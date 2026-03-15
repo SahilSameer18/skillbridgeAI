@@ -1,0 +1,90 @@
+@use "sass:color";
+
+$bg-page:        #0d1117;
+$bg-card:        #161b22;
+$border-color:   #2a3348;
+$text-primary:   #e6edf3;
+$text-muted:     #7d8590;
+$accent:         #ff2d78;
+
+.global-navbar {
+    background-color: $bg-card;
+    border-bottom: 1px solid $border-color;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    box-shadow: 0 1px 15px rgba(0, 0, 0, 0.4);
+
+    .navbar-container {
+        max-width: 1280px;
+        margin: 0 auto;
+        padding: 0 1.5rem;
+        height: 70px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+
+    .navbar-brand {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        text-decoration: none;
+        
+        .brand-logo {
+            font-size: 1.5rem;
+        }
+
+        .brand-name {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: $text-primary;
+            letter-spacing: -0.5px;
+        }
+    }
+
+    .navbar-links {
+        display: flex;
+        align-items: center;
+        gap: 1.5rem;
+
+        .nav-link {
+            text-decoration: none;
+            color: $text-muted;
+            font-weight: 500;
+            font-size: 0.95rem;
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+            transition: all 0.2s ease;
+
+            &:hover {
+                color: $text-primary;
+                background-color: rgba($text-muted, 0.1);
+            }
+
+            &.active {
+                color: $accent;
+                background-color: rgba($accent, 0.1);
+            }
+        }
+    }
+
+    .navbar-actions {
+        .btn-logout {
+            background-color: rgba($accent, 0.1);
+            color: $accent;
+            border: 1px solid rgba($accent, 0.2);
+            padding: 0.5rem 1.25rem;
+            border-radius: 6px;
+            font-weight: 500;
+            font-size: 0.95rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+
+            &:hover {
+                background-color: $accent;
+                color: #fff;
+            }
+        }
+    }
+}

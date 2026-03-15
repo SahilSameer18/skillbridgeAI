@@ -89,6 +89,30 @@ async function getAllInterviewReportsController(req, res) {
     })
 }
 
+/**
+ * @description Controller to delete an interview report by ID.
+ */
+async function deleteInterviewReportController(req, res) {
+    const { interviewId } = req.params;
+
+    try {
+        const deletedReport = await interviewReportModel.findOneAndDelete({ _id: interviewId, user: req.user.id });
+
+        if (!deletedReport) {
+            return res.status(404).json({
+                message: "Interview report not found or you do not have permission to delete it."
+            });
+        }
+
+        res.status(200).json({
+            message: "Interview report deleted successfully."
+        });
+    } catch (error) {
+        console.error("Error deleting an interview report:", error);
+        res.status(500).json({ message: "Failed to delete interview report" });
+    }
+}
+
 
 /**
  * @description Controller to generate resume PDF based on user self description, resume and job description.
@@ -116,4 +140,4 @@ async function generateResumePdfController(req, res) {
     res.send(pdfBuffer)
 }
 
-module.exports = { generateInterViewReportController, getInterviewReportByIdController, getAllInterviewReportsController, generateResumePdfController }
+module.exports = { generateInterViewReportController, getInterviewReportByIdController, getAllInterviewReportsController, deleteInterviewReportController, generateResumePdfController }

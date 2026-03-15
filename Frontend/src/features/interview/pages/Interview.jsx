@@ -61,6 +61,10 @@ const Interview = () => {
     const [ activeNav, setActiveNav ] = useState('technical')
     const { report, getReportById, loading, getResumePdf } = useInterview()
     const { interviewId } = useParams()
+    
+    const radius = 40;
+    const circumference = 2 * Math.PI * radius;
+    const [ progressOffset, setProgressOffset ] = useState(circumference)
 
     useEffect(() => {
         if (interviewId) {
@@ -69,6 +73,16 @@ const Interview = () => {
     }, [ interviewId ])
 
 
+
+    useEffect(() => {
+        if (report) {
+            const finalOffset = circumference - (report.matchScore / 100) * circumference;
+            // Slight delay ensures the CSS transition can trigger after initial render
+            setTimeout(() => {
+                setProgressOffset(finalOffset);
+            }, 50);
+        }
+    }, [ report, circumference ])
 
     if (loading || !report) {
         return (
@@ -79,9 +93,8 @@ const Interview = () => {
     }
 
     const scoreColor =
-        report.matchScore >= 80 ? 'score--high' :
-            report.matchScore >= 60 ? 'score--mid' : 'score--low'
-
+        report.matchScore >= 80 ? '#3fb950' :
+            report.matchScore >= 60 ? '#f5a623' : '#ff4d4d'
 
     return (
         <div className='interview-page'>
@@ -165,11 +178,37 @@ const Interview = () => {
                     {/* Match Score */}
                     <div className='match-score'>
                         <p className='match-score__label'>Match Score</p>
-                        <div className={`match-score__ring ${scoreColor}`}>
-                            <span className='match-score__value'>{report.matchScore}</span>
-                            <span className='match-score__pct'>%</span>
+                        <div className="match-score__ring-container">
+                            <svg width="100" height="100" className="match-score__svg">
+                                <circle 
+                                    className="match-score__bg" 
+                                    r={radius} 
+                                    cx="50" 
+                                    cy="50" 
+                                />
+                                <circle 
+                                    className="match-score__progress" 
+                                    r={radius} 
+                                    cx="50" 
+                                    cy="50"
+                                    style={{
+                                        stroke: scoreColor,
+                                        strokeDasharray: circumference,
+                                        strokeDashoffset: progressOffset,
+                                        transition: 'stroke-dashoffset 1s ease-in-out'
+                                    }}
+                                />
+                            </svg>
+                            <div className='match-score__content'>
+                                <span className='match-score__value'>{report.matchScore}</span>
+                                <span className='match-score__pct'>%</span>
+                            </div>
                         </div>
-                        <p className='match-score__sub'>Strong match for this role</p>
+                        <p className='match-score__sub'>
+                            {report.matchScore >= 80 ? 'Strong match for this role' : 
+                             report.matchScore >= 60 ? 'Average match for this role' : 
+                             'Low match for this role'}
+                        </p>
                     </div>
 
                     <div className='sidebar-divider' />

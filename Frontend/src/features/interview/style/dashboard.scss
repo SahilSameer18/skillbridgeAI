@@ -1,0 +1,212 @@
+@use "sass:color";
+
+$bg-page:        #0d1117;
+$bg-card:        #161b22;
+$border-color:   #2a3348;
+$text-primary:   #e6edf3;
+$text-muted:     #7d8590;
+$accent:         #ff2d78;
+
+.dashboard-page {
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 3rem 1.5rem;
+    min-height: calc(100vh - 70px);
+    background-color: $bg-page;
+    color: $text-primary;
+
+    .page-header {
+        text-align: center;
+        margin-bottom: 3rem;
+
+        h1 {
+            font-size: 2.5rem;
+            color: $text-primary;
+            margin-bottom: 0.5rem;
+            
+            .highlight {
+                color: $accent;
+            }
+        }
+        
+        p {
+            color: $text-muted;
+            font-size: 1.1rem;
+        }
+    }
+
+    .empty-state {
+        text-align: center;
+        padding: 4rem 2rem;
+        background: $bg-card;
+        border-radius: 12px;
+        border: 1px dashed $border-color;
+
+        p {
+            color: $text-muted;
+            font-size: 1.2rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .generate-btn {
+            background-color: $accent;
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            font-weight: 500;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: opacity 0.2s;
+
+            &:hover {
+                opacity: 0.9;
+            }
+        }
+    }
+
+    .dashboard-reports {
+        .reports-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .report-card {
+            background: $bg-card;
+            border-radius: 12px;
+            padding: 1.5rem;
+            border: 1px solid $border-color;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            flex-direction: column;
+
+            &:hover {
+                transform: translateY(-2px);
+                border-color: color.adjust($border-color, $lightness: 10%);
+                background-color: color.adjust($bg-card, $lightness: 2%);
+            }
+
+            &__header {
+                display: flex;
+                justify-content: space-between;
+                align-items: flex-start;
+                margin-bottom: 1rem;
+
+                h3 {
+                    margin: 0;
+                    font-size: 1.1rem;
+                    color: $text-primary;
+                    font-weight: 600;
+                    line-height: 1.4;
+                    padding-right: 1rem;
+                }
+
+                .delete-btn {
+                    background: transparent;
+                    border: none;
+                    color: $text-muted;
+                    cursor: pointer;
+                    padding: 0.25rem;
+                    border-radius: 4px;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    transition: all 0.2s ease;
+
+                    &:hover:not(:disabled) {
+                        color: #ef4444;
+                        background: rgba(239, 68, 68, 0.1);
+                    }
+
+                    &:disabled {
+                        opacity: 0.5;
+                        cursor: not-allowed;
+                    }
+                }
+            }
+
+            &__body {
+                flex-grow: 1;
+                display: flex;
+                flex-direction: column;
+                justify-content: space-between;
+
+                .report-meta {
+                    color: $text-muted;
+                    font-size: 0.875rem;
+                    margin-bottom: 1.5rem;
+                }
+
+                .score-container {
+                    .match-badge {
+                        display: inline-block;
+                        padding: 0.25rem 0.75rem;
+                        border-radius: 999px;
+                        font-size: 0.875rem;
+                        font-weight: 500;
+
+                        &.score--high {
+                            background-color: rgba(16, 185, 129, 0.1);
+                            color: #10b981;
+                            border: 1px solid rgba(16, 185, 129, 0.2);
+                        }
+
+                        &.score--mid {
+                            background-color: rgba(245, 158, 11, 0.1);
+                            color: #f59e0b;
+                            border: 1px solid rgba(245, 158, 11, 0.2);
+                        }
+
+                        &.score--low {
+                            background-color: rgba(239, 68, 68, 0.1);
+                            color: #ef4444;
+                            border: 1px solid rgba(239, 68, 68, 0.2);
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    .loading-screen {
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 1.5rem;
+        min-height: 400px;
+
+        h2 {
+            color: $text-muted;
+            font-size: 1.25rem;
+            font-weight: 500;
+        }
+
+        .spinner {
+            width: 40px;
+            height: 40px;
+            border: 3px solid rgba($accent, 0.1);
+            border-top: 3px solid $accent;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+    }
+
+    .spinner-small {
+        display: inline-block;
+        width: 16px;
+        height: 16px;
+        border: 2px solid rgba($accent, 0.3);
+        border-radius: 50%;
+        border-top-color: $accent;
+        animation: spin 1s linear infinite;
+    }
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}

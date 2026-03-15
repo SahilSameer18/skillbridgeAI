@@ -17,8 +17,13 @@ const Login = () => {
     navigate('/')
   };
 
-  if(loading){
-    return(<main><h1>Loading....</h1></main>)
+  if (loading) {
+    return (
+      <main className="loading-screen">
+        <div className="spinner"></div>
+        <h2>Authenticating...</h2>
+      </main>
+    );
   }
 
   return (
@@ -52,7 +57,9 @@ const Login = () => {
             />
           </div>
 
-          <button className="button primary-button">Login</button>
+          <button className="button primary-button" disabled={loading}>
+            {loading ? "Logging in..." : "Login"}
+          </button>
         </form>
 
         <p>
