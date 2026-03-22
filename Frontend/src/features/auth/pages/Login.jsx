@@ -8,13 +8,21 @@ const Login = () => {
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [error, setError] = useState(null);
 
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    await handleLogin({email, password})
-    navigate('/')
+    setError(null);
+    try {
+      await handleLogin({ email, password });
+      navigate("/");
+    } catch (err) {
+      const msg =
+        err?.response?.data?.message || "Login failed. Please try again.";
+      setError(msg);
+    }
   };
 
   if (loading) {
@@ -29,6 +37,10 @@ const Login = () => {
   return (
     <main>
       <div className="form-container">
+        <Link to="/" className="auth-logo-link">
+          <span className="auth-logo-link__icon">🚀</span>
+          <span className="auth-logo-link__name">SkillBridge AI</span>
+        </Link>
         <h1>Login</h1>
 
         <form onSubmit={handleSubmit}>
@@ -42,6 +54,7 @@ const Login = () => {
               id="email"
               name="email"
               placeholder="Enter your email"
+              required
             />
           </div>
           <div className="input-group">
@@ -54,16 +67,19 @@ const Login = () => {
               id="password"
               name="password"
               placeholder="Enter your password"
+              required
             />
           </div>
 
-          <button className="button primary-button" disabled={loading}>
+          {error && <p className="auth-error">{error}</p>}
+
+          <button className="button primary-button" type="submit" disabled={loading}>
             {loading ? "Logging in..." : "Login"}
           </button>
         </form>
 
         <p>
-          Don't have an account? <Link to={"/register"}>register</Link>
+          Don't have an account? <Link to={"/register"}>Register</Link>
         </p>
       </div>
     </main>
@@ -71,3 +87,4 @@ const Login = () => {
 };
 
 export default Login;
+

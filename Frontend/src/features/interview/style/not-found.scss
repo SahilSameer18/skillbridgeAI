@@ -1,0 +1,93 @@
+$bg-page:      #0d1117;
+$bg-card:      #161b22;
+$border-color: #2a3348;
+$text-primary: #e6edf3;
+$text-muted:   #7d8590;
+$accent:       #ff2d78;
+$font-stack:   system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+
+.not-found-page {
+    min-height: calc(100vh - 70px);
+    width: 100%;
+    background-color: $bg-page;
+    font-family: $font-stack;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 2rem;
+
+    .not-found__code {
+        font-size: 8rem;
+        font-weight: 800;
+        line-height: 1;
+        color: $accent;
+        letter-spacing: -4px;
+        text-shadow: 0 0 80px rgba(255, 45, 120, 0.3);
+        margin-bottom: 1.5rem;
+    }
+
+    .not-found__title {
+        font-size: 1.75rem;
+        font-weight: 700;
+        color: $text-primary;
+        margin-bottom: 0.75rem;
+    }
+
+    .not-found__subtitle {
+        font-size: 1rem;
+        color: $text-muted;
+        line-height: 1.6;
+        max-width: 420px;
+        margin-bottom: 2.5rem;
+    }
+
+    .not-found__actions {
+        display: flex;
+        gap: 1rem;
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+
+    .btn-home {
+        background: linear-gradient(135deg, $accent, darken($accent, 10%));
+        color: #fff;
+        border: none;
+        padding: 0.75rem 2rem;
+        border-radius: 0.5rem;
+        font-size: 0.95rem;
+        font-weight: 600;
+        cursor: pointer;
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        transition: opacity 0.2s, transform 0.2s;
+
+        &:hover {
+            opacity: 0.9;
+            transform: translateY(-2px);
+        }
+    }
+
+    .btn-back {
+        background: transparent;
+        color: $text-primary;
+        border: 1px solid $border-color;
+        padding: 0.75rem 2rem;
+        border-radius: 0.5rem;
+        font-size: 0.95rem;
+        font-weight: 600;
+        cursor: pointer;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        transition: background 0.2s, border-color 0.2s;
+
+        &:hover {
+            background: $bg-card;
+            border-color: rgba($text-muted, 0.4);
+        }
+    }
+}

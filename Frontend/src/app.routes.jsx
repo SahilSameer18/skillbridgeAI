@@ -7,40 +7,57 @@ import Landing from './features/interview/pages/Landing';
 import Interview from './features/interview/pages/Interview';
 import Dashboard from './features/interview/pages/Dashboard';
 import Layout from './features/interview/components/Layout';
+import NotFound from './features/interview/pages/NotFound';
 
 export const router = createBrowserRouter([
   {
     path: '/login',
-    element: <Login />
+    element: <Login />,
   },
   {
     path: '/register',
-    element: <Register />
+    element: <Register />,
   },
   {
+    // Layout wraps everything (Navbar + Outlet)
     path: '/',
-    element: (
-      <Protected>
-        <Layout />
-      </Protected>
-    ),
+    element: <Layout />,
     children: [
       {
-        path: '/',
-        element: <Landing />
+        // Landing is PUBLIC — no Protected wrapper
+        index: true,
+        element: <Landing />,
       },
       {
+        // All app routes below require login
         path: '/generate',
-        element: <Home />
+        element: (
+          <Protected>
+            <Home />
+          </Protected>
+        ),
       },
       {
         path: '/dashboard',
-        element: <Dashboard />
+        element: (
+          <Protected>
+            <Dashboard />
+          </Protected>
+        ),
       },
       {
         path: '/interview/:interviewId',
-        element: <Interview />
-      }
-    ]
-  }
-])
+        element: (
+          <Protected>
+            <Interview />
+          </Protected>
+        ),
+      },
+      {
+        // Catch-all 404 inside the layout (keeps Navbar visible)
+        path: '*',
+        element: <NotFound />,
+      },
+    ],
+  },
+])

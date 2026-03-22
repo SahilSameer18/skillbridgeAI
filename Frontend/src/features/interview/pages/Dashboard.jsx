@@ -51,7 +51,14 @@ const Dashboard = () => {
                         {reports.map(report => (
                             <div key={report._id} className="report-card" onClick={() => navigate(`/interview/${report._id}`)}>
                                 <div className="report-card__header">
-                                    <h3>{report.title || 'Untitled Position'}</h3>
+                                    <h3>
+                                        {report.title
+                                            ? report.title
+                                            : report.jobDescription
+                                                ? report.jobDescription.slice(0, 45).trim() + (report.jobDescription.length > 45 ? '…' : '')
+                                                : 'Interview Plan'}
+                                    </h3>
+
                                     <button 
                                         className="delete-btn" 
                                         onClick={(e) => handleDelete(e, report._id)}

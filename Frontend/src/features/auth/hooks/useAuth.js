@@ -10,59 +10,59 @@ export const useAuth = () => {
 
   const handleLogin = async ({ email, password }) => {
     setLoading(true);
-
     try {
       const data = await login({ email, password });
-
       setUser(data.user);
     } catch (err) {
-      
-    } finally {
       setLoading(false);
+      // Re-throw so Login.jsx can catch and show error
+      throw err;
     }
+    setLoading(false);
   };
 
   const handleRegister = async ({ username, email, password }) => {
     setLoading(true);
-
     try {
       const data = await register({ username, email, password });
-
       setUser(data.user);
     } catch (err) {
-    } finally {
       setLoading(false);
+      // Re-throw so Register.jsx can catch and show error
+      throw err;
     }
+    setLoading(false);
   };
 
   const handleLogout = async () => {
     setLoading(true);
     try {
-      const data = await logout();
+      await logout();
       setUser(null);
     } catch (err) {
+      // Silent — clear user state regardless
+      setUser(null);
     } finally {
       setLoading(false);
     }
   };
 
-  useEffect(()=>{
-
-    const getAndSetUser = async()=>{
+  useEffect(() => {
+    const getAndSetUser = async () => {
       try {
-        const data = await getMe()
-      setUser(data.user)
+        const data = await getMe();
+        if (data && data.user) {
+          setUser(data.user);
+        }
       } catch (error) {
-        
-      } finally{
-        setLoading(false)
+        // Not logged in
+      } finally {
+        setLoading(false);
       }
-      
-      
-    }
-
-    getAndSetUser()
-  },[])
+    };
+    getAndSetUser();
+  }, []);
 
   return { user, loading, handleRegister, handleLogin, handleLogout };
 };
+

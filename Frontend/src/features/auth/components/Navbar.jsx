@@ -4,7 +4,7 @@ import { useAuth } from '../hooks/useAuth.js';
 import './navbar.scss';
 
 const Navbar = () => {
-    const { handleLogout } = useAuth();
+    const { handleLogout, user } = useAuth();
     const navigate = useNavigate();
     const location = useLocation();
 
@@ -43,9 +43,23 @@ const Navbar = () => {
                 </div>
 
                 <div className="navbar-actions">
-                    <button onClick={onLogoutClick} className="btn-logout">
-                        Logout
-                    </button>
+                    {user ? (
+                        <>
+                            <div className="user-chip">
+                                <div className="user-chip__avatar">
+                                    {user.username?.charAt(0).toUpperCase()}
+                                </div>
+                                <span className="user-chip__name">{user.username}</span>
+                            </div>
+                            <button onClick={onLogoutClick} className="btn-logout">
+                                Logout
+                            </button>
+                        </>
+                    ) : (
+                        <Link to="/login" className="btn-login-nav">
+                            Login
+                        </Link>
+                    )}
                 </div>
             </div>
         </nav>
@@ -53,3 +67,4 @@ const Navbar = () => {
 };
 
 export default Navbar;
+
