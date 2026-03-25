@@ -1,6 +1,6 @@
 import { getAllInterviewReports, generateInterviewReport, getInterviewReportById, generateResumePdf, deleteInterviewReport } from "../services/interview.api"
 import { useContext, useEffect } from "react"
-import { InterviewContext } from "../interview.context"
+import { InterviewContext } from "../Interview.context"
 import { useParams } from "react-router"
 
 
@@ -93,7 +93,7 @@ export const useInterview = () => {
         } else {
             getReports()
         }
-    }, [ interviewId ])
+    }, [interviewId])
 
     return { loading, report, reports, generateReport, getReportById, getReports, getResumePdf, deleteReport }
 
