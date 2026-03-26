@@ -47,22 +47,6 @@ export const useAuth = () => {
     }
   };
 
-  useEffect(() => {
-    const getAndSetUser = async () => {
-      try {
-        const data = await getMe();
-        if (data && data.user) {
-          setUser(data.user);
-        }
-      } catch (error) {
-        // Not logged in
-      } finally {
-        setLoading(false);
-      }
-    };
-    getAndSetUser();
-  }, []);
-
   return { user, loading, handleRegister, handleLogin, handleLogout };
 };
 
