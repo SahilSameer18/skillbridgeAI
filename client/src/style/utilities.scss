@@ -1,0 +1,362 @@
+// ═══════════════════════════════════════════════════════════════════
+// 📱 RESPONSIVE UTILITIES & HELPER CLASSES
+// ═══════════════════════════════════════════════════════════════════
+
+@use './variables' as *;
+
+// ───────────────────────────────────────────────────────────────────
+// 🎯 VISIBILITY UTILITIES
+// ───────────────────────────────────────────────────────────────────
+
+.hide-mobile {
+  @include breakpoint('xs') {
+    display: none !important;
+  }
+  
+  @include breakpoint('sm') {
+    display: block !important;
+  }
+}
+
+.hide-tablet {
+  @include breakpoint('md') {
+    display: none !important;
+  }
+}
+
+.hide-desktop {
+  @include breakpoint('lg') {
+    display: none !important;
+  }
+}
+
+.show-mobile {
+  display: none !important;
+  
+  @include breakpoint('xs') {
+    display: block !important;
+  }
+}
+
+.show-tablet {
+  display: none !important;
+  
+  @include breakpoint('md') {
+    display: block !important;
+  }
+}
+
+.show-desktop {
+  display: none !important;
+  
+  @include breakpoint('lg') {
+    display: block !important;
+  }
+}
+
+// ───────────────────────────────────────────────────────────────────
+// 🎨 SPACING UTILITIES
+// ───────────────────────────────────────────────────────────────────
+
+@each $name, $value in (
+  'xs': $spacing-2,
+  'sm': $spacing-4,
+  'md': $spacing-6,
+  'lg': $spacing-8,
+  'xl': $spacing-12,
+) {
+  .gap-#{$name} { gap: $value; }
+  .p-#{$name} { padding: $value; }
+  .px-#{$name} { padding-left: $value; padding-right: $value; }
+  .py-#{$name} { padding-top: $value; padding-bottom: $value; }
+  .m-#{$name} { margin: $value; }
+  .mx-#{$name} { margin-left: $value; margin-right: $value; }
+  .my-#{$name} { margin-top: $value; margin-bottom: $value; }
+}
+
+// ───────────────────────────────────────────────────────────────────
+// 📐 LAYOUT UTILITIES
+// ───────────────────────────────────────────────────────────────────
+
+.flex {
+  display: flex;
+}
+
+.flex-col {
+  flex-direction: column;
+}
+
+.flex-row {
+  flex-direction: row;
+}
+
+.flex-center {
+  @include flex-center;
+}
+
+.flex-between {
+  @include flex-between;
+}
+
+.flex-start {
+  @include flex-start;
+}
+
+.flex-wrap {
+  flex-wrap: wrap;
+}
+
+.grid {
+  display: grid;
+}
+
+.container {
+  max-width: $container-xl;
+  margin: 0 auto;
+  padding-left: $spacing-6;
+  padding-right: $spacing-6;
+  
+  @include breakpoint('md') {
+    padding-left: $spacing-8;
+    padding-right: $spacing-8;
+  }
+}
+
+.full-width {
+  width: 100%;
+}
+
+.full-height {
+  height: 100%;
+  min-height: 100%;
+}
+
+// ───────────────────────────────────────────────────────────────────
+// 📝 TEXT UTILITIES
+// ───────────────────────────────────────────────────────────────────
+
+.text-center {
+  text-align: center;
+}
+
+.text-left {
+  text-align: left;
+}
+
+.text-right {
+  text-align: right;
+}
+
+.text-truncate {
+  @include text-truncate;
+}
+
+.text-clamp-2 {
+  @include text-clamp(2);
+}
+
+.text-clamp-3 {
+  @include text-clamp(3);
+}
+
+.font-bold {
+  font-weight: $font-weight-bold;
+}
+
+.font-semibold {
+  font-weight: $font-weight-semibold;
+}
+
+.font-medium {
+  font-weight: $font-weight-medium;
+}
+
+// ───────────────────────────────────────────────────────────────────
+// 🎨 COLOR UTILITIES
+// ───────────────────────────────────────────────────────────────────
+
+.text-primary {
+  color: $color-text-primary;
+}
+
+.text-secondary {
+  color: $color-text-secondary;
+}
+
+.text-muted {
+  color: $color-text-muted;
+}
+
+.text-accent {
+  color: $color-accent;
+}
+
+.text-success {
+  color: $color-success;
+}
+
+.text-error {
+  color: $color-error;
+}
+
+.text-warning {
+  color: $color-warning;
+}
+
+// Background colors
+.bg-primary {
+  background-color: $color-bg-primary;
+}
+
+.bg-secondary {
+  background-color: $color-bg-secondary;
+}
+
+.bg-tertiary {
+  background-color: $color-bg-tertiary;
+}
+
+.bg-accent {
+  background: linear-gradient(135deg, $color-accent 0%, $color-accent-dark 100%);
+}
+
+.bg-primary-gradient {
+  @include gradient-primary;
+}
+
+// ───────────────────────────────────────────────────────────────────
+// 🔘 BUTTON UTILITIES
+// ───────────────────────────────────────────────────────────────────
+
+.btn-group {
+  display: flex;
+  gap: $spacing-2;
+  
+  .button,
+  button {
+    flex: 1;
+    min-width: 100px;
+  }
+}
+
+// ───────────────────────────────────────────────────────────────────
+// 📊 SHADOW UTILITIES
+// ───────────────────────────────────────────────────────────────────
+
+.shadow-xs {
+  box-shadow: $shadow-xs;
+}
+
+.shadow-sm {
+  box-shadow: $shadow-sm;
+}
+
+.shadow-base {
+  box-shadow: $shadow-base;
+}
+
+.shadow-md {
+  box-shadow: $shadow-md;
+}
+
+.shadow-lg {
+  box-shadow: $shadow-lg;
+}
+
+// ───────────────────────────────────────────────────────────────────
+// 🔄 ANIMATION UTILITIES
+// ───────────────────────────────────────────────────────────────────
+
+.animate-fade {
+  animation: fade-in-up 0.6s ease-out;
+}
+
+.animate-pulse {
+  animation: pulse 2s ease-in-out infinite;
+}
+
+.animate-bounce {
+  animation: bounce 1s ease-in-out infinite;
+}
+
+@keyframes bounce {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}
+
+// ───────────────────────────────────────────────────────────────────
+// 📏 SIZE UTILITIES
+// ───────────────────────────────────────────────────────────────────
+
+.max-width-sm {
+  max-width: $container-sm;
+}
+
+.max-width-md {
+  max-width: $container-md;
+}
+
+.max-width-lg {
+  max-width: $container-lg;
+}
+
+.max-width-xl {
+  max-width: $container-xl;
+}
+
+// ───────────────────────────────────────────────────────────────────
+// 🔒 ACCESSIBILITY
+// ───────────────────────────────────────────────────────────────────
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+// ───────────────────────────────────────────────────────────────────
+// 🎯 MOBILE-FIRST RESPONSIVE GRID
+// ───────────────────────────────────────────────────────────────────
+
+.grid-auto {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: $spacing-6;
+  
+  @include breakpoint('md') {
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: $spacing-8;
+  }
+}
+
+.grid-cols-1 {
+  grid-template-columns: 1fr;
+}
+
+.grid-cols-2 {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  
+  @include breakpoint('xs') {
+    grid-template-columns: 1fr;
+  }
+}
+
+.grid-cols-3 {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  
+  @include breakpoint('md') {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  
+  @include breakpoint('sm') {
+    grid-template-columns: 1fr;
+  }
+}

@@ -1,16 +1,10 @@
-$bg-page:      #0d1117;
-$bg-card:      #161b22;
-$border-color: #2a3348;
-$text-primary: #e6edf3;
-$text-muted:   #7d8590;
-$accent:       #ff2d78;
-$font-stack:   system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+@use '../../../style/variables' as *;
 
 .not-found-page {
     min-height: calc(100vh - 70px);
     width: 100%;
-    background-color: $bg-page;
-    font-family: $font-stack;
+    background-color: $color-bg-primary;
+    font-family: $font-family-base;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -22,22 +16,22 @@ $font-stack:   system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto,
         font-size: 8rem;
         font-weight: 800;
         line-height: 1;
-        color: $accent;
+        color: $color-accent;
         letter-spacing: -4px;
-        text-shadow: 0 0 80px rgba(255, 45, 120, 0.3);
+        text-shadow: 0 0 80px rgba($color-accent, 0.3);
         margin-bottom: 1.5rem;
     }
 
     .not-found__title {
         font-size: 1.75rem;
         font-weight: 700;
-        color: $text-primary;
+        color: $color-text-primary;
         margin-bottom: 0.75rem;
     }
 
     .not-found__subtitle {
         font-size: 1rem;
-        color: $text-muted;
+        color: $color-text-secondary;
         line-height: 1.6;
         max-width: 420px;
         margin-bottom: 2.5rem;
@@ -51,7 +45,7 @@ $font-stack:   system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto,
     }
 
     .btn-home {
-        background: linear-gradient(135deg, $accent, darken($accent, 10%));
+        @include gradient-primary;
         color: #fff;
         border: none;
         padding: 0.75rem 2rem;
@@ -73,8 +67,8 @@ $font-stack:   system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto,
 
     .btn-back {
         background: transparent;
-        color: $text-primary;
-        border: 1px solid $border-color;
+        color: $color-text-primary;
+        border: 1px solid $color-border;
         padding: 0.75rem 2rem;
         border-radius: 0.5rem;
         font-size: 0.95rem;
@@ -86,8 +80,8 @@ $font-stack:   system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto,
         transition: background 0.2s, border-color 0.2s;
 
         &:hover {
-            background: $bg-card;
-            border-color: rgba($text-muted, 0.4);
+            background: $color-bg-secondary;
+            border-color: rgba($color-text-secondary, 0.4);
         }
     }
 }

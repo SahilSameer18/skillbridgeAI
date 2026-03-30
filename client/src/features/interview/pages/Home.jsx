@@ -78,6 +78,30 @@ const Home = () => {
                 <p>Let our AI analyze the job requirements and your unique profile to build a winning strategy.</p>
             </header>
 
+            {/* Features Section */}
+            {/* <div className='features-grid'>
+                <div className='feature-card'>
+                    <span className='feature-icon'>🎯</span>
+                    <h3>Tailored Questions</h3>
+                    <p>Get technical and behavioral questions specifically designed for your target role</p>
+                </div>
+                <div className='feature-card'>
+                    <span className='feature-icon'>📊</span>
+                    <h3>Match Analysis</h3>
+                    <p>Understand how well your skills align with the job requirements</p>
+                </div>
+                <div className='feature-card'>
+                    <span className='feature-icon'>🗓️</span>
+                    <h3>Prep Roadmap</h3>
+                    <p>Follow a day-by-day structured plan to prepare effectively</p>
+                </div>
+                <div className='feature-card'>
+                    <span className='feature-icon'>⚡</span>
+                    <h3>30 Second Setup</h3>
+                    <p>Get instant results powered by advanced AI analysis</p>
+                </div>
+            </div> */}
+
             {/* Main Card */}
             <div className='interview-card'>
                 <div className='interview-card__body'>

@@ -1,128 +1,300 @@
-@use "sass:color";
+@use 'sass:color';
+@use '../../../style/variables' as *;
+@use '../../../style/button.scss' as *;
 
-$bg-page:        #0d1117;
-$bg-card:        #161b22;
-$border-color:   #2a3348;
-$text-primary:   #e6edf3;
-$text-muted:     #7d8590;
-$accent:         #ff2d78;
+// ═══════════════════════════════════════════════════════════════════
+// 🧭 NAVBAR - Modern Navigation
+// ═══════════════════════════════════════════════════════════════════
 
 .global-navbar {
-    background-color: $bg-card;
-    border-bottom: 1px solid $border-color;
-    position: sticky;
-    top: 0;
-    z-index: 1000;
-    box-shadow: 0 1px 15px rgba(0, 0, 0, 0.4);
+  background: linear-gradient(180deg, rgba($color-bg-secondary, 0.8) 0%, rgba($color-bg-primary, 0.6) 100%);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid $color-border;
+  position: sticky;
+  top: 0;
+  z-index: $z-sticky;
+  box-shadow: $shadow-md;
+  padding: $spacing-3 0;
+  overflow-x: hidden;
+  
+  .navbar-container {
+    max-width: 100%;
+    margin: 0 auto;
+    padding: 0 $spacing-4;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: auto;
+    min-height: 60px;
+    gap: $spacing-3;
+    flex-wrap: wrap;
+    width: 100%;
+    box-sizing: border-box;
+    
+    @include breakpoint('sm') {
+      padding: 0 $spacing-6;
+      gap: $spacing-4;
+    }
+    
+    @include breakpoint('md') {
+      padding: 0 $spacing-8;
+      gap: $spacing-8;
+      flex-wrap: nowrap;
+      min-height: 70px;
+    }
+  }
+}
 
-    .navbar-container {
-        max-width: 1280px;
-        margin: 0 auto;
-        padding: 0 1.5rem;
-        height: 70px;
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
+// ───────────────────────────────────────────────────────────────────
+// 🏷️ NAVBAR BRAND
+// ───────────────────────────────────────────────────────────────────
+
+.navbar-brand {
+  display: inline-flex;
+  align-items: center;
+  gap: $spacing-3;
+  text-decoration: none;
+  flex-shrink: 0;
+  transition: $transition-color;
+  
+  &:hover {
+    .brand-name {
+      color: $color-primary;
+    }
+  }
+  
+  .brand-logo {
+    font-size: $font-size-2xl;
+    line-height: 1;
+    animation: logo-bounce-nav 2s ease-in-out infinite;
+  }
+  
+  .brand-name {
+    font-size: clamp(1rem, 2vw, 1.25rem);
+    font-weight: $font-weight-bold;
+    color: $color-text-primary;
+    letter-spacing: $letter-spacing-tight;
+    transition: $transition-color;
+    white-space: nowrap;
+    
+    @include breakpoint('xs') {
+      display: none;
+    }
+    @include breakpoint('sm') {
+      display: inline;
+    }
+  }
+}
+
+// ───────────────────────────────────────────────────────────────────
+// 🔗 NAVBAR LINKS
+// ───────────────────────────────────────────────────────────────────
+
+.navbar-links {
+  display: none;
+  align-items: center;
+  gap: $spacing-2;
+  flex: 1;
+  justify-content: center;
+  min-width: 0;
+  
+  @include breakpoint('xs') {
+    display: flex;
+    gap: $spacing-2;
+    order: 3;
+    width: 100%;
+    margin-top: $spacing-2;
+  }
+  
+  @include breakpoint('sm') {
+    gap: $spacing-3;
+    margin-top: 0;
+    width: auto;
+    order: unset;
+  }
+  
+  @include breakpoint('md') {
+    display: flex;
+    gap: $spacing-6;
+  }
+  
+  .nav-link {
+    text-decoration: none;
+    color: $color-text-secondary;
+    font-weight: $font-weight-semibold;
+    font-size: $font-size-sm;
+    padding: $spacing-2 $spacing-4;
+    border-radius: $radius-md;
+    transition: $transition-all;
+    position: relative;
+    
+    &::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 2px;
+      background: $color-primary;
+      border-radius: $radius-full;
+      transform: scaleX(0);
+      transform-origin: center;
+      transition: transform $transition-base;
+    }
+    
+    &:hover {
+      color: $color-text-primary;
+      background-color: rgba($color-primary, 0.1);
+      
+      &::after {
+        transform: scaleX(1);
+      }
+    }
+    
+    &.active {
+      color: $color-primary;
+      background-color: rgba($color-primary, 0.12);
+      
+      &::after {
+        transform: scaleX(1);
+      }
+    }
+  }
+}
+
+// ───────────────────────────────────────────────────────────────────
+// 🎯 NAVBAR ACTIONS
+// ───────────────────────────────────────────────────────────────────
+
+.navbar-actions {
+  display: flex;
+  align-items: center;
+  gap: $spacing-2;
+  flex-shrink: 0;
+  min-width: 0;
+  
+  @include breakpoint('sm') {
+    gap: $spacing-3;
+  }
+  
+  @include breakpoint('md') {
+    gap: $spacing-4;
+  }
+}
+
+.user-chip {
+  display: flex;
+  align-items: center;
+  gap: $spacing-1;
+  padding: $spacing-1 $spacing-2;
+  border-radius: $radius-full;
+  background: rgba($color-primary, 0.08);
+  border: 1px solid rgba($color-primary, 0.2);
+  transition: $transition-all;
+  cursor: pointer;
+  min-width: 0;
+  
+  @include breakpoint('sm') {
+    gap: $spacing-2;
+    padding: $spacing-1 $spacing-3;
+  }
+  
+  &:hover {
+    background: rgba($color-primary, 0.12);
+    border-color: rgba($color-primary, 0.4);
+  }
+  
+  &__avatar {
+    width: 28px;
+    height: 28px;
+    border-radius: $radius-full;
+    @include gradient-primary;
+    color: white;
+    font-size: $font-size-xs;
+    font-weight: $font-weight-bold;
+    @include flex-center;
+    flex-shrink: 0;
+    
+    @include breakpoint('sm') {
+      width: 32px;
+      height: 32px;
+      font-size: $font-size-sm;
+    }
+  }
+  
+  &__name {
+    font-size: $font-size-xs;
+    font-weight: $font-weight-semibold;
+    color: $color-text-primary;
+    max-width: 100px;
+    @include text-truncate;
+    
+    @include breakpoint('xs') {
+      display: none;
+    }
+    @include breakpoint('sm') {
+      display: inline;
+      max-width: 150px;
+      font-size: $font-size-sm;
+    }
+  }
+}
+
+// ───────────────────────────────────────────────────────────────────
+// 🔘 LOGOUT BUTTON
+// ───────────────────────────────────────────────────────────────────
+
+.logout-btn {
+  @extend .btn-outline;
+  font-size: $font-size-sm;
+  padding: $spacing-2 $spacing-4;
+  
+  &:hover {
+    border-color: $color-error;
+    color: $color-error;
+    background-color: rgba($color-error, 0.1);
+  }
+}
+
+// ───────────────────────────────────────────────────────────────────
+// 🎬 ANIMATIONS
+// ───────────────────────────────────────────────────────────────────
+
+@keyframes logo-bounce-nav {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-4px); }
+}
+
+.btn-logout {
+    background-color: rgba($color-accent, 0.1);
+    color: $color-accent;
+    border: 1px solid rgba($color-accent, 0.2);
+    padding: $spacing-1 $spacing-2;
+    border-radius: 6px;
+    font-weight: 500;
+    font-size: 0.75rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    white-space: nowrap;
+    
+    @include breakpoint('sm') {
+      padding: $spacing-1 $spacing-3;
+      font-size: 0.85rem;
+    }
+    
+    @include breakpoint('md') {
+      padding: 0.5rem 1.25rem;
+      font-size: 0.95rem;
     }
 
-    .navbar-brand {
-        display: flex;
-        align-items: center;
-        gap: 0.75rem;
-        text-decoration: none;
-        
-        .brand-logo {
-            font-size: 1.5rem;
-        }
-
-        .brand-name {
-            font-size: 1.25rem;
-            font-weight: 700;
-            color: $text-primary;
-            letter-spacing: -0.5px;
-        }
+    &:hover {
+        background-color: $color-accent;
+        color: #fff;
     }
-
-    .navbar-links {
-        display: flex;
-        align-items: center;
-        gap: 1.5rem;
-
-        .nav-link {
-            text-decoration: none;
-            color: $text-muted;
-            font-weight: 500;
-            font-size: 0.95rem;
-            padding: 0.5rem 1rem;
-            border-radius: 6px;
-            transition: all 0.2s ease;
-
-            &:hover {
-                color: $text-primary;
-                background-color: rgba($text-muted, 0.1);
-            }
-
-            &.active {
-                color: $accent;
-                background-color: rgba($accent, 0.1);
-            }
-        }
-    }
-
-    .navbar-actions {
-        display: flex;
-        align-items: center;
-        gap: 1rem;
-
-        .user-chip {
-            display: flex;
-            align-items: center;
-            gap: 0.6rem;
-
-            &__avatar {
-                width: 32px;
-                height: 32px;
-                border-radius: 50%;
-                background: linear-gradient(135deg, $accent, color.adjust($accent, $lightness: -15%));
-                color: #fff;
-                font-size: 0.85rem;
-                font-weight: 700;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                flex-shrink: 0;
-            }
-
-            &__name {
-                font-size: 0.9rem;
-                font-weight: 500;
-                color: $text-primary;
-                max-width: 120px;
-                overflow: hidden;
-                text-overflow: ellipsis;
-                white-space: nowrap;
-            }
-        }
-
-        .btn-logout {
-            background-color: rgba($accent, 0.1);
-            color: $accent;
-            border: 1px solid rgba($accent, 0.2);
-            padding: 0.5rem 1.25rem;
-            border-radius: 6px;
-            font-weight: 500;
-            font-size: 0.95rem;
-            cursor: pointer;
-            transition: all 0.2s ease;
-
-            &:hover {
-                background-color: $accent;
-                color: #fff;
-            }
-        }
+}
 
         .btn-login-nav {
-            background: linear-gradient(135deg, $accent, color.adjust($accent, $lightness: -10%));
+            background: linear-gradient(135deg, $color-accent, color.adjust($color-accent, $lightness: -10%));
             color: #fff;
             border: none;
             padding: 0.5rem 1.4rem;
@@ -139,6 +311,4 @@ $accent:         #ff2d78;
                 transform: translateY(-1px);
             }
         }
-    }
-}
 

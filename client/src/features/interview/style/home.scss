@@ -1,375 +1,670 @@
-@use 'sass:color';
+@use '../../../style/variables' as *;
+@use '../../../style/button.scss' as *;
 
-// ── Variables ────────────────────────────────────────────────────────────────
-$bg-page:        #0d1117;
-$bg-card:        #161b22;
-$bg-panel:       #1c2230;
-$bg-input:       #1e2535;
-$border-color:   #2a3348;
-$text-primary:   #e6edf3;
-$text-muted:     #7d8590;
-$accent:         #ff2d78;
-$accent-alt:     #ff6b9d;
-$badge-required: #ff2d78;
-$badge-best:     #ff2d78;
-$info-bg:        #1b2a4a;
-$info-border:    #2d4a7a;
-$font-stack:     system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+// ═══════════════════════════════════════════════════════════════════
+// 🏠 HOME PAGE (Generate Report) - MAANG Quality Design
+// ═══════════════════════════════════════════════════════════════════
 
-// ── Page Shell ───────────────────────────────────────────────────────────────
+// ───────────────────────────────────────────────────────────────────
+// 📄 PAGE SHELL
+// ───────────────────────────────────────────────────────────────────
+
 .home-page {
-    width: 100%;
-    min-height: 100vh;
-    background-color: $bg-page;
-    color: $text-primary;
-    font-family: $font-stack;
+  width: 100%;
+  min-height: 100vh;
+  background: linear-gradient(135deg, $color-bg-primary 0%, $color-bg-secondary 100%);
+  color: $color-text-primary;
+  font-family: $font-family-base;
+  
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  gap: $spacing-6;
+  padding: $spacing-4 $spacing-3;
+  box-sizing: border-box;
+  margin: 0;
+  
+  @include breakpoint('sm') {
+    padding: $spacing-6 $spacing-4;
+    gap: $spacing-7;
+  }
+  
+  @include breakpoint('md') {
+    padding: $spacing-8 $spacing-6;
+    gap: $spacing-8;
+  }
+  
+  @include breakpoint('lg') {
+    padding: $spacing-10 $spacing-8;
+    gap: $spacing-10;
+  }
+}
 
+// ───────────────────────────────────────────────────────────────────
+// 📋 PAGE HEADER
+// ───────────────────────────────────────────────────────────────────
+
+.page-header {
+  text-align: center;
+  max-width: 700px;
+  animation: fade-in-up 0.6s ease-out;
+  
+  h1 {
+    font-size: clamp(1.75rem, 5vw, 2.5rem);
+    font-weight: $font-weight-bold;
+    margin-bottom: $spacing-4;
+    color: $color-text-primary;
+    line-height: $line-height-tight;
+  }
+  
+  p {
+    color: $color-text-secondary;
+    font-size: $font-size-lg;
+    max-width: 600px;
+    margin: 0 auto;
+    line-height: $line-height-relaxed;
+  }
+  
+  .highlight {
+    @include gradient-primary;
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+}
+
+// ───────────────────────────────────────────────────────────────────
+// ✨ FEATURES GRID
+// ───────────────────────────────────────────────────────────────────
+
+.features-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: $spacing-3;
+  width: 100%;
+  max-width: 100%;
+  padding: 0 $spacing-2;
+  margin: 0 auto;
+  
+  @include breakpoint('sm') {
+    grid-template-columns: repeat(2, 1fr);
+    gap: $spacing-4;
+    max-width: 600px;
+    padding: 0 $spacing-3;
+  }
+  
+  @include breakpoint('md') {
+    grid-template-columns: repeat(4, 1fr);
+    gap: $spacing-5;
+    max-width: 1000px;
+  }
+}
+
+.feature-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: $spacing-2;
+  padding: $spacing-4;
+  background: rgba($color-primary, 0.05);
+  border: 1px solid rgba($color-primary, 0.1);
+  border-radius: $radius-lg;
+  transition: $transition-all;
+  cursor: pointer;
+  
+  @include breakpoint('sm') {
+    gap: $spacing-3;
+    padding: $spacing-5;
+  }
+  
+  &:hover {
+    background: rgba($color-primary, 0.08);
+    border-color: rgba($color-primary, 0.25);
+    transform: translateY(-4px);
+    box-shadow: 0 8px 16px rgba($color-primary, 0.1);
+  }
+  
+  .feature-icon {
+    font-size: 1.75rem;
+    line-height: 1;
+    display: block;
+    
+    @include breakpoint('sm') {
+      font-size: 2rem;
+    }
+  }
+  
+  h3 {
+    font-size: $font-size-sm;
+    font-weight: $font-weight-bold;
+    color: $color-text-primary;
+    margin: 0;
+    
+    @include breakpoint('sm') {
+      font-size: $font-size-base;
+    }
+  }
+  
+  p {
+    font-size: $font-size-xs;
+    color: $color-text-secondary;
+    margin: 0;
+    line-height: $line-height-relaxed;
+    
+    @include breakpoint('sm') {
+      font-size: $font-size-sm;
+    }
+  }
+}
+
+// ───────────────────────────────────────────────────────────────────
+// 🃏 MAIN INTERVIEW CARD
+// ───────────────────────────────────────────────────────────────────
+
+.interview-card {
+  width: 100%;
+  max-width: 1000px;
+  margin: 0 auto;
+  box-sizing: border-box;
+  
+  @include card;
+  overflow: hidden;
+  animation: card-appear 0.7s ease-out;
+  
+  @include breakpoint('sm') {
+    max-width: 100%;
+    padding: 0 $spacing-2;
+  }
+  
+  @include breakpoint('md') {
+    max-width: 1000px;
+    padding: 0;
+  }
+  
+  &__body {
     display: flex;
     flex-direction: column;
+    
+    @include breakpoint('md') {
+      flex-direction: row;
+      min-height: 500px;
+    }
+  }
+  
+  &__footer {
+    display: flex;
     align-items: center;
-    justify-content: center;
-    padding: 3rem 1.5rem;
-    gap: 2rem;
+    justify-content: space-between;
+    padding: $spacing-6;
+    border-top: 1px solid $color-border;
+    gap: $spacing-4;
+    flex-wrap: wrap;
+    
+    .footer-info {
+      font-size: $font-size-sm;
+      color: $color-text-muted;
+    }
+  }
 }
 
-// ── Page Header ──────────────────────────────────────────────────────────────
-.page-header {
-    text-align: center;
+// ───────────────────────────────────────────────────────────────────
+// 📍 PANEL DIVIDER
+// ───────────────────────────────────────────────────────────────────
 
-    h1 {
-        font-size: 2.25rem;
-        font-weight: 700;
-        margin-bottom: 0.5rem;
-        color: $text-primary;
-    }
-
-    p {
-        color: $text-muted;
-        font-size: 0.95rem;
-        max-width: 480px;
-        margin: 0 auto;
-        line-height: 1.6;
-    }
-
-    .highlight {
-        color: $accent;
-    }
-}
-
-// ── Main Card ─────────────────────────────────────────────────────────────────
-.interview-card {
-    width: 100%;
-    max-width: 900px;
-    background-color: $bg-card;
-    border: 1px solid $border-color;
-    border-radius: 1rem;
-    overflow: hidden;
-
-    &__body {
-        display: flex;
-        min-height: 520px;
-    }
-
-    &__footer {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        padding: 1rem 1.5rem;
-        border-top: 1px solid $border-color;
-
-        .footer-info {
-            font-size: 0.8rem;
-            color: $text-muted;
-        }
-    }
-}
-
-// ── Panels ────────────────────────────────────────────────────────────────────
 .panel-divider {
-    width: 1px;
-    background-color: $border-color;
-    flex-shrink: 0;
+  display: none;
+  width: 1px;
+  background-color: $color-border;
+  flex-shrink: 0;
+  
+  @include breakpoint('md') {
+    display: block;
+  }
 }
+
+// ───────────────────────────────────────────────────────────────────
+// 📝 PANEL STYLES
+// ───────────────────────────────────────────────────────────────────
 
 .panel {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
-    padding: 1.5rem;
-
-    &__header {
-        display: flex;
-        align-items: center;
-        gap: 0.5rem;
-        margin-bottom: 0.25rem;
-
-        h2 {
-            font-size: 1rem;
-            font-weight: 600;
-            color: $text-primary;
-            flex: 1;
-        }
-    }
-
-    &__icon {
-        display: flex;
-        align-items: center;
-        color: $accent;
-    }
-
-    &__textarea {
-        flex: 1;
-        width: 100%;
-        background-color: $bg-input;
-        border: 1px solid $border-color;
-        border-radius: 0.5rem;
-        padding: 0.75rem 1rem;
-        color: $text-primary;
-        font-family: $font-stack;
-        font-size: 0.875rem;
-        resize: none;
-        outline: none;
-        transition: border-color 0.2s;
-        line-height: 1.5;
-
-        &::placeholder {
-            color: $text-muted;
-        }
-
-        &:focus {
-            border-color: $accent;
-        }
-
-        &--short {
-            flex: unset;
-            height: 96px;
-        }
-    }
-
-    &--left {
-        position: relative;
-
-        .char-counter {
-            position: absolute;
-            bottom: 2.25rem;
-            right: 2rem;
-            font-size: 0.75rem;
-            color: $text-muted;
-        }
-    }
-
-    &--right {
-        gap: 0.75rem;
-    }
-}
-
-// ── Badges ────────────────────────────────────────────────────────────────────
-.badge {
-    font-size: 0.7rem;
-    font-weight: 600;
-    padding: 0.15rem 0.5rem;
-    border-radius: 0.3rem;
-    text-transform: uppercase;
-    letter-spacing: 0.03em;
-
-    &--required {
-        background-color: rgba($badge-required, 0.15);
-        color: $badge-required;
-        border: 1px solid rgba($badge-required, 0.3);
-    }
-
-    &--best {
-        background-color: rgba($badge-best, 0.15);
-        color: $badge-best;
-        border: 1px solid rgba($badge-best, 0.3);
-    }
-}
-
-// ── Section Label ─────────────────────────────────────────────────────────────
-.section-label {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-4;
+  padding: $spacing-6;
+  position: relative;
+  
+  @include breakpoint('sm') {
+    gap: $spacing-5;
+    padding: $spacing-7;
+  }
+  
+  @include breakpoint('md') {
+    gap: $spacing-6;
+    padding: $spacing-8;
+  }
+  
+  &__header {
     display: flex;
     align-items: center;
-    gap: 0.5rem;
-    font-size: 0.875rem;
-    font-weight: 500;
-    color: $text-primary;
-    margin-bottom: 0.25rem;
+    gap: $spacing-3;
+    margin-bottom: $spacing-2;
+    
+    h2 {
+      font-size: $font-size-lg;
+      font-weight: $font-weight-bold;
+      color: $color-text-primary;
+      flex: 1;
+      margin: 0;
+    }
+  }
+  
+  &__icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: $color-primary;
+    width: $size-icon-base;
+    height: $size-icon-base;
+  }
+  
+  &__textarea {
+    flex: 1;
+    width: 100%;
+    background-color: rgba($color-bg-tertiary, 0.5);
+    border: 1px solid $color-border;
+    border-radius: $radius-md;
+    padding: $spacing-4;
+    color: $color-text-primary;
+    font-family: $font-family-base;
+    font-size: $font-size-base;
+    resize: vertical;
+    outline: none;
+    transition: $transition-all;
+    line-height: $line-height-relaxed;
+    
+    &::placeholder {
+      color: $color-text-muted;
+    }
+    
+    &:focus {
+      border-color: $color-primary;
+      background-color: rgba($color-primary, 0.05);
+      box-shadow: 0 0 0 3px rgba($color-primary, 0.1);
+    }
+    
+    &--short {
+      flex: none;
+      min-height: 120px;
+    }
+  }
+  
+  &--left {
+    position: relative;
+  }
+  
+  &--right {
+    gap: $spacing-4;
+  }
 }
 
-// ── Dropzone ──────────────────────────────────────────────────────────────────
+// ───────────────────────────────────────────────────────────────────
+// 🏷️ BADGE STYLES
+// ───────────────────────────────────────────────────────────────────
+
+.badge {
+  font-size: $font-size-xs;
+  font-weight: $font-weight-bold;
+  padding: $spacing-1 $spacing-3;
+  border-radius: $radius-sm;
+  text-transform: uppercase;
+  letter-spacing: $letter-spacing-wide;
+  display: inline-block;
+  width: fit-content;
+  
+  &--required {
+    background-color: rgba($color-accent, 0.15);
+    color: $color-accent;
+    border: 1px solid rgba($color-accent, 0.3);
+  }
+  
+  &--best {
+    background-color: rgba($color-primary, 0.15);
+    color: $color-primary;
+    border: 1px solid rgba($color-primary, 0.3);
+  }
+}
+
+// ───────────────────────────────────────────────────────────────────
+// 📊 SECTION LABEL & UPLOAD
+// ───────────────────────────────────────────────────────────────────
+
+.section-label {
+  display: flex;
+  align-items: center;
+  gap: $spacing-2;
+  font-size: $font-size-sm;
+  font-weight: $font-weight-semibold;
+  color: $color-text-primary;
+  margin-bottom: $spacing-1;
+}
+
 .upload-section {
-    display: flex;
-    flex-direction: column;
-    gap: 0.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-3;
 }
 
 .dropzone {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    gap: 0.35rem;
-    padding: 1.5rem 1rem;
-    background-color: $bg-input;
-    border: 2px dashed $border-color;
-    border-radius: 0.6rem;
-    cursor: pointer;
-    transition: border-color 0.2s, background-color 0.2s;
-
-    &:hover {
-        border-color: color.adjust($border-color, $lightness: 8%);
-        background-color: rgba($accent, 0.05);
-    }
-
-    &__icon {
-        color: $accent;
-        margin-bottom: 0.25rem;
-    }
-
-    &__title {
-        font-size: 0.875rem;
-        font-weight: 500;
-        color: $text-primary;
-        margin: 0;
-    }
-
-    &__subtitle {
-        font-size: 0.75rem;
-        color: $text-muted;
-        margin: 0;
-    }
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: $spacing-2;
+  padding: $spacing-8;
+  background-color: rgba($color-bg-tertiary, 0.4);
+  border: 2px dashed $color-border;
+  border-radius: $radius-lg;
+  cursor: pointer;
+  transition: $transition-all;
+  
+  &:hover {
+    border-color: $color-primary;
+    background-color: rgba($color-primary, 0.08);
+  }
+  
+  &:active {
+    transform: scale(0.98);
+  }
+  
+  &__icon {
+    font-size: $font-size-4xl;
+    color: $color-primary;
+  }
+  
+  &__title {
+    font-size: $font-size-base;
+    font-weight: $font-weight-semibold;
+    color: $color-text-primary;
+    margin: 0;
+  }
+  
+  &__subtitle {
+    font-size: $font-size-sm;
+    color: $color-text-muted;
+    margin: 0;
+  }
 }
 
-// ── OR Divider ────────────────────────────────────────────────────────────────
+// ───────────────────────────────────────────────────────────────────
+// ➕ OR DIVIDER
+// ───────────────────────────────────────────────────────────────────
+
 .or-divider {
-    display: flex;
-    align-items: center;
-    gap: 0.75rem;
-    color: $text-muted;
-    font-size: 0.75rem;
-
-    &::before,
-    &::after {
-        content: '';
-        flex: 1;
-        height: 1px;
-        background-color: $border-color;
-    }
-
-    span {
-        white-space: nowrap;
-    }
+  display: flex;
+  align-items: center;
+  gap: $spacing-4;
+  color: $color-text-muted;
+  font-size: $font-size-sm;
+  font-weight: $font-weight-semibold;
+  
+  &::before,
+  &::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background-color: $color-border;
+  }
+  
+  span {
+    white-space: nowrap;
+  }
 }
 
-// ── Self Description ──────────────────────────────────────────────────────────
+// ───────────────────────────────────────────────────────────────────
+// 💬 SELF DESCRIPTION
+// ───────────────────────────────────────────────────────────────────
+
 .self-description {
-    display: flex;
-    flex-direction: column;
-    gap: 0.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-3;
 }
 
-// ── Info Box ──────────────────────────────────────────────────────────────────
+// ───────────────────────────────────────────────────────────────────
+// ℹ️ INFO BOX
+// ───────────────────────────────────────────────────────────────────
+
 .info-box {
-    display: flex;
-    align-items: flex-start;
-    gap: 0.6rem;
-    padding: 0.75rem 1rem;
-    background-color: $info-bg;
-    border: 1px solid $info-border;
-    border-radius: 0.5rem;
-
-    &__icon {
-        flex-shrink: 0;
-        color: #4a90e2;
-        margin-top: 1px;
+  display: flex;
+  align-items: flex-start;
+  gap: $spacing-3;
+  padding: $spacing-4;
+  background: rgba($color-info, 0.12);
+  border: 1px solid rgba($color-info, 0.25);
+  border-radius: $radius-md;
+  
+  &__icon {
+    flex-shrink: 0;
+    color: $color-info;
+    font-size: $font-size-xl;
+    margin-top: $spacing-1;
+  }
+  
+  p {
+    margin: 0;
+    font-size: $font-size-sm;
+    color: $color-info;
+    line-height: $line-height-relaxed;
+    
+    strong {
+      color: $color-text-primary;
     }
-
-    p {
-        margin: 0;
-        font-size: 0.8rem;
-        color: #8ab4f8;
-        line-height: 1.5;
-
-        strong {
-            color: $text-primary;
-        }
-    }
+  }
 }
 
-// ── Generate Button ───────────────────────────────────────────────────────────
+// ───────────────────────────────────────────────────────────────────
+// 📤 CHARACTER COUNTER
+// ───────────────────────────────────────────────────────────────────
+
+.char-counter {
+  font-size: $font-size-xs;
+  color: $color-text-muted;
+  font-weight: $font-weight-medium;
+  text-align: right;
+  margin-top: $spacing-1;
+  padding-right: $spacing-2;
+}
+
+// ───────────────────────────────────────────────────────────────────
+// 🚀 GENERATE BUTTON
+// ───────────────────────────────────────────────────────────────────
+
 .generate-btn {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    padding: 0.75rem 1.5rem;
-    background: linear-gradient(135deg, $accent 0%, color.adjust($accent, $lightness: -10%) 100%);
-    color: #fff;
-    font-size: 0.9rem;
-    font-weight: 600;
-    border: none;
-    border-radius: 0.5rem;
-    cursor: pointer;
-    transition: opacity 0.2s, transform 0.1s;
-    font-family: $font-stack;
-
-    &:hover {
-        opacity: 0.9;
-    }
-
-    &:active {
-        transform: scale(0.98);
-    }
+  @extend .btn-primary;
+  width: 100%;
+  min-height: 2.75rem;
+  font-size: $font-size-base;
+  gap: $spacing-2;
 }
 
-.recent-reports{
-    display: flex;
-    flex-direction: column;
-    gap: 0.75rem;
-    width: 100%;
-    max-width: 900px;
+// ───────────────────────────────────────────────────────────────────
+// 📜 RECENT REPORTS
+// ───────────────────────────────────────────────────────────────────
 
-    .reports-list{
-        display: flex;
-        gap: 0.75rem;
-        flex-wrap: wrap;
-
-        .report-item{
-            background-color: $bg-card;
-            border: 1px solid $border-color;
-            border-radius: 0.5rem;
-            padding: 1rem;
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            gap: 0.5rem;
-            cursor: pointer;
-            flex-shrink: 0;
-
-            .match-score {
-                font-size: 0.8rem;
-                font-weight: 600;
-                color: $accent;
-                align-items: flex-start;
-            }
-        }
-    }
+.recent-reports {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-6;
+  width: 100%;
+  max-width: 1000px;
+  
+  h3 {
+    font-size: $font-size-2xl;
+    font-weight: $font-weight-bold;
+    color: $color-text-primary;
+    margin: 0;
+  }
 }
 
+.reports-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: $spacing-6;
+  width: 100%;
+  
+  @include breakpoint('md') {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
 
-// ── Page Footer ───────────────────────────────────────────────────────────────
+.report-item {
+  @include card-hover;
+  padding: $spacing-6;
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-3;
+  cursor: pointer;
+  
+  .match-score {
+    font-size: $font-size-lg;
+    font-weight: $font-weight-bold;
+    color: $color-primary;
+  }
+  
+  .report-title {
+    font-size: $font-size-base;
+    font-weight: $font-weight-semibold;
+    color: $color-text-primary;
+    margin: 0;
+    @include text-truncate;
+  }
+  
+  .report-date {
+    font-size: $font-size-sm;
+    color: $color-text-muted;
+    margin: 0;
+  }
+}
+
+// ───────────────────────────────────────────────────────────────────
+// 🔗 PAGE FOOTER
+// ───────────────────────────────────────────────────────────────────
+
 .page-footer {
-    display: flex;
-    gap: 1.5rem;
-
-    a {
-        font-size: 0.8rem;
-        color: $text-muted;
-        text-decoration: none;
-        transition: color 0.2s;
-
-        &:hover {
-            color: $text-primary;
-        }
+  display: flex;
+  gap: $spacing-6;
+  align-items: center;
+  flex-wrap: wrap;
+  justify-content: center;
+  margin-top: $spacing-8;
+  
+  a {
+    font-size: $font-size-sm;
+    color: $color-text-muted;
+    text-decoration: none;
+    transition: $transition-color;
+    
+    &:hover {
+      color: $color-primary;
+      text-decoration: underline;
     }
+  }
+}
+
+// ───────────────────────────────────────────────────────────────────
+// 🔄 LOADING SCREEN & STEPPER
+// ───────────────────────────────────────────────────────────────────
+
+.loading-screen {
+  width: 100%;
+  min-height: 100vh;
+  background: linear-gradient(135deg, $color-bg-primary 0%, $color-bg-secondary 100%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: $spacing-6;
+  padding: $spacing-8 $spacing-4;
+  
+  @include breakpoint('md') {
+    padding: $spacing-12 $spacing-8;
+  }
+}
+
+.stepper-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: $spacing-6;
+  width: 100%;
+  max-width: 400px;
+  
+  h2 {
+    color: $color-text-primary;
+    font-size: clamp(1.25rem, 5vw, 1.75rem);
+    font-weight: $font-weight-semibold;
+    text-align: center;
+    margin: 0;
+  }
+
+  .spinner {
+    width: 56px;
+    height: 56px;
+    border: 4px solid rgba($color-primary, 0.1);
+    border-top: 4px solid $color-primary;
+    border-radius: 50%;
+    animation: spinner-spin 1s linear infinite;
+  }
+
+  .progress-bar-container {
+    width: 100%;
+    height: 4px;
+    background-color: rgba($color-border, 0.5);
+    border-radius: $radius-full;
+    overflow: hidden;
+    margin-top: $spacing-2;
+  }
+
+  .progress-bar-fill {
+    height: 100%;
+    background: linear-gradient(90deg, $color-primary, $color-accent);
+    border-radius: $radius-full;
+    transition: width 0.5s ease-in-out;
+  }
+}
+
+// ───────────────────────────────────────────────────────────────────
+// 🎬 ANIMATIONS
+// ───────────────────────────────────────────────────────────────────
+
+@keyframes fade-in-up {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes card-appear {
+  from {
+    opacity: 0;
+    transform: translateY(30px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes spinner-spin {
+  to { 
+    transform: rotate(360deg); 
+  }
 }
