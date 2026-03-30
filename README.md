@@ -42,7 +42,7 @@ The system helps users understand how well their resume matches a job role and p
 ### Frontend
 
 * React
-* Tailwind CSS
+* SCSS
 * Axios
 * React Router
 
