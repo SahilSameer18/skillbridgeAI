@@ -1,0 +1,342 @@
+@use 'sass:color';
+@use '../../styles/variables' as *;
+@use '../../styles/button.scss' as *;
+
+// ═══════════════════════════════════════════════════════════════════
+// 🧭 NAVBAR - Modern Navigation
+// ═══════════════════════════════════════════════════════════════════
+
+.global-navbar {
+  @include glass;
+  position: sticky;
+  top: $spacing-4;
+  margin: 0 $spacing-6;
+  border-radius: $radius-xl;
+  z-index: $z-sticky;
+  padding: $spacing-1 0;
+  transition: $transition-all;
+  
+  .navbar-container {
+    padding: 0 $spacing-6;
+    min-height: 64px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    box-sizing: border-box;
+  }
+}
+
+// ───────────────────────────────────────────────────────────────────
+// 🏷️ NAVBAR BRAND
+// ───────────────────────────────────────────────────────────────────
+
+.navbar-brand {
+  .brand-logo {
+    font-size: 1.5rem;
+    filter: drop-shadow(0 0 8px rgba($color-primary, 0.5));
+  }
+  
+  .brand-name {
+    @include text-gradient;
+    font-size: 1.25rem;
+  }
+}
+
+// ───────────────────────────────────────────────────────────────────
+// 🔗 NAVBAR LINKS
+// ───────────────────────────────────────────────────────────────────
+
+.navbar-links {
+  .nav-link {
+    font-size: $font-size-sm;
+    letter-spacing: 0.02em;
+    padding: $spacing-2 $spacing-4;
+    
+    &::after {
+      height: 3px;
+      box-shadow: 0 0 10px $color-primary;
+    }
+    
+    &:hover {
+      background: rgba($color-primary, 0.08);
+    }
+  }
+}
+
+// ───────────────────────────────────────────────────────────────────
+// 🎯 NAVBAR ACTIONS
+// ───────────────────────────────────────────────────────────────────
+
+.navbar-actions {
+  display: flex;
+  align-items: center;
+  gap: $spacing-2;
+  flex-shrink: 0;
+  min-width: 0;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  
+  @include breakpoint('sm') {
+    gap: $spacing-3;
+    flex-wrap: nowrap;
+  }
+  
+  @include breakpoint('md') {
+    gap: $spacing-4;
+  }
+}
+
+.user-chip {
+  display: flex;
+  align-items: center;
+  gap: $spacing-1;
+  padding: $spacing-1 $spacing-2;
+  border-radius: $radius-full;
+  background: rgba($color-primary, 0.08);
+  border: 1px solid rgba($color-primary, 0.2);
+  transition: $transition-all;
+  cursor: pointer;
+  min-width: 0;
+  white-space: nowrap;
+  
+  @include breakpoint('sm') {
+    gap: $spacing-2;
+    padding: $spacing-1 $spacing-3;
+  }
+  
+  &:hover {
+    background: rgba($color-primary, 0.12);
+    border-color: rgba($color-primary, 0.4);
+  }
+  
+  &__avatar {
+    width: 28px;
+    height: 28px;
+    border-radius: $radius-full;
+    @include gradient-primary;
+    color: white;
+    font-size: $font-size-xs;
+    font-weight: $font-weight-bold;
+    @include flex-center;
+    flex-shrink: 0;
+    
+    @include breakpoint('sm') {
+      width: 32px;
+      height: 32px;
+      font-size: $font-size-sm;
+    }
+  }
+  
+  &__name {
+    font-size: $font-size-xs;
+    font-weight: $font-weight-semibold;
+    color: $color-text-primary;
+    max-width: 100px;
+    @include text-truncate;
+    
+    @include breakpoint('xs') {
+      display: none;
+    }
+    @include breakpoint('sm') {
+      display: inline;
+      max-width: 150px;
+      font-size: $font-size-sm;
+    }
+  }
+}
+
+// ───────────────────────────────────────────────────────────────────
+// 🔘 LOGOUT BUTTON
+// ───────────────────────────────────────────────────────────────────
+
+.logout-btn {
+  @extend .btn-outline;
+  font-size: $font-size-sm;
+  padding: $spacing-2 $spacing-4;
+  
+  &:hover {
+    border-color: $color-error;
+    color: $color-error;
+    background-color: rgba($color-error, 0.1);
+  }
+}
+
+// ───────────────────────────────────────────────────────────────────
+// 🎬 ANIMATIONS
+// ───────────────────────────────────────────────────────────────────
+
+@keyframes logo-bounce-nav {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-4px); }
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.btn-logout {
+    background-color: rgba($color-accent, 0.1);
+    color: $color-accent;
+    border: 1px solid rgba($color-accent, 0.2);
+    padding: $spacing-1 $spacing-2;
+    border-radius: 6px;
+    font-weight: 500;
+    font-size: 0.7rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    white-space: nowrap;
+    display: none;
+    
+    @include breakpoint('sm') {
+      display: inline-block;
+      padding: $spacing-1 $spacing-3;
+      font-size: 0.8rem;
+    }
+    
+    @include breakpoint('md') {
+      padding: $spacing-2 $spacing-4;
+      font-size: 0.9rem;
+    }
+
+    &:hover {
+        background-color: $color-accent;
+        color: #fff;
+    }
+}
+
+// ───────────────────────────────────────────────────────────────────
+// 📱 MOBILE MENU
+// ───────────────────────────────────────────────────────────────────
+
+.mobile-menu-wrapper {
+  position: relative;
+  display: flex;
+  
+  @include breakpoint('sm') {
+    display: none;
+  }
+}
+
+.hamburger-btn {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: $spacing-2;
+  border-radius: $radius-md;
+  transition: $transition-all;
+  align-items: center;
+  justify-content: center;
+  
+  &:hover {
+    background-color: rgba($color-primary, 0.1);
+  }
+  
+  .hamburger-line {
+    width: 20px;
+    height: 2px;
+    background-color: $color-text-primary;
+    border-radius: 1px;
+    transition: $transition-all;
+  }
+}
+
+.mobile-menu-dropdown {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  background: $color-bg-secondary;
+  border: 1px solid $color-border;
+  border-radius: $radius-md;
+  margin-top: $spacing-2;
+  min-width: 200px;
+  box-shadow: $shadow-lg;
+  z-index: 1000;
+  animation: slideDown 0.2s ease-out;
+  
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.mobile-nav-link {
+  color: $color-text-secondary;
+  text-decoration: none;
+  padding: $spacing-3 $spacing-4;
+  transition: $transition-all;
+  font-weight: $font-weight-semibold;
+  text-align: left;
+  border-bottom: 1px solid rgba($color-border, 0.5);
+  
+  &:last-child {
+    border-bottom: none;
+  }
+  
+  &:hover {
+    background-color: rgba($color-primary, 0.1);
+    color: $color-text-primary;
+  }
+  
+  &.active {
+    background-color: rgba($color-primary, 0.15);
+    color: $color-primary;
+    font-weight: $font-weight-bold;
+  }
+}
+
+.mobile-logout-btn {
+  background: none;
+  border: none;
+  color: $color-accent;
+  padding: $spacing-3 $spacing-4;
+  text-align: left;
+  cursor: pointer;
+  transition: $transition-all;
+  font-weight: $font-weight-semibold;
+  font-size: $font-size-sm;
+  
+  &:hover {
+    background-color: rgba($color-accent, 0.1);
+    color: $color-accent;
+  }
+}
+
+.btn-login-nav {
+    background: linear-gradient(135deg, $color-accent, color.adjust($color-accent, $lightness: -10%));
+    color: #fff;
+    border: none;
+    padding: $spacing-1 $spacing-2;
+    border-radius: 6px;
+    font-weight: 600;
+    font-size: 0.75rem;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    transition: opacity 0.2s, transform 0.2s;
+    white-space: nowrap;
+
+    @include breakpoint('sm') {
+      padding: 0.5rem 1rem;
+      font-size: 0.85rem;
+    }
+
+    @include breakpoint('md') {
+      padding: 0.5rem 1.4rem;
+      font-size: 0.95rem;
+    }
+
+    &:hover {
+        opacity: 0.88;
+        transform: translateY(-1px);
+    }
+}

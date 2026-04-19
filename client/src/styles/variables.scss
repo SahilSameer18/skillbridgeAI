@@ -1,0 +1,334 @@
+// ═══════════════════════════════════════════════════════════════════
+// 🎨 DESIGN SYSTEM - SkillBridge AI
+// ═══════════════════════════════════════════════════════════════════
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700;800&display=swap');
+
+// ───────────────────────────────────────────────────────────────────
+// 🎯 COLOR PALETTE
+// ───────────────────────────────────────────────────────────────────
+
+// Primary Colors - More vibrant & modern
+$color-primary: #3b82f6;        // Bright Blue
+$color-primary-dark: #1d4ed8;   // Deeper Blue
+$color-primary-light: #60a5fa;  // Soft Blue
+$color-primary-50: rgba($color-primary, 0.05);
+
+// Secondary Colors
+$color-accent: #f43f5e;         // Rose
+$color-accent-dark: #e11d48;
+$color-accent-light: #fb7185;
+
+// Status
+$color-success: #10b981;
+$color-warning: #f59e0b;
+$color-error: #ef4444;
+$color-info: #0ea5e9;           // Sky Blue for informational UI
+
+// Neutrals (Optimized Dark Theme)
+$color-bg-primary: #0b0f1a;     // Deep Midnight
+$color-bg-secondary: #131a2b;   // Dark Navy
+$color-bg-tertiary: #1e293b;    // Slate
+$color-bg-input: rgba(15, 23, 42, 0.6);
+
+$color-text-primary: #ffffff;
+$color-text-secondary: #94a3b8;
+$color-text-muted: #64748b;
+
+$color-border: rgba(255, 255, 255, 0.08);
+
+// ───────────────────────────────────────────────────────────────────
+// 📏 SPACING SYSTEM (8px base)
+// ───────────────────────────────────────────────────────────────────
+
+$spacing-0: 0;
+$spacing-1: 0.25rem;    // 4px
+$spacing-2: 0.5rem;     // 8px
+$spacing-3: 0.75rem;    // 12px
+$spacing-4: 1rem;       // 16px
+$spacing-5: 1.25rem;    // 20px
+$spacing-6: 1.5rem;     // 24px
+$spacing-7: 1.75rem;    // 28px
+$spacing-8: 2rem;       // 32px
+$spacing-10: 2.5rem;    // 40px
+$spacing-12: 3rem;      // 48px
+$spacing-16: 4rem;      // 64px
+$spacing-20: 5rem;      // 80px
+
+// ───────────────────────────────────────────────────────────────────
+// 🔤 TYPOGRAPHY
+// ───────────────────────────────────────────────────────────────────
+
+$font-family-base: 'Inter', system-ui, -apple-system, sans-serif;
+$font-family-display: 'Outfit', 'Inter', sans-serif;
+$font-family-mono: 'JetBrains Mono', 'Fira Code', monospace;
+
+// Font Sizes
+$font-size-xs: 0.75rem;    // 12px
+$font-size-sm: 0.875rem;   // 14px
+$font-size-base: 1rem;     // 16px
+$font-size-lg: 1.125rem;   // 18px
+$font-size-xl: 1.25rem;    // 20px
+$font-size-2xl: 1.5rem;    // 24px
+$font-size-3xl: 1.875rem;  // 30px
+$font-size-4xl: 2.25rem;   // 36px
+$font-size-5xl: 3rem;      // 48px
+$font-size-6xl: 3.75rem;   // 60px
+
+// Font Weights
+$font-weight-light: 300;
+$font-weight-normal: 400;
+$font-weight-medium: 500;
+$font-weight-semibold: 600;
+$font-weight-bold: 700;
+$font-weight-extrabold: 800;
+
+// Line Heights
+$line-height-none: 1;
+$line-height-tight: 1.25;
+$line-height-snug: 1.375;
+$line-height-normal: 1.5;
+$line-height-relaxed: 1.625;
+$line-height-loose: 2;
+
+// Letter Spacing
+$letter-spacing-tight: -0.02em;
+$letter-spacing-normal: 0;
+$letter-spacing-wide: 0.02em;
+
+// ───────────────────────────────────────────────────────────────────
+// 🔲 BORDER RADIUS
+// ───────────────────────────────────────────────────────────────────
+
+$radius-none: 0;
+$radius-sm: 0.375rem;    // 6px
+$radius-base: 0.5rem;    // 8px
+$radius-md: 0.75rem;     // 12px
+$radius-lg: 1rem;        // 16px
+$radius-xl: 1.5rem;      // 24px
+$radius-2xl: 2rem;       // 32px
+$radius-full: 9999px;    // Full radius
+
+// ───────────────────────────────────────────────────────────────────
+// 🎬 TRANSITIONS & ANIMATIONS
+// ───────────────────────────────────────────────────────────────────
+
+$transition-fast: 150ms;
+$transition-base: 200ms;
+$transition-slow: 300ms;
+$transition-slower: 500ms;
+
+$easing-linear: linear;
+$easing-in: cubic-bezier(0.4, 0, 1, 1);
+$easing-out: cubic-bezier(0, 0, 0.2, 1);
+$easing-in-out: cubic-bezier(0.4, 0, 0.2, 1);
+$easing-ease: ease;
+
+// Standard transitions
+$transition-all: all $transition-base $easing-in-out;
+$transition-color: color $transition-base $easing-in-out;
+$transition-opacity: opacity $transition-base $easing-in-out;
+$transition-transform: transform $transition-base $easing-in-out;
+$transition-shadow: box-shadow $transition-base $easing-in-out;
+$transition-all-slow: all $transition-slow $easing-in-out;
+
+// ───────────────────────────────────────────────────────────────────
+// 💡 SHADOWS
+// ───────────────────────────────────────────────────────────────────
+
+$shadow-none: none;
+$shadow-xs: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+$shadow-sm: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+$shadow-base: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+$shadow-md: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+$shadow-lg: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+$shadow-xl: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+$shadow-2xl: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+
+$shadow-elevation-1: $shadow-md;
+$shadow-elevation-2: $shadow-lg;
+$shadow-elevation-3: $shadow-xl;
+
+// Inset shadows
+$shadow-inset: inset 0 2px 4px 0 rgba(0, 0, 0, 0.05);
+
+// ───────────────────────────────────────────────────────────────────
+// 📱 BREAKPOINTS
+// ───────────────────────────────────────────────────────────────────
+
+$breakpoint-xs: 0;
+$breakpoint-sm: 640px;
+$breakpoint-md: 768px;
+$breakpoint-lg: 1024px;
+$breakpoint-xl: 1280px;
+$breakpoint-2xl: 1536px;
+
+// ───────────────────────────────────────────────────────────────────
+// ⚡ Z-INDEX SCALE
+// ───────────────────────────────────────────────────────────────────
+
+$z-dropdown: 100;
+$z-sticky: 500;
+$z-fixed: 1000;
+$z-modal-backdrop: 1040;
+$z-modal: 1050;
+$z-tooltip: 1100;
+$z-notification: 1200;
+
+// ───────────────────────────────────────────────────────────────────
+// 🎯 COMPONENT SIZES
+// ───────────────────────────────────────────────────────────────────
+
+$size-input-sm: 2rem;      // 32px
+$size-input-base: 2.5rem;  // 40px
+$size-input-lg: 3rem;      // 48px
+
+$size-button-sm: 2rem;     // 32px
+$size-button-base: 2.5rem; // 40px
+$size-button-lg: 3rem;     // 48px
+
+$size-icon-xs: 1rem;       // 16px
+$size-icon-sm: 1.5rem;     // 24px
+$size-icon-base: 2rem;     // 32px
+$size-icon-lg: 2.5rem;     // 40px
+
+// ───────────────────────────────────────────────────────────────────
+// 📐 CONTAINER WIDTHS
+// ───────────────────────────────────────────────────────────────────
+
+$container-xs: 320px;
+$container-sm: 640px;
+$container-md: 768px;
+$container-lg: 1024px;
+$container-xl: 1280px;
+$container-2xl: 1536px;
+
+// ───────────────────────────────────────────────────────────────────
+// 🔄 LAYOUT
+// ───────────────────────────────────────────────────────────────────
+
+$layout-gap: $spacing-6;
+$layout-gap-mobile: $spacing-4;
+$layout-padding: $spacing-6;
+$layout-padding-mobile: $spacing-4;
+
+@mixin text-gradient($start: $color-text-primary, $end: $color-text-secondary) {
+  background: linear-gradient(135deg, $start 0%, $end 100%);
+  -webkit-background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+// ═══════════════════════════════════════════════════════════════════
+// 🎨 UTILITIES & MIXINS
+// ═══════════════════════════════════════════════════════════════════
+
+// Responsive Breakpoints Mixin
+@mixin breakpoint($point) {
+  @if $point == 'xs' {
+    @media (max-width: ($breakpoint-sm - 1px)) { @content; }
+  }
+  @else if $point == 'sm' {
+    @media (min-width: $breakpoint-sm) { @content; }
+  }
+  @else if $point == 'md' {
+    @media (min-width: $breakpoint-md) { @content; }
+  }
+  @else if $point == 'lg' {
+    @media (min-width: $breakpoint-lg) { @content; }
+  }
+  @else if $point == 'xl' {
+    @media (min-width: $breakpoint-xl) { @content; }
+  }
+  @else if $point == '2xl' {
+    @media (min-width: $breakpoint-2xl) { @content; }
+  }
+}
+
+// Flexbox Utilities
+@mixin flex-center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+@mixin flex-between {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+@mixin flex-start {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+}
+
+// Text Utilities
+@mixin text-truncate {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+@mixin text-clamp($lines: 2) {
+  display: -webkit-box;
+  -webkit-line-clamp: $lines;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+// Card Utilities
+@mixin card {
+  background-color: $color-bg-secondary;
+  border: 1px solid $color-border;
+  border-radius: $radius-lg;
+  box-shadow: $shadow-elevation-1;
+}
+
+@mixin card-hover {
+  @include card;
+  transition: $transition-all-slow;
+  
+  &:hover {
+    border-color: $color-primary;
+    box-shadow: $shadow-elevation-2;
+    transform: translateY(-2px);
+  }
+}
+
+// Focus Utilities
+@mixin focus-ring($color: $color-primary, $width: 2px) {
+  outline: none;
+  box-shadow: 0 0 0 $width rgba($color, 0.5);
+  border-color: $color;
+}
+
+// Gradient Utilities
+@mixin gradient-primary {
+  background: linear-gradient(135deg, $color-primary 0%, $color-primary-dark 100%);
+}
+
+@mixin gradient-accent {
+  background: linear-gradient(135deg, $color-accent 0%, $color-accent-dark 100%);
+}
+
+// Glass Morphism
+@mixin glass($opacity: 0.03, $blur: 12px) {
+  background: rgba(255, 255, 255, $opacity);
+  backdrop-filter: blur($blur);
+  -webkit-backdrop-filter: blur($blur);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+}
+
+// Smooth Scroll
+@mixin smooth-scroll {
+  scroll-behavior: smooth;
+}
+
+// Hardware Acceleration
+@mixin gpu-acceleration {
+  transform: translateZ(0);
+  will-change: transform;
+}

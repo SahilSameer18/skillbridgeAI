@@ -1,8 +1,8 @@
 import React from "react";
 import { RouterProvider } from "react-router";
-import { router } from "./app.routes.jsx";
-import { AuthProvider } from "./features/auth/auth.context.jsx";
-import { InterviewProvider } from "./features/interview/Interview.context.jsx";
+import { router } from "./routes/app.routes";
+import { AuthProvider } from "./context/AuthContext";
+import { InterviewProvider } from "./context/InterviewContext";
 
 function App() {
   return (
