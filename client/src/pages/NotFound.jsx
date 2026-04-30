@@ -1,24 +1,36 @@
 import React from 'react'
 import { Link, useNavigate } from 'react-router'
-import './not-found.scss'
 
 const NotFound = () => {
     const navigate = useNavigate()
 
     return (
-        <div className="not-found-page">
-            <div className="not-found__code">404</div>
-            <h1 className="not-found__title">Page Not Found</h1>
-            <p className="not-found__subtitle">
-                The page you're looking for doesn't exist or has been moved.
-            </p>
-            <div className="not-found__actions">
-                <Link to="/" className="btn-home">
-                    🏠 Go Home
-                </Link>
-                <button onClick={() => navigate(-1)} className="btn-back">
-                    ← Go Back
-                </button>
+        <div className="min-h-[70vh] flex items-center justify-center px-4 animate-fade-in">
+            <div className="text-center max-w-md mx-auto">
+                {/* 404 glowing number */}
+                <div className="text-[8rem] font-black leading-none text-gradient-cyan mb-4 select-none">
+                    404
+                </div>
+
+                <h1 className="text-2xl font-bold text-white mb-3">Page Not Found</h1>
+                <p className="text-slate-400 mb-10 leading-relaxed">
+                    The page you're looking for doesn't exist or has been moved.
+                </p>
+
+                <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
+                    <Link
+                        to="/"
+                        className="px-6 py-3 rounded-xl font-semibold text-white text-sm transition-all duration-300 active:scale-95"
+                        style={{background:'linear-gradient(135deg,#06b6d4,#a855f7)', boxShadow:'0 8px 24px rgba(168,85,247,0.2)'}}>
+                        🏠 Go Home
+                    </Link>
+                    <button
+                        onClick={() => navigate(-1)}
+                        className="px-6 py-3 rounded-xl font-semibold text-sm text-slate-300 hover:text-white transition-all duration-200"
+                        style={{background:'rgba(30,41,59,0.6)', border:'1px solid rgba(51,65,85,0.6)'}}>
+                        ← Go Back
+                    </button>
+                </div>
             </div>
         </div>
     )

@@ -4,9 +4,9 @@ import { Outlet } from 'react-router';
 
 const AppLayout = ({ children }) => {
     return (
-        <div className="app-layout">
+        <div className="min-h-screen flex flex-col bg-slate-950">
             <Navbar />
-            <main className="main-content">
+            <main className="flex-grow w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
                 {children ? children : <Outlet />}
             </main>
         </div>
