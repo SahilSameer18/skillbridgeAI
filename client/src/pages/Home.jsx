@@ -6,14 +6,14 @@ const features = [
     { icon: '🔍', title: 'Deep Resume Profiling', desc: 'AI extracts skills and maps them against target job requirements instantly.' },
     { icon: '🤖', title: 'AI-Generated Questions', desc: '10+ tailored technical & behavioral questions with model answers specific to your role.' },
     { icon: '📈', title: 'Skill Gap Analysis', desc: 'See exactly which skills you\'re missing with severity ratings — High, Medium, Low.' },
-    { icon: '🗺️', title: '7-Day Prep Roadmap', desc: 'Day-by-day preparation tasks to close your skill gaps before the interview.' },
+    { icon: '🗺️', title: '10-Day Prep Roadmap', desc: 'Day-by-day preparation tasks to close your skill gaps before the interview.' },
     { icon: '📄', title: 'AI Resume Generator', desc: 'Download a polished ATS-friendly PDF resume tailored to the job in under a minute.' },
     { icon: '💾', title: 'Report History', desc: 'All plans saved to your dashboard. Track multiple applications and revisit anytime.' },
 ]
 
 const steps = [
     { num: '01', icon: '📤', title: 'Upload & Describe', desc: 'Paste the job description and upload your PDF resume or write a quick self-description.' },
-    { num: '02', icon: '⚡', title: 'AI Analyzes', desc: 'Gemini AI parses your resume, compares it to the JD, and calculates a match score in ~30s.' },
+    { num: '02', icon: '⚡', title: 'AI Analyzes', desc: 'AI parses your resume, compares it to the JD, and calculates a match score in ~30s.' },
     { num: '03', icon: '🎯', title: 'Study Your Plan', desc: 'Review tailored questions, skill gap tags, and follow the roadmap. Download your resume.' },
 ]
 
@@ -64,7 +64,7 @@ const Home = () => {
 
                             <p className="text-base sm:text-lg text-slate-400 leading-relaxed mb-10 max-w-lg mx-auto lg:mx-0 animate-fade-in-up delay-100">
                                 Upload your resume + job description. Our AI builds a personalised question bank,
-                                identifies skill gaps, and gives you a 7-day prep roadmap — in under a minute.
+                                identifies skill gaps, and gives you a 10-day prep roadmap — in under a minute.
                             </p>
 
                             <div className="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4 animate-fade-in-up delay-200">
@@ -73,7 +73,7 @@ const Home = () => {
                                     className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-8 py-3.5 rounded-full font-semibold text-white transition-all duration-300 active:scale-95 glow-cyan"
                                     style={{ background: 'linear-gradient(135deg, #06b6d4, #a855f7)', boxShadow: '0 8px 32px rgba(168,85,247,0.25)' }}
                                 >
-                                    {user ? '✨ Generate My Plan' : '🚀 Start For Free'}
+                                    {user ? 'Generate My Plan' : 'Start For Free'}
                                     <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
                                     </svg>
@@ -88,7 +88,7 @@ const Home = () => {
                             </div>
 
                             <p className="mt-6 text-xs text-slate-600 animate-fade-in-up delay-300">
-                                No credit card · Ready in 30 seconds
+                                Ready in 30 seconds
                             </p>
                         </div>
 
@@ -166,8 +166,8 @@ const Home = () => {
                     {[
                         { num: '10K+', label: 'Plans Generated', icon: '📋' },
                         { num: '95%', label: 'Match Accuracy', icon: '🎯' },
-                        { num: '50+', label: 'Questions Per Plan', icon: '❓' },
-                        { num: '7-Day', label: 'Prep Roadmap', icon: '🗓️' },
+                        { num: '10+', label: 'Questions Per Plan', icon: '❓' },
+                        { num: '10-Day', label: 'Prep Roadmap', icon: '🗓️' },
                     ].map((s, i) => (
                         <div key={i} className="flex flex-col items-center gap-1 px-6 border-r border-slate-800/50 last:border-r-0">
                             <span className="text-2xl mb-1">{s.icon}</span>
@@ -282,33 +282,73 @@ const Home = () => {
                 </div>
             </section>
 
-            {/* ── CTA ── */}
-            <section className="py-24 px-4 sm:px-6 lg:px-8">
-                <div className="max-w-4xl mx-auto">
-                    <div className="relative rounded-3xl p-10 sm:p-16 text-center overflow-hidden"
-                        style={{ background: 'linear-gradient(135deg,rgba(6,182,212,0.08),rgba(168,85,247,0.08))', border: '1px solid rgba(6,182,212,0.2)' }}>
-                        <div className="absolute top-0 right-0 w-72 h-72 rounded-full blur-3xl pointer-events-none"
-                            style={{ background: 'rgba(168,85,247,0.1)' }} />
-                        <div className="absolute bottom-0 left-0 w-56 h-56 rounded-full blur-3xl pointer-events-none"
-                            style={{ background: 'rgba(6,182,212,0.1)' }} />
-                        <div className="relative z-10">
-                            <span className="text-5xl mb-6 block">🚀</span>
-                            <h2 className="text-4xl sm:text-5xl font-bold text-white mb-4">
-                                Ready to Get the Job?
-                            </h2>
-                            <p className="text-slate-400 text-lg mb-10 max-w-xl mx-auto">
-                                Join thousands of candidates who used SkillBridge AI to walk into interviews with full confidence.
-                            </p>
-                            <Link
-                                to={user ? '/generate' : '/register'}
-                                className="inline-flex items-center gap-3 px-10 py-4 rounded-full text-lg font-bold text-white transition-all duration-300 active:scale-95 glow-cyan"
-                                style={{ background: 'linear-gradient(135deg,#06b6d4,#a855f7)', boxShadow: '0 12px 40px rgba(168,85,247,0.3)' }}>
-                                {user ? '✨ Generate New Plan' : '🚀 Start For Free'}
-                                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
-                                </svg>
-                            </Link>
-                        </div>
+            {/* ── TESTIMONIALS (MARQUEE) ── */}
+            <section className="py-24 relative overflow-hidden flex flex-col items-center">
+                <div className="absolute inset-0 bg-gradient-to-b from-[#030712] via-transparent to-[#030712] pointer-events-none z-10" />
+                <div className="text-center mb-16 relative z-20 px-4">
+                    <span className="inline-block px-3 py-1 text-xs font-semibold rounded-full mb-4"
+                        style={{ background: 'rgba(6,182,212,0.1)', border: '1px solid rgba(6,182,212,0.2)', color: '#67e8f9' }}>
+                        Success Stories
+                    </span>
+                    <h2 className="text-4xl sm:text-5xl font-bold text-white mb-4">
+                        Candidates who cracked it
+                    </h2>
+                </div>
+
+                <div className="relative flex overflow-x-hidden group max-w-full w-full">
+                    {/* First Marquee set */}
+                    <div className="animate-marquee py-4 whitespace-nowrap flex gap-6 px-3">
+                        {[
+                            { name: 'Sarah L.', role: 'Frontend Engineer', text: 'SkillBridge analyzed my resume and gave me exactly the system design questions I was asked in my final round!' },
+                            { name: 'David M.', role: 'Data Scientist', text: 'The skill gap tag for \'PyTorch\' made me cram it over the weekend. That was literally the first question they asked.' },
+                            { name: 'Priya K.', role: 'Software Dev Intern', text: 'I didn\'t have a resume yet. Used the generator and the custom prep plan. Got the internship!' },
+                            { name: 'James B.', role: 'Full Stack Dev', text: 'The 10-day roadmap is a lifesaver. It structures the chaotic interview prep process perfectly.' },
+                            { name: 'Anita R.', role: 'Backend Engineer', text: 'Model answers are brilliant. They teach you how to structure responses, not just the technical details.' }
+                        ].map((t, i) => (
+                            <div key={i} className="inline-block w-[350px] whitespace-normal rounded-2xl p-6"
+                                style={{ background: 'rgba(15,23,42,0.5)', border: '1px solid rgba(255,255,255,0.06)' }}>
+                                <div className="flex text-amber-400 mb-3 text-sm">
+                                    ★★★★★
+                                </div>
+                                <p className="text-slate-300 text-sm leading-relaxed mb-4">"{t.text}"</p>
+                                <div className="flex items-center gap-3">
+                                    <div className="w-8 h-8 rounded-full bg-slate-800 flex items-center justify-center font-bold text-xs text-white">
+                                        {t.name[0]}
+                                    </div>
+                                    <div>
+                                        <p className="text-sm font-semibold text-white">{t.name}</p>
+                                        <p className="text-xs text-slate-500">{t.role}</p>
+                                    </div>
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+                    {/* Duplicate Marquee set for seamless loop */}
+                    <div className="animate-marquee py-4 whitespace-nowrap flex gap-6 px-3 absolute top-0 left-[100%]">
+                        {[
+                            { name: 'Sarah L.', role: 'Frontend Engineer', text: 'SkillBridge analyzed my resume and gave me exactly the system design questions I was asked in my final round!' },
+                            { name: 'David M.', role: 'Data Scientist', text: 'The skill gap tag for \'PyTorch\' made me cram it over the weekend. That was literally the first question they asked.' },
+                            { name: 'Priya K.', role: 'Software Dev Intern', text: 'I didn\'t have a resume yet. Used the generator and the custom prep plan. Got the internship!' },
+                            { name: 'James B.', role: 'Full Stack Dev', text: 'The 10-day roadmap is a lifesaver. It structures the chaotic interview prep process perfectly.' },
+                            { name: 'Anita R.', role: 'Backend Engineer', text: 'Model answers are brilliant. They teach you how to structure responses, not just the technical details.' }
+                        ].map((t, i) => (
+                            <div key={i} className="inline-block w-[350px] whitespace-normal rounded-2xl p-6"
+                                style={{ background: 'rgba(15,23,42,0.5)', border: '1px solid rgba(255,255,255,0.06)' }}>
+                                <div className="flex text-amber-400 mb-3 text-sm">
+                                    ★★★★★
+                                </div>
+                                <p className="text-slate-300 text-sm leading-relaxed mb-4">"{t.text}"</p>
+                                <div className="flex items-center gap-3">
+                                    <div className="w-8 h-8 rounded-full bg-slate-800 flex items-center justify-center font-bold text-xs text-white">
+                                        {t.name[0]}
+                                    </div>
+                                    <div>
+                                        <p className="text-sm font-semibold text-white">{t.name}</p>
+                                        <p className="text-xs text-slate-500">{t.role}</p>
+                                    </div>
+                                </div>
+                            </div>
+                        ))}
                     </div>
                 </div>
             </section>
@@ -318,3 +358,4 @@ const Home = () => {
 }
 
 export default Home
+

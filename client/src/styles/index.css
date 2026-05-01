@@ -107,6 +107,15 @@
     background-size: 200% 100%;
     animation: shimmer 1.8s ease-in-out infinite;
   }
+
+  /* Hide scrollbar for clean scrolling containers */
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+  .no-scrollbar {
+    -ms-overflow-style: none;  /* IE and Edge */
+    scrollbar-width: none;  /* Firefox */
+  }
 }
 
 /* ── Keyframe Animations ── */
@@ -166,6 +175,3 @@
 .delay-400 { animation-delay: 0.4s; }
 .delay-500 { animation-delay: 0.5s; }
 .delay-600 { animation-delay: 0.6s; }
-
-
-

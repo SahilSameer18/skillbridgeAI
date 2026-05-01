@@ -205,7 +205,7 @@ const InterviewReport = () => {
                     <button onClick={() => getResumePdf(interviewId)}
                         className="flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-semibold text-white whitespace-nowrap ml-auto shrink-0"
                         style={{ background: 'linear-gradient(135deg,#06b6d4,#a855f7)' }}>
-                        ✨ Download
+                        Download
                     </button>
                 </div>
             </div>
