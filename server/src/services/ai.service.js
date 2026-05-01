@@ -33,7 +33,7 @@ async function generateInterviewReport({ resume, selfDescription, jobDescription
                             ],
                             "preparationPlan": [
                                 { "day": <number>, "focus": "<string>", "tasks": ["<string>", "<string>"] },
-                                ... generate a plan spanning at least 7 days
+                                ... generate a plan spanning at least 10 days
                             ],
                             "title": "<string> job title"
                         }
