@@ -42,7 +42,7 @@ The system helps users understand how well their resume matches a job role and p
 ### Frontend
 
 * React
-* SCSS
+* Taiwind CSS
 * Axios
 * React Router
 
@@ -110,7 +110,7 @@ Create a `.env` file inside the backend folder.
 Example:
 
 ```
-PORT=5000
+PORT=3000
 MONGO_URI=your_mongodb_connection
 JWT_SECRET=your_secret_key
 GEMINI_API_KEY=your_gemini_api_key
