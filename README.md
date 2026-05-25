@@ -240,3 +240,4 @@ This project is licensed under the MIT License.
 ---
 
 <p align="center">Built by Sahil Sameer to help candidates turn resumes into interview-ready AI reports.</p>
+
