@@ -55,7 +55,7 @@ Job seekers often struggle to translate their resume into interview readiness. S
 flowchart TD
   Client[React 19 + Vite + Tailwind] -->|HTTPS/CORS| Server[Express 5 API]
   Server -->|Mongoose| MongoDB[(MongoDB)]
-  Server -->|@google/genai| Gemini[Google Gemini AI]
+  Server -->|Gemini API| Gemini[Google Gemini AI]
   Server -->|Puppeteer| PDF[Resume PDF Generation]
   Client --> Auth[JWT Cookie Auth]
   Client --> Reports[Saved Interview Reports]
