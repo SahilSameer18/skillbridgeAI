@@ -23,7 +23,6 @@ It combines secure account management, PDF resume parsing, Google Gemini AI anal
 - [🔗 API Reference](#-api-reference)
 - [🚀 Local Setup](#-local-setup)
 - [💼 Available Scripts](#-available-scripts)
-- [🤝 Contributing](#-contributing)
 - [📄 License](#-license)
 
 ---
@@ -55,7 +54,7 @@ Job seekers often struggle to translate their resume into interview readiness. S
 flowchart TD
   Client[React 19 + Vite + Tailwind] -->|HTTPS/CORS| Server[Express 5 API]
   Server -->|Mongoose| MongoDB[(MongoDB)]
-  Server -->|@google/genai| Gemini[Google Gemini AI]
+  Server -->|Gemini API| Gemini[Google Gemini AI]
   Server -->|Puppeteer| PDF[Resume PDF Generation]
   Client --> Auth[JWT Cookie Auth]
   Client --> Reports[Saved Interview Reports]
@@ -173,7 +172,7 @@ flowchart TD
 ### 1. Clone the repo
 
 ```bash
-git clone https://github.com/yourusername/skillbridgeAI.git
+git clone https://github.com/SahilSameer18/skillbridgeAI.git
 cd skillbridgeAI
 ```
 
