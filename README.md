@@ -1,39 +1,101 @@
 # SkillBridge AI 🚀
 
-SkillBridge AI is an AI-powered web application that analyzes a user's resume against a job description and generates an intelligent report highlighting skill gaps, preparation plans, and interview questions.
+[![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg?style=for-the-badge)](LICENSE)
+[![React Version](https://img.shields.io/badge/React-19.2-61dafb.svg?logo=react&style=for-the-badge)](https://react.dev/)
+[![Tailwind Version](https://img.shields.io/badge/Tailwind-4.2-38bdf8.svg?logo=tailwindcss&style=for-the-badge)](https://tailwindcss.com/)
+[![Express Version](https://img.shields.io/badge/Express-5.2-000000.svg?logo=express&style=for-the-badge)](https://expressjs.com/)
+[![AI Integration](https://img.shields.io/badge/Gemini--AI-Structured-red.svg?logo=googlegemini&style=for-the-badge)](https://ai.google.dev/)
 
-The system helps users understand how well their resume matches a job role and provides actionable insights to improve their chances of getting hired.
+SkillBridge AI is a full-stack interview preparation platform that transforms a resume and job description into a structured, AI-powered career readiness report.
+
+It combines secure account management, PDF resume parsing, Google Gemini AI analysis, and a modern React dashboard to help candidates prepare for technical and behavioral interviews.
 
 ---
 
-## ✨ Features
+## 📋 Table of Contents
 
-* 🔐 **User Authentication**
+- [🎯 What SkillBridge AI Solves](#-what-skillbridge-ai-solves)
+- [⚡ Technical Highlights](#-technical-highlights)
+- [🏗️ Architecture](#️-architecture)
+- [✨ Core Features](#-core-features)
+- [🛠 Tech Stack](#-tech-stack)
+- [💾 Database Schema](#-database-schema)
+- [🔗 API Reference](#-api-reference)
+- [🚀 Local Setup](#-local-setup)
+- [💼 Available Scripts](#-available-scripts)
+- [🤝 Contributing](#-contributing)
+- [📄 License](#-license)
 
-  * Register and login using JWT authentication
+---
 
-* 📄 **Resume Upload**
+## 🎯 What SkillBridge AI Solves
 
-  * Upload resume in PDF format
+Job seekers often struggle to translate their resume into interview readiness. SkillBridge AI closes this gap by:
 
-* 🤖 **AI Resume Analysis**
+- converting resume content and job descriptions into specific AI-driven feedback
+- producing a match score, skill gaps, and practice questions
+- giving candidates a saved preparation plan with technical and behavioral coaching
+- storing reports so users can return to past interview prep anytime
 
-  * Resume analyzed using **Google Gemini AI**
+---
 
-* 📊 **Generated Report**
+## ⚡ Technical Highlights
 
-  * Skill gaps
-  * Preparation roadmap
-  * Technical interview questions
-  * Behavioral interview questions
+- **Structured AI Output:** Backend prompts Google Gemini to return a strict JSON payload containing `matchScore`, `technicalQuestions`, `behavioralQuestions`, `skillGaps`, `preparationPlan`, and `title`.
+- **Secure Session Management:** JWT-based auth is stored as an HTTP-only cookie and validated with a token blacklist.
+- **PDF Resume Parsing:** Uploaded resumes are parsed using `pdf-parse`, then analyzed alongside job descriptions and self-descriptions.
+- **Downloadable Resume Export:** Generated resume HTML is converted to PDF through Puppeteer for a polished candidate asset.
+- **Protected React Routing:** Authenticated flows use React Router and a `Protected` wrapper for `/generate`, `/dashboard`, and report detail routes.
 
-* 💾 **Report Storage**
+---
 
-  * All generated reports are saved in the database
+## 🏗️ Architecture
 
-* 📂 **User Dashboard**
+```mermaid
+flowchart TD
+  Client[React 19 + Vite + Tailwind] -->|HTTPS/CORS| Server[Express 5 API]
+  Server -->|Mongoose| MongoDB[(MongoDB)]
+  Server -->|@google/genai| Gemini[Google Gemini AI]
+  Server -->|Puppeteer| PDF[Resume PDF Generation]
+  Client --> Auth[JWT Cookie Auth]
+  Client --> Reports[Saved Interview Reports]
+```
 
-  * View previously generated reports
+---
+
+## ✨ Core Features
+
+### 🤖 AI Interview Analyzer
+
+- Upload a resume PDF or enter a self-description
+- Paste the target job description
+- Generate a tailored report with:
+  - match score
+  - technical interview questions + model answers
+  - behavioral interview questions + intent guidance
+  - skill gaps ranked by severity
+  - multi-day preparation roadmap
+  - downloadable resume PDF
+
+### 🔐 Authentication & Security
+
+- register, login, and logout flows
+- HTTP-only auth cookie stored by the backend
+- authenticated route guard for protected app sections
+- token blacklist support on logout
+
+### 📂 Report Management
+
+- save generated reports automatically
+- view all past reports in a dashboard
+- open detailed report pages for each saved analysis
+- delete reports when no longer needed
+
+### 📄 Resume & Job Compatibility
+
+- parse candidate resumes from PDF uploads
+- compare resume content to the posted job description
+- include optional self-description to supplement missing resume text
 
 ---
 
@@ -41,128 +103,134 @@ The system helps users understand how well their resume matches a job role and p
 
 ### Frontend
 
-* React
-* Taiwind CSS
-* Axios
-* React Router
+- React 19
+- Vite 7
+- Tailwind CSS v4
+- React Router DOM 7
+- Axios
 
 ### Backend
 
-* Node.js
-* Express.js
-
-### Database
-
-* MongoDB
-* Mongoose
-
-### AI Integration
-
-* Google Gemini API
-
-### Authentication
-
-* JWT (JSON Web Token)
-* bcryptjs
-
-### File Handling
-
-* Multer
-* pdf-parse
+- Node.js
+- Express 5
+- MongoDB
+- Mongoose
+- @google/genai
+- Puppeteer
+- pdf-parse
+- bcryptjs
+- jsonwebtoken
+- multer
 
 ---
 
+## 💾 Database Schema
 
-## ⚙️ Installation
+### User
 
-### 1️⃣ Clone the repository
+- `username` (String, unique)
+- `email` (String, unique)
+- `password` (String, hashed)
+- timestamps
 
-```
+### InterviewReport
+
+- `jobDescription` (String)
+- `resume` (String)
+- `selfDescription` (String)
+- `matchScore` (Number)
+- `technicalQuestions` (Array of question/intention/answer)
+- `behavioralQuestions` (Array of question/intention/answer)
+- `skillGaps` (Array of skill/severity)
+- `preparationPlan` (Array of day/focus/tasks)
+- `title` (String)
+- `user` (ObjectId ref)
+- timestamps
+
+---
+
+## 🔗 API Reference
+
+### Auth Endpoints
+
+- `POST /api/auth/register` - create a new user
+- `POST /api/auth/login` - sign in and receive secure auth cookie
+- `POST /api/auth/logout` - revoke session and blacklist token
+- `GET /api/auth/get-me` - return current user profile
+
+### Interview Endpoints
+
+- `POST /api/interview/` - generate a new AI interview report (`multipart/form-data`, optional `resume` file)
+- `GET /api/interview/` - list all saved reports for the authenticated user
+- `GET /api/interview/report/:interviewId` - fetch a single report detail
+- `DELETE /api/interview/:interviewId` - delete a saved report
+- `POST /api/interview/resume/pdf/:interviewReportId` - generate and download resume PDF from saved report
+
+---
+
+## 🚀 Local Setup
+
+### 1. Clone the repo
+
+```bash
 git clone https://github.com/yourusername/skillbridgeAI.git
-```
-
-### 2️⃣ Navigate to project
-
-```
 cd skillbridgeAI
 ```
 
-### 3️⃣ Install backend dependencies
+### 2. Backend setup
 
-```
-cd backend
+```bash
+cd server
 npm install
 ```
 
-### 4️⃣ Install frontend dependencies
+Create a `.env` file in `server/` with:
 
-```
-cd ../frontend
-npm install
-```
-
----
-
-## 🔑 Environment Variables
-
-Create a `.env` file inside the backend folder.
-
-Example:
-
-```
+```env
 PORT=3000
-MONGO_URI=your_mongodb_connection
-JWT_SECRET=your_secret_key
-GEMINI_API_KEY=your_gemini_api_key
+MONGO_URI=mongodb://127.0.0.1:27017/skillbridgeai
+JWT_SECRET=your_jwt_secret
+GOOGLE_GENAI_API_KEY=your_google_genai_key
 ```
 
----
+### 3. Frontend setup
 
-## ▶️ Run the Application
-
-### Start Backend
-
+```bash
+cd ../client
+npm install
 ```
-cd backend
+
+### 4. Start both apps
+
+Open two terminal windows:
+
+```bash
+cd server
 npm run dev
 ```
 
-### Start Frontend
-
-```
-cd frontend
-npm start
+```bash
+cd client
+npm run dev
 ```
 
----
-
-## 🧠 How It Works
-
-1. User registers and logs in
-2. User uploads a resume (PDF)
-3. User enters job description
-4. Resume text is extracted from PDF
-5. Data is sent to Gemini AI
-6. AI generates analysis report
-7. Report is stored in MongoDB
-8. User can view report anytime from dashboard
+Then open `http://localhost:5173` in your browser.
 
 ---
 
-## 📊 Future Improvements
+## 💼 Available Scripts
 
-* Resume Match Score
-* Download Report as PDF
-* Skill Gap Visualization
-* AI Chat with Resume
-* Resume Improvement Suggestions
+### Backend (`server/`)
 
----
+- `npm run dev` - start Express with Nodemon
+- `npm start` - run production server with Node
 
-## 🤝 Contributing
+### Frontend (`client/`)
 
-Contributions are welcome!
-Feel free to fork the repository and submit a pull request.
+- `npm run dev` - start Vite dev server
+- `npm run build` - build the production bundle
+- `npm run lint` - run ESLint
+- `npm run preview` - preview the production build
 
 ---
 
@@ -172,8 +240,4 @@ This project is licensed under the MIT License.
 
 ---
 
-## 👨‍💻 Author
-
-**Sahil Sameer Siddique**
-
-GitHub: https://github.com/SahilSameer18
+<p align="center">Built by Sahil Sameer to help candidates turn resumes into interview-ready AI reports.</p>
