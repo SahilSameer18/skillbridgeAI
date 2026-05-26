@@ -2,6 +2,7 @@ const express = require("express")
 const authMiddleware = require('../middlewares/auth.middleware')
 const interviewController = require('../controllers/interview.controller')
 const upload = require('../middlewares/file.middleware')
+const { aiGenerationLimiter } = require('../middlewares/rateLimit.middleware')
 
 
 const interviewRouter = express.Router()
@@ -11,7 +12,7 @@ const interviewRouter = express.Router()
  * @access private
  */
 
-interviewRouter.post('/', authMiddleware.authUser, upload.single("resume"), interviewController.generateInterViewReportController)
+interviewRouter.post('/', authMiddleware.authUser, aiGenerationLimiter, upload.single("resume"), interviewController.generateInterViewReportController)
 
 /**
  * @route GET /api/interview/report/:interviewId

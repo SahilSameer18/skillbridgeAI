@@ -1,12 +1,13 @@
 const express = require('express');
 const authController = require('../controllers/auth.controller')
 const authMiddleware = require('../middlewares/auth.middleware')
+const { authLimiter } = require('../middlewares/rateLimit.middleware')
 
 const authRouter = express.Router();
 
 
-authRouter.post('/register', authController.registerUserController)
-authRouter.post('/login', authController.loginUserController)
+authRouter.post('/register', authLimiter, authController.registerUserController)
+authRouter.post('/login', authLimiter, authController.loginUserController)
 
 
 /**
