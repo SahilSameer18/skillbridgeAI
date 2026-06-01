@@ -10,8 +10,8 @@ async function authUser(req, res, next) {
     });
   }
 
-  const isTokenBlacklisted = await tokenBlacklistModel.findOne({
-    token,
+  const isTokenBlacklisted = await tokenBlacklistModel.findUnique({
+    where: { token },
   });
 
   if (isTokenBlacklisted) {

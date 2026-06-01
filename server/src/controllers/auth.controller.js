@@ -20,9 +20,12 @@ async function registerUserController(req, res, next) {
         .json({ success: false, message: "All fields are required" });
     }
 
-    const isUserAlreadyExist = await userModel.findOne({
-      $or: [{ email }, { username }],
+    const isUserAlreadyExist = await userModel.findFirst({
+      where: {
+        OR: [{ email }, { username }],
+      },
     });
+
     if (isUserAlreadyExist) {
       return res
         .status(400)
@@ -32,14 +35,16 @@ async function registerUserController(req, res, next) {
     const hash = await bcrypt.hash(password, 10);
 
     const user = await userModel.create({
-      username,
-      email,
-      password: hash,
+      data: {
+        username,
+        email,
+        password: hash,
+      },
     });
 
     const token = jwt.sign(
       {
-        id: user._id,
+        id: user.id,
         username: user.username,
       },
       process.env.JWT_SECRET,
@@ -57,7 +62,7 @@ async function registerUserController(req, res, next) {
       success: true,
       message: "User registered successfully",
       user: {
-        id: user._id,
+        id: user.id,
         username: user.username,
         email: user.email,
       },
@@ -88,7 +93,9 @@ async function loginUserController(req, res, next) {
       });
     }
 
-    const user = await userModel.findOne({ email });
+    const user = await userModel.findUnique({
+      where: { email },
+    });
 
     if (!user) {
       return res.status(401).json({
@@ -108,7 +115,7 @@ async function loginUserController(req, res, next) {
 
     const token = jwt.sign(
       {
-        id: user._id,
+        id: user.id,
         username: user.username,
       },
       process.env.JWT_SECRET,
@@ -125,7 +132,7 @@ async function loginUserController(req, res, next) {
       success: true,
       message: "Login successful",
       user: {
-        id: user._id,
+        id: user.id,
         username: user.username,
         email: user.email,
       },
@@ -150,7 +157,9 @@ async function logoutUserController(req, res, next) {
     const token = req.cookies.token;
 
     if (token) {
-      await tokenBlacklistModel.create({ token });
+      await tokenBlacklistModel.create({
+        data: { token },
+      });
     }
 
     res.clearCookie("token", {
@@ -180,7 +189,9 @@ async function logoutUserController(req, res, next) {
 
 async function getMeController(req, res, next) {
   try {
-    const user = await userModel.findById(req.user.id);
+    const user = await userModel.findUnique({
+      where: { id: req.user.id },
+    });
 
     if (!user) {
       return res.status(404).json({
@@ -193,7 +204,7 @@ async function getMeController(req, res, next) {
       success: true,
       message: "User details retrieved successfully",
       user: {
-        id: user._id,
+        id: user.id,
         username: user.username,
         email: user.email,
       },

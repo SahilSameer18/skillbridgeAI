@@ -1,9 +1,8 @@
 import "dotenv/config.js";
 import app from "./src/app.js";
-import connectToDB from "./src/config/database.js";
 import dns from "dns";
 
-//changing dns because of mongodb not connected
+//changing dns because of db not connected
 dns.setServers(["1.1.1.1", "8.8.8.8"]);
 
 

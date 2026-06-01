@@ -46,11 +46,29 @@ async function generateInterViewReportController(req, res) {
     });
 
     const interviewReport = await interviewReportModel.create({
-      user: req.user.id,
-      resume: resumeText,
-      selfDescription,
-      ...interViewReportByAi,
-      jobDescription, // Place after spread to prevent overriding
+      data: {
+        userId: req.user.id,
+        resume: resumeText,
+        selfDescription,
+        jobDescription,
+        matchScore: interViewReportByAi.matchScore,
+        title: interViewReportByAi.title,
+        technicalQuestions: {
+          create: interViewReportByAi.technicalQuestions,
+        },
+        behavioralQuestions: {
+          create: interViewReportByAi.behavioralQuestions,
+        },
+        skillGaps: {
+          create: interViewReportByAi.skillGaps,
+        },
+        preparationPlan: {
+          create: interViewReportByAi.preparationPlan.map((plan) => ({
+            ...plan,
+            tasks: JSON.stringify(plan.tasks),
+          })),
+        },
+      },
     });
 
     res.status(201).json({
@@ -73,22 +91,35 @@ async function getInterviewReportByIdController(req, res) {
   const { interviewId } = req.params;
 
   try {
-    const interviewReport = await interviewReportModel.findOne({
-      _id: interviewId,
-      user: req.user.id,
+    const interviewReport = await interviewReportModel.findUnique({
+      where: { id: interviewId },
+      include: {
+        technicalQuestions: true,
+        behavioralQuestions: true,
+        skillGaps: true,
+        preparationPlan: true,
+      },
     });
 
-    if (!interviewReport) {
+    if (!interviewReport || interviewReport.userId !== req.user.id) {
       return res.status(404).json({
         success: false,
         message: "Interview report not found",
       });
     }
 
+    const normalizedReport = {
+      ...interviewReport,
+      preparationPlan: interviewReport.preparationPlan.map((plan) => ({
+        ...plan,
+        tasks: JSON.parse(plan.tasks),
+      })),
+    };
+
     res.status(200).json({
       success: true,
       message: "Interview report retrieved successfully",
-      interviewReport,
+      interviewReport: normalizedReport,
     });
   } catch (error) {
     console.error("Error fetching interview report by ID:", error);
@@ -103,12 +134,18 @@ async function getInterviewReportByIdController(req, res) {
  */
 async function getAllInterviewReportsController(req, res) {
   try {
-    const interviewReports = await interviewReportModel
-      .find({ user: req.user.id })
-      .sort({ createdAt: -1 })
-      .select(
-        "-resume -selfDescription -jobDescription -__v -technicalQuestions -behavioralQuestions -skillGaps -preparationPlan",
-      );
+    const interviewReports = await interviewReportModel.findMany({
+      where: { userId: req.user.id },
+      orderBy: { createdAt: "desc" },
+      select: {
+        id: true,
+        jobDescription: true,
+        matchScore: true,
+        title: true,
+        createdAt: true,
+        updatedAt: true,
+      },
+    });
 
     res.status(200).json({
       success: true,
@@ -130,17 +167,20 @@ async function deleteInterviewReportController(req, res) {
   const { interviewId } = req.params;
 
   try {
-    const deletedReport = await interviewReportModel.findOneAndDelete({
-      _id: interviewId,
-      user: req.user.id,
+    const report = await interviewReportModel.findUnique({
+      where: { id: interviewId },
     });
 
-    if (!deletedReport) {
+    if (!report || report.userId !== req.user.id) {
       return res.status(404).json({
         success: false,
         message: "Interview report not found or insufficient permissions",
       });
     }
+
+    await interviewReportModel.delete({
+      where: { id: interviewId },
+    });
 
     res.status(200).json({
       success: true,
@@ -161,10 +201,11 @@ async function generateResumePdfController(req, res) {
   const { interviewReportId } = req.params;
 
   try {
-    const interviewReport =
-      await interviewReportModel.findById(interviewReportId);
+    const interviewReport = await interviewReportModel.findUnique({
+      where: { id: interviewReportId },
+    });
 
-    if (!interviewReport) {
+    if (!interviewReport || interviewReport.userId !== req.user.id) {
       return res.status(404).json({
         success: false,
         message: "Interview report not found",
