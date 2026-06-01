@@ -62,7 +62,7 @@ export const useInterview = () => {
     const deleteReport = async (id) => {
         try {
             await deleteInterviewReport(id)
-            setReports(prev => prev.filter(report => report._id !== id))
+            setReports(prev => prev.filter(report => report.id !== id))
         } catch (error) {
             console.error("Failed to delete report:", error)
         }

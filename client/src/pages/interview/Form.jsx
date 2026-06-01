@@ -25,6 +25,7 @@ const Form = () => {
 
   const handleGenerateReport = async () => {
     const resumeFile = resumeInputRef.current.files[0];
+    console.log("resumeFile:", resumeFile);
     setIsGenerating(true);
     try {
       const data = await generateReport({
@@ -32,8 +33,8 @@ const Form = () => {
         selfDescription,
         resumeFile,
       });
-      if (data && data._id) {
-        navigate(`/interview/${data._id}`);
+      if (data && data.interviewReport?.id) {
+        navigate(`/interview/${data.interviewReport.id}`);
       } else {
         alert("Failed to generate report. Please try again.");
       }
@@ -350,4 +351,3 @@ const Form = () => {
 };
 
 export default Form;
-

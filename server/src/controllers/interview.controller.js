@@ -1,4 +1,6 @@
-import pdfParse from "pdf-parse";
+import { createRequire } from "module";
+const require = createRequire(import.meta.url);
+const pdfParse = require("pdf-parse");
 import {
   generateInterviewReport,
   generateResumePdf,
@@ -9,6 +11,9 @@ import prisma from "../lib/prisma.js";
  * @description Controller to generate interview report based on user self description, resume and job description.
  */
 async function generateInterViewReportController(req, res) {
+  console.log("🔵 Controller hit");        // ADD
+  console.log("🔵 Body:", req.body);       // ADD
+  console.log("🔵 File:", req.file);
   const { selfDescription, jobDescription } = req.body;
 
   if (!jobDescription || jobDescription.trim() === "") {
@@ -44,6 +49,8 @@ async function generateInterViewReportController(req, res) {
       selfDescription,
       jobDescription,
     });
+
+    console.log("🟢 AI response received:", interViewReportByAi);
 
     const interviewReport = await prisma.interviewReport.create({
       data: {
@@ -87,6 +94,7 @@ async function generateInterViewReportController(req, res) {
     });
   } catch (error) {
     console.error("Error generating interview report:", error);
+    console.error("Full error:", error);
     res
       .status(500)
       .json({ success: false, message: "Failed to generate interview report" });
