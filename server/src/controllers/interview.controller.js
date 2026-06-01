@@ -1,9 +1,9 @@
-const pdfParse = require("pdf-parse");
-const {
+import * as pdfParse from "pdf-parse";
+import {
   generateInterviewReport,
   generateResumePdf,
-} = require("../services/ai.service");
-const interviewReportModel = require("../models/interviewReport.model");
+} from "../services/ai.service.js";
+import interviewReportModel from "../models/interviewReport.model.js";
 
 /**
  * @description Controller to generate interview report based on user self description, resume and job description.
@@ -26,20 +26,16 @@ async function generateInterViewReportController(req, res) {
       resumeText = resumeContent.text;
     } catch (error) {
       console.error("Error parsing PDF:", error);
-      return res
-        .status(400)
-        .json({
-          success: false,
-          message: "Failed to parse uploaded resume PDF",
-        });
+      return res.status(400).json({
+        success: false,
+        message: "Failed to parse uploaded resume PDF",
+      });
     }
   } else if (!selfDescription || selfDescription.trim() === "") {
-    return res
-      .status(400)
-      .json({
-        success: false,
-        message: "Either resume or self description is required",
-      });
+    return res.status(400).json({
+      success: false,
+      message: "Either resume or self description is required",
+    });
   }
 
   try {
@@ -197,7 +193,7 @@ async function generateResumePdfController(req, res) {
   }
 }
 
-module.exports = {
+export {
   generateInterViewReportController,
   getInterviewReportByIdController,
   getAllInterviewReportsController,

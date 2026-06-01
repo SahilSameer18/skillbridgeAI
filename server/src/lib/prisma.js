@@ -1,3 +1,3 @@
 import prisma from "../config/database.js";
 
-export default prisma.interviewReport;
+export default prisma;

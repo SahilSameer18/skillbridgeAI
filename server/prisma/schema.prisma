@@ -10,3 +10,71 @@ generator client {
 datasource db {
   provider = "postgresql"
 }
+
+model User {
+  id               String            @id @default(cuid())
+  username         String            @unique
+  email            String            @unique
+  password         String
+  interviewReports InterviewReport[]
+  createdAt        DateTime          @default(now())
+  updatedAt        DateTime          @updatedAt
+}
+
+model InterviewReport {
+  id                  String               @id @default(cuid())
+  jobDescription      String               @db.Text
+  resume              String?              @db.Text
+  selfDescription     String?              @db.Text
+  matchScore          Int?
+  title               String?
+  technicalQuestions  TechnicalQuestion[]
+  behavioralQuestions BehavioralQuestion[]
+  skillGaps           SkillGap[]
+  preparationPlan     PreparationPlan[]
+  user                User                 @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId              String
+  createdAt           DateTime             @default(now())
+  updatedAt           DateTime             @updatedAt
+}
+
+model TechnicalQuestion {
+  id                String          @id @default(cuid())
+  question          String          @db.Text
+  intention         String          @db.Text
+  answer            String          @db.Text
+  interviewReport   InterviewReport @relation(fields: [interviewReportId], references: [id], onDelete: Cascade)
+  interviewReportId String
+}
+
+model BehavioralQuestion {
+  id                String          @id @default(cuid())
+  question          String          @db.Text
+  intention         String          @db.Text
+  answer            String          @db.Text
+  interviewReport   InterviewReport @relation(fields: [interviewReportId], references: [id], onDelete: Cascade)
+  interviewReportId String
+}
+
+model SkillGap {
+  id                String          @id @default(cuid())
+  skill             String
+  severity          String // "low", "medium", "high"
+  interviewReport   InterviewReport @relation(fields: [interviewReportId], references: [id], onDelete: Cascade)
+  interviewReportId String
+}
+
+model PreparationPlan {
+  id                String          @id @default(cuid())
+  day               Int
+  focus             String
+  tasks             String          @db.Text // JSON stringified array
+  interviewReport   InterviewReport @relation(fields: [interviewReportId], references: [id], onDelete: Cascade)
+  interviewReportId String
+}
+
+model TokenBlacklist {
+  id        String   @id @default(cuid())
+  token     String   @unique
+  createdAt DateTime @default(now())
+}

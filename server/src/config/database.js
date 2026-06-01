@@ -1,14 +1,10 @@
-const mongoose = require('mongoose');
+import 'dotenv/config'
+import { PrismaNeon } from '@prisma/adapter-neon'
+import { PrismaClient } from '@prisma/client'
 
-async function connectToDB() {
-  try {
-    await mongoose.connect(process.env.MONGO_URI)
-    console.log('connected to Database')
-  }
-  catch (err) {
-    console.log(err)
-  }
+const connectionString = process.env.DATABASE_URL
 
-}
+const adapter = new PrismaNeon({connectionString})
+const prisma = new PrismaClient({adapter})
 
-module.exports = connectToDB
+export default prisma

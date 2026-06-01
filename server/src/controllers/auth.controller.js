@@ -1,7 +1,7 @@
-const userModel = require("../models/user.model");
-const bcrypt = require("bcryptjs");
-const jwt = require("jsonwebtoken");
-const tokenBlacklistModel = require("../models/blacklist.model");
+import userModel from "../models/user.model.js";
+import bcrypt from "bcryptjs";
+import jwt from "jsonwebtoken";
+import tokenBlacklistModel from "../models/blacklist.model.js";
 
 /**
  *
@@ -24,7 +24,9 @@ async function registerUserController(req, res, next) {
       $or: [{ email }, { username }],
     });
     if (isUserAlreadyExist) {
-      return res.status(400).json({ success: false, message: "User already exists" });
+      return res
+        .status(400)
+        .json({ success: false, message: "User already exists" });
     }
 
     const hash = await bcrypt.hash(password, 10);
@@ -62,12 +64,10 @@ async function registerUserController(req, res, next) {
     });
   } catch (error) {
     console.error("Registration error:", error);
-    res
-      .status(500)
-      .json({
-        success: false,
-        message: "Registration failed. Please try again later",
-      });
+    res.status(500).json({
+      success: false,
+      message: "Registration failed. Please try again later",
+    });
   }
 }
 
@@ -132,12 +132,10 @@ async function loginUserController(req, res, next) {
     });
   } catch (error) {
     console.error("Login error:", error);
-    res
-      .status(500)
-      .json({
-        success: false,
-        message: "Login failed. Please try again later",
-      });
+    res.status(500).json({
+      success: false,
+      message: "Login failed. Please try again later",
+    });
   }
 }
 
@@ -167,12 +165,10 @@ async function logoutUserController(req, res, next) {
     });
   } catch (error) {
     console.error("Logout error:", error);
-    res
-      .status(500)
-      .json({
-        success: false,
-        message: "Logout failed. Please try again later",
-      });
+    res.status(500).json({
+      success: false,
+      message: "Logout failed. Please try again later",
+    });
   }
 }
 
@@ -210,7 +206,7 @@ async function getMeController(req, res, next) {
   }
 }
 
-module.exports = {
+export {
   registerUserController,
   loginUserController,
   logoutUserController,

@@ -1,22 +1,23 @@
-const express = require('express');
-const authController = require('../controllers/auth.controller')
-const authMiddleware = require('../middlewares/auth.middleware')
-const { authLimiter } = require('../middlewares/rateLimit.middleware')
+import express from "express";
+import * as authController from "../controllers/auth.controller.js";
+import { authUser } from "../middlewares/auth.middleware.js";
+import { authLimiter } from "../middlewares/rateLimit.middleware.js";
 
 const authRouter = express.Router();
 
-
-authRouter.post('/register', authLimiter, authController.registerUserController)
-authRouter.post('/login', authLimiter, authController.loginUserController)
-
+authRouter.post(
+  "/register",
+  authLimiter,
+  authController.registerUserController,
+);
+authRouter.post("/login", authLimiter, authController.loginUserController);
 
 /**
  * @route GET /api/auth/logout
  * @description clear the token cookie to logout the user
  * @access Public
  */
-authRouter.post('/logout', authController.logoutUserController)
-
+authRouter.post("/logout", authController.logoutUserController);
 
 /**
  * @route GET /api/auth/get-me
@@ -24,7 +25,6 @@ authRouter.post('/logout', authController.logoutUserController)
  * @access Private
  */
 
-authRouter.get('/get-me', authMiddleware.authUser, authController.getMeController)
+authRouter.get("/get-me", authUser, authController.getMeController);
 
-
-module.exports = authRouter;
+export default authRouter;
