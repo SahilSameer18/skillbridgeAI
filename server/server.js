@@ -1,4 +1,4 @@
-import "dotenv/config.js";
+import "dotenv/config";
 import app from "./src/app.js";
 import dns from "dns";
 

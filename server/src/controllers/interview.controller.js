@@ -69,12 +69,27 @@ async function generateInterViewReportController(req, res) {
           })),
         },
       },
+      include: {
+        technicalQuestions: true,
+        behavioralQuestions: true,
+        skillGaps: true,
+        preparationPlan: true,
+      },
     });
+
+    // Parse tasks back from JSON string to array for the response
+    const normalizedReport = {
+      ...interviewReport,
+      preparationPlan: interviewReport.preparationPlan.map((plan) => ({
+        ...plan,
+        tasks: JSON.parse(plan.tasks),
+      })),
+    };
 
     res.status(201).json({
       success: true,
       message: "Interview report generated successfully",
-      interviewReport,
+      interviewReport: normalizedReport,
     });
   } catch (error) {
     console.error("Error generating interview report:", error);
@@ -241,3 +256,6 @@ export {
   deleteInterviewReportController,
   generateResumePdfController,
 };
+
+
+

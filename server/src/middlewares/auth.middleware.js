@@ -1,5 +1,5 @@
 import jwt from "jsonwebtoken";
-import tokenBlacklistModel from "../models/blacklist.model.js";
+import prisma from "../lib/prisma.js";
 
 async function authUser(req, res, next) {
   const token = req.cookies.token;
@@ -10,17 +10,17 @@ async function authUser(req, res, next) {
     });
   }
 
-  const isTokenBlacklisted = await tokenBlacklistModel.findUnique({
-    where: { token },
-  });
-
-  if (isTokenBlacklisted) {
-    return res.status(401).json({
-      message: "token is invalid",
-    });
-  }
-
   try {
+    const isTokenBlacklisted = await prisma.tokenBlacklist.findUnique({
+      where: { token },
+    });
+
+    if (isTokenBlacklisted) {
+      return res.status(401).json({
+        message: "Token is invalid",
+      });
+    }
+
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
 
     req.user = decoded;
@@ -28,7 +28,7 @@ async function authUser(req, res, next) {
     next();
   } catch (err) {
     return res.status(401).json({
-      message: "invalid token",
+      message: "Invalid token",
     });
   }
 }
