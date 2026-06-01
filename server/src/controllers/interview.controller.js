@@ -1,9 +1,9 @@
-import * as pdfParse from "pdf-parse";
+import pdfParse from "pdf-parse";
 import {
   generateInterviewReport,
   generateResumePdf,
 } from "../services/ai.service.js";
-import interviewReportModel from "../models/interviewReport.model.js";
+import prisma from "../lib/prisma.js";
 
 /**
  * @description Controller to generate interview report based on user self description, resume and job description.
@@ -45,7 +45,7 @@ async function generateInterViewReportController(req, res) {
       jobDescription,
     });
 
-    const interviewReport = await interviewReportModel.create({
+    const interviewReport = await prisma.interviewReport.create({
       data: {
         userId: req.user.id,
         resume: resumeText,
@@ -60,12 +60,15 @@ async function generateInterViewReportController(req, res) {
           create: interViewReportByAi.behavioralQuestions,
         },
         skillGaps: {
-          create: interViewReportByAi.skillGaps,
+          create: interViewReportByAi.skillGaps.map((gap) => ({
+            ...gap,
+            severity: gap.severity.toLowerCase(),
+          })),
         },
         preparationPlan: {
           create: interViewReportByAi.preparationPlan.map((plan) => ({
             ...plan,
-            tasks: JSON.stringify(plan.tasks),
+            tasks: plan.tasks,
           })),
         },
       },
@@ -77,19 +80,10 @@ async function generateInterViewReportController(req, res) {
       },
     });
 
-    // Parse tasks back from JSON string to array for the response
-    const normalizedReport = {
-      ...interviewReport,
-      preparationPlan: interviewReport.preparationPlan.map((plan) => ({
-        ...plan,
-        tasks: JSON.parse(plan.tasks),
-      })),
-    };
-
     res.status(201).json({
       success: true,
       message: "Interview report generated successfully",
-      interviewReport: normalizedReport,
+      interviewReport: interviewReport,
     });
   } catch (error) {
     console.error("Error generating interview report:", error);
@@ -106,7 +100,7 @@ async function getInterviewReportByIdController(req, res) {
   const { interviewId } = req.params;
 
   try {
-    const interviewReport = await interviewReportModel.findUnique({
+    const interviewReport = await prisma.interviewReport.findUnique({
       where: { id: interviewId },
       include: {
         technicalQuestions: true,
@@ -123,18 +117,10 @@ async function getInterviewReportByIdController(req, res) {
       });
     }
 
-    const normalizedReport = {
-      ...interviewReport,
-      preparationPlan: interviewReport.preparationPlan.map((plan) => ({
-        ...plan,
-        tasks: JSON.parse(plan.tasks),
-      })),
-    };
-
     res.status(200).json({
       success: true,
       message: "Interview report retrieved successfully",
-      interviewReport: normalizedReport,
+      interviewReport: interviewReport,
     });
   } catch (error) {
     console.error("Error fetching interview report by ID:", error);
@@ -149,7 +135,7 @@ async function getInterviewReportByIdController(req, res) {
  */
 async function getAllInterviewReportsController(req, res) {
   try {
-    const interviewReports = await interviewReportModel.findMany({
+    const interviewReports = await prisma.interviewReport.findMany({
       where: { userId: req.user.id },
       orderBy: { createdAt: "desc" },
       select: {
@@ -182,20 +168,18 @@ async function deleteInterviewReportController(req, res) {
   const { interviewId } = req.params;
 
   try {
-    const report = await interviewReportModel.findUnique({
-      where: { id: interviewId },
+    const report = await prisma.interviewReport.deleteMany({
+      where: { id: interviewId, userId: req.user.id },
     });
 
-    if (!report || report.userId !== req.user.id) {
-      return res.status(404).json({
-        success: false,
-        message: "Interview report not found or insufficient permissions",
-      });
+    if (report.count === 0) {
+      return res
+        .status(404)
+        .json({
+          success: false,
+          message: "Interview report not found or insufficient permissions",
+        });
     }
-
-    await interviewReportModel.delete({
-      where: { id: interviewId },
-    });
 
     res.status(200).json({
       success: true,
@@ -216,8 +200,8 @@ async function generateResumePdfController(req, res) {
   const { interviewReportId } = req.params;
 
   try {
-    const interviewReport = await interviewReportModel.findUnique({
-      where: { id: interviewReportId },
+    const interviewReport = await prisma.interviewReport.findUnique({
+      where: { id: interviewReportId, userId: req.user.id },
     });
 
     if (!interviewReport || interviewReport.userId !== req.user.id) {
@@ -256,6 +240,3 @@ export {
   deleteInterviewReportController,
   generateResumePdfController,
 };
-
-
-

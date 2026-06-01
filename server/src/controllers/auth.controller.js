@@ -1,7 +1,6 @@
-import userModel from "../models/user.model.js";
+import prisma from "../lib/prisma.js"
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
-import tokenBlacklistModel from "../models/blacklist.model.js";
 
 /**
  *
@@ -20,7 +19,7 @@ async function registerUserController(req, res, next) {
         .json({ success: false, message: "All fields are required" });
     }
 
-    const isUserAlreadyExist = await userModel.findFirst({
+    const isUserAlreadyExist = await prisma.user.findFirst({
       where: {
         OR: [{ email }, { username }],
       },
@@ -34,7 +33,7 @@ async function registerUserController(req, res, next) {
 
     const hash = await bcrypt.hash(password, 10);
 
-    const user = await userModel.create({
+    const user = await prisma.user.create({
       data: {
         username,
         email,
@@ -93,7 +92,7 @@ async function loginUserController(req, res, next) {
       });
     }
 
-    const user = await userModel.findUnique({
+    const user = await prisma.user.findUnique({
       where: { email },
     });
 
@@ -157,7 +156,7 @@ async function logoutUserController(req, res, next) {
     const token = req.cookies.token;
 
     if (token) {
-      await tokenBlacklistModel.create({
+      await prisma.tokenBlacklist.create({
         data: { token },
       });
     }
@@ -189,7 +188,7 @@ async function logoutUserController(req, res, next) {
 
 async function getMeController(req, res, next) {
   try {
-    const user = await userModel.findUnique({
+    const user = await prisma.user.findUnique({
       where: { id: req.user.id },
     });
 
