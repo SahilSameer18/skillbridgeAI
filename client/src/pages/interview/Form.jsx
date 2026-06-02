@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { useInterview } from "../../hooks/useInterview.js";
 import { useNavigate } from "react-router";
 
@@ -15,8 +15,8 @@ const Form = () => {
   const [jobDescription, setJobDescription] = useState("");
   const [selfDescription, setSelfDescription] = useState("");
   const [resumeFileName, setResumeFileName] = useState("");
+  const [resumeFile, setResumeFile] = useState(null);
   const [loadingStep, setLoadingStep] = useState(0);
-  const resumeInputRef = useRef();
   const navigate = useNavigate();
 
   const canGenerate = Boolean(
@@ -24,8 +24,6 @@ const Form = () => {
   );
 
   const handleGenerateReport = async () => {
-    const resumeFile = resumeInputRef.current.files[0];
-    console.log("resumeFile:", resumeFile);
     setIsGenerating(true);
     try {
       const data = await generateReport({
@@ -33,8 +31,10 @@ const Form = () => {
         selfDescription,
         resumeFile,
       });
-      if (data && data.interviewReport?.id) {
-        navigate(`/interview/${data.interviewReport.id}`);
+      if (data && data.id) {
+        setResumeFile(null);
+        setResumeFileName("");
+        navigate(`/interview/${data.id}`);
       } else {
         alert("Failed to generate report. Please try again.");
       }
@@ -251,10 +251,11 @@ const Form = () => {
                   </p>
                 )}
                 <input
-                  ref={resumeInputRef}
-                  onChange={(e) =>
-                    setResumeFileName(e.target.files[0]?.name || "")
-                  }
+                  onChange={(e) => {
+                    const file = e.target.files[0] || null;
+                    setResumeFile(file);
+                    setResumeFileName(file?.name || "");
+                  }}
                   hidden
                   type="file"
                   id="resume"

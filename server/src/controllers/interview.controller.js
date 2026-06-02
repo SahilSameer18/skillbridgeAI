@@ -11,9 +11,6 @@ import prisma from "../lib/prisma.js";
  * @description Controller to generate interview report based on user self description, resume and job description.
  */
 async function generateInterViewReportController(req, res) {
-  console.log("🔵 Controller hit");        // ADD
-  console.log("🔵 Body:", req.body);       // ADD
-  console.log("🔵 File:", req.file);
   const { selfDescription, jobDescription } = req.body;
 
   if (!jobDescription || jobDescription.trim() === "") {
@@ -49,8 +46,6 @@ async function generateInterViewReportController(req, res) {
       selfDescription,
       jobDescription,
     });
-
-    console.log("🟢 AI response received:", interViewReportByAi);
 
     const interviewReport = await prisma.interviewReport.create({
       data: {
