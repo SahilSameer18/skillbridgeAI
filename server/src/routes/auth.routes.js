@@ -5,15 +5,14 @@ import { authLimiter } from "../middlewares/rateLimit.middleware.js";
 
 const authRouter = express.Router();
 
-authRouter.post(
-  "/register",
-  authLimiter,
-  authController.registerUserController,
-);
+// register route
+authRouter.post("/register", authLimiter, authController.registerUserController);
+
+// login route
 authRouter.post("/login", authLimiter, authController.loginUserController);
 
 /**
- * @route GET /api/auth/logout
+ * @route POST /api/auth/logout
  * @description clear the token cookie to logout the user
  * @access Public
  */
@@ -28,3 +27,5 @@ authRouter.post("/logout", authController.logoutUserController);
 authRouter.get("/get-me", authUser, authController.getMeController);
 
 export default authRouter;
+
+

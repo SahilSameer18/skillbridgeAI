@@ -16,11 +16,12 @@ It combines secure account management, PDF resume parsing, Google Gemini AI anal
 
 - [🎯 What SkillBridge AI Solves](#-what-skillbridge-ai-solves)
 - [⚡ Technical Highlights](#-technical-highlights)
-- [🏗️ Architecture](#️-architecture)
+- [🏗️ Architecture](#-architecture)
 - [✨ Core Features](#-core-features)
 - [🛠 Tech Stack](#-tech-stack)
 - [💾 Database Schema](#-database-schema)
 - [🔗 API Reference](#-api-reference)
+- [⚙️ Prerequisites](#️-prerequisites)
 - [🚀 Local Setup](#-local-setup)
 - [💼 Available Scripts](#-available-scripts)
 - [📄 License](#-license)
@@ -29,12 +30,7 @@ It combines secure account management, PDF resume parsing, Google Gemini AI anal
 
 ## 🎯 What SkillBridge AI Solves
 
-Job seekers often struggle to translate their resume into interview readiness. SkillBridge AI closes this gap by:
-
-- converting resume content and job descriptions into specific AI-driven feedback
-- producing a match score, skill gaps, and practice questions
-- giving candidates a saved preparation plan with technical and behavioral coaching
-- storing reports so users can return to past interview prep anytime
+Job seekers often struggle to translate their resume into interview readiness. SkillBridge AI closes this gap by analyzing your resume and job description with Google Gemini AI — delivering a match score, ranked skill gaps, practice questions with model answers, and a multi-day preparation roadmap, all saved to your account for future reference.
 
 ---
 
@@ -42,9 +38,12 @@ Job seekers often struggle to translate their resume into interview readiness. S
 
 - **Structured AI Output:** Backend prompts Google Gemini to return a strict JSON payload containing `matchScore`, `technicalQuestions`, `behavioralQuestions`, `skillGaps`, `preparationPlan`, and `title`.
 - **Secure Session Management:** JWT-based auth is stored as an HTTP-only cookie and validated with a token blacklist.
+- **API Rate Limiting:** Express rate-limit middleware protects the login endpoint and AI generation calls from abuse.
+- **Input Validation:** Zod schemas validate auth and interview data payloads for type safety and consistency.
 - **PDF Resume Parsing:** Uploaded resumes are parsed using `pdf-parse`, then analyzed alongside job descriptions and self-descriptions.
 - **Downloadable Resume Export:** Generated resume HTML is converted to PDF through Puppeteer for a polished candidate asset.
 - **Protected React Routing:** Authenticated flows use React Router and a `Protected` wrapper for `/generate`, `/dashboard`, and report detail routes.
+- **PostgreSQL + Prisma ORM:** Type-safe database layer using Prisma ORM with PostgreSQL hosted on Neon, enabling efficient relational queries and schema migrations.
 
 ---
 
@@ -52,12 +51,12 @@ Job seekers often struggle to translate their resume into interview readiness. S
 
 ```mermaid
 flowchart TD
-  Client[React 19 + Vite + Tailwind] -->|HTTPS/CORS| Server[Express 5 API]
-  Server -->|Mongoose| MongoDB[(MongoDB)]
+  Client[React 19 + Vite + Tailwind] -->|REST API / HTTPS| Server[Express 5 API]
+  Server -->|JWT Cookie Auth| Client
+  Server -->|Prisma ORM| Database[(PostgreSQL · Neon)]
   Server -->|Gemini API| Gemini[Google Gemini AI]
-  Server -->|Puppeteer| PDF[Resume PDF Generation]
-  Client --> Auth[JWT Cookie Auth]
-  Client --> Reports[Saved Interview Reports]
+  Server -->|Puppeteer| PDF[Resume PDF]
+  Server -->|Rate Limiting · Zod| Middleware[Request Validation]
 ```
 
 ---
@@ -98,7 +97,7 @@ flowchart TD
 
 ---
 
-## 🛠 Tech Stack
+## 🛠️ Tech Stack
 
 ### Frontend
 
@@ -112,11 +111,13 @@ flowchart TD
 
 - Node.js
 - Express 5
-- MongoDB
-- Mongoose
+- PostgreSQL (via Neon)
+- Prisma ORM
+- Zod (request validation)
 - @google/genai
 - Puppeteer
 - pdf-parse
+- express-rate-limit
 - bcryptjs
 - jsonwebtoken
 - multer
@@ -125,26 +126,19 @@ flowchart TD
 
 ## 💾 Database Schema
 
-### User
+Managed with **Prisma ORM** on **PostgreSQL (Neon)**. Full schema at [`server/prisma/schema.prisma`](server/prisma/schema.prisma).
 
-- `username` (String, unique)
-- `email` (String, unique)
-- `password` (String, hashed)
-- timestamps
+| Model                | Key Fields                                                                               |
+| -------------------- | ---------------------------------------------------------------------------------------- |
+| `User`               | `id`, `username`, `email`, `password` → has many `InterviewReport`                       |
+| `InterviewReport`    | `matchScore`, `title`, `jobDescription`, `resume`, `selfDescription` → belongs to `User` |
+| `TechnicalQuestion`  | `question`, `intention`, `answer` → belongs to `InterviewReport`                         |
+| `BehavioralQuestion` | `question`, `intention`, `answer` → belongs to `InterviewReport`                         |
+| `SkillGap`           | `skill`, `severity` (`low \| medium \| high`) → belongs to `InterviewReport`             |
+| `PreparationPlan`    | `day`, `focus`, `tasks` (JSON array) → belongs to `InterviewReport`                      |
+| `TokenBlacklist`     | `token`, `expiresAt` (auto-expires after 1 day)                                          |
 
-### InterviewReport
-
-- `jobDescription` (String)
-- `resume` (String)
-- `selfDescription` (String)
-- `matchScore` (Number)
-- `technicalQuestions` (Array of question/intention/answer)
-- `behavioralQuestions` (Array of question/intention/answer)
-- `skillGaps` (Array of skill/severity)
-- `preparationPlan` (Array of day/focus/tasks)
-- `title` (String)
-- `user` (ObjectId ref)
-- timestamps
+All relations use `onDelete: Cascade`. IDs are `cuid()`.
 
 ---
 
@@ -164,6 +158,20 @@ flowchart TD
 - `GET /api/interview/report/:interviewId` - fetch a single report detail
 - `DELETE /api/interview/:interviewId` - delete a saved report
 - `POST /api/interview/resume/pdf/:interviewReportId` - generate and download resume PDF from saved report
+
+---
+
+## ⚙️ Prerequisites
+
+Make sure you have the following installed before running the project:
+
+| Tool    | Minimum Version    |
+| ------- | ------------------ |
+| Node.js | 18.x or higher     |
+| npm     | 9.x or higher      |
+| Git     | any recent version |
+
+> A [Neon](https://neon.tech/) account is also required for the PostgreSQL database, and a [Google AI Studio](https://aistudio.google.com/) account for the Gemini API key.
 
 ---
 
@@ -187,19 +195,29 @@ Create a `.env` file in `server/` with:
 
 ```env
 PORT=3000
-MONGO_URI=mongodb://127.0.0.1:27017/skillbridgeai
+DATABASE_URL=postgresql://user:password@host/database
 JWT_SECRET=your_jwt_secret
 GOOGLE_GENAI_API_KEY=your_google_genai_key
 ```
 
-### 3. Frontend setup
+### 3. Setup Prisma & Database
+
+```bash
+# Generate Prisma Client
+npx prisma generate
+
+# Run migrations
+npx prisma migrate dev
+```
+
+### 4. Frontend setup
 
 ```bash
 cd ../client
 npm install
 ```
 
-### 4. Start both apps
+### 5. Start both apps
 
 Open two terminal windows:
 
@@ -240,4 +258,3 @@ This project is licensed under the MIT License.
 ---
 
 <p align="center">Built by Sahil Sameer to help candidates turn resumes into interview-ready AI reports.</p>
-
