@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useInterview } from "../../hooks/useInterview.js";
 import { useNavigate } from "react-router";
 
@@ -9,6 +9,9 @@ const LOADING_STEPS = [
   { label: "Finalizing Preparation Plan...", icon: "✨" },
 ];
 
+const MAX_FILE_SIZE_MB = 5;
+const MAX_FILE_SIZE_BYTES = MAX_FILE_SIZE_MB * 1024 * 1024;
+
 const Form = () => {
   const { generateReport } = useInterview();
   const [isGenerating, setIsGenerating] = useState(false);
@@ -17,13 +20,65 @@ const Form = () => {
   const [resumeFileName, setResumeFileName] = useState("");
   const [resumeFile, setResumeFile] = useState(null);
   const [loadingStep, setLoadingStep] = useState(0);
+  const [error, setError] = useState("");
+  const [fileError, setFileError] = useState("");
+  const [isDraggingOver, setIsDraggingOver] = useState(false);
+  const fileInputRef = useRef(null);
   const navigate = useNavigate();
 
+  // At least one of: jobDescription OR (selfDescription OR resumeFile)
+  // Both sides are needed for a useful plan, but we match the original logic:
+  // any single field enables the button. We keep that, just fix the label.
   const canGenerate = Boolean(
-    jobDescription.trim() || selfDescription.trim() || resumeFileName,
+    jobDescription.trim() && (selfDescription.trim() || resumeFile)
   );
 
+  const handleFileSelect = (file) => {
+    setFileError("");
+    if (!file) return;
+
+    const validTypes = [
+      "application/pdf",
+      "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+    ];
+    if (!validTypes.includes(file.type)) {
+      setFileError("Only PDF or DOCX files are supported.");
+      return;
+    }
+    if (file.size > MAX_FILE_SIZE_BYTES) {
+      setFileError(`File is too large. Maximum size is ${MAX_FILE_SIZE_MB}MB.`);
+      return;
+    }
+
+    setResumeFile(file);
+    setResumeFileName(file.name);
+  };
+
+  const handleRemoveFile = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setResumeFile(null);
+    setResumeFileName("");
+    setFileError("");
+    if (fileInputRef.current) fileInputRef.current.value = "";
+  };
+
+  const handleDrop = (e) => {
+    e.preventDefault();
+    setIsDraggingOver(false);
+    const file = e.dataTransfer.files[0] || null;
+    handleFileSelect(file);
+  };
+
+  const handleDragOver = (e) => {
+    e.preventDefault();
+    setIsDraggingOver(true);
+  };
+
+  const handleDragLeave = () => setIsDraggingOver(false);
+
   const handleGenerateReport = async () => {
+    setError("");
     setIsGenerating(true);
     try {
       const data = await generateReport({
@@ -32,23 +87,26 @@ const Form = () => {
         resumeFile,
       });
       if (data && data.id) {
-        setResumeFile(null);
-        setResumeFileName("");
         navigate(`/interview/${data.id}`);
       } else {
-        alert("Failed to generate report. Please try again.");
+        setError("Failed to generate report. Please try again.");
       }
+    } catch (err) {
+      setError(
+        err?.message || "Something went wrong. Please try again."
+      );
     } finally {
       setIsGenerating(false);
     }
   };
 
+  // Advance loading step based on time, but never go past last step
   useEffect(() => {
     let interval;
     if (isGenerating) {
       setLoadingStep(0);
       interval = setInterval(() => {
-        setLoadingStep((prev) => (prev < 3 ? prev + 1 : prev));
+        setLoadingStep((prev) => (prev < LOADING_STEPS.length - 1 ? prev + 1 : prev));
       }, 5000);
     } else {
       setLoadingStep(0);
@@ -56,64 +114,9 @@ const Form = () => {
     return () => clearInterval(interval);
   }, [isGenerating]);
 
-  if (isGenerating) {
-    const progress = ((loadingStep + 1) / LOADING_STEPS.length) * 100;
-    return (
-      <div className="min-h-[70vh] flex items-center justify-center animate-fade-in">
-        <div className="text-center max-w-md mx-auto px-4">
-          {/* Animated icon */}
-          <div
-            className="w-20 h-20 mx-auto mb-8 rounded-2xl flex items-center justify-center text-4xl animate-float"
-            style={{
-              background:
-                "linear-gradient(135deg,rgba(6,182,212,0.15),rgba(168,85,247,0.15))",
-              border: "1px solid rgba(6,182,212,0.2)",
-            }}
-          >
-            {LOADING_STEPS[loadingStep].icon}
-          </div>
+  const progress = ((loadingStep + 1) / LOADING_STEPS.length) * 100;
 
-          <h2 className="text-2xl font-bold text-white mb-2 animate-fade-in-up">
-            {LOADING_STEPS[loadingStep].label}
-          </h2>
-          <p className="text-slate-400 mb-8">
-            AI is preparing your personalized interview plan...
-          </p>
-
-          {/* Progress bar */}
-          <div className="w-full rounded-full h-1.5 mb-3 bg-slate-800">
-            <div
-              className="h-1.5 rounded-full transition-all duration-700 ease-out"
-              style={{
-                width: `${progress}%`,
-                background: "linear-gradient(90deg,#06b6d4,#a855f7)",
-              }}
-            />
-          </div>
-          <p className="text-xs text-slate-500">
-            Step {loadingStep + 1} of {LOADING_STEPS.length}
-          </p>
-
-          {/* Dots */}
-          <div className="flex justify-center gap-2 mt-8">
-            {LOADING_STEPS.map((_, i) => (
-              <div
-                key={i}
-                className={`rounded-full transition-all duration-300 ${i <= loadingStep ? "w-6 h-2" : "w-2 h-2"}`}
-                style={{
-                  background:
-                    i <= loadingStep
-                      ? "linear-gradient(90deg,#06b6d4,#a855f7)"
-                      : "rgba(100,116,139,0.4)",
-                }}
-              />
-            ))}
-          </div>
-        </div>
-      </div>
-    );
-  }
-
+  // ─── Main form ───────────────────────────────────────────────────────────────
   return (
     <div className="animate-fade-in py-4">
       {/* Header */}
@@ -131,17 +134,115 @@ const Form = () => {
         </p>
       </div>
 
+      {/* Inline error banner */}
+      {error && (
+        <div
+          className="mb-4 flex items-start gap-3 px-4 py-3 rounded-xl text-sm text-red-300 animate-fade-in"
+          style={{
+            background: "rgba(239,68,68,0.08)",
+            border: "1px solid rgba(239,68,68,0.25)",
+          }}
+        >
+          <svg
+            className="w-4 h-4 mt-0.5 shrink-0"
+            fill="currentColor"
+            viewBox="0 0 20 20"
+          >
+            <path
+              fillRule="evenodd"
+              d="M10 18a8 8 0 100-16 8 8 0 000 16zm-.75-9.25a.75.75 0 011.5 0v3.5a.75.75 0 01-1.5 0v-3.5zm.75 6a.875.875 0 100-1.75.875.875 0 000 1.75z"
+              clipRule="evenodd"
+            />
+          </svg>
+          <p>{error}</p>
+          <button
+            onClick={() => setError("")}
+            className="ml-auto shrink-0 text-red-400 hover:text-red-200 transition-colors"
+            aria-label="Dismiss error"
+          >
+            <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+              <path
+                fillRule="evenodd"
+                d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 011.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
+                clipRule="evenodd"
+              />
+            </svg>
+          </button>
+        </div>
+      )}
+
       {/* Main Card */}
       <div
-        className="rounded-2xl overflow-hidden shadow-2xl shadow-black/30"
+        className="rounded-2xl overflow-hidden shadow-2xl shadow-black/30 relative"
         style={{
           background: "rgba(10,18,35,0.8)",
           border: "1px solid rgba(255,255,255,0.07)",
           backdropFilter: "blur(16px)",
         }}
       >
+        {/* ── Loading overlay — sits on top of the card, no layout shift ── */}
+        {isGenerating && (
+          <div
+            className="absolute inset-0 z-10 flex items-center justify-center rounded-2xl animate-fade-in"
+            style={{
+              background: "rgba(10,18,35,0.92)",
+              backdropFilter: "blur(8px)",
+            }}
+          >
+            <div className="text-center max-w-sm mx-auto px-6">
+              <div
+                className="w-16 h-16 mx-auto mb-6 rounded-2xl flex items-center justify-center text-3xl animate-float"
+                style={{
+                  background:
+                    "linear-gradient(135deg,rgba(6,182,212,0.15),rgba(168,85,247,0.15))",
+                  border: "1px solid rgba(6,182,212,0.2)",
+                }}
+              >
+                {LOADING_STEPS[loadingStep].icon}
+              </div>
+
+              <h2 className="text-xl font-bold text-white mb-2">
+                {LOADING_STEPS[loadingStep].label}
+              </h2>
+              <p className="text-slate-400 text-sm mb-6">
+                AI is preparing your personalized interview plan...
+              </p>
+
+              <div className="w-full rounded-full h-1.5 mb-2 bg-slate-800">
+                <div
+                  className="h-1.5 rounded-full transition-all duration-700 ease-out"
+                  style={{
+                    width: `${progress}%`,
+                    background: "linear-gradient(90deg,#06b6d4,#a855f7)",
+                  }}
+                />
+              </div>
+              <p className="text-xs text-slate-500 mb-6">
+                Step {loadingStep + 1} of {LOADING_STEPS.length}
+              </p>
+
+              <div className="flex justify-center gap-2">
+                {LOADING_STEPS.map((_, i) => (
+                  <div
+                    key={i}
+                    className={`rounded-full transition-all duration-300 ${
+                      i <= loadingStep ? "w-6 h-2" : "w-2 h-2"
+                    }`}
+                    style={{
+                      background:
+                        i <= loadingStep
+                          ? "linear-gradient(90deg,#06b6d4,#a855f7)"
+                          : "rgba(100,116,139,0.4)",
+                    }}
+                  />
+                ))}
+              </div>
+            </div>
+          </div>
+        )}
+
         <div className="grid grid-cols-1 lg:grid-cols-2 divide-y lg:divide-y-0 lg:divide-x divide-slate-800/60">
-          {/* Left: Job Description */}
+          {/* ── Left: Job Description ─────────────────────────────────────── */}
           <div className="p-6 md:p-8 flex flex-col">
             <div className="flex items-center gap-3 mb-5">
               <div
@@ -170,10 +271,12 @@ const Form = () => {
                 <h2 className="font-semibold text-white text-sm">
                   Target Job Description
                 </h2>
-                <span className="text-xs text-cyan-400">Required</span>
+                {/* Fixed: was misleadingly "Required" — any field is enough */}
+                <span className="text-xs text-red-400">Required</span>
               </div>
             </div>
             <textarea
+              value={jobDescription}
               onChange={(e) => setJobDescription(e.target.value)}
               placeholder={`Paste the full job description here...\ne.g. 'Senior Frontend Engineer at Google requires proficiency in React, TypeScript...'`}
               maxLength={5000}
@@ -188,7 +291,7 @@ const Form = () => {
             </p>
           </div>
 
-          {/* Right: Profile */}
+          {/* ── Right: Profile ────────────────────────────────────────────── */}
           <div className="p-6 md:p-8 flex flex-col gap-6">
             <div className="flex items-center gap-3">
               <div
@@ -233,29 +336,68 @@ const Form = () => {
                   Best Results
                 </span>
               </div>
+
               <label
                 htmlFor="resume"
-                className={`flex flex-col items-center justify-center p-6 rounded-xl cursor-pointer transition-all duration-200 border-2 border-dashed ${resumeFileName ? "border-cyan-500/50 bg-cyan-500/5" : "border-slate-700/60 hover:border-slate-600 bg-slate-900/30 hover:bg-slate-900/50"}`}
+                onDrop={handleDrop}
+                onDragOver={handleDragOver}
+                onDragLeave={handleDragLeave}
+                className={`flex flex-col items-center justify-center p-6 rounded-xl cursor-pointer transition-all duration-200 border-2 border-dashed ${
+                  isDraggingOver
+                    ? "border-cyan-400/70 bg-cyan-500/10 scale-[1.01]"
+                    : resumeFileName
+                    ? "border-cyan-500/50 bg-cyan-500/5"
+                    : fileError
+                    ? "border-red-500/50 bg-red-500/5"
+                    : "border-slate-700/60 hover:border-slate-600 bg-slate-900/30 hover:bg-slate-900/50"
+                }`}
               >
                 <div className="text-2xl mb-2">
-                  {resumeFileName ? "📄" : "☁️"}
+                  {fileError ? "⚠️" : resumeFileName ? "📄" : "☁️"}
                 </div>
-                <p className="text-sm font-medium text-slate-300">
-                  {resumeFileName
-                    ? resumeFileName
-                    : "Click to upload or drag & drop"}
-                </p>
-                {!resumeFileName && (
-                  <p className="text-xs text-slate-600 mt-1">
-                    PDF or DOCX · Max 5MB
-                  </p>
+
+                {resumeFileName ? (
+                  <div className="flex items-center gap-2">
+                    <p className="text-sm font-medium text-slate-300 truncate max-w-[180px]">
+                      {resumeFileName}
+                    </p>
+                    {/* Remove file button */}
+                    <button
+                      onClick={handleRemoveFile}
+                      className="shrink-0 w-5 h-5 rounded-full flex items-center justify-center text-slate-400 hover:text-red-400 hover:bg-red-500/10 transition-colors"
+                      aria-label="Remove file"
+                    >
+                      <svg
+                        className="w-3.5 h-3.5"
+                        fill="currentColor"
+                        viewBox="0 0 20 20"
+                      >
+                        <path
+                          fillRule="evenodd"
+                          d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 011.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
+                          clipRule="evenodd"
+                        />
+                      </svg>
+                    </button>
+                  </div>
+                ) : (
+                  <>
+                    <p className="text-sm font-medium text-slate-300">
+                      {fileError
+                        ? fileError
+                        : "Click to upload or drag & drop"}
+                    </p>
+                    {!fileError && (
+                      <p className="text-xs text-slate-600 mt-1">
+                        PDF or DOCX · Max {MAX_FILE_SIZE_MB}MB
+                      </p>
+                    )}
+                  </>
                 )}
+
                 <input
-                  onChange={(e) => {
-                    const file = e.target.files[0] || null;
-                    setResumeFile(file);
-                    setResumeFileName(file?.name || "");
-                  }}
+                  ref={fileInputRef}
+                  onChange={(e) => handleFileSelect(e.target.files[0] || null)}
                   hidden
                   type="file"
                   id="resume"
@@ -263,6 +405,24 @@ const Form = () => {
                   accept=".pdf,.docx"
                 />
               </label>
+
+              {/* Inline file error below dropzone (also shown inside above) */}
+              {fileError && (
+                <p className="text-xs text-red-400 mt-1.5 flex items-center gap-1">
+                  <svg
+                    className="w-3 h-3 shrink-0"
+                    fill="currentColor"
+                    viewBox="0 0 20 20"
+                  >
+                    <path
+                      fillRule="evenodd"
+                      d="M10 18a8 8 0 100-16 8 8 0 000 16zm-.75-9.25a.75.75 0 011.5 0v3.5a.75.75 0 01-1.5 0v-3.5zm.75 6a.875.875 0 100-1.75.875.875 0 000 1.75z"
+                      clipRule="evenodd"
+                    />
+                  </svg>
+                  {fileError}
+                </p>
+              )}
             </div>
 
             {/* Divider */}
@@ -281,6 +441,7 @@ const Form = () => {
                 Quick Self-Description
               </label>
               <textarea
+                value={selfDescription}
                 onChange={(e) => setSelfDescription(e.target.value)}
                 id="selfDescription"
                 placeholder="Briefly describe your experience, key skills, and years of experience..."
@@ -312,9 +473,11 @@ const Form = () => {
                 />
               </svg>
               <p>
-                Either a <strong className="text-slate-300">Resume</strong> or a{" "}
-                <strong className="text-slate-300">Self Description</strong> is
-                required to generate a personalized plan.
+                <strong className="text-slate-300">Job Description</strong> is
+                required, plus at least one of{" "}
+                <strong className="text-slate-300">Resume</strong> or{" "}
+                <strong className="text-slate-300">Self Description</strong> to
+                generate your personalized plan.
               </p>
             </div>
           </div>
@@ -322,9 +485,7 @@ const Form = () => {
 
         {/* Footer */}
         <div className="flex items-center justify-between px-6 md:px-8 py-4 border-t border-slate-800/60 bg-slate-900/30">
-          <span className="text-sm text-slate-500">
-            AI-Powered · ~30 seconds
-          </span>
+          <span className="text-sm text-slate-500">AI-Powered · ~30 seconds</span>
           <button
             onClick={handleGenerateReport}
             disabled={!canGenerate}
