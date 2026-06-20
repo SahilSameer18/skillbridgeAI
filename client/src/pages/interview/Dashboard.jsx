@@ -4,17 +4,60 @@ import { useNavigate } from 'react-router';
 import Skeleton from '../../components/common/Skeleton.jsx';
 
 const ScoreBadge = ({ score }) => {
-    const color = score >= 80
+    if (!score) return <span className="text-xs text-slate-600">No score</span>;
+    const styles = score >= 80
         ? 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20'
         : score >= 60
         ? 'bg-amber-500/10 text-amber-400 border-amber-500/20'
         : 'bg-red-500/10 text-red-400 border-red-500/20';
+    const label = score >= 80 ? 'Strong match' : score >= 60 ? 'Average match' : 'Low match';
     return (
-        <span className={`inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold border ${color}`}>
-            {score ? `${score}% Match` : 'N/A'}
-        </span>
+        <div className="flex items-center gap-2">
+            <span className={`inline-flex items-center px-2 py-0.5 rounded-md text-xs font-semibold border ${styles}`}>
+                {score}%
+            </span>
+            <span className="text-xs text-slate-500">{label}</span>
+        </div>
     );
 };
+
+const SkeletonCard = () => (
+    <div className="rounded-xl p-5 space-y-4 bg-slate-900/50 border border-slate-800/60">
+        <div className="flex justify-between items-start gap-2">
+            <Skeleton width="65%" height="1rem" />
+            <Skeleton width="28px" height="28px" borderRadius="8px" />
+        </div>
+        <Skeleton width="35%" height="0.75rem" />
+        <div className="flex items-center justify-between pt-1">
+            <Skeleton width="80px" height="1.5rem" borderRadius="6px" />
+            <Skeleton width="16px" height="16px" borderRadius="4px" />
+        </div>
+    </div>
+);
+
+const EmptyState = ({ onNavigate }) => (
+    <div className="flex flex-col items-center justify-center py-28 text-center">
+        <div className="w-16 h-16 rounded-2xl flex items-center justify-center mb-5 bg-slate-900/60 border border-slate-800/60">
+            <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className="text-slate-600">
+                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="12" y1="18" x2="12" y2="12"/><line x1="9" y1="15" x2="15" y2="15"/>
+            </svg>
+        </div>
+        <h3 className="text-base font-semibold text-white mb-1.5">No plans yet</h3>
+        <p className="text-sm text-slate-500 mb-7 max-w-xs leading-relaxed">
+            Generate your first interview plan by uploading a resume and job description.
+        </p>
+        <button
+            onClick={onNavigate}
+            className="flex items-center gap-2 px-5 py-2.5 rounded-xl font-semibold text-white text-sm transition-all duration-200 active:scale-95 hover:opacity-90"
+            style={{ background: 'linear-gradient(135deg,#06b6d4,#a855f7)', boxShadow: '0 8px 20px rgba(168,85,247,0.2)' }}
+        >
+            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="currentColor" stroke="none">
+                <path d="M10.6144 17.7956 11.492 15.7854C12.2731 13.9966 13.6789 12.5726 15.4325 11.7942L17.8482 10.7219C18.6162 10.381 18.6162 9.26368 17.8482 8.92277L15.5079 7.88394C13.7092 7.08552 12.2782 5.60881 11.5105 3.75894L10.6215 1.61673C10.2916.821765 9.19319.821767 8.8633 1.61673L7.97427 3.75892C7.20657 5.60881 5.77553 7.08552 3.97685 7.88394L1.63658 8.92277C.868537 9.26368.868536 10.381 1.63658 10.7219L4.0523 11.7942C5.80589 12.5726 7.21171 13.9966 7.99275 15.7854L8.8704 17.7956C9.20776 18.5682 10.277 18.5682 10.6144 17.7956Z"/>
+            </svg>
+            Create new plan
+        </button>
+    </div>
+);
 
 const Dashboard = () => {
     const { reports, getReports, deleteReport } = useInterview();
@@ -39,84 +82,90 @@ const Dashboard = () => {
         setDeletingId(null);
     };
 
+    const isLoading = isFetching && reports.length === 0;
+
     return (
         <div className="animate-fade-in py-4">
-            {/* Header */}
-            <div className="mb-10">
-                <div className="flex items-center gap-3 mb-3">
-                    <div className="w-1 h-8 rounded-full" style={{background:'linear-gradient(180deg,#06b6d4,#a855f7)'}} />
-                    <h1 className="text-3xl font-bold text-white">Your Interview Plans</h1>
-                </div>
-                <p className="text-slate-400 ml-4 pl-3">Review your saved analyses and continue preparing for interviews.</p>
-            </div>
 
-            {isFetching && reports.length === 0 ? (
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
-                    {[...Array(6)].map((_, i) => (
-                        <div key={i} className="rounded-2xl p-6 space-y-4" style={{background:'rgba(15,23,42,0.6)', border:'1px solid rgba(255,255,255,0.06)'}}>
-                            <Skeleton width="70%" height="1.4rem" />
-                            <Skeleton width="40%" height="0.8rem" />
-                            <Skeleton width="100px" height="1.8rem" borderRadius="2rem" />
-                        </div>
-                    ))}
+            {/* ── Header ── */}
+            <div className="flex items-center justify-between mb-8">
+                <div>
+                    <h1 className="text-2xl font-bold text-white">Interview plans</h1>
+                    <p className="text-sm text-slate-500 mt-0.5">
+                        {isLoading ? 'Loading...' : `${reports.length} saved ${reports.length === 1 ? 'plan' : 'plans'}`}
+                    </p>
                 </div>
-            ) : reports.length === 0 ? (
-                <div className="flex flex-col items-center justify-center py-24 text-center">
-                    <div className="w-20 h-20 rounded-2xl flex items-center justify-center text-4xl mb-6" style={{background:'rgba(6,182,212,0.08)', border:'1px solid rgba(6,182,212,0.15)'}}>
-                        📋
-                    </div>
-                    <h3 className="text-xl font-semibold text-white mb-2">No plans yet</h3>
-                    <p className="text-slate-500 mb-8 max-w-xs">You haven't generated any interview plans yet. Create your first one!</p>
+                {!isLoading && reports.length > 0 && (
                     <button
                         onClick={() => navigate('/generate')}
-                        className="px-6 py-3 rounded-xl font-semibold text-white text-sm transition-all duration-300 active:scale-95"
-                        style={{background:'linear-gradient(135deg,#06b6d4,#a855f7)', boxShadow:'0 8px 24px rgba(168,85,247,0.2)'}}>
-                        ✨ Create New Plan
+                        className="flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-semibold text-white transition-all duration-200 active:scale-95 hover:opacity-90 shrink-0"
+                        style={{ background: 'linear-gradient(135deg,#06b6d4,#a855f7)', boxShadow: '0 6px 16px rgba(168,85,247,0.2)' }}
+                    >
+                        <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                            <line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>
+                        </svg>
+                        New plan
                     </button>
+                )}
+            </div>
+
+            {/* ── Skeleton loading ── */}
+            {isLoading && (
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                    {[...Array(6)].map((_, i) => <SkeletonCard key={i} />)}
                 </div>
-            ) : (
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+            )}
+
+            {/* ── Empty state ── */}
+            {!isLoading && reports.length === 0 && (
+                <EmptyState onNavigate={() => navigate('/generate')} />
+            )}
+
+            {/* ── Report grid ── */}
+            {!isLoading && reports.length > 0 && (
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                     {reports.map((report, idx) => (
                         <div
                             key={report.id}
                             onClick={() => navigate(`/interview/${report.id}`)}
-                            className="group relative rounded-2xl p-6 cursor-pointer transition-all duration-300 hover:-translate-y-1 animate-fade-in-up"
-                            style={{
-                                background:'rgba(15,23,42,0.6)',
-                                border:'1px solid rgba(255,255,255,0.06)',
-                                backdropFilter:'blur(12px)',
-                                animationDelay:`${idx * 0.05}s`
-                            }}
+                            className="group relative rounded-xl p-5 cursor-pointer transition-all duration-200 hover:-translate-y-0.5 hover:border-slate-700/70 animate-fade-in-up bg-slate-900/50 border border-slate-800/60"
+                            style={{ animationDelay: `${idx * 0.04}s` }}
                         >
-                            {/* Hover glow */}
-                            <div className="absolute inset-0 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none"
-                                style={{background:'linear-gradient(135deg,rgba(6,182,212,0.04),rgba(168,85,247,0.04))', border:'1px solid rgba(6,182,212,0.15)'}} />
-
-                            <div className="flex justify-between items-start gap-2 mb-3">
+                            {/* Top row: title + delete */}
+                            <div className="flex items-start justify-between gap-2 mb-2">
                                 <h3 className="font-semibold text-white text-sm leading-snug line-clamp-2 flex-1">
-                                    {report.title || (report.jobDescription?.slice(0, 50).trim() + (report.jobDescription?.length > 50 ? '…' : '')) || 'Interview Plan'}
+                                    {report.title
+                                        || (report.jobDescription?.slice(0, 60).trim() + (report.jobDescription?.length > 60 ? '…' : ''))
+                                        || 'Interview plan'}
                                 </h3>
                                 <button
                                     onClick={(e) => handleDelete(e, report.id)}
                                     disabled={deletingId === report.id}
-                                    title="Delete"
-                                    className="shrink-0 w-8 h-8 rounded-lg flex items-center justify-center text-slate-600 hover:text-red-400 hover:bg-red-500/10 transition-all duration-200 disabled:opacity-50"
+                                    title="Delete plan"
+                                    className="shrink-0 w-7 h-7 rounded-lg flex items-center justify-center text-slate-700 hover:text-red-400 hover:bg-red-500/10 transition-all duration-150 disabled:opacity-40"
                                 >
                                     {deletingId === report.id ? (
-                                        <span className="w-3.5 h-3.5 border border-red-400/50 border-t-red-400 rounded-full animate-spin" />
+                                        <span className="w-3 h-3 border border-red-400/50 border-t-red-400 rounded-full animate-spin" />
                                     ) : (
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M3 6h18"/><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/></svg>
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                                            <path d="M3 6h18"/><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/>
+                                        </svg>
                                     )}
                                 </button>
                             </div>
 
-                            <p className="text-xs text-slate-500 mb-4">
+                            {/* Date */}
+                            <p className="text-xs text-slate-600 mb-4">
                                 {new Date(report.createdAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
                             </p>
 
-                            <div className="flex items-center justify-between">
+                            {/* Divider */}
+                            <div className="border-t border-slate-800/60 pt-3 flex items-center justify-between">
                                 <ScoreBadge score={report.matchScore} />
-                                <svg className="w-4 h-4 text-slate-600 group-hover:text-cyan-400 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <svg
+                                    className="w-4 h-4 text-slate-700 group-hover:text-cyan-400 transition-colors duration-150"
+                                    fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"
+                                >
                                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
                                 </svg>
                             </div>
