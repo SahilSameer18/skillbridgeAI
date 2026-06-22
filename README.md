@@ -194,11 +194,13 @@ npm install
 Create a `.env` file in `server/` with:
 
 ```env
-PORT=3000
 DATABASE_URL=postgresql://user:password@host/database
+DIRECT_URL=postgresql://user:password@host/database
 JWT_SECRET=your_jwt_secret
 GOOGLE_GENAI_API_KEY=your_google_genai_key
 ```
+
+> Note: the backend currently listens on port `3000` in [`server/server.js`](server/server.js), so `PORT` is not used yet.
 
 ### 3. Setup Prisma & Database
 
@@ -225,6 +227,8 @@ Open two terminal windows:
 cd server
 npm run dev
 ```
+
+The API will run on `http://localhost:3000`.
 
 ```bash
 cd client
