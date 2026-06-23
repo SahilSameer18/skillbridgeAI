@@ -46,6 +46,8 @@ model InterviewReport {
   userId              String
   createdAt           DateTime             @default(now())
   updatedAt           DateTime             @updatedAt
+
+  @@index([userId])
 }
 
 model TechnicalQuestion {
@@ -55,6 +57,8 @@ model TechnicalQuestion {
   answer            String          @db.Text
   interviewReport   InterviewReport @relation(fields: [interviewReportId], references: [id], onDelete: Cascade)
   interviewReportId String
+
+  @@index([interviewReportId])
 }
 
 model BehavioralQuestion {
@@ -64,6 +68,8 @@ model BehavioralQuestion {
   answer            String          @db.Text
   interviewReport   InterviewReport @relation(fields: [interviewReportId], references: [id], onDelete: Cascade)
   interviewReportId String
+
+  @@index([interviewReportId])
 }
 
 model SkillGap {
@@ -72,6 +78,8 @@ model SkillGap {
   severity          Severity // "low", "medium", "high"
   interviewReport   InterviewReport @relation(fields: [interviewReportId], references: [id], onDelete: Cascade)
   interviewReportId String
+
+  @@index([interviewReportId])
 }
 
 model PreparationPlan {
@@ -81,6 +89,8 @@ model PreparationPlan {
   tasks             Json            @default("[]")
   interviewReport   InterviewReport @relation(fields: [interviewReportId], references: [id], onDelete: Cascade)
   interviewReportId String
+
+  @@index([interviewReportId])
 }
 
 model TokenBlacklist {

@@ -204,7 +204,7 @@ async function generateResumePdfController(req, res) {
 
   try {
     const interviewReport = await prisma.interviewReport.findUnique({
-      where: { id: interviewReportId, userId: req.user.id },
+      where: { id: interviewReportId },
     });
 
     if (!interviewReport || interviewReport.userId !== req.user.id) {
