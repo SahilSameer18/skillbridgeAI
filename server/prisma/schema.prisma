@@ -75,11 +75,14 @@ model BehavioralQuestion {
 model SkillGap {
   id                String          @id @default(cuid())
   skill             String
-  severity          Severity // "low", "medium", "high"
+  severity          Severity
+  skillId           String?
+  skillRef          Skill?          @relation(fields: [skillId], references: [id], onDelete: SetNull)
   interviewReport   InterviewReport @relation(fields: [interviewReportId], references: [id], onDelete: Cascade)
   interviewReportId String
 
   @@index([interviewReportId])
+  @@index([skillId])
 }
 
 model PreparationPlan {
@@ -91,6 +94,34 @@ model PreparationPlan {
   interviewReportId String
 
   @@index([interviewReportId])
+}
+
+// SKILL Resources
+
+enum ResourceType {
+  DOCUMENTATION
+  VIDEO
+}
+
+model Skill {
+  id        String             @id @default(cuid())
+  name      String             @unique
+  aliases   String[]           @default([])
+  resources LearningResource[]
+  skillGaps SkillGap[]
+  createdAt DateTime           @default(now())
+  updatedAt DateTime           @updatedAt
+}
+
+model LearningResource {
+  id      String       @id @default(cuid())
+  type    ResourceType
+  title   String
+  url     String
+  skill   Skill        @relation(fields: [skillId], references: [id], onDelete: Cascade)
+  skillId String
+
+  @@index([skillId])
 }
 
 model TokenBlacklist {

@@ -6,6 +6,7 @@ import {
   generateResumePdf,
 } from "../services/ai.service.js";
 import prisma from "../lib/prisma.js";
+import { attachSkillIds } from "../services/skillMatcher.service.js";
 
 /**
  * @description Controller to generate interview report based on user self description, resume and job description.
@@ -47,6 +48,11 @@ async function generateInterViewReportController(req, res) {
       jobDescription,
     });
 
+    const skillGapsWithIds = await attachSkillIds(
+      interViewReportByAi.skillGaps,
+      prisma,
+    );
+
     const interviewReport = await prisma.interviewReport.create({
       data: {
         userId: req.user.id,
@@ -62,9 +68,10 @@ async function generateInterViewReportController(req, res) {
           create: interViewReportByAi.behavioralQuestions,
         },
         skillGaps: {
-          create: interViewReportByAi.skillGaps.map((gap) => ({
-            ...gap,
+          create: skillGapsWithIds.map((gap) => ({
+            skill: gap.skill,
             severity: gap.severity.toLowerCase(),
+            skillId: gap.skillId,
           })),
         },
         preparationPlan: {
@@ -74,10 +81,19 @@ async function generateInterViewReportController(req, res) {
           })),
         },
       },
+
       include: {
         technicalQuestions: true,
         behavioralQuestions: true,
-        skillGaps: true,
+        skillGaps: {
+          include: {
+            skillRef: {
+              include: {
+                resources: true,
+              },
+            },
+          },
+        },
         preparationPlan: true,
       },
     });
@@ -108,7 +124,15 @@ async function getInterviewReportByIdController(req, res) {
       include: {
         technicalQuestions: true,
         behavioralQuestions: true,
-        skillGaps: true,
+        skillGaps: {
+          include: {
+            skillRef: {
+              include: {
+                resources: true,
+              },
+            },
+          },
+        },
         preparationPlan: true,
       },
     });
@@ -176,12 +200,10 @@ async function deleteInterviewReportController(req, res) {
     });
 
     if (report.count === 0) {
-      return res
-        .status(404)
-        .json({
-          success: false,
-          message: "Interview report not found or insufficient permissions",
-        });
+      return res.status(404).json({
+        success: false,
+        message: "Interview report not found or insufficient permissions",
+      });
     }
 
     res.status(200).json({
