@@ -39,7 +39,7 @@ Job seekers often struggle to translate their resume into interview readiness. S
 - **Structured AI Output:** Backend prompts Google Gemini to return a strict JSON payload containing `matchScore`, `technicalQuestions`, `behavioralQuestions`, `skillGaps`, `preparationPlan`, and `title`.
 - **Secure Session Management:** JWT-based auth is stored as an HTTP-only cookie and validated with a token blacklist.
 - **API Rate Limiting:** Express rate-limit middleware protects the login endpoint and AI generation calls from abuse.
-- **Input Validation:** Zod schemas validate auth and interview data payloads for type safety and consistency.
+- **Input Validation:** Zod schemas validate auth and interview payloads on both client and server, ensuring consistent request data and user form validation.
 - **PDF Resume Parsing:** Uploaded resumes are parsed using `pdf-parse`, then analyzed alongside job descriptions and self-descriptions.
 - **Downloadable Resume Export:** Generated resume HTML is converted to PDF through Puppeteer for a polished candidate asset.
 - **Protected React Routing:** Authenticated flows use React Router and a `Protected` wrapper for `/generate`, `/dashboard`, and report detail routes.
@@ -57,6 +57,49 @@ flowchart TD
   Server -->|Gemini API| Gemini[Google Gemini AI]
   Server -->|Puppeteer| PDF[Resume PDF]
   Server -->|Rate Limiting · Zod| Middleware[Request Validation]
+```
+
+---
+
+## 📁 Project Structure
+
+```text
+skillBridgeAI/
+├── client/
+│   ├── package.json
+│   ├── vite.config.js
+│   ├── public/
+│   │   ├── robots.txt
+│   │   └── sitemap.xml
+│   └── src/
+│       ├── App.jsx
+│       ├── main.jsx
+│       ├── assets/
+│       ├── components/
+│       ├── context/
+│       ├── hooks/
+│       ├── layouts/
+│       ├── pages/
+│       ├── routes/
+│       ├── schemas/
+│       ├── services/
+│       └── styles/
+└── server/
+    ├── package.json
+    ├── prisma/
+    │   ├── schema.prisma
+    │   └── migrations/
+    ├── prisma.config.ts
+    ├── server.js
+    └── src/
+        ├── app.js
+        ├── config/
+        ├── controllers/
+        ├── lib/
+        ├── middlewares/
+        ├── routes/
+        ├── schemas/
+        └── services/
 ```
 
 ---
