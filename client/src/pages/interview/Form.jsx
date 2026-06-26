@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import { useInterview } from "../../hooks/useInterview.js";
 import { useNavigate } from "react-router";
+import { interviewFormSchema } from "../../schemas/interview.schema.js";
 
 const LOADING_STEPS = [
   { label: "Parsing Resume Data...", icon: "📄" },
@@ -26,12 +27,12 @@ const Form = () => {
   const fileInputRef = useRef(null);
   const navigate = useNavigate();
 
-  // At least one of: jobDescription OR (selfDescription OR resumeFile)
-  // Both sides are needed for a useful plan, but we match the original logic:
-  // any single field enables the button. We keep that, just fix the label.
-  const canGenerate = Boolean(
-    jobDescription.trim() && (selfDescription.trim() || resumeFile)
-  );
+  // Validate using Zod schema reactively to enable/disable button
+  const canGenerate = interviewFormSchema.safeParse({
+    jobDescription,
+    selfDescription,
+    resumeFile,
+  }).success;
 
   const handleFileSelect = (file) => {
     setFileError("");
@@ -79,6 +80,17 @@ const Form = () => {
 
   const handleGenerateReport = async () => {
     setError("");
+    const validationResult = interviewFormSchema.safeParse({
+      jobDescription,
+      selfDescription,
+      resumeFile,
+    });
+    
+    if (!validationResult.success) {
+      setError(validationResult.error.errors[0].message);
+      return;
+    }
+
     setIsGenerating(true);
     try {
       const data = await generateReport({

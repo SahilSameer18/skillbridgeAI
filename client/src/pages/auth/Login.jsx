@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate, Link } from "react-router";
 import { useAuth } from "../../hooks/useAuth";
+import { loginSchema } from "../../schemas/auth.schema.js";
 
 const EyeIcon = ({ open }) =>
   open ? (
@@ -13,19 +14,6 @@ const EyeIcon = ({ open }) =>
       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.88 9.88l-3.29-3.29m7.532 7.532l3.29 3.29M3 3l3.59 3.59m0 0A9.953 9.953 0 0112 5c4.478 0 8.268 2.943 9.543 7a10.025 10.025 0 01-4.132 5.411m0 0L21 21" />
     </svg>
   );
-
-// --- Validation helpers ---
-const validateEmail = (val) => {
-  if (!val) return "Email is required.";
-  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(val)) return "Enter a valid email address.";
-  return null;
-};
-
-const validatePassword = (val) => {
-  if (!val) return "Password is required.";
-  if (val.length < 6) return "Password must be at least 6 characters.";
-  return null;
-};
 
 const Login = () => {
   const { loginLoading, handleLogin } = useAuth();
@@ -42,7 +30,9 @@ const Login = () => {
 
   // Validate a single field and update state
   const validateField = (name, value) => {
-    const err = name === "email" ? validateEmail(value) : validatePassword(value);
+    const fieldSchema = loginSchema.shape[name];
+    const result = fieldSchema.safeParse(value);
+    const err = result.success ? null : result.error.errors[0].message;
     setFieldErrors((prev) => ({ ...prev, [name]: err }));
     return err;
   };
@@ -72,9 +62,21 @@ const Login = () => {
 
     // Mark all fields touched and validate
     setTouched({ email: true, password: true });
-    const emailErr = validateField("email", email);
-    const passwordErr = validateField("password", password);
-    if (emailErr || passwordErr) return; // stop if client-side errors exist
+    
+    const result = loginSchema.safeParse({ email, password });
+    if (!result.success) {
+      const errors = { email: null, password: null };
+      result.error.errors.forEach((err) => {
+        const path = err.path[0];
+        if (!errors[path]) {
+          errors[path] = err.message;
+        }
+      });
+      setFieldErrors(errors);
+      return; // stop if client-side errors exist
+    }
+
+    setFieldErrors({ email: null, password: null });
 
     try {
       await handleLogin({ email, password });

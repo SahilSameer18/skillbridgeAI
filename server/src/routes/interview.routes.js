@@ -3,6 +3,12 @@ import { authUser } from "../middlewares/auth.middleware.js";
 import * as interviewController from "../controllers/interview.controller.js";
 import upload from "../middlewares/file.middleware.js";
 import { aiGenerationLimiter } from "../middlewares/rateLimit.middleware.js";
+import { validateBody, validateParams } from "../middlewares/validate.middleware.js";
+import {
+  createInterviewSchema,
+  interviewIdParamSchema,
+  resumePdfParamSchema,
+} from "../schemas/interview.schema.js";
 
 const interviewRouter = express.Router();
 /**
@@ -16,6 +22,7 @@ interviewRouter.post(
   authUser,
   aiGenerationLimiter,
   upload.single("resume"),
+  validateBody(createInterviewSchema),
   interviewController.generateInterViewReportController,
 );
 
@@ -28,6 +35,7 @@ interviewRouter.post(
 interviewRouter.get(
   "/report/:interviewId",
   authUser,
+  validateParams(interviewIdParamSchema),
   interviewController.getInterviewReportByIdController,
 );
 
@@ -52,12 +60,14 @@ interviewRouter.get(
 interviewRouter.delete(
   "/:interviewId",
   authUser,
+  validateParams(interviewIdParamSchema),
   interviewController.deleteInterviewReportController,
 );
 
 interviewRouter.post(
   "/resume/pdf/:interviewReportId",
   authUser,
+  validateParams(resumePdfParamSchema),
   interviewController.generateResumePdfController,
 );
 

@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate, Link } from "react-router";
 import { useAuth } from "../../hooks/useAuth";
+import { registerSchema, registerBaseSchema } from "../../schemas/auth.schema.js";
 
 const EyeIcon = ({ open }) =>
   open ? (
@@ -13,31 +14,6 @@ const EyeIcon = ({ open }) =>
       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.88 9.88l-3.29-3.29m7.532 7.532l3.29 3.29M3 3l3.59 3.59m0 0A9.953 9.953 0 0112 5c4.478 0 8.268 2.943 9.543 7a10.025 10.025 0 01-4.132 5.411m0 0L21 21" />
     </svg>
   );
-
-// --- Validation helpers ---
-const validators = {
-  username: (val) => {
-    if (!val) return "Username is required.";
-    if (val.length < 3) return "Username must be at least 3 characters.";
-    if (!/^[a-zA-Z0-9_]+$/.test(val)) return "Only letters, numbers, and underscores allowed.";
-    return null;
-  },
-  email: (val) => {
-    if (!val) return "Email is required.";
-    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(val)) return "Enter a valid email address.";
-    return null;
-  },
-  password: (val) => {
-    if (!val) return "Password is required.";
-    if (val.length < 6) return "Password must be at least 6 characters.";
-    return null;
-  },
-  confirmPassword: (val, password) => {
-    if (!val) return "Please confirm your password.";
-    if (val !== password) return "Passwords do not match.";
-    return null;
-  },
-};
 
 const FieldError = ({ msg }) =>
   msg ? (
@@ -69,10 +45,19 @@ const Register = () => {
   const [fieldErrors, setFieldErrors] = useState({});
 
   const validateField = (name, value) => {
-    const err =
-      name === "confirmPassword"
-        ? validators.confirmPassword(value, fields.password)
-        : validators[name]?.(value) ?? null;
+    let err = null;
+    if (name === "confirmPassword") {
+      const result = registerBaseSchema.shape.confirmPassword.safeParse(value);
+      if (!result.success) {
+        err = result.error.errors[0].message;
+      } else if (value !== fields.password) {
+        err = "Passwords do not match.";
+      }
+    } else {
+      const fieldSchema = registerBaseSchema.shape[name];
+      const result = fieldSchema.safeParse(value);
+      err = result.success ? null : result.error.errors[0].message;
+    }
     setFieldErrors((prev) => ({ ...prev, [name]: err }));
     return err;
   };
@@ -81,10 +66,22 @@ const Register = () => {
     const value = e.target.value;
     setFields((prev) => ({ ...prev, [name]: value }));
     setError(null); // clear API error on re-type
-    if (touched[name]) validateField(name, value);
+    
+    if (touched[name]) {
+      if (name === "confirmPassword") {
+        const err = value === fields.password ? null : "Passwords do not match.";
+        setFieldErrors((prev) => ({ ...prev, confirmPassword: err }));
+      } else {
+        const fieldSchema = registerBaseSchema.shape[name];
+        const result = fieldSchema.safeParse(value);
+        const err = result.success ? null : result.error.errors[0].message;
+        setFieldErrors((prev) => ({ ...prev, [name]: err }));
+      }
+    }
+    
     // Re-validate confirmPassword live if password changes
     if (name === "password" && touched.confirmPassword) {
-      const err = validators.confirmPassword(fields.confirmPassword, value);
+      const err = fields.confirmPassword === value ? null : "Passwords do not match.";
       setFieldErrors((prev) => ({ ...prev, confirmPassword: err }));
     }
   };
@@ -102,14 +99,20 @@ const Register = () => {
     const allTouched = { username: true, email: true, password: true, confirmPassword: true };
     setTouched(allTouched);
 
-    const errors = {
-      username: validators.username(fields.username),
-      email: validators.email(fields.email),
-      password: validators.password(fields.password),
-      confirmPassword: validators.confirmPassword(fields.confirmPassword, fields.password),
-    };
-    setFieldErrors(errors);
-    if (Object.values(errors).some(Boolean)) return;
+    const result = registerSchema.safeParse(fields);
+    if (!result.success) {
+      const errors = { username: null, email: null, password: null, confirmPassword: null };
+      result.error.errors.forEach((err) => {
+        const path = err.path[0];
+        if (!errors[path]) {
+          errors[path] = err.message;
+        }
+      });
+      setFieldErrors(errors);
+      return;
+    }
+
+    setFieldErrors({ username: null, email: null, password: null, confirmPassword: null });
 
     try {
       await handleRegister({ username: fields.username, email: fields.email, password: fields.password });
