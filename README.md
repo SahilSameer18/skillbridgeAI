@@ -47,16 +47,53 @@ Job seekers often struggle to translate their resume into interview readiness. S
 
 ---
 
-## 🏗️ Architecture
-
 ```mermaid
-flowchart TD
-  Client[React 19 + Vite + Tailwind] -->|REST API / HTTPS| Server[Express 5 API]
-  Server -->|JWT Cookie Auth| Client
-  Server -->|Prisma ORM| Database[(PostgreSQL · Neon)]
-  Server -->|Gemini API| Gemini[Google Gemini AI]
-  Server -->|Puppeteer| PDF[Resume PDF]
-  Server -->|Rate Limiting · Zod| Middleware[Request Validation]
+flowchart LR
+
+    User([User])
+
+    subgraph Frontend["Frontend (React 19 + Vite)"]
+        UI[React Components]
+        Router[React Router]
+        Context[Context API]
+        Forms[React Hook Form + Zod]
+    end
+
+    subgraph Backend["Express 5 API"]
+        API[REST Controllers]
+        Auth[JWT Authentication]
+        Middleware[Zod Validation<br/>Rate Limiter]
+        Services[Business Services]
+    end
+
+    subgraph Database["Database"]
+        Prisma[Prisma ORM]
+        DB[(PostgreSQL · Neon)]
+    end
+
+    subgraph External["External Services"]
+        Gemini[Google Gemini AI]
+        Parser[pdf-parse]
+        PDF[Puppeteer PDF Generator]
+    end
+
+    User --> UI
+    UI --> Router
+    UI --> Context
+    UI --> Forms
+
+    Forms -->|HTTPS / REST| API
+    Context -->|HTTP-only JWT Cookie| Auth
+
+    API --> Middleware
+    Middleware --> Services
+
+    Services --> Prisma
+    Prisma --> DB
+
+    Services --> Gemini
+    Services --> Parser
+    Services --> PDF
 ```
 
 ---
