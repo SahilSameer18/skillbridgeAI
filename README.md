@@ -30,13 +30,14 @@ It combines secure account management, PDF resume parsing, Google Gemini AI anal
 
 ## 🎯 What SkillBridge AI Solves
 
-Job seekers often struggle to translate their resume into interview readiness. SkillBridge AI closes this gap by analyzing your resume and job description with Google Gemini AI — delivering a match score, ranked skill gaps, practice questions with model answers, and a multi-day preparation roadmap, all saved to your account for future reference.
+Job seekers often struggle to translate their resume into interview readiness. SkillBridge AI closes this gap by analyzing your resume and job description with Google Gemini AI — delivering a match score, ranked skill gaps with curated learning resources, practice questions with model answers, and a multi-day preparation roadmap, all saved to your account for future reference.
 
 ---
 
 ## ⚡ Technical Highlights
 
 - **Structured AI Output:** Backend prompts Google Gemini to return a strict JSON payload containing `matchScore`, `technicalQuestions`, `behavioralQuestions`, `skillGaps`, `preparationPlan`, and `title`.
+- **Deterministic Skill-Resource Matching:** Each AI-generated skill gap is resolved server-side against a seeded, normalized `Skill` catalog — using bounded keyword matching (with a word-boundary check that prevents false positives like "Java" matching inside "JavaScript") and a Levenshtein-based fuzzy fallback for typos. No prompt changes, no AI-generated URLs — every resource link is pre-curated and verified.
 - **Secure Session Management:** JWT-based auth is stored as an HTTP-only cookie and validated with a token blacklist.
 - **API Rate Limiting:** Express rate-limit middleware protects the login endpoint and AI generation calls from abuse.
 - **Input Validation:** Zod schemas validate auth and interview payloads on both client and server, ensuring consistent request data and user form validation.
@@ -64,6 +65,7 @@ flowchart LR
         Auth[JWT Authentication]
         Middleware[Zod Validation<br/>Rate Limiter]
         Services[Business Services]
+        Matcher[Skill Matcher Service]
     end
 
     subgraph Database["Database"]
@@ -88,12 +90,14 @@ flowchart LR
     API --> Middleware
     Middleware --> Services
 
-    Services --> Prisma
-    Prisma --> DB
-
     Services --> Gemini
     Services --> Parser
     Services --> PDF
+    Services --> Matcher
+
+    Matcher --> Prisma
+    Services --> Prisma
+    Prisma --> DB
 ```
 
 ---
@@ -125,6 +129,7 @@ skillBridgeAI/
     ├── package.json
     ├── prisma/
     │   ├── schema.prisma
+    │   ├── seed.js
     │   └── migrations/
     ├── prisma.config.ts
     ├── server.js
@@ -151,9 +156,17 @@ skillBridgeAI/
   - match score
   - technical interview questions + model answers
   - behavioral interview questions + intent guidance
-  - skill gaps ranked by severity
+  - skill gaps ranked by severity, each enriched with curated learning resources
   - multi-day preparation roadmap
   - downloadable resume PDF
+
+### 📚 Curated Learning Resources
+
+- every identified skill gap is matched server-side against a seeded, normalized skill catalog
+- word-boundary-aware matching avoids false positives (e.g. "Go" inside "Django")
+- matched gaps are enriched with one official documentation link and one video tutorial
+- unmatched gaps are simply left without resources — no guessed or AI-generated links
+- resource data lives in dedicated `Skill` / `LearningResource` tables, fully decoupled from the AI provider
 
 ### 🔐 Authentication & Security
 
@@ -208,17 +221,19 @@ skillBridgeAI/
 
 Managed with **Prisma ORM** on **PostgreSQL (Neon)**. Full schema at [`server/prisma/schema.prisma`](server/prisma/schema.prisma).
 
-| Model                | Key Fields                                                                               |
-| -------------------- | ---------------------------------------------------------------------------------------- |
-| `User`               | `id`, `username`, `email`, `password` → has many `InterviewReport`                       |
-| `InterviewReport`    | `matchScore`, `title`, `jobDescription`, `resume`, `selfDescription` → belongs to `User` |
-| `TechnicalQuestion`  | `question`, `intention`, `answer` → belongs to `InterviewReport`                         |
-| `BehavioralQuestion` | `question`, `intention`, `answer` → belongs to `InterviewReport`                         |
-| `SkillGap`           | `skill`, `severity` (`low \| medium \| high`) → belongs to `InterviewReport`             |
-| `PreparationPlan`    | `day`, `focus`, `tasks` (JSON array) → belongs to `InterviewReport`                      |
-| `TokenBlacklist`     | `token`, `expiresAt` (auto-expires after 1 day)                                          |
+| Model                | Key Fields                                                                                              |
+| --------------------- | --------------------------------------------------------------------------------------------------------- |
+| `User`                | `id`, `username`, `email`, `password` → has many `InterviewReport`                                        |
+| `InterviewReport`     | `matchScore`, `title`, `jobDescription`, `resume`, `selfDescription` → belongs to `User`                  |
+| `TechnicalQuestion`   | `question`, `intention`, `answer` → belongs to `InterviewReport`                                           |
+| `BehavioralQuestion`  | `question`, `intention`, `answer` → belongs to `InterviewReport`                                           |
+| `SkillGap`            | `skill`, `severity` (`low \| medium \| high`), optional `skillRef` → belongs to `InterviewReport`, optionally links to a `Skill` |
+| `Skill`               | `name` (unique), `aliases` → has many `LearningResource`, has many `SkillGap`                              |
+| `LearningResource`    | `type` (`DOCUMENTATION \| VIDEO`), `title`, `url` → belongs to `Skill`                                     |
+| `PreparationPlan`     | `day`, `focus`, `tasks` (JSON array) → belongs to `InterviewReport`                                        |
+| `TokenBlacklist`      | `token`, `expiresAt` (auto-expires after 1 day)                                                            |
 
-All relations use `onDelete: Cascade`. IDs are `cuid()`.
+All relations use `onDelete: Cascade`, except `SkillGap.skillRef → Skill`, which uses `onDelete: SetNull` — deleting a seeded skill never deletes historical skill gap records, it just clears the link. IDs are `cuid()`.
 
 ---
 
@@ -233,9 +248,9 @@ All relations use `onDelete: Cascade`. IDs are `cuid()`.
 
 ### Interview Endpoints
 
-- `POST /api/interview/` - generate a new AI interview report (`multipart/form-data`, optional `resume` file)
+- `POST /api/interview/` - generate a new AI interview report (`multipart/form-data`, optional `resume` file). Each returned skill gap includes a `skillRef` object (with `resources`) when a match is found, or `null` when it isn't.
 - `GET /api/interview/` - list all saved reports for the authenticated user
-- `GET /api/interview/report/:interviewId` - fetch a single report detail
+- `GET /api/interview/report/:interviewId` - fetch a single report detail, including skill gap resources
 - `DELETE /api/interview/:interviewId` - delete a saved report
 - `POST /api/interview/resume/pdf/:interviewReportId` - generate and download resume PDF from saved report
 
@@ -290,7 +305,12 @@ npx prisma generate
 
 # Run migrations
 npx prisma migrate dev
+
+# Seed the skill resource catalog (documentation + video links for common skills)
+npx prisma db seed
 ```
+
+> The seed step populates the `Skill` and `LearningResource` tables used to attach learning resources to matched skill gaps. Without it, skill gaps will still generate normally, just without any attached resources.
 
 ### 4. Frontend setup
 
@@ -325,6 +345,7 @@ Then open `http://localhost:5173` in your browser.
 
 - `npm run dev` - start Express with Nodemon
 - `npm start` - run production server with Node
+- `npx prisma db seed` - seed/refresh the `Skill` and `LearningResource` catalog
 
 ### Frontend (`client/`)
 
@@ -341,4 +362,6 @@ This project is licensed under the MIT License.
 
 ---
 
-<p align="center">Built by Sahil Sameer to help candidates turn resumes into interview-ready AI reports.</p>
+<p align="center">Built by Sahil Sameer Siddique.</p>
+
+

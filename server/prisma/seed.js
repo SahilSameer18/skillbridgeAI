@@ -143,7 +143,7 @@ const skills = [
   },
   {
     name: "Angular",
-    aliases: ["angular"],
+    aliases: ["angular", "AngularJS", "angular.js"],
     resources: [
       {
         type: "DOCUMENTATION",

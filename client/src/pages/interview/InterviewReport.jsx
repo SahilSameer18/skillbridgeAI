@@ -5,6 +5,7 @@ import { useParams } from 'react-router'
 const NAV_ITEMS = [
     { id: 'technical', label: 'Technical', icon: 'code' },
     { id: 'behavioral', label: 'Behavioral', icon: 'messages' },
+    { id: 'skills', label: 'Skill Gaps', icon: 'target' },
     { id: 'roadmap', label: 'Roadmap', icon: 'map-2' },
 ]
 
@@ -31,6 +32,7 @@ const Icon = ({ name, className = '' }) => (
         {name === 'code' && <><polyline points="16 18 22 12 16 6" /><polyline points="8 6 2 12 8 18" /></>}
         {name === 'messages' && <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />}
         {name === 'map-2' && <polygon points="3 11 22 2 13 21 11 13 3 11" />}
+        {name === 'target' && <><circle cx="12" cy="12" r="9" /><circle cx="12" cy="12" r="5" /><circle cx="12" cy="12" r="1" /></>}
         {name === 'chevron-down' && <polyline points="6 9 12 15 18 9" />}
         {name === 'download' && <><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" /><polyline points="7 10 12 15 17 10" /><line x1="12" y1="15" x2="12" y2="3" /></>}
         {name === 'sparkle' && <path d="M10.6144 17.7956 11.492 15.7854C12.2731 13.9966 13.6789 12.5726 15.4325 11.7942L17.8482 10.7219C18.6162 10.381 18.6162 9.26368 17.8482 8.92277L15.5079 7.88394C13.7092 7.08552 12.2782 5.60881 11.5105 3.75894L10.6215 1.61673C10.2916.821765 9.19319.821767 8.8633 1.61673L7.97427 3.75892C7.20657 5.60881 5.77553 7.08552 3.97685 7.88394L1.63658 8.92277C.868537 9.26368.868536 10.381 1.63658 10.7219L4.0523 11.7942C5.80589 12.5726 7.21171 13.9966 7.99275 15.7854L8.8704 17.7956C9.20776 18.5682 10.277 18.5682 10.6144 17.7956Z" fill="currentColor" stroke="none" />}
@@ -92,6 +94,44 @@ const QuestionCard = ({ item, index, accentClass, bodyBg }) => {
                         </p>
                     </div>
                 </div>
+            )}
+        </div>
+    )
+}
+
+/* ── Skill gap card — full width, no truncation, resources as labeled buttons ── */
+const SkillGapCard = ({ gap }) => {
+    const resources = gap.skillRef?.resources ?? []
+    const severityKey = gap.severity?.toLowerCase()
+
+    return (
+        <div className="rounded-xl p-4 border border-slate-800/60 bg-slate-900/50 hover:border-slate-700/70 transition-colors duration-150">
+            <div className="flex items-start justify-between gap-3">
+                <p className="text-sm font-medium text-slate-200 leading-snug">{gap.skill}</p>
+                <span
+                    className={`shrink-0 whitespace-nowrap text-[11px] px-2 py-0.5 rounded-md font-medium capitalize ${SEVERITY_STYLES[severityKey] ?? SEVERITY_STYLES.low}`}
+                >
+                    {gap.severity ?? 'low'}
+                </span>
+            </div>
+
+            {resources.length > 0 ? (
+                <div className="flex flex-wrap gap-2 mt-3">
+                    {resources.map((resource) => (
+                        <a
+                            key={resource.id}
+                            href={resource.url}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="flex items-center gap-1.5 text-xs font-medium text-slate-400 hover:text-cyan-400 bg-slate-800/50 hover:bg-cyan-500/10 border border-slate-700/50 hover:border-cyan-500/30 rounded-lg px-2.5 py-1.5 transition-colors"
+                        >
+                            <Icon name={resource.type === 'VIDEO' ? 'player-play' : 'file-text'} />
+                            {resource.type === 'VIDEO' ? 'Video tutorial' : 'Documentation'}
+                        </a>
+                    ))}
+                </div>
+            ) : (
+                <p className="text-xs text-slate-600 mt-2.5">No curated resources yet for this skill</p>
             )}
         </div>
     )
@@ -169,6 +209,7 @@ const InterviewReport = () => {
         )
     }
 
+    const skillGaps = report.skillGaps ?? []
     const scoreColor = report.matchScore >= 80 ? '#34d399' : report.matchScore >= 60 ? '#fbbf24' : '#f87171'
     const scoreLabel = report.matchScore >= 80 ? 'Strong match' : report.matchScore >= 60 ? 'Average match' : 'Low match'
     const scoreLabelColor = report.matchScore >= 80 ? 'text-emerald-400' : report.matchScore >= 60 ? 'text-amber-400' : 'text-red-400'
@@ -215,8 +256,8 @@ const InterviewReport = () => {
                 {/* Main content */}
                 <div className="flex-1 min-w-0">
 
-                    {/* Tab row */}
-                    <div className="flex gap-2 mb-4 overflow-x-auto pb-px">
+                    {/* Tab row — drives both this row and the mobile footer bar below from one source */}
+                    <div className="flex gap-2 mb-4 overflow-x-auto pb-px no-scrollbar">
                         {NAV_ITEMS.map(item => (
                             <button
                                 key={item.id}
@@ -238,11 +279,13 @@ const InterviewReport = () => {
                         <h2 className="text-base font-semibold text-white">
                             {activeNav === 'technical' && 'Technical questions'}
                             {activeNav === 'behavioral' && 'Behavioral questions'}
+                            {activeNav === 'skills' && 'Skill gaps'}
                             {activeNav === 'roadmap' && 'Preparation roadmap'}
                         </h2>
                         <span className="text-xs text-slate-600">
                             {activeNav === 'technical' && `${report.technicalQuestions.length} questions`}
                             {activeNav === 'behavioral' && `${report.behavioralQuestions.length} questions`}
+                            {activeNav === 'skills' && `${skillGaps.length} identified`}
                             {activeNav === 'roadmap' && `${report.preparationPlan.length}-day plan`}
                         </span>
                     </div>
@@ -277,6 +320,21 @@ const InterviewReport = () => {
                         </div>
                     )}
 
+                    {/* Skill gaps — full width on every screen size, no truncation */}
+                    {activeNav === 'skills' && (
+                        <div className="space-y-2">
+                            {skillGaps.length > 0 ? (
+                                skillGaps.map((gap, i) => (
+                                    <SkillGapCard key={i} gap={gap} />
+                                ))
+                            ) : (
+                                <div className="rounded-xl p-6 border border-slate-800/60 bg-slate-900/50 text-center">
+                                    <p className="text-sm text-slate-500">No skill gaps identified for this report.</p>
+                                </div>
+                            )}
+                        </div>
+                    )}
+
                     {/* Roadmap */}
                     {activeNav === 'roadmap' && (
                         <div className="pt-1">
@@ -292,7 +350,7 @@ const InterviewReport = () => {
                     )}
                 </div>
 
-                {/* Right sidebar — desktop only */}
+                {/* Right sidebar — desktop only. Skill gaps now live in the tab above, not duplicated here. */}
                 <aside className="hidden lg:flex flex-col gap-4 w-56 shrink-0">
 
                     {/* Score card */}
@@ -313,56 +371,19 @@ const InterviewReport = () => {
                         </div>
                     </div>
 
-                    {/* Skill gaps */}
-                    <div className="rounded-xl p-4 bg-slate-900/60 border border-slate-800/60">
-    <p className="text-[11px] font-semibold text-slate-500 uppercase tracking-wider mb-3">
-        Skill gaps
-    </p>
-
-    <div className="space-y-2">
-        {report.skillGaps?.map((gap, i) => (
-            <div key={i} className="flex items-center gap-2">
-                <span
-                    title={gap.skill}
-                    className={`flex-1 truncate text-[11px] px-2 py-0.5 rounded-md font-medium ${
-                        SEVERITY_STYLES[
-                            gap.severity?.toLowerCase()
-                        ] ?? SEVERITY_STYLES.low
-                    }`}
-                >
-                    {gap.skill}
-                </span>
-
-                {gap.skillRef?.resources?.length > 0 && (
-                    <div className="flex items-center gap-1 shrink-0">
-                        {gap.skillRef.resources.map((resource) => (
-                            <a
-                                key={resource.id}
-                                href={resource.url}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                title={
-                                    resource.type === "VIDEO"
-                                        ? "Video tutorial"
-                                        : "Documentation"
-                                }
-                                className="w-6 h-6 rounded-md flex items-center justify-center text-slate-500 hover:text-cyan-400 hover:bg-cyan-500/10 transition-colors"
-                            >
-                                <Icon
-                                    name={
-                                        resource.type === "VIDEO"
-                                            ? "player-play"
-                                            : "file-text"
-                                    }
-                                />
-                            </a>
-                        ))}
-                    </div>
-                )}
-            </div>
-        ))}
-    </div>
-</div>
+                    {/* Quick skill-gap summary — links into the tab, doesn't duplicate its content */}
+                    <button
+                        onClick={() => setActiveNav('skills')}
+                        className={`text-left rounded-xl p-4 border transition-colors duration-150 ${
+                            activeNav === 'skills'
+                                ? 'bg-cyan-500/10 border-cyan-500/30'
+                                : 'bg-slate-900/60 border-slate-800/60 hover:border-slate-700/70'
+                        }`}
+                    >
+                        <p className="text-[11px] font-semibold text-slate-500 uppercase tracking-wider mb-1">Skill gaps</p>
+                        <p className="text-2xl font-bold text-white leading-none">{skillGaps.length}</p>
+                        <p className="text-xs text-slate-500 mt-1">View details &amp; resources →</p>
+                    </button>
 
                     {/* Download */}
                     <button
@@ -412,3 +433,5 @@ const InterviewReport = () => {
 }
 
 export default InterviewReport
+
+

@@ -43,7 +43,7 @@ const Form = () => {
       "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
     ];
     if (!validTypes.includes(file.type)) {
-      setFileError("Only PDF or DOCX files are supported.");
+      setFileError("Only Text based PDF files are supported.");
       return;
     }
     if (file.size > MAX_FILE_SIZE_BYTES) {
@@ -401,7 +401,7 @@ const Form = () => {
                     </p>
                     {!fileError && (
                       <p className="text-xs text-slate-600 mt-1">
-                        PDF or DOCX · Max {MAX_FILE_SIZE_MB}MB
+                        Text based PDF only · Max {MAX_FILE_SIZE_MB}MB
                       </p>
                     )}
                   </>
@@ -414,7 +414,7 @@ const Form = () => {
                   type="file"
                   id="resume"
                   name="resume"
-                  accept=".pdf,.docx"
+                  accept=".pdf"
                 />
               </label>
 
