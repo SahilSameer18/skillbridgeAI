@@ -1,6 +1,4 @@
-import { PrismaClient } from "@prisma/client";
-
-const prisma = new PrismaClient();
+import prisma from "../src/lib/prisma.js";
 
 /**
  * Each skill's `aliases` are literal, lowercase substrings expected to appear
@@ -1369,4 +1367,3 @@ main()
     await prisma.$disconnect();
   });
 
-  

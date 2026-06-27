@@ -37,6 +37,8 @@ const Icon = ({ name, className = '' }) => (
         {name === 'help-circle' && <><circle cx="12" cy="12" r="10" /><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3" /><line x1="12" y1="17" x2="12.01" y2="17" /></>}
         {name === 'calendar' && <><rect x="3" y="4" width="18" height="18" rx="2" ry="2" /><line x1="16" y1="2" x2="16" y2="6" /><line x1="8" y1="2" x2="8" y2="6" /><line x1="3" y1="10" x2="21" y2="10" /></>}
         {name === 'chart-pie' && <><path d="M21.21 15.89A10 10 0 1 1 8 2.83" /><path d="M22 12A10 10 0 0 0 12 2v10z" /></>}
+        {name === 'file-text' && <><path d="M14 3v4a1 1 0 0 0 1 1h4" /><path d="M17 21h-10a2 2 0 0 1 -2 -2v-14a2 2 0 0 1 2 -2h7l5 5v11a2 2 0 0 1 -2 2z" /></>}
+        {name === 'player-play' && <><circle cx="12" cy="12" r="9" /><path d="M10 9l5 3l-5 3z" /></>}
     </svg>
 )
 
@@ -313,18 +315,54 @@ const InterviewReport = () => {
 
                     {/* Skill gaps */}
                     <div className="rounded-xl p-4 bg-slate-900/60 border border-slate-800/60">
-                        <p className="text-[11px] font-semibold text-slate-500 uppercase tracking-wider mb-3">Skill gaps</p>
-                        <div className="flex flex-wrap gap-1.5">
-                            {report.skillGaps.map((gap, i) => (
-                                <span
-                                    key={i}
-                                    className={`text-[11px] px-2 py-0.5 rounded-md font-medium ${SEVERITY_STYLES[gap.severity?.toLowerCase()] ?? SEVERITY_STYLES.low}`}
-                                >
-                                    {gap.skill}
-                                </span>
-                            ))}
-                        </div>
+    <p className="text-[11px] font-semibold text-slate-500 uppercase tracking-wider mb-3">
+        Skill gaps
+    </p>
+
+    <div className="space-y-2">
+        {report.skillGaps?.map((gap, i) => (
+            <div key={i} className="flex items-center gap-2">
+                <span
+                    title={gap.skill}
+                    className={`flex-1 truncate text-[11px] px-2 py-0.5 rounded-md font-medium ${
+                        SEVERITY_STYLES[
+                            gap.severity?.toLowerCase()
+                        ] ?? SEVERITY_STYLES.low
+                    }`}
+                >
+                    {gap.skill}
+                </span>
+
+                {gap.skillRef?.resources?.length > 0 && (
+                    <div className="flex items-center gap-1 shrink-0">
+                        {gap.skillRef.resources.map((resource) => (
+                            <a
+                                key={resource.id}
+                                href={resource.url}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                title={
+                                    resource.type === "VIDEO"
+                                        ? "Video tutorial"
+                                        : "Documentation"
+                                }
+                                className="w-6 h-6 rounded-md flex items-center justify-center text-slate-500 hover:text-cyan-400 hover:bg-cyan-500/10 transition-colors"
+                            >
+                                <Icon
+                                    name={
+                                        resource.type === "VIDEO"
+                                            ? "player-play"
+                                            : "file-text"
+                                    }
+                                />
+                            </a>
+                        ))}
                     </div>
+                )}
+            </div>
+        ))}
+    </div>
+</div>
 
                     {/* Download */}
                     <button
