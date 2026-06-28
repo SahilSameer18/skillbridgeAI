@@ -12,7 +12,7 @@ import { attachSkillIds } from "../services/skillMatcher.service.js";
  * @description Controller to generate interview report based on user self description, resume and job description.
  */
 async function generateInterViewReportController(req, res) {
-  const { selfDescription, jobDescription } = req.body;
+  const { jobDescription } = req.body;
 
   if (!jobDescription || jobDescription.trim() === "") {
     return res
@@ -20,31 +20,31 @@ async function generateInterViewReportController(req, res) {
       .json({ success: false, message: "Job description is required" });
   }
 
-  let resumeText = "";
-  if (req.file) {
-    try {
-      const resumeContent = await new pdfParse.PDFParse(
-        Uint8Array.from(req.file.buffer),
-      ).getText();
-      resumeText = resumeContent.text;
-    } catch (error) {
-      console.error("Error parsing PDF:", error);
-      return res.status(400).json({
-        success: false,
-        message: "Failed to parse uploaded resume PDF",
-      });
-    }
-  } else if (!selfDescription || selfDescription.trim() === "") {
+  // Resume PDF file is now mandatory
+  if (!req.file) {
     return res.status(400).json({
       success: false,
-      message: "Either resume or self description is required",
+      message: "Resume PDF file is required",
+    });
+  }
+
+  let resumeText = "";
+  try {
+    const resumeContent = await new pdfParse.PDFParse(
+      Uint8Array.from(req.file.buffer),
+    ).getText();
+    resumeText = resumeContent.text;
+  } catch (error) {
+    console.error("Error parsing PDF:", error);
+    return res.status(400).json({
+      success: false,
+      message: "Failed to parse uploaded resume PDF",
     });
   }
 
   try {
     const interViewReportByAi = await generateInterviewReport({
       resume: resumeText,
-      selfDescription,
       jobDescription,
     });
 
@@ -57,7 +57,6 @@ async function generateInterViewReportController(req, res) {
       data: {
         userId: req.user.id,
         resume: resumeText,
-        selfDescription,
         jobDescription,
         matchScore: interViewReportByAi.matchScore,
         title: interViewReportByAi.title,
@@ -236,12 +235,11 @@ async function generateResumePdfController(req, res) {
       });
     }
 
-    const { resume, jobDescription, selfDescription } = interviewReport;
+    const { resume, jobDescription } = interviewReport;
 
     const pdfBuffer = await generateResumePdf({
       resume,
       jobDescription,
-      selfDescription,
     });
 
     res.set({

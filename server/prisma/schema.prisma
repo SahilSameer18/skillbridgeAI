@@ -35,7 +35,6 @@ model InterviewReport {
   id                  String               @id @default(cuid())
   jobDescription      String               @db.Text
   resume              String?              @db.Text
-  selfDescription     String?              @db.Text
   matchScore          Int?
   title               String?
   technicalQuestions  TechnicalQuestion[]

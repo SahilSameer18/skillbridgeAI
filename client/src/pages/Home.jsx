@@ -40,7 +40,7 @@ const steps = [
     num: "01",
     icon: "📤",
     title: "Upload & Describe",
-    desc: "Paste the job description and upload your PDF resume or write a quick self-description.",
+    desc: "Paste the job description and upload your PDF resume.",
   },
   {
     num: "02",

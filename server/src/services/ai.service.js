@@ -9,12 +9,10 @@ const ai = new GoogleGenAI({
 
 async function generateInterviewReport({
   resume,
-  selfDescription,
   jobDescription,
 }) {
   const prompt = `You are an expert technical interviewer and career coach. Generate a comprehensive interview report for a candidate with the following details:
                         Resume: ${resume}
-                        Self Description: ${selfDescription}
                         Job Description: ${jobDescription}
 
                         CRITICAL INSTRUCTIONS:
@@ -74,7 +72,7 @@ async function generatePdfFromHtml(htmlContent) {
   return pdfBuffer;
 }
 
-async function generateResumePdf({ resume, selfDescription, jobDescription }) {
+async function generateResumePdf({ resume, jobDescription }) {
   const resumePdfSchema = z.object({
     html: z
       .string()
@@ -85,7 +83,6 @@ async function generateResumePdf({ resume, selfDescription, jobDescription }) {
 
   const prompt = `Generate resume for a candidate with the following details:
                         Resume: ${resume}
-                        Self Description: ${selfDescription}
                         Job Description: ${jobDescription}
 
                         the response should be a JSON object with a single field "html" which contains the HTML content of the resume which can be converted to PDF using any library like puppeteer.

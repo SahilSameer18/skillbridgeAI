@@ -5,11 +5,6 @@ export const createInterviewSchema = z.object({
     .string({ required_error: "Job description is required" })
     .trim()
     .min(1, "Job description is required"),
-  selfDescription: z
-    .string()
-    .trim()
-    .optional()
-    .or(z.literal("")),
 });
 
 export const interviewIdParamSchema = z.object({

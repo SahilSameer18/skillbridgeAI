@@ -342,7 +342,7 @@ const skills = [
   },
   {
     name: "REST APIs",
-    aliases: ["restful", "rest api", "rest"],
+    aliases: ["restful", "rest api", "rest apis", "restful apis", "rest"],
     resources: [
       {
         type: "DOCUMENTATION",
@@ -374,7 +374,7 @@ const skills = [
   },
   {
     name: "Socket.io",
-    aliases: ["socket.io", "socketio", "websockets", "websocket"],
+    aliases: ["socket.io", "socketio", "websockets", "websocket", "web socket", "web sockets"],
     resources: [
       {
         type: "DOCUMENTATION",
@@ -634,7 +634,7 @@ const skills = [
   // ---------- DevOps / Cloud ----------
   {
     name: "Docker",
-    aliases: ["docker"],
+    aliases: ["docker", "docker containers", "containerization"],
     resources: [
       {
         type: "DOCUMENTATION",
@@ -719,6 +719,8 @@ const skills = [
       "continuous deployment",
       "ci/cd",
       "ci cd",
+      "deployment pipeline",
+      "deployment pipelines",
     ],
     resources: [
       {
@@ -735,7 +737,7 @@ const skills = [
   },
   {
     name: "Git",
-    aliases: ["version control", "git"],
+    aliases: ["version control", "git", "github", "gitlab"],
     resources: [
       {
         type: "DOCUMENTATION",
@@ -818,7 +820,14 @@ const skills = [
 
   {
     name: "Unit Testing",
-    aliases: ["unit testing", "unit-testing", "unit testing"],
+    aliases: [
+      "unit testing",
+      "unit-testing",
+      "automated testing",
+      "integration testing",
+      "unit/integration",
+      "testing",
+    ],
     resources: [
       {
         type: "DOCUMENTATION",
@@ -980,7 +989,7 @@ const skills = [
   // ---------- CS Fundamentals ----------
   {
     name: "Data Structures",
-    aliases: ["data structures"],
+    aliases: ["data structures", "data structure"],
     resources: [
       {
         type: "DOCUMENTATION",
@@ -1012,7 +1021,7 @@ const skills = [
   },
   {
     name: "System Design",
-    aliases: ["system design"],
+    aliases: ["system design", "systems design", "architecting systems"],
     resources: [
       {
         type: "DOCUMENTATION",
@@ -1044,7 +1053,7 @@ const skills = [
   },
   {
     name: "Design Patterns",
-    aliases: ["design patterns"],
+    aliases: ["design patterns", "design pattern"],
     resources: [
       {
         type: "DOCUMENTATION",
@@ -1094,7 +1103,7 @@ const skills = [
   },
   {
     name: "Load Balancing",
-    aliases: ["load balancer", "load balancing"],
+    aliases: ["load balancer", "load balancing", "load-balancer", "load-balancing"],
     resources: [
       {
         type: "DOCUMENTATION",
@@ -1144,7 +1153,7 @@ const skills = [
   },
   {
     name: "JWT",
-    aliases: ["json web token", "jwt"],
+    aliases: ["json web token", "jwt", "jwts", "json web tokens"],
     resources: [
       {
         type: "DOCUMENTATION",
@@ -1176,7 +1185,7 @@ const skills = [
   },
   {
     name: "Web Security (OWASP)",
-    aliases: ["sql injection", "csrf", "xss", "owasp"],
+    aliases: ["sql injection", "csrf", "xss", "owasp", "web security", "cybersecurity", "application security"],
     resources: [
       {
         type: "DOCUMENTATION",
@@ -1337,25 +1346,84 @@ const skills = [
       },
     ],
   },
+  {
+    name: "UI/UX Design",
+    aliases: [
+      "ui/ux",
+      "ux research",
+      "user testing",
+      "visual hierarchy",
+      "typography",
+      "user experience",
+      "user interface",
+      "design theory"
+    ],
+    resources: [
+      {
+        type: "DOCUMENTATION",
+        title: "Interaction Design Foundation",
+        url: "https://www.interaction-design.org/literature",
+      },
+      {
+        type: "VIDEO",
+        title: "UI/UX Design Full Course - freeCodeCamp",
+        url: "https://youtu.be/c9Wg6Ry_OMY",
+      },
+    ],
+  },
+  {
+    name: "Figma",
+    aliases: [
+      "figma",
+      "figma mastery",
+      "figma prototyping"
+    ],
+    resources: [
+      {
+        type: "DOCUMENTATION",
+        title: "Figma Help Center",
+        url: "https://help.figma.com/hc/en-us",
+      },
+      {
+        type: "VIDEO",
+        title: "Figma UI/UX Design Tutorial - freeCodeCamp",
+        url: "https://youtu.be/Ft-FtV-bHkE",
+      },
+    ],
+  },
 ];
 
+async function seedSkill(skillData) {
+  const { resources, ...skillFields } = skillData;
+  const skill = await prisma.skill.upsert({
+    where: { name: skillFields.name },
+    update: { aliases: skillFields.aliases },
+    create: skillFields,
+  });
+
+  // Wipe and recreate resources each run so re-seeding after editing
+  // URLs above never leaves stale/duplicate rows behind.
+  await prisma.learningResource.deleteMany({ where: { skillId: skill.id } });
+  await prisma.learningResource.createMany({
+    data: resources.map((r) => ({ ...r, skillId: skill.id })),
+  });
+
+  console.log(`Seeded: ${skill.name} (${resources.length} resources)`);
+}
+
 async function main() {
-  for (const { resources, ...skillFields } of skills) {
-    const skill = await prisma.skill.upsert({
-      where: { name: skillFields.name },
-      update: { aliases: skillFields.aliases },
-      create: skillFields,
-    });
-
-    // Wipe and recreate resources each run so re-seeding after editing
-    // URLs above never leaves stale/duplicate rows behind.
-    await prisma.learningResource.deleteMany({ where: { skillId: skill.id } });
-    await prisma.learningResource.createMany({
-      data: resources.map((r) => ({ ...r, skillId: skill.id })),
-    });
-
-    console.log(`Seeded: ${skill.name} (${resources.length} resources)`);
+  const CONCURRENCY_LIMIT = 10;
+  const chunks = [];
+  
+  for (let i = 0; i < skills.length; i += CONCURRENCY_LIMIT) {
+    chunks.push(skills.slice(i, i + CONCURRENCY_LIMIT));
   }
+
+  console.log(`Starting seeding of ${skills.length} skills in chunks of ${CONCURRENCY_LIMIT}...`);
+  for (const chunk of chunks) {
+    await Promise.all(chunk.map((skill) => seedSkill(skill)));
+  }
+  console.log("Seeding completed successfully!");
 }
 
 main()
