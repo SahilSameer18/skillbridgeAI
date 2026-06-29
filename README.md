@@ -41,7 +41,7 @@ Job seekers often struggle to translate their resume into interview readiness. S
 - **Secure Session Management:** JWT-based auth is stored as an HTTP-only cookie and validated with a token blacklist.
 - **API Rate Limiting:** Express rate-limit middleware protects the login endpoint and AI generation calls from abuse.
 - **Input Validation:** Zod schemas validate auth and interview payloads on both client and server, ensuring consistent request data and user form validation.
-- **PDF Resume Parsing:** Uploaded resumes are parsed using `pdf-parse`, then analyzed alongside job descriptions and self-descriptions.
+- **PDF Resume Parsing:** Uploaded resumes are parsed using `pdf-parse`, then analyzed alongside job descriptions.
 - **Downloadable Resume Export:** Generated resume HTML is converted to PDF through Puppeteer for a polished candidate asset.
 - **Protected React Routing:** Authenticated flows use React Router and a `Protected` wrapper for `/generate`, `/dashboard`, and report detail routes.
 - **PostgreSQL + Prisma ORM:** Type-safe database layer using Prisma ORM with PostgreSQL hosted on Neon, enabling efficient relational queries and schema migrations.
@@ -150,7 +150,7 @@ skillBridgeAI/
 
 ### 🤖 AI Interview Analyzer
 
-- Upload a resume PDF or enter a self-description
+- Upload a resume PDF
 - Paste the target job description
 - Generate a tailored report with:
   - match score
@@ -186,7 +186,6 @@ skillBridgeAI/
 
 - parse candidate resumes from PDF uploads
 - compare resume content to the posted job description
-- include optional self-description to supplement missing resume text
 
 ---
 
@@ -224,7 +223,7 @@ Managed with **Prisma ORM** on **PostgreSQL (Neon)**. Full schema at [`server/pr
 | Model                | Key Fields                                                                                              |
 | --------------------- | --------------------------------------------------------------------------------------------------------- |
 | `User`                | `id`, `username`, `email`, `password` → has many `InterviewReport`                                        |
-| `InterviewReport`     | `matchScore`, `title`, `jobDescription`, `resume`, `selfDescription` → belongs to `User`                  |
+| `InterviewReport`     | `matchScore`, `title`, `jobDescription`, `resume` → belongs to `User`                  |
 | `TechnicalQuestion`   | `question`, `intention`, `answer` → belongs to `InterviewReport`                                           |
 | `BehavioralQuestion`  | `question`, `intention`, `answer` → belongs to `InterviewReport`                                           |
 | `SkillGap`            | `skill`, `severity` (`low \| medium \| high`), optional `skillRef` → belongs to `InterviewReport`, optionally links to a `Skill` |

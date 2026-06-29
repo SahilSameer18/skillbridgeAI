@@ -29,7 +29,7 @@ const skills = [
   },
   {
     name: "TypeScript",
-    aliases: ["typescript", "ts"],
+    aliases: ["typescript", "ts", "ts language", "typescript language"],
     resources: [
       {
         type: "DOCUMENTATION",
@@ -45,7 +45,7 @@ const skills = [
   },
   {
     name: "Python",
-    aliases: ["python"],
+    aliases: ["python", "py", "python3", "python programming"],
     resources: [
       {
         type: "DOCUMENTATION",
@@ -61,7 +61,7 @@ const skills = [
   },
   {
     name: "Java",
-    aliases: ["java"],
+    aliases: ["java", "java programming", "java language", "jdk"],
     resources: [
       {
         type: "DOCUMENTATION",
@@ -159,7 +159,7 @@ const skills = [
   },
   {
     name: "Tailwind CSS",
-    aliases: ["tailwindcss", "tailwind"],
+    aliases: ["tailwindcss", "tailwind", "tailwind css"],
     resources: [
       {
         type: "DOCUMENTATION",
@@ -175,7 +175,7 @@ const skills = [
   },
   {
     name: "Redux",
-    aliases: ["redux"],
+    aliases: ["redux", "redux toolkit", "rtk", "redux state management"],
     resources: [
       {
         type: "DOCUMENTATION",
@@ -212,6 +212,7 @@ const skills = [
       "tanstack query",
       "tanstack react query",
       "@tanstack/react-query",
+      "react-query",
     ],
     resources: [
       {
@@ -260,7 +261,7 @@ const skills = [
   },
   {
     name: "Next.js",
-    aliases: ["next", "nextjs", "next.js"],
+    aliases: ["next", "nextjs", "next.js", "nextjs framework", "next.js framework"],
     resources: [
       {
         type: "DOCUMENTATION",
@@ -278,7 +279,7 @@ const skills = [
   // ---------- Backend ----------
   {
     name: "Node.js",
-    aliases: ["node.js", "nodejs", "node"],
+    aliases: ["node.js", "nodejs", "node", "node runtime", "node.js runtime"],
     resources: [
       {
         type: "DOCUMENTATION",
@@ -294,7 +295,7 @@ const skills = [
   },
   {
     name: "Express.js",
-    aliases: ["express.js", "expressjs", "express"],
+    aliases: ["express.js", "expressjs", "express", "express framework", "express.js framework"],
     resources: [
       {
         type: "DOCUMENTATION",
@@ -326,7 +327,7 @@ const skills = [
   },
   {
     name: "Spring Boot",
-    aliases: ["spring boot", "springboot", "spring"],
+    aliases: ["spring boot", "springboot", "spring", "spring boot framework", "spring framework"],
     resources: [
       {
         type: "DOCUMENTATION",
@@ -358,7 +359,7 @@ const skills = [
   },
   {
     name: "GraphQL",
-    aliases: ["graphql"],
+    aliases: ["graphql", "gql", "graphql api"],
     resources: [
       {
         type: "DOCUMENTATION",
@@ -504,7 +505,7 @@ const skills = [
   },
   {
     name: "PostgreSQL",
-    aliases: ["postgresql", "postgres"],
+    aliases: ["postgresql", "postgres", "postgres database"],
     resources: [
       {
         type: "DOCUMENTATION",
@@ -520,7 +521,7 @@ const skills = [
   },
   {
     name: "MongoDB",
-    aliases: ["mongodb", "mongo"],
+    aliases: ["mongodb", "mongo", "mongodb database"],
     resources: [
       {
         type: "DOCUMENTATION",
@@ -536,7 +537,7 @@ const skills = [
   },
   {
     name: "Redis",
-    aliases: ["redis"],
+    aliases: ["redis", "redis cache", "redis caching"],
     resources: [
       {
         type: "DOCUMENTATION",
@@ -584,7 +585,7 @@ const skills = [
   },
   {
     name: "Prisma",
-    aliases: ["prisma", "prisma orm"],
+    aliases: ["prisma", "prisma orm", "prisma client"],
     resources: [
       {
         type: "DOCUMENTATION",
@@ -650,7 +651,7 @@ const skills = [
   },
   {
     name: "Kubernetes",
-    aliases: ["kubernetes", "k8s"],
+    aliases: ["kubernetes", "k8s", "k8s cluster", "kubernetes orchestration"],
     resources: [
       {
         type: "DOCUMENTATION",
@@ -666,7 +667,7 @@ const skills = [
   },
   {
     name: "AWS",
-    aliases: ["amazon web services", "aws"],
+    aliases: ["amazon web services", "aws", "aws services", "amazon cloud"],
     resources: [
       {
         type: "DOCUMENTATION",
@@ -1376,7 +1377,8 @@ const skills = [
     aliases: [
       "figma",
       "figma mastery",
-      "figma prototyping"
+      "figma prototyping",
+      "figma design"
     ],
     resources: [
       {
