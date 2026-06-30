@@ -1,24 +1,21 @@
 import jwt from "jsonwebtoken";
 import prisma from "../lib/prisma.js";
+import ApiError from "../utils/ApiError.js";
 
 async function authUser(req, res, next) {
-  const token = req.cookies.token;
-
-  if (!token) {
-    return res.status(401).json({
-      message: "Token not provided",
-    });
-  }
-
   try {
+    const token = req.cookies.token;
+
+    if (!token) {
+      throw new ApiError(401, "Token not provided");
+    }
+
     const isTokenBlacklisted = await prisma.tokenBlacklist.findUnique({
       where: { token },
     });
 
     if (isTokenBlacklisted) {
-      return res.status(401).json({
-        message: "Token is invalid",
-      });
+      throw new ApiError(401, "Token is invalid");
     }
 
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
@@ -27,10 +24,8 @@ async function authUser(req, res, next) {
 
     next();
   } catch (err) {
-    return res.status(401).json({
-      message: "Invalid token",
-    });
+    next(err);
   }
 }
 
-export { authUser };
+export { authUser };

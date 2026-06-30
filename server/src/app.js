@@ -3,6 +3,8 @@ import cookieParser from "cookie-parser";
 import cors from "cors";
 import authRouter from "./routes/auth.routes.js";
 import interviewRouter from "./routes/interview.routes.js";
+import errorMiddleware from "./middlewares/error.middleware.js";
+import ApiError from "./utils/ApiError.js";
 
 const app = express();
 
@@ -18,5 +20,13 @@ app.use(
 // using all the routes here
 app.use("/api/auth", authRouter);
 app.use("/api/interview", interviewRouter);
+
+// Fallback for 404 - Route Not Found
+app.use((req, res, next) => {
+  next(new ApiError(404, `Endpoint not found: ${req.method} ${req.originalUrl}`));
+});
+
+// Centralized error handling middleware
+app.use(errorMiddleware);
 
 export default app;
