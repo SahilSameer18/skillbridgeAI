@@ -115,8 +115,7 @@ const Login = () => {
         >
           <Link to="/" className="flex items-center gap-2 mb-8">
             <div
-              className="w-9 h-9 rounded-xl flex items-center justify-center text-white font-bold text-xl shadow-lg"
-              style={{ background: "linear-gradient(135deg,#06b6d4,#a855f7)" }}
+              className="w-9 h-9 rounded-xl flex items-center justify-center text-white font-bold text-xl shadow-lg" style={{ background: "linear-gradient(135deg,#06b6d4,#a855f7)" }}
             >
               S
             </div>
@@ -223,11 +222,7 @@ const Login = () => {
             <button
               type="submit"
               disabled={loginLoading}
-              className="w-full py-3.5 rounded-xl font-semibold text-white transition-all duration-300 disabled:opacity-60 disabled:cursor-not-allowed active:scale-[0.98] text-sm cursor-pointer"
-              style={{
-                background: "linear-gradient(135deg,#06b6d4,#a855f7)",
-                boxShadow: "0 8px 32px rgba(168,85,247,0.2)",
-              }}
+              className="w-full py-3.5 rounded-xl font-semibold text-white transition-all duration-300 disabled:opacity-60 disabled:cursor-not-allowed active:scale-[0.98] text-sm cursor-pointer" style={{ background: "linear-gradient(135deg,#06b6d4,#a855f7)" }}
             >
               {loginLoading ? (
                 <span className="flex items-center justify-center gap-2">

@@ -72,11 +72,7 @@ const Navbar = () => {
           {/* ── Brand ──────────────────────────────────────────────────────── */}
           <Link to="/" className="flex items-center gap-2.5 group shrink-0">
             <div
-              className="w-8 h-8 rounded-lg flex items-center justify-center text-white font-bold text-sm transition-all duration-300 group-hover:scale-105"
-              style={{
-                background: "linear-gradient(135deg,#06b6d4,#a855f7)",
-                boxShadow: "0 4px 12px rgba(6,182,212,0.25)",
-              }}
+              className="w-8 h-8 rounded-lg flex items-center justify-center text-white font-bold text-sm transition-all duration-300 group-hover:scale-105" style={{ background: "linear-gradient(135deg,#06b6d4,#a855f7)" }}
             >
               S
             </div>
@@ -105,8 +101,7 @@ const Navbar = () => {
                   {label}
                   {isActive && (
                     <span
-                      className="absolute bottom-0 left-1/2 -translate-x-1/2 w-4 h-0.5 rounded-full"
-                      style={{ background: "linear-gradient(90deg,#06b6d4,#a855f7)" }}
+                      className="absolute bottom-0 left-1/2 -translate-x-1/2 w-4 h-0.5 rounded-full" style={{ background: "linear-gradient(135deg,#06b6d4,#a855f7)" }}
                     />
                   )}
                 </Link>
@@ -124,7 +119,7 @@ const Navbar = () => {
                   style={{ background: "rgba(30,41,59,0.6)" }}
                 >
                   <div
-                    className="w-5 h-5 rounded-full flex items-center justify-center text-xs font-bold text-purple-300 shrink-0"
+                    className="w-5 h-5 rounded-full flex items-center justify-center text-xs font-bold text-cyan-300 shrink-0"
                     style={{ background: "rgba(168,85,247,0.2)" }}
                   >
                     {user.username?.charAt(0).toUpperCase()}
@@ -146,11 +141,7 @@ const Navbar = () => {
             ) : (
               <Link
                 to="/login"
-                className="px-5 py-2 text-sm font-semibold rounded-full text-white transition-all duration-200 hover:opacity-90 active:scale-95"
-                style={{
-                  background: "linear-gradient(135deg,#06b6d4,#a855f7)",
-                  boxShadow: "0 4px 14px rgba(168,85,247,0.25)",
-                }}
+                className="px-5 py-2 text-sm font-semibold rounded-full text-white transition-all duration-200 hover:opacity-90 active:scale-95" style={{ background: "linear-gradient(135deg,#06b6d4,#a855f7)" }}
               >
                 Login
               </Link>
@@ -220,8 +211,7 @@ const Navbar = () => {
               >
                 {isActive && (
                   <span
-                    className="w-1 h-4 rounded-full shrink-0"
-                    style={{ background: "linear-gradient(180deg,#06b6d4,#a855f7)" }}
+                    className="w-1 h-4 rounded-full shrink-0" style={{ background: "linear-gradient(135deg,#06b6d4,#a855f7)" }}
                   />
                 )}
                 {label}
@@ -235,7 +225,7 @@ const Navbar = () => {
               <div className="space-y-1">
                 <div className="flex items-center gap-3 px-3 py-2">
                   <div
-                    className="w-8 h-8 rounded-full flex items-center justify-center font-bold text-purple-300 text-sm shrink-0"
+                    className="w-8 h-8 rounded-full flex items-center justify-center font-bold text-cyan-300 text-sm shrink-0"
                     style={{ background: "rgba(168,85,247,0.15)" }}
                   >
                     {user.username?.charAt(0).toUpperCase()}
@@ -255,8 +245,7 @@ const Navbar = () => {
             ) : (
               <Link
                 to="/login"
-                className="flex items-center justify-center w-full px-4 py-2.5 rounded-xl text-sm font-semibold text-white transition-all duration-200 hover:opacity-90 active:scale-95"
-                style={{ background: "linear-gradient(135deg,#06b6d4,#a855f7)" }}
+                className="flex items-center justify-center w-full px-4 py-2.5 rounded-xl text-sm font-semibold text-white transition-all duration-200 hover:opacity-90 active:scale-95" style={{ background: "linear-gradient(135deg,#06b6d4,#a855f7)" }}
               >
                 Login
               </Link>

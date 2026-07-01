@@ -85,7 +85,7 @@ const ProcessTimeline = () => {
                 <span className="text-[10px] font-bold font-mono text-slate-500 uppercase tracking-widest">{step.num}</span>
               </div>
               
-              <span className="text-[9px] font-bold text-purple-400 uppercase tracking-wider mb-2 font-mono">
+              <span className="text-[9px] font-bold text-cyan-400 uppercase tracking-wider mb-2 font-mono">
                 {step.label}
               </span>
               <h3 className="text-base font-bold text-white mb-2">{step.title}</h3>

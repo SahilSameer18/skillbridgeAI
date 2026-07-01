@@ -362,5 +362,3 @@ This project is licensed under the MIT License.
 ---
 
 <p align="center">Built by Sahil Sameer Siddique.</p>
-
-

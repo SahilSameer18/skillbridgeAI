@@ -14,7 +14,7 @@ const PERSONAS = [
     title: "Career Switchers",
     desc: "Transition roles with a structured matrix of the transferrable skills you have and gaps you need to close.",
     icon: (
-      <svg className="w-8 h-8 text-purple-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
+      <svg className="w-8 h-8 text-cyan-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
         <path d="m16 3 4 4-4 4"/><path d="M20 7H9a4 4 0 0 0 0 8h1"/>
       </svg>
     ),

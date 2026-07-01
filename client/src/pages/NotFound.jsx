@@ -20,8 +20,7 @@ const NotFound = () => {
                 <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
                     <Link
                         to="/"
-                        className="px-6 py-3 rounded-xl font-semibold text-white text-sm transition-all duration-300 active:scale-95"
-                        style={{background:'linear-gradient(135deg,#06b6d4,#a855f7)', boxShadow:'0 8px 24px rgba(168,85,247,0.2)'}}>
+                        className="px-6 py-3 rounded-xl font-semibold text-white text-sm transition-all duration-300 active:scale-95" style={{ background: "linear-gradient(135deg,#06b6d4,#a855f7)" }}>
                         🏠 Go Home
                     </Link>
                     <button

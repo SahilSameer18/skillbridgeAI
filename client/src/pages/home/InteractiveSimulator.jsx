@@ -178,10 +178,10 @@ const InteractiveSimulator = ({ user }) => {
             </div>
           </div>
 
-          <div className="p-3 bg-purple-500/5 border border-purple-500/15 rounded-xl text-left leading-relaxed">
+          <div className="p-3 bg-cyan-500/5 border border-cyan-500/15 rounded-xl text-left leading-relaxed">
             <div className="flex justify-between items-center mb-1.5">
-              <span className="text-[9px] font-bold text-purple-400 uppercase tracking-wide font-mono">Sample Interview Question</span>
-              <span className="text-[9px] text-purple-500">Technical Round</span>
+              <span className="text-[9px] font-bold text-cyan-400 uppercase tracking-wide font-mono">Sample Interview Question</span>
+              <span className="text-[9px] text-cyan-500">Technical Round</span>
             </div>
             <p className="text-xs font-semibold text-slate-200 mb-1 leading-snug">
               "{activeData.questions[0].q}"
@@ -200,8 +200,7 @@ const InteractiveSimulator = ({ user }) => {
             </button>
             <Link
               to={user ? "/generate" : "/register"}
-              className="px-4 py-1.5 rounded-lg text-[10px] font-bold text-white transition-opacity duration-200 hover:opacity-90"
-              style={{ background: "linear-gradient(135deg, #06b6d4, #a855f7)" }}
+              className="px-4 py-1.5 rounded-lg text-[10px] font-bold text-white transition-opacity duration-200 hover:opacity-90" style={{ background: "linear-gradient(135deg,#06b6d4,#a855f7)" }}
             >
               Generate Your Custom Plan
             </Link>

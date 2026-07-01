@@ -66,7 +66,7 @@ const ResumeUpload = ({ onChange }) => {
   };
 
   return (
-    <div className="flex flex-col h-full bg-slate-950/40 p-6 rounded-2xl border border-slate-800/80 transition-all duration-300 hover:border-purple-500/20">
+    <div className="flex flex-col h-full bg-slate-950/40 p-6 rounded-2xl border border-slate-800/80 transition-all duration-300 hover:border-cyan-500/20">
       {/* Header section */}
       <div className="flex items-center justify-between mb-5">
         <div className="flex items-center gap-3">
@@ -96,7 +96,7 @@ const ResumeUpload = ({ onChange }) => {
             <h2 className="font-semibold text-white text-base tracking-wide">
               Your Resume
             </h2>
-            <p className="text-xs text-purple-400 font-medium mt-0.5">Required</p>
+            <p className="text-xs text-cyan-400 font-medium mt-0.5">Required</p>
           </div>
         </div>
         <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 uppercase tracking-wider">

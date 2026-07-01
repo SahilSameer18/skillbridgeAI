@@ -18,7 +18,7 @@ const HomeStats = () => {
             num: "96.4%",
             label: "Match Scoring Accuracy",
             icon: (
-              <svg className="w-5 h-5 text-purple-400 mb-1" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+              <svg className="w-5 h-5 text-cyan-400 mb-1" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                 <circle cx="12" cy="12" r="10"/><path d="m4.93 4.93 4.24 4.24"/><path d="m14.83 9.17 4.24-4.24"/><path d="M12 12V2"/>
               </svg>
             ),

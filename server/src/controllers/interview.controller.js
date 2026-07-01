@@ -136,9 +136,19 @@ const getInterviewReportByIdController = asyncHandler(async (req, res, next) => 
  * @description Controller to get all interview reports of logged in user.
  */
 const getAllInterviewReportsController = asyncHandler(async (req, res, next) => {
+  const page = parseInt(req.query.page) || 1;
+  const limit = parseInt(req.query.limit) || 6;
+  const skip = (page - 1) * limit;
+
+  const totalCount = await prisma.interviewReport.count({
+    where: { userId: req.user.id },
+  });
+
   const interviewReports = await prisma.interviewReport.findMany({
     where: { userId: req.user.id },
     orderBy: { createdAt: "desc" },
+    skip,
+    take: limit,
     select: {
       id: true,
       jobDescription: true,
@@ -153,6 +163,9 @@ const getAllInterviewReportsController = asyncHandler(async (req, res, next) => 
     success: true,
     message: "Interview reports retrieved successfully",
     interviewReports,
+    totalCount,
+    currentPage: page,
+    totalPages: Math.ceil(totalCount / limit),
   });
 });
 

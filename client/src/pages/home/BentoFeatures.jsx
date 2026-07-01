@@ -44,13 +44,13 @@ const BENTO_FEATURES = [
     desc: "A tailored list of core questions with clear mock guides, specifically tailored to the target role.",
     span: "col-span-1",
     icon: (
-      <svg className="w-5 h-5 text-purple-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <svg className="w-5 h-5 text-cyan-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
         <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
       </svg>
     ),
     visual: (
-      <div className="mt-4 bg-purple-500/5 p-4 rounded-xl border border-purple-500/10 text-xs">
-        <p className="text-purple-400 font-semibold mb-1">Technical Question</p>
+      <div className="mt-4 bg-cyan-500/5 p-4 rounded-xl border border-cyan-500/10 text-xs">
+        <p className="text-cyan-400 font-semibold mb-1">Technical Question</p>
         <p className="text-slate-300 line-clamp-3 leading-relaxed">
           "Explain how you would optimize database query rendering loops inside server components..."
         </p>

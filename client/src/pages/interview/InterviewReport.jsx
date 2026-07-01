@@ -4,32 +4,21 @@ import { useParams } from 'react-router'
 import LoadingScreen from '../../components/common/LoadingScreen'
 
 const NAV_ITEMS = [
-    { id: 'technical', label: 'Technical', icon: 'code' },
-    { id: 'behavioral', label: 'Behavioral', icon: 'messages' },
-    { id: 'skills', label: 'Skill Gaps', icon: 'target' },
-    { id: 'roadmap', label: 'Roadmap', icon: 'map-2' },
+    { id: 'technical', label: 'Technical Q&A', icon: 'code' },
+    { id: 'behavioral', label: 'Behavioral Q&A', icon: 'messages' },
+    { id: 'skills', label: 'Skill Gaps & Resources', icon: 'target' },
+    { id: 'roadmap', label: 'Action Plan', icon: 'map-2' },
 ]
 
 const SEVERITY_STYLES = {
-    high: 'bg-red-500/10 text-red-400 border border-red-500/20',
-    medium: 'bg-amber-500/10 text-amber-400 border border-amber-500/20',
-    low: 'bg-blue-500/10 text-blue-400 border border-blue-500/20',
+    high: 'bg-red-500/10 text-red-400 border border-red-500/20 shadow-sm',
+    medium: 'bg-amber-500/10 text-amber-400 border border-amber-500/20 shadow-sm',
+    low: 'bg-blue-500/10 text-blue-400 border border-blue-500/20 shadow-sm',
 }
 
-/* ── Tabler icon helper ── */
+/* ── Generic Icon Helper ── */
 const Icon = ({ name, className = '' }) => (
-    <svg
-        xmlns="http://www.w3.org/2000/svg"
-        width="16" height="16"
-        viewBox="0 0 24 24"
-        fill="none"
-        stroke="currentColor"
-        strokeWidth="2"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        className={className}
-        aria-hidden="true"
-    >
+    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className} aria-hidden="true">
         {name === 'code' && <><polyline points="16 18 22 12 16 6" /><polyline points="8 6 2 12 8 18" /></>}
         {name === 'messages' && <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />}
         {name === 'map-2' && <polygon points="3 11 22 2 13 21 11 13 3 11" />}
@@ -38,133 +27,29 @@ const Icon = ({ name, className = '' }) => (
         {name === 'download' && <><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" /><polyline points="7 10 12 15 17 10" /><line x1="12" y1="15" x2="12" y2="3" /></>}
         {name === 'sparkle' && <path d="M10.6144 17.7956 11.492 15.7854C12.2731 13.9966 13.6789 12.5726 15.4325 11.7942L17.8482 10.7219C18.6162 10.381 18.6162 9.26368 17.8482 8.92277L15.5079 7.88394C13.7092 7.08552 12.2782 5.60881 11.5105 3.75894L10.6215 1.61673C10.2916.821765 9.19319.821767 8.8633 1.61673L7.97427 3.75892C7.20657 5.60881 5.77553 7.08552 3.97685 7.88394L1.63658 8.92277C.868537 9.26368.868536 10.381 1.63658 10.7219L4.0523 11.7942C5.80589 12.5726 7.21171 13.9966 7.99275 15.7854L8.8704 17.7956C9.20776 18.5682 10.277 18.5682 10.6144 17.7956Z" fill="currentColor" stroke="none" />}
         {name === 'help-circle' && <><circle cx="12" cy="12" r="10" /><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3" /><line x1="12" y1="17" x2="12.01" y2="17" /></>}
-        {name === 'calendar' && <><rect x="3" y="4" width="18" height="18" rx="2" ry="2" /><line x1="16" y1="2" x2="16" y2="6" /><line x1="8" y1="2" x2="8" y2="6" /><line x1="3" y1="10" x2="21" y2="10" /></>}
-        {name === 'chart-pie' && <><path d="M21.21 15.89A10 10 0 1 1 8 2.83" /><path d="M22 12A10 10 0 0 0 12 2v10z" /></>}
-        {name === 'file-text' && <><path d="M14 3v4a1 1 0 0 0 1 1h4" /><path d="M17 21h-10a2 2 0 0 1 -2 -2v-14a2 2 0 0 1 2 -2h7l5 5v11a2 2 0 0 1 -2 2z" /></>}
-        {name === 'player-play' && <><circle cx="12" cy="12" r="9" /><path d="M10 9l5 3l-5 3z" /></>}
     </svg>
 )
 
-/* ── Stat Card (top bar) ── */
-const StatCard = ({ icon, label, value, sub, iconClass }) => (
-    <div className="flex items-center gap-3 rounded-xl p-4 bg-slate-900/60 border border-slate-800/60">
-        <div className={`w-9 h-9 rounded-lg flex items-center justify-center shrink-0 ${iconClass}`}>
-            <Icon name={icon} />
-        </div>
-        <div className="min-w-0">
-            <p className="text-xs text-slate-500 mb-0.5">{label}</p>
-            <p className="text-lg font-semibold text-white leading-none">{value}</p>
-            {sub && <p className="text-xs mt-0.5 truncate" style={{ color: 'inherit' }}>{sub}</p>}
-        </div>
-    </div>
+/* ── Brand Logos for Resources ── */
+const YouTubeLogo = () => (
+    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="currentColor" stroke="none" className="text-red-500">
+        <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814z" />
+        <path fill="#fff" d="M9.545 15.568V8.432L15.818 12l-6.273 3.568z" />
+    </svg>
 )
 
-/* ── Question accordion card ── */
-const QuestionCard = ({ item, index, accentClass, bodyBg }) => {
-    const [open, setOpen] = useState(false)
-    return (
-        <div
-            className="rounded-xl overflow-hidden border border-slate-800/60 bg-slate-900/50 hover:border-slate-700/70 transition-colors duration-150"
-        >
-            <button
-                className="w-full flex items-start gap-3 p-4 text-left"
-                onClick={() => setOpen(o => !o)}
-            >
-                <span className={`shrink-0 w-6 h-6 rounded-md flex items-center justify-center text-[11px] font-semibold mt-0.5 ${accentClass}`}>
-                    {index + 1}
-                </span>
-                <p className="flex-1 text-sm text-slate-200 leading-relaxed">{item.question}</p>
-                <Icon
-                    name="chevron-down"
-                    className={`shrink-0 mt-1 text-slate-600 transition-transform duration-200 ${open ? 'rotate-180' : ''}`}
-                />
-            </button>
-
-            {open && (
-                <div className="px-4 pb-4 space-y-3 border-t border-slate-800/50">
-                    <div className="pt-3">
-                        <p className="text-[11px] font-semibold text-slate-500 uppercase tracking-wider mb-1.5">Intention</p>
-                        <p className="text-sm text-slate-400 leading-relaxed bg-slate-800/40 rounded-lg px-3 py-2.5">
-                            {item.intention}
-                        </p>
-                    </div>
-                    <div>
-                        <p className="text-[11px] font-semibold text-slate-500 uppercase tracking-wider mb-1.5">Model answer</p>
-                        <p className={`text-sm text-slate-300 leading-relaxed rounded-lg px-3 py-2.5 ${bodyBg}`}>
-                            {item.answer}
-                        </p>
-                    </div>
-                </div>
-            )}
-        </div>
-    )
-}
-
-/* ── Skill gap card — full width, no truncation, resources as labeled buttons ── */
-const SkillGapCard = ({ gap }) => {
-    const resources = gap.skillRef?.resources ?? []
-    const severityKey = gap.severity?.toLowerCase()
-
-    return (
-        <div className="rounded-xl p-4 border border-slate-800/60 bg-slate-900/50 hover:border-slate-700/70 transition-colors duration-150">
-            <div className="flex items-start justify-between gap-3">
-                <p className="text-sm font-medium text-slate-200 leading-snug">{gap.skill}</p>
-                <span
-                    className={`shrink-0 whitespace-nowrap text-[11px] px-2 py-0.5 rounded-md font-medium capitalize ${SEVERITY_STYLES[severityKey] ?? SEVERITY_STYLES.low}`}
-                >
-                    {gap.severity ?? 'low'}
-                </span>
-            </div>
-
-            {resources.length > 0 ? (
-                <div className="flex flex-wrap gap-2 mt-3">
-                    {resources.map((resource) => (
-                        <a
-                            key={resource.id}
-                            href={resource.url}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="flex items-center gap-1.5 text-xs font-medium text-slate-400 hover:text-cyan-400 bg-slate-800/50 hover:bg-cyan-500/10 border border-slate-700/50 hover:border-cyan-500/30 rounded-lg px-2.5 py-1.5 transition-colors"
-                        >
-                            <Icon name={resource.type === 'VIDEO' ? 'player-play' : 'file-text'} />
-                            {resource.type === 'VIDEO' ? 'Video tutorial' : 'Documentation'}
-                        </a>
-                    ))}
-                </div>
-            ) : (
-                <p className="text-xs text-slate-600 mt-2.5">No curated resources yet for this skill</p>
-            )}
-        </div>
-    )
-}
-
-/* ── Roadmap day row ── */
-const RoadmapDay = ({ day, index, total }) => (
-    <div className="flex gap-4">
-        <div className="flex flex-col items-center">
-            <div className="w-8 h-8 rounded-full flex items-center justify-center text-xs font-semibold text-white shrink-0 bg-gradient-to-br from-cyan-500 to-violet-500">
-                {day.day}
-            </div>
-            {index < total - 1 && (
-                <div className="w-px flex-1 mt-2 bg-slate-800 min-h-6" />
-            )}
-        </div>
-        <div className="pb-6 flex-1 min-w-0">
-            <h3 className="text-sm font-semibold text-white mb-2 mt-1">{day.focus}</h3>
-            <ul className="space-y-1.5">
-                {day.tasks.map((task, i) => (
-                    <li key={i} className="flex items-start gap-2 text-sm text-slate-400">
-                        <span className="mt-2 w-1 h-1 rounded-full bg-slate-600 shrink-0" />
-                        {task}
-                    </li>
-                ))}
-            </ul>
-        </div>
-    </div>
+const DocsLogo = () => (
+    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-cyan-400">
+        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+        <polyline points="14 2 14 8 20 8" />
+        <line x1="16" y1="13" x2="8" y2="13" />
+        <line x1="16" y1="17" x2="8" y2="17" />
+        <polyline points="10 9 9 9 8 9" />
+    </svg>
 )
 
 /* ── Circular score ring ── */
-const ScoreRing = ({ score, color, size = 80, strokeWidth = 6 }) => {
+const ScoreRing = ({ score, color, size = 64, strokeWidth = 5 }) => {
     const radius = (size - strokeWidth) / 2
     const circumference = 2 * Math.PI * radius
     const [offset, setOffset] = useState(circumference)
@@ -189,7 +74,181 @@ const ScoreRing = ({ score, color, size = 80, strokeWidth = 6 }) => {
     )
 }
 
-/* ── Main component ── */
+/* ── Hero Stats Component ── */
+const HeroStats = ({ report }) => {
+    const scoreColor = report.matchScore >= 80 ? '#34d399' : report.matchScore >= 60 ? '#fbbf24' : '#f87171'
+    const scoreLabel = report.matchScore >= 80 ? 'Strong match' : report.matchScore >= 60 ? 'Average match' : 'Low match'
+    const scoreLabelColor = report.matchScore >= 80 ? 'text-emerald-400' : report.matchScore >= 60 ? 'text-amber-400' : 'text-red-400'
+
+    return (
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-3 sm:gap-4 mb-6">
+            <div className="md:col-span-1 rounded-2xl p-4 sm:p-5 bg-slate-900/80 border border-slate-800/80 relative overflow-hidden flex flex-col items-center justify-center text-center shadow-lg">
+                <div className="relative z-10 mb-3">
+                    <ScoreRing score={report.matchScore} color={scoreColor} size={72} strokeWidth={6} />
+                    <div className="absolute inset-0 flex items-center justify-center flex-col">
+                        <span className="text-xl font-bold text-white leading-none">{report.matchScore}</span>
+                    </div>
+                </div>
+                <h3 className="relative z-10 text-sm font-semibold text-white mb-0.5">Match Score</h3>
+                <p className={`relative z-10 text-[10px] font-bold uppercase tracking-wider ${scoreLabelColor}`}>{scoreLabel}</p>
+            </div>
+
+            <div className="md:col-span-2 grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
+                <div className="rounded-2xl p-4 sm:p-5 bg-slate-900/70 border border-slate-800/60 flex flex-col justify-center relative overflow-hidden group hover:bg-slate-900/90 transition-colors duration-200">
+                    <div className="absolute right-0 top-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity"><Icon name="messages" className="w-12 h-12 text-cyan-400" /></div>
+                    <p className="text-[11px] font-semibold text-slate-500 uppercase tracking-widest mb-1 relative z-10">Questions</p>
+                    <p className="text-2xl font-bold text-white mb-1 relative z-10">{report.technicalQuestions.length + report.behavioralQuestions.length}</p>
+                    <p className="text-xs text-cyan-400 font-medium relative z-10">Technical & Behavioral</p>
+                </div>
+                <div className="rounded-2xl p-4 sm:p-5 bg-slate-900/70 border border-slate-800/60 flex flex-col justify-center relative overflow-hidden group hover:bg-slate-900/90 transition-colors duration-200">
+                    <div className="absolute right-0 top-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity"><Icon name="map-2" className="w-12 h-12 text-violet-400" /></div>
+                    <p className="text-[11px] font-semibold text-slate-500 uppercase tracking-widest mb-1 relative z-10">Roadmap</p>
+                    <p className="text-2xl font-bold text-white mb-1 relative z-10">{report.preparationPlan.length} Days</p>
+                    <p className="text-xs text-violet-400 font-medium relative z-10">Structured plan</p>
+                </div>
+            </div>
+        </div>
+    )
+}
+
+/* ── Question accordion card (Redesigned) ── */
+const QuestionCard = ({ item, index, accentClass, bodyBg }) => {
+    const [open, setOpen] = useState(false)
+    return (
+        <div className={`rounded-xl overflow-hidden border transition-colors duration-200 ${open ? 'border-slate-700 shadow-md shadow-black/10 bg-slate-900/90' : 'border-slate-800/60 bg-slate-900/60 hover:border-slate-700/70'}`}>
+            <button
+                className="w-full flex items-start gap-3 p-3 sm:p-4 text-left focus:outline-none"
+                onClick={() => setOpen(o => !o)}
+            >
+                <div className={`shrink-0 w-6 h-6 rounded-md flex items-center justify-center text-xs font-bold shadow-inner ${accentClass}`}>
+                    {index + 1}
+                </div>
+                <div className="flex-1 pt-0.5">
+                    <p className={`text-sm font-medium leading-relaxed transition-colors duration-200 ${open ? 'text-white' : 'text-slate-300'}`}>
+                        {item.question}
+                    </p>
+                </div>
+                <div className={`shrink-0 w-6 h-6 rounded-full flex items-center justify-center bg-slate-800/50 border border-slate-700/50 text-slate-400 transition-transform duration-300 ${open ? 'rotate-180 bg-slate-700 text-white' : ''}`}>
+                    <Icon name="chevron-down" className="w-3 h-3" />
+                </div>
+            </button>
+
+            <div className={`grid transition-[grid-template-rows,opacity] duration-300 ease-in-out ${open ? 'grid-rows-[1fr] opacity-100' : 'grid-rows-[0fr] opacity-0'}`}>
+                <div className="overflow-hidden">
+                    <div className="px-3 pb-3 sm:px-4 sm:pb-4 space-y-3 pt-1">
+                        <div className="flex gap-3">
+                            <div className="w-6 shrink-0 flex justify-center"><div className="w-px h-full bg-slate-800" /></div>
+                            <div className="flex-1">
+                                <p className="text-[9px] font-bold text-slate-500 uppercase tracking-widest mb-1 flex items-center gap-1">
+                                    <Icon name="target" className="w-2.5 h-2.5" /> Intention
+                                </p>
+                                <p className="text-xs text-slate-400 leading-relaxed bg-slate-950/60 rounded-lg p-2.5 border border-slate-800/50">
+                                    {item.intention}
+                                </p>
+                            </div>
+                        </div>
+                        <div className="flex gap-3">
+                            <div className="w-6 shrink-0 flex justify-center"><div className="w-px h-full bg-slate-800" /></div>
+                            <div className="flex-1">
+                                <p className="text-[9px] font-bold text-slate-500 uppercase tracking-widest mb-1 flex items-center gap-1">
+                                    <Icon name="sparkle" className="w-2.5 h-2.5 text-cyan-500" /> Model Answer
+                                </p>
+                                <div className={`text-sm text-slate-300 leading-relaxed rounded-lg p-3 shadow-inner ${bodyBg}`}>
+                                    {item.answer}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    )
+}
+
+/* ── Skill Gap Card with YouTube and Docs Logos ── */
+const SkillGapCard = ({ gap }) => {
+    const resources = gap.skillRef?.resources ?? []
+    const severityKey = gap.severity?.toLowerCase()
+
+    return (
+        <div className="rounded-xl p-3 sm:p-4 border border-slate-800/70 bg-slate-900/60 hover:bg-slate-900/80 transition-colors duration-200 mb-2">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-3">
+                <div className="flex items-center gap-2.5">
+                    <div className={`w-1 h-5 rounded-full ${severityKey === 'high' ? 'bg-red-500' : severityKey === 'medium' ? 'bg-amber-500' : 'bg-blue-500'}`} />
+                    <h3 className="text-base font-semibold text-white tracking-tight">{gap.skill}</h3>
+                </div>
+                <span className={`px-2 py-0.5 rounded-md text-[10px] font-bold tracking-wide uppercase self-start sm:self-auto ${SEVERITY_STYLES[severityKey] ?? SEVERITY_STYLES.low}`}>
+                    {gap.severity ?? 'low'} Priority
+                </span>
+            </div>
+
+            {resources.length > 0 ? (
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 mt-3">
+                    {resources.map((resource) => (
+                        <a
+                            key={resource.id}
+                            href={resource.url}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="group flex items-center gap-2.5 p-2 rounded-lg border border-slate-800/60 bg-slate-900/80 hover:bg-slate-800 hover:border-slate-700 transition-colors duration-200"
+                        >
+                            <div className="shrink-0 w-8 h-8 rounded-md flex items-center justify-center bg-slate-950 border border-slate-800/80 shadow-inner group-hover:scale-105 transition-transform duration-200">
+                                {resource.type === 'VIDEO' ? <YouTubeLogo /> : <DocsLogo />}
+                            </div>
+                            <div className="flex-1 min-w-0">
+                                <p className="text-xs font-medium text-slate-200 group-hover:text-white transition-colors duration-200 truncate">
+                                    {resource.title || (resource.type === 'VIDEO' ? 'Watch Tutorial' : 'Read Documentation')}
+                                </p>
+                                <p className="text-[9px] text-slate-500 uppercase tracking-wider mt-0.5">
+                                    {resource.type === 'VIDEO' ? 'YouTube' : 'Documentation'}
+                                </p>
+                            </div>
+                        </a>
+                    ))}
+                </div>
+            ) : (
+                <div className="flex items-center gap-1.5 p-2.5 mt-2 rounded-lg bg-slate-800/40 border border-slate-800/50 text-xs text-slate-400">
+                    <Icon name="help-circle" className="w-3.5 h-3.5" />
+                    <span>No curated resources available yet.</span>
+                </div>
+            )}
+        </div>
+    )
+}
+
+/* ── Roadmap Day Timeline ── */
+const RoadmapDay = ({ day, index, total }) => (
+    <div className="relative flex gap-3 sm:gap-4 pb-6 group">
+        {/* Timeline vertical line */}
+        {index < total - 1 && (
+            <div className="absolute left-[18px] sm:left-5 top-9 bottom-0 w-[2px] bg-gradient-to-b from-cyan-500/30 to-violet-500/10 transition-colors duration-300" />
+        )}
+        
+        {/* Node */}
+        <div className="relative z-10 shrink-0 w-9 h-9 sm:w-10 sm:h-10 rounded-xl flex flex-col items-center justify-center bg-slate-900 border border-slate-700 shadow-[0_0_10px_rgba(6,182,212,0.1)] group-hover:border-cyan-500/50 transition-colors duration-300">
+            <span className="text-[7px] sm:text-[8px] font-bold text-slate-400 uppercase tracking-widest leading-none mb-0.5 sm:mb-1">Day</span>
+            <span className="text-xs sm:text-sm font-bold text-transparent bg-clip-text bg-gradient-to-br from-cyan-400 to-violet-400 leading-none">{day.day}</span>
+        </div>
+
+        {/* Content Box */}
+        <div className="flex-1 bg-slate-900/60 border border-slate-800/60 rounded-xl p-3 sm:p-4 hover:bg-slate-900/80 hover:border-slate-700/60 transition-colors duration-200 mt-0">
+            <h3 className="text-sm font-semibold text-white mb-2 flex items-center gap-1.5">
+                <Icon name="target" className="text-cyan-400 w-3.5 h-3.5" />
+                {day.focus}
+            </h3>
+            <ul className="space-y-1.5">
+                {day.tasks.map((task, i) => (
+                    <li key={i} className="flex items-start gap-2 text-xs text-slate-300 leading-relaxed">
+                        <span className="mt-1 w-1 h-1 rounded-full bg-violet-400 shrink-0 shadow-[0_0_4px_rgba(167,139,250,0.5)]" />
+                        {task}
+                    </li>
+                ))}
+            </ul>
+        </div>
+    </div>
+)
+
+/* ── Main Component ── */
 const InterviewReport = () => {
     const [activeNav, setActiveNav] = useState('technical')
     const { report, getReportById, loading, pdfLoading, getResumePdf } = useInterview()
@@ -197,6 +256,7 @@ const InterviewReport = () => {
 
     useEffect(() => {
         if (interviewId) getReportById(interviewId)
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [interviewId])
 
     if (loading || !report) {
@@ -209,95 +269,93 @@ const InterviewReport = () => {
     }
 
     const skillGaps = report.skillGaps ?? []
-    const scoreColor = report.matchScore >= 80 ? '#34d399' : report.matchScore >= 60 ? '#fbbf24' : '#f87171'
-    const scoreLabel = report.matchScore >= 80 ? 'Strong match' : report.matchScore >= 60 ? 'Average match' : 'Low match'
-    const scoreLabelColor = report.matchScore >= 80 ? 'text-emerald-400' : report.matchScore >= 60 ? 'text-amber-400' : 'text-red-400'
 
     return (
-        <div className="animate-fade-in space-y-5">
+        <div className="animate-fade-in w-full max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 py-4 sm:py-6 pb-24 lg:pb-12">
             {pdfLoading && (
                 <LoadingScreen
-                    message="Compiling resume PDF..."
-                    subtitle="Puppeteer is rendering a polished resume template. The download will start automatically."
+                    message="Compiling PDF Report..."
+                    subtitle="Generating a polished document layout. The download will start automatically."
+                    fullScreen={true}
                 />
             )}
 
-            {/* ── Page header ── */}
-            <div>
-                <h1 className="text-xl font-bold text-white">Interview preparation</h1>
-                <p className="text-sm text-slate-500 mt-0.5">
-                    {report.jobTitle ?? 'Role'} · {report.company ?? 'Company'}
-                </p>
-            </div>
-
-            {/* ── Top stat bar ── */}
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-                <StatCard
-                    icon="chart-pie"
-                    label="Match score"
-                    value={`${report.matchScore}%`}
-                    sub={scoreLabel}
-                    iconClass="bg-emerald-500/10 text-emerald-400"
-                />
-                <StatCard
-                    icon="help-circle"
-                    label="Questions prepared"
-                    value={report.technicalQuestions.length + report.behavioralQuestions.length}
-                    sub={`${report.technicalQuestions.length} technical · ${report.behavioralQuestions.length} behavioral`}
-                    iconClass="bg-cyan-500/10 text-cyan-400"
-                />
-                <StatCard
-                    icon="calendar"
-                    label="Prep roadmap"
-                    value={`${report.preparationPlan.length} days`}
-                    sub="Structured plan"
-                    iconClass="bg-violet-500/10 text-violet-400"
-                />
-            </div>
-
-            {/* ── Body: main + sidebar ── */}
-            <div className="flex gap-5 items-start">
-
-                {/* Main content */}
-                <div className="flex-1 min-w-0">
-
-                    {/* Tab row — drives both this row and the mobile footer bar below from one source */}
-                    <div className="flex gap-2 mb-4 overflow-x-auto pb-px no-scrollbar">
-                        {NAV_ITEMS.map(item => (
-                            <button
-                                key={item.id}
-                                onClick={() => setActiveNav(item.id)}
-                                className={`flex items-center gap-2 px-3.5 py-2 rounded-lg text-sm font-medium whitespace-nowrap transition-all duration-150 ${
-                                    activeNav === item.id
-                                        ? 'bg-cyan-500/10 border border-cyan-500/30 text-cyan-300'
-                                        : 'text-slate-500 hover:text-slate-300 border border-transparent hover:border-slate-800'
-                                }`}
-                            >
-                                <Icon name={item.icon} />
-                                {item.label}
-                            </button>
-                        ))}
+            {/* ── Page Header ── */}
+            <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-6">
+                <div>
+                    <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-cyan-500/10 border border-cyan-500/20 text-cyan-400 text-[10px] font-bold uppercase tracking-wider mb-2 shadow-[0_0_8px_rgba(6,182,212,0.1)]">
+                        <Icon name="sparkle" className="w-3 h-3" /> AI Analysis Complete
                     </div>
+                    <h1 className="text-2xl font-bold text-white tracking-tight mb-1">Interview Strategy</h1>
+                    <p className="text-slate-400 text-sm">
+                        <span className="text-white font-medium">{report.jobTitle ?? 'Target Role'}</span> at {report.company ?? 'Company'}
+                    </p>
+                </div>
+                <button
+                    onClick={() => getResumePdf(interviewId)}
+                    className="group flex items-center justify-center gap-1.5 px-4 py-2 rounded-lg text-xs font-bold text-white transition-transform duration-200 hover:scale-[1.02] active:scale-95 shadow-[0_0_15px_rgba(168,85,247,0.2)] hover:shadow-[0_0_20px_rgba(168,85,247,0.4)] shrink-0" style={{ background: "linear-gradient(135deg,#06b6d4,#a855f7)" }}
+                >
+                    <Icon name="download" className="w-4 h-4 group-hover:-translate-y-px transition-transform duration-200" />
+                    Export PDF
+                </button>
+            </div>
 
-                    {/* Section heading */}
-                    <div className="flex items-baseline justify-between mb-3">
-                        <h2 className="text-base font-semibold text-white">
-                            {activeNav === 'technical' && 'Technical questions'}
-                            {activeNav === 'behavioral' && 'Behavioral questions'}
-                            {activeNav === 'skills' && 'Skill gaps'}
-                            {activeNav === 'roadmap' && 'Preparation roadmap'}
+            {/* ── Hero Stats ── */}
+            <HeroStats report={report} />
+
+            {/* ── Layout: Vertical Sidebar + Main Content ── */}
+            <div className="flex flex-col lg:flex-row gap-5 sm:gap-6">
+                
+                {/* Navigation Sidebar */}
+                <div className="w-full lg:w-56 shrink-0">
+                    <div className="lg:sticky lg:top-20 bg-slate-900/80 border border-slate-800/80 rounded-2xl p-2 flex flex-row lg:flex-col gap-1.5 overflow-x-auto lg:overflow-visible no-scrollbar shadow-sm">
+                        {NAV_ITEMS.map(item => {
+                            const isActive = activeNav === item.id;
+                            return (
+                                <button
+                                    key={item.id}
+                                    onClick={() => setActiveNav(item.id)}
+                                    className={`flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-xs font-medium whitespace-nowrap transition-colors duration-200 ${
+                                        isActive 
+                                        ? 'bg-gradient-to-r from-cyan-500/15 to-violet-500/15 text-white shadow-inner border border-slate-700/40' 
+                                        : 'text-slate-400 hover:bg-slate-800/80 hover:text-slate-200 border border-transparent'
+                                    }`}
+                                >
+                                    <div className={`w-7 h-7 rounded-lg flex items-center justify-center transition-colors duration-200 ${isActive ? 'bg-slate-800 text-cyan-400 shadow-sm' : 'bg-slate-800/50 text-slate-500'}`}>
+                                        <Icon name={item.icon} className="w-4 h-4" />
+                                    </div>
+                                    {item.label}
+                                    {item.id === 'skills' && skillGaps.length > 0 && (
+                                        <span className={`ml-auto px-1.5 py-0.5 rounded-full text-[9px] font-bold ${isActive ? 'bg-cyan-500 text-slate-950' : 'bg-slate-800 text-slate-300'}`}>
+                                            {skillGaps.length}
+                                        </span>
+                                    )}
+                                </button>
+                            )
+                        })}
+                    </div>
+                </div>
+
+                {/* Main Content Area */}
+                <div className="flex-1 min-w-0 pb-8">
+                    <div className="mb-5 sm:mb-6">
+                        <h2 className="text-lg font-semibold text-white mb-1">
+                            {activeNav === 'technical' && 'Technical Questions'}
+                            {activeNav === 'behavioral' && 'Behavioral Questions'}
+                            {activeNav === 'skills' && 'Skill Gaps & Resources'}
+                            {activeNav === 'roadmap' && '10-Day Preparation Plan'}
                         </h2>
-                        <span className="text-xs text-slate-600">
-                            {activeNav === 'technical' && `${report.technicalQuestions.length} questions`}
-                            {activeNav === 'behavioral' && `${report.behavioralQuestions.length} questions`}
-                            {activeNav === 'skills' && `${skillGaps.length} identified`}
-                            {activeNav === 'roadmap' && `${report.preparationPlan.length}-day plan`}
-                        </span>
+                        <p className="text-slate-400 text-xs">
+                            {activeNav === 'technical' && 'Tailored technical questions based on your resume and the job description.'}
+                            {activeNav === 'behavioral' && 'Situational questions to validate your soft skills and experience.'}
+                            {activeNav === 'skills' && 'Identified areas for improvement with curated video and documentation resources.'}
+                            {activeNav === 'roadmap' && 'A structured day-by-day guide to ace your interview.'}
+                        </p>
                     </div>
 
                     {/* Technical */}
                     {activeNav === 'technical' && (
-                        <div className="space-y-2">
+                        <div className="space-y-3">
                             {report.technicalQuestions.map((q, i) => (
                                 <QuestionCard
                                     key={i}
@@ -312,7 +370,7 @@ const InterviewReport = () => {
 
                     {/* Behavioral */}
                     {activeNav === 'behavioral' && (
-                        <div className="space-y-2">
+                        <div className="space-y-3">
                             {report.behavioralQuestions.map((q, i) => (
                                 <QuestionCard
                                     key={i}
@@ -325,16 +383,20 @@ const InterviewReport = () => {
                         </div>
                     )}
 
-                    {/* Skill gaps — full width on every screen size, no truncation */}
+                    {/* Skill Gaps */}
                     {activeNav === 'skills' && (
-                        <div className="space-y-2">
+                        <div className="space-y-3">
                             {skillGaps.length > 0 ? (
                                 skillGaps.map((gap, i) => (
                                     <SkillGapCard key={i} gap={gap} />
                                 ))
                             ) : (
-                                <div className="rounded-xl p-6 border border-slate-800/60 bg-slate-900/50 text-center">
-                                    <p className="text-sm text-slate-500">No skill gaps identified for this report.</p>
+                                <div className="rounded-2xl p-6 sm:p-8 border border-slate-800/60 bg-slate-900/70 text-center shadow-inner">
+                                    <div className="w-12 h-12 mx-auto rounded-xl bg-slate-800/50 flex items-center justify-center mb-3">
+                                        <Icon name="target" className="w-6 h-6 text-slate-500" />
+                                    </div>
+                                    <p className="text-sm font-semibold text-white mb-1">No Skill Gaps Identified</p>
+                                    <p className="text-xs text-slate-500 max-w-xs mx-auto">Your resume perfectly matches the job description requirements. You're fully aligned!</p>
                                 </div>
                             )}
                         </div>
@@ -342,7 +404,7 @@ const InterviewReport = () => {
 
                     {/* Roadmap */}
                     {activeNav === 'roadmap' && (
-                        <div className="pt-1">
+                        <div className="pt-1 pl-1">
                             {report.preparationPlan.map((day, i) => (
                                 <RoadmapDay
                                     key={day.day}
@@ -354,89 +416,12 @@ const InterviewReport = () => {
                         </div>
                     )}
                 </div>
-
-                {/* Right sidebar — desktop only. Skill gaps now live in the tab above, not duplicated here. */}
-                <aside className="hidden lg:flex flex-col gap-4 w-56 shrink-0">
-
-                    {/* Score card */}
-                    <div className="rounded-xl p-4 bg-slate-900/60 border border-slate-800/60">
-                        <p className="text-[11px] font-semibold text-slate-500 uppercase tracking-wider mb-3">Match score</p>
-                        <div className="flex items-center gap-3 mb-3">
-                            <ScoreRing score={report.matchScore} color={scoreColor} size={72} strokeWidth={6} />
-                            <div>
-                                <p className="text-2xl font-bold text-white leading-none">{report.matchScore}<span className="text-sm font-normal text-slate-500">%</span></p>
-                                <p className={`text-xs font-medium mt-1 ${scoreLabelColor}`}>{scoreLabel}</p>
-                            </div>
-                        </div>
-                        <div className="h-1 rounded-full bg-slate-800">
-                            <div
-                                className="h-full rounded-full transition-all duration-1000 ease-out"
-                                style={{ width: `${report.matchScore}%`, backgroundColor: scoreColor }}
-                            />
-                        </div>
-                    </div>
-
-                    {/* Quick skill-gap summary — links into the tab, doesn't duplicate its content */}
-                    <button
-                        onClick={() => setActiveNav('skills')}
-                        className={`text-left rounded-xl p-4 border transition-colors duration-150 ${
-                            activeNav === 'skills'
-                                ? 'bg-cyan-500/10 border-cyan-500/30'
-                                : 'bg-slate-900/60 border-slate-800/60 hover:border-slate-700/70'
-                        }`}
-                    >
-                        <p className="text-[11px] font-semibold text-slate-500 uppercase tracking-wider mb-1">Skill gaps</p>
-                        <p className="text-2xl font-bold text-white leading-none">{skillGaps.length}</p>
-                        <p className="text-xs text-slate-500 mt-1">View details &amp; resources →</p>
-                    </button>
-
-                    {/* Download */}
-                    <button
-                        onClick={() => getResumePdf(interviewId)}
-                        className="w-full flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl text-sm font-semibold text-white transition-all duration-150 active:scale-95 hover:opacity-90"
-                        style={{ background: 'linear-gradient(135deg,#06b6d4,#a855f7)', boxShadow: '0 4px 14px rgba(168,85,247,0.25)' }}
-                    >
-                        <Icon name="sparkle" />
-                        Download resume
-                    </button>
-                </aside>
             </div>
-
-            {/* ── Mobile footer bar ── */}
-            <div className="lg:hidden fixed bottom-0 inset-x-0 z-20 px-4 pb-5 pt-3"
-                style={{ background: 'linear-gradient(to top, rgba(2,6,23,1) 70%, transparent)' }}>
-                <div className="flex items-center gap-2">
-                    <div className="flex-1 rounded-xl bg-slate-900/80 border border-slate-800/80 flex divide-x divide-slate-800">
-                        {NAV_ITEMS.map(item => (
-                            <button
-                                key={item.id}
-                                onClick={() => setActiveNav(item.id)}
-                                className={`flex-1 flex flex-col items-center gap-1 py-2.5 text-[10px] font-medium transition-colors ${
-                                    activeNav === item.id ? 'text-cyan-400' : 'text-slate-600'
-                                }`}
-                            >
-                                <Icon name={item.icon} />
-                                {item.label}
-                            </button>
-                        ))}
-                    </div>
-                    <button
-                        onClick={() => getResumePdf(interviewId)}
-                        className="h-11 w-11 rounded-xl flex items-center justify-center text-white shrink-0"
-                        style={{ background: 'linear-gradient(135deg,#06b6d4,#a855f7)' }}
-                        aria-label="Download resume"
-                    >
-                        <Icon name="download" />
-                    </button>
-                </div>
-            </div>
-
-            {/* Bottom padding so mobile footer doesn't overlap content */}
-            <div className="lg:hidden h-20" />
         </div>
     )
 }
 
 export default InterviewReport
+
 
 

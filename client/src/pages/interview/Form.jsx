@@ -164,11 +164,7 @@ const Form = () => {
           <button
             onClick={handleGenerateReport}
             disabled={!canGenerate}
-            className="flex items-center gap-2 px-6 py-2.5 rounded-xl font-semibold text-white text-sm transition-all duration-300 disabled:opacity-40 disabled:cursor-not-allowed active:scale-95 focus:outline-none focus:ring-2 focus:ring-cyan-500/50"
-            style={{
-              background: "linear-gradient(135deg,#06b6d4,#a855f7)",
-              boxShadow: "0 4px 20px rgba(168,85,247,0.2)",
-            }}
+            className="flex items-center gap-2 px-6 py-2.5 rounded-xl font-semibold text-white text-sm transition-all duration-300 disabled:opacity-40 disabled:cursor-not-allowed active:scale-95 focus:outline-none focus:ring-2 focus:ring-cyan-500/50" style={{ background: "linear-gradient(135deg,#06b6d4,#a855f7)" }}
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"

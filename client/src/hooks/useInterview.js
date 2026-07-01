@@ -13,7 +13,7 @@ export const useInterview = () => {
         throw new Error("useInterview must be used within an InterviewProvider")
     }
 
-    const { loading, setLoading, pdfLoading, setPdfLoading, report, setReport, reports, setReports } = context
+    const { loading, setLoading, pdfLoading, setPdfLoading, report, setReport, reports, setReports, totalReports, setTotalReports } = context
 
     const generateReport = async ({ jobDescription, resumeFile }) => {
         setLoading(true)
@@ -45,19 +45,26 @@ export const useInterview = () => {
         return response.interviewReport
     }
 
-    const getReports = async () => {
-        setLoading(true)
+    const getReports = async (page = 1, limit = 6) => {
+        if (page === 1) setLoading(true) // Only show main loader for initial fetch
         let response = null
         try {
-            response = await getAllInterviewReports()
-            setReports(response.interviewReports)
+            response = await getAllInterviewReports(page, limit)
+            if (page === 1) {
+                setReports(response.interviewReports)
+            } else {
+                setReports(prev => [...prev, ...response.interviewReports])
+            }
+            if (response.totalCount !== undefined) {
+                setTotalReports(response.totalCount)
+            }
         } catch (error) {
             console.log(error)
         } finally {
             setLoading(false)
         }
 
-        return response.interviewReports
+        return response?.interviewReports || []
     }
 
     const deleteReport = async (id) => {
@@ -96,6 +103,6 @@ export const useInterview = () => {
         }
     }, [interviewId])
 
-    return { loading, pdfLoading, report, reports, generateReport, getReportById, getReports, getResumePdf, deleteReport }
+    return { loading, pdfLoading, report, reports, totalReports, generateReport, getReportById, getReports, getResumePdf, deleteReport }
 
 }
