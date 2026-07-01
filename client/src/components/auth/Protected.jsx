@@ -1,6 +1,7 @@
 import React from 'react'
 import { useAuth } from '../../hooks/useAuth'
 import { Navigate } from 'react-router';
+import LoadingScreen from '../common/LoadingScreen';
 
 
 const Protected = ({ children }) => {
@@ -9,10 +10,10 @@ const Protected = ({ children }) => {
 
   if (loading) {
     return (
-      <main className="loading-screen">
-        <div className="spinner"></div>
-        <h2>Loading...</h2>
-      </main>
+      <LoadingScreen
+        message="Verifying your credentials..."
+        subtitle="Establishing a secure connection to your professional workspace."
+      />
     )
   }
 

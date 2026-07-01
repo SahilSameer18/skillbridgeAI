@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useNavigate, Link } from "react-router";
 import { useAuth } from "../../hooks/useAuth";
 import { registerSchema, registerBaseSchema } from "../../schemas/auth.schema.js";
+import LoadingScreen from "../../components/common/LoadingScreen";
 
 const EyeIcon = ({ open }) =>
   open ? (
@@ -124,12 +125,10 @@ const Register = () => {
 
   if (registerLoading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-[#030712]">
-        <div className="flex flex-col items-center gap-4 animate-fade-in">
-          <div className="w-12 h-12 rounded-full border-2 border-purple-500/30 border-t-purple-400 animate-spin" />
-          <p className="text-purple-400 text-xl font-semibold">Creating your account...</p>
-        </div>
-      </div>
+      <LoadingScreen
+        message="Setting up your account..."
+        subtitle="Creating your professional profile and personalized workspace."
+      />
     );
   }
 

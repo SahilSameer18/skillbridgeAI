@@ -66,7 +66,7 @@ const ResumeUpload = ({ onChange }) => {
   };
 
   return (
-    <div className="flex flex-col h-full bg-slate-900/40 p-6 rounded-2xl border border-slate-800/80 backdrop-blur-md transition-all duration-300 hover:border-purple-500/20">
+    <div className="flex flex-col h-full bg-slate-950/40 p-6 rounded-2xl border border-slate-800/80 transition-all duration-300 hover:border-purple-500/20">
       {/* Header section */}
       <div className="flex items-center justify-between mb-5">
         <div className="flex items-center gap-3">

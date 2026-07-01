@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { useInterview } from '../../hooks/useInterview.js'
 import { useParams } from 'react-router'
+import LoadingScreen from '../../components/common/LoadingScreen'
 
 const NAV_ITEMS = [
     { id: 'technical', label: 'Technical', icon: 'code' },
@@ -191,7 +192,7 @@ const ScoreRing = ({ score, color, size = 80, strokeWidth = 6 }) => {
 /* ── Main component ── */
 const InterviewReport = () => {
     const [activeNav, setActiveNav] = useState('technical')
-    const { report, getReportById, loading, getResumePdf } = useInterview()
+    const { report, getReportById, loading, pdfLoading, getResumePdf } = useInterview()
     const { interviewId } = useParams()
 
     useEffect(() => {
@@ -200,12 +201,10 @@ const InterviewReport = () => {
 
     if (loading || !report) {
         return (
-            <div className="min-h-[60vh] flex items-center justify-center">
-                <div className="flex flex-col items-center gap-3">
-                    <div className="w-10 h-10 rounded-full border-2 border-cyan-500/20 border-t-cyan-400 animate-spin" />
-                    <p className="text-sm text-slate-500">Loading your interview plan...</p>
-                </div>
-            </div>
+            <LoadingScreen
+                message="Retrieving your preparation data..."
+                subtitle="Assembling questions, answers, and curated learning resources."
+            />
         )
     }
 
@@ -216,6 +215,12 @@ const InterviewReport = () => {
 
     return (
         <div className="animate-fade-in space-y-5">
+            {pdfLoading && (
+                <LoadingScreen
+                    message="Compiling resume PDF..."
+                    subtitle="Puppeteer is rendering a polished resume template. The download will start automatically."
+                />
+            )}
 
             {/* ── Page header ── */}
             <div>

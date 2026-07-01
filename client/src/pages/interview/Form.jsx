@@ -4,6 +4,7 @@ import { useNavigate } from "react-router";
 import { interviewFormSchema } from "../../schemas/interview.schema.js";
 import JobDescriptionInput from "./components/JobDescriptionInput.jsx";
 import ResumeUpload from "./components/ResumeUpload.jsx";
+import LoadingScreen from "../../components/common/LoadingScreen.jsx";
 
 // Simulated step notifications during AI generation process
 const LOADING_STEPS = [
@@ -131,69 +132,19 @@ const Form = () => {
       <div
         className="rounded-2xl overflow-hidden shadow-2xl shadow-black/30 relative"
         style={{
-          background: "rgba(10,18,35,0.8)",
+          background: "#090f1e",
           border: "1px solid rgba(255,255,255,0.07)",
-          backdropFilter: "blur(16px)",
         }}
       >
         {/* Loading Overlay */}
         {isGenerating && (
-          <div
-            className="absolute inset-0 z-10 flex items-center justify-center rounded-2xl animate-fade-in"
-            style={{
-              background: "rgba(10,18,35,0.92)",
-              backdropFilter: "blur(8px)",
-            }}
-          >
-            <div className="text-center max-w-sm mx-auto px-6">
-              <div
-                className="w-16 h-16 mx-auto mb-6 rounded-2xl flex items-center justify-center text-3xl animate-float"
-                style={{
-                  background: "linear-gradient(135deg,rgba(6,182,212,0.15),rgba(168,85,247,0.15))",
-                  border: "1px solid rgba(6,182,212,0.2)",
-                }}
-              >
-                {LOADING_STEPS[loadingStep].icon}
-              </div>
-
-              <h2 className="text-xl font-bold text-white mb-2">
-                {LOADING_STEPS[loadingStep].label}
-              </h2>
-              <p className="text-slate-400 text-sm mb-6">
-                AI is preparing your personalized interview plan...
-              </p>
-
-              <div className="w-full rounded-full h-1.5 mb-2 bg-slate-800">
-                <div
-                  className="h-1.5 rounded-full transition-all duration-700 ease-out"
-                  style={{
-                    width: `${progress}%`,
-                    background: "linear-gradient(90deg,#06b6d4,#a855f7)",
-                  }}
-                />
-              </div>
-              <p className="text-xs text-slate-500 mb-6">
-                Step {loadingStep + 1} of {LOADING_STEPS.length}
-              </p>
-
-              <div className="flex justify-center gap-2">
-                {LOADING_STEPS.map((_, i) => (
-                  <div
-                    key={i}
-                    className={`rounded-full transition-all duration-300 ${
-                      i <= loadingStep ? "w-6 h-2" : "w-2 h-2"
-                    }`}
-                    style={{
-                      background:
-                        i <= loadingStep
-                          ? "linear-gradient(90deg,#06b6d4,#a855f7)"
-                          : "rgba(100,116,139,0.4)",
-                    }}
-                  />
-                ))}
-              </div>
-            </div>
-          </div>
+          <LoadingScreen
+            message={LOADING_STEPS[loadingStep].label}
+            subtitle="Comparing resume credentials and job expectations. This usually takes about 30 seconds."
+            steps={LOADING_STEPS.map((s) => s.label)}
+            currentStep={loadingStep}
+            fullScreen={true}
+          />
         )}
 
         {/* Side-by-side Grid Inputs */}

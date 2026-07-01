@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useNavigate, Link } from "react-router";
 import { useAuth } from "../../hooks/useAuth";
 import { loginSchema } from "../../schemas/auth.schema.js";
+import LoadingScreen from "../../components/common/LoadingScreen";
 
 const EyeIcon = ({ open }) =>
   open ? (
@@ -88,12 +89,10 @@ const Login = () => {
 
   if (loginLoading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-[#030712]">
-        <div className="flex flex-col items-center gap-4 animate-fade-in">
-          <div className="w-12 h-12 rounded-full border-2 border-cyan-500/30 border-t-cyan-400 animate-spin" />
-          <p className="text-cyan-400 text-xl font-semibold">Authenticating...</p>
-        </div>
-      </div>
+      <LoadingScreen
+        message="Authenticating your profile..."
+        subtitle="Verifying credentials and establishing a secure session."
+      />
     );
   }
 
