@@ -8,16 +8,15 @@ import LoadingScreen from "../../components/common/LoadingScreen.jsx";
 
 // Simulated step notifications during AI generation process
 const LOADING_STEPS = [
-  { label: "Parsing Resume Data...", icon: "📄" },
-  { label: "Analyzing Job Description...", icon: "🔍" },
-  { label: "Generating Technical Questions...", icon: "🤖" },
-  { label: "Finalizing Preparation Plan...", icon: "✨" },
+  { label: "Parsing Resume Data..." },
+  { label: "Analyzing Job Description..." },
+  { label: "Generating Technical Questions..." },
+  { label: "Finalizing Preparation Plan..." },
 ];
 
 /**
  * Form Component
- * Main page for triggering the AI interview preparation analysis.
- * Combines JobDescriptionInput and ResumeUpload side-by-side.
+ * Career assessment console with side-by-side inputs and interactive ready state meters.
  */
 const Form = () => {
   const { generateReport } = useInterview();
@@ -35,6 +34,13 @@ const Form = () => {
     jobDescription,
     resumeFile,
   }).success;
+
+  // Clear Form state completely
+  const handleClear = () => {
+    setError("");
+    setJobDescription("");
+    setResumeFile(null);
+  };
 
   // Triggers AI report generation
   const handleGenerateReport = async () => {
@@ -61,11 +67,11 @@ const Form = () => {
         // Navigate to the dynamic report dashboard
         navigate(`/interview/${data.id}`);
       } else {
-        setError("Failed to generate report. Please try again.");
+        setError("Failed to generate report. Please ensure resume or job description is not empty.");
       }
     } catch (err) {
       setError(
-        err?.message || "Something went wrong. Please try again."
+        err.response?.data?.message || err?.message || "Something went wrong. Please check your credentials and connection."
       );
     } finally {
       setIsGenerating(false);
@@ -79,43 +85,75 @@ const Form = () => {
       setLoadingStep(0);
       interval = setInterval(() => {
         setLoadingStep((prev) => (prev < LOADING_STEPS.length - 1 ? prev + 1 : prev));
-      }, 5000);
+      }, 6000);
     } else {
       setLoadingStep(0);
     }
     return () => clearInterval(interval);
   }, [isGenerating]);
 
-  const progress = ((loadingStep + 1) / LOADING_STEPS.length) * 100;
+  // Determine current console match setup state description
+  const getConsoleStatusText = () => {
+    if (!jobDescription.trim() && !resumeFile) {
+      return "Career Engine Offline: Awaiting details";
+    }
+    if (jobDescription.trim() && !resumeFile) {
+      return "Awaiting Resume Upload to complete calibration...";
+    }
+    if (!jobDescription.trim() && resumeFile) {
+      return "Awaiting Job Description to begin sync...";
+    }
+    return "All Systems Calibrated: Console ready for strategy execution";
+  };
 
   return (
-    <div className="animate-fade-in py-4">
+    <div className="animate-fade-in py-4 max-w-6xl mx-auto">
       {/* Header Info */}
       <div className="mb-8 text-center">
-        <span className="inline-block px-3 py-1 text-xs font-medium rounded-full mb-4 bg-cyan-500/10 text-cyan-400 border border-cyan-500/20">
-          AI-Powered Match Engine
+        <span className="inline-flex items-center gap-1.5 px-3.5 py-1 text-xs font-semibold rounded-full mb-4 bg-cyan-500/10 text-cyan-400 border border-cyan-500/20">
+          <span className="w-1.5 h-1.5 rounded-full bg-cyan-400 animate-pulse" />
+          AI-Powered Match Engine v2.0
         </span>
-        <h1 className="text-3xl sm:text-4xl font-bold text-white mb-3">
+        <h1 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-white mb-4 tracking-tight">
           Compare Your <span className="text-gradient-cyan">Resume & Job Description</span>
         </h1>
-        <p className="text-slate-400 max-w-xl mx-auto text-sm">
-          Upload your resume and paste the job description to get a customized interview questions bank and a 10-day prep roadmap.
+        <p className="text-slate-400 max-w-2xl mx-auto text-sm leading-relaxed">
+          Upload your resume and paste the job description to get a customized interview questions bank, matched skill gaps assessment, and a 10-day prep roadmap.
         </p>
       </div>
+
+      {/* Clear state button */}
+      {(jobDescription.trim() || resumeFile) && (
+        <div className="mb-6 flex justify-end">
+          <button
+            onClick={handleClear}
+            className="text-xs flex items-center gap-1 px-3 py-1.5 rounded-xl border border-dashed border-red-500/20 text-red-400 hover:bg-red-500/10 hover:text-red-200 transition-all duration-200"
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+              <line x1="18" y1="6" x2="6" y2="18" />
+              <line x1="6" y1="6" x2="18" y2="18" />
+            </svg>
+            Reset Console
+          </button>
+        </div>
+      )}
 
       {/* Global error banner */}
       {error && (
         <div
-          className="mb-6 flex items-start gap-3 px-4 py-3 rounded-xl text-sm text-red-300 animate-fade-in"
+          className="mb-6 flex items-start gap-3 px-4 py-3.5 rounded-2xl text-sm text-red-300 animate-fade-in"
           style={{
             background: "rgba(239,68,68,0.08)",
             border: "1px solid rgba(239,68,68,0.25)",
           }}
         >
-          <svg className="w-4 h-4 mt-0.5 shrink-0" fill="currentColor" viewBox="0 0 20 20">
+          <svg className="w-4 h-4 mt-0.5 shrink-0 text-red-400" fill="currentColor" viewBox="0 0 20 20">
             <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm-.75-9.25a.75.75 0 011.5 0v3.5a.75.75 0 01-1.5 0v-3.5zm.75 6a.875.875 0 100-1.75.875.875 0 000 1.75z" clipRule="evenodd" />
           </svg>
-          <p>{error}</p>
+          <div className="flex-grow">
+            <p className="font-semibold text-red-200">Execution Error</p>
+            <p className="text-xs text-red-350/90 mt-0.5">{error}</p>
+          </div>
           <button
             onClick={() => setError("")}
             className="ml-auto shrink-0 text-red-400 hover:text-red-200 transition-colors"
@@ -130,12 +168,18 @@ const Form = () => {
 
       {/* Main Console Box */}
       <div
-        className="rounded-2xl overflow-hidden shadow-2xl shadow-black/30 relative"
-        style={{
-          background: "#090f1e",
-          border: "1px solid rgba(255,255,255,0.07)",
-        }}
+        className="rounded-3xl overflow-hidden shadow-2xl shadow-black/40 border border-slate-800/80 bg-gradient-to-b from-[#0a0f1e] to-[#040711] relative"
       >
+        {/* Calibration Status Bar at top of Workspace */}
+        <div className="flex items-center gap-3 px-6 md:px-8 py-3.5 bg-slate-950/60 border-b border-slate-900/80">
+          <span className={`w-2.5 h-2.5 rounded-full shrink-0 ${
+            canGenerate ? "bg-emerald-400 animate-pulse shadow-[0_0_8px_rgba(52,211,153,0.6)]" : "bg-amber-400"
+          }`} />
+          <span className="text-xs font-mono font-bold tracking-wide text-slate-400 truncate">
+            {getConsoleStatusText()}
+          </span>
+        </div>
+
         {/* Loading Overlay */}
         {isGenerating && (
           <LoadingScreen
@@ -151,20 +195,35 @@ const Form = () => {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 p-6 md:p-8">
           <JobDescriptionInput
             value={jobDescription}
-            onChange={setJobDescription}
+            onChange={(val) => {
+              setJobDescription(val);
+            }}
           />
           <ResumeUpload
-            onChange={setResumeFile}
+            value={resumeFile}
+            onChange={(file) => {
+              setResumeFile(file);
+            }}
           />
         </div>
 
         {/* Footer Area */}
-        <div className="flex items-center justify-between px-6 md:px-8 py-4 border-t border-slate-800/60 bg-slate-900/30">
-          <span className="text-xs text-slate-500">AI-Powered Analysis · takes ~30 seconds</span>
+        <div className="flex flex-col sm:flex-row items-center justify-between gap-4 px-6 md:px-8 py-5 border-t border-slate-900 bg-slate-950/40">
+          <div className="flex items-center gap-2 text-xs text-slate-500">
+            <svg className="w-4 h-4 text-cyan-500/60" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
+            </svg>
+            <span>Orchestrates technical and behavioral roadmap matches</span>
+          </div>
+
           <button
             onClick={handleGenerateReport}
             disabled={!canGenerate}
-            className="flex items-center gap-2 px-6 py-2.5 rounded-xl font-semibold text-white text-sm transition-all duration-300 disabled:opacity-40 disabled:cursor-not-allowed active:scale-95 focus:outline-none focus:ring-2 focus:ring-cyan-500/50" style={{ background: "linear-gradient(135deg,#06b6d4,#a855f7)" }}
+            className={`w-full sm:w-auto flex items-center justify-center gap-2 px-7 py-3 rounded-2xl font-bold text-white text-sm transition-all duration-300 disabled:opacity-40 disabled:cursor-not-allowed hover:shadow-lg active:scale-98 ${
+              canGenerate 
+                ? "bg-gradient-to-r from-cyan-500 via-indigo-500 to-purple-500 hover:shadow-indigo-500/20 shadow-[0_4px_20px_rgba(99,102,241,0.2)] cursor-pointer" 
+                : "bg-slate-800"
+            }`}
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -172,6 +231,7 @@ const Form = () => {
               height="16"
               viewBox="0 0 24 24"
               fill="currentColor"
+              className={canGenerate ? "animate-pulse" : ""}
             >
               <path d="M12 2l2.4 7.4H22l-6.2 4.5 2.4 7.4L12 17l-6.2 4.3 2.4-7.4L2 9.4h7.6z" />
             </svg>
@@ -184,3 +244,4 @@ const Form = () => {
 };
 
 export default Form;
+

@@ -1,26 +1,50 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 
-const MAX_FILE_SIZE_MB = 5;
+const MAX_FILE_SIZE_MB = 4;
 const MAX_FILE_SIZE_BYTES = MAX_FILE_SIZE_MB * 1024 * 1024;
 
 /**
  * ResumeUpload Component
  * Handles file drag-and-drop, validation (file type, size limits),
- * and preview of the selected PDF resume file.
+ * and preview of the selected PDF resume file with an animated parsing status.
  */
-const ResumeUpload = ({ onChange }) => {
+const ResumeUpload = ({ value, onChange }) => {
   const [fileName, setFileName] = useState("");
+  const [fileSize, setFileSize] = useState("");
   const [fileError, setFileError] = useState("");
   const [isDragging, setIsDragging] = useState(false);
+  const [isParsing, setIsParsing] = useState(false);
+  const [parseProgress, setParseProgress] = useState(0);
+  const [isParsed, setIsParsed] = useState(false);
   const fileInputRef = useRef(null);
+
+  // Sync state if value changes externally (e.g. preset selection)
+  useEffect(() => {
+    if (value) {
+      setFileName(value.name || "resume.pdf");
+      const sizeInBytes = value.size || 1024 * 1024 * 1.2; // default 1.2MB for mocks
+      const sizeInKb = (sizeInBytes / 1024).toFixed(1);
+      setFileSize(sizeInKb > 1024 ? `${(sizeInKb / 1024).toFixed(1)} MB` : `${sizeInKb} KB`);
+      setIsParsed(true);
+    } else {
+      setFileName("");
+      setFileSize("");
+      setIsParsed(false);
+      setIsParsing(false);
+      setParseProgress(0);
+    }
+  }, [value]);
 
   // Validate and handle file input
   const processFile = (file) => {
     setFileError("");
+    setIsParsed(false);
+    setIsParsing(false);
+    setParseProgress(0);
+
     if (!file) return;
 
     // Supported formats (Standard Text-based PDFs)
-    const validTypes = ["application/pdf"];
     if (file.type !== "application/pdf") {
       setFileError("Only text-based PDF files are supported.");
       onChange(null);
@@ -34,16 +58,46 @@ const ResumeUpload = ({ onChange }) => {
       return;
     }
 
+    // Capture file details
     setFileName(file.name);
-    onChange(file);
+    // Format size
+    const sizeInKb = (file.size / 1024).toFixed(1);
+    setFileSize(sizeInKb > 1024 ? `${(sizeInKb / 1024).toFixed(1)} MB` : `${sizeInKb} KB`);
+    
+    // Simulate Parsing Process
+    setIsParsing(true);
+    onChange(file); // Set file immediately for validation but show animated parsing
   };
+
+  // Parsing simulation progress timer
+  useEffect(() => {
+    let interval;
+    if (isParsing) {
+      interval = setInterval(() => {
+        setParseProgress((prev) => {
+          if (prev >= 100) {
+            clearInterval(interval);
+            setIsParsing(false);
+            setIsParsed(true);
+            return 100;
+          }
+          return prev + 10;
+        });
+      }, 100);
+    }
+    return () => clearInterval(interval);
+  }, [isParsing]);
 
   // Remove the selected file
   const handleRemove = (e) => {
     e.preventDefault();
     e.stopPropagation();
     setFileName("");
+    setFileSize("");
     setFileError("");
+    setIsParsing(false);
+    setParseProgress(0);
+    setIsParsed(false);
     onChange(null);
     if (fileInputRef.current) fileInputRef.current.value = "";
   };
@@ -66,7 +120,9 @@ const ResumeUpload = ({ onChange }) => {
   };
 
   return (
-    <div className="flex flex-col h-full bg-slate-950/40 p-6 rounded-2xl border border-slate-800/80 transition-all duration-300 hover:border-cyan-500/20">
+    <div className={`flex flex-col h-full bg-slate-950/40 p-6 rounded-2xl border transition-all duration-300 ${
+      isDragging ? "border-purple-500/50 shadow-[0_0_15px_rgba(168,85,247,0.15)]" : "border-slate-800/80 hover:border-slate-700/80"
+    }`}>
       {/* Header section */}
       <div className="flex items-center justify-between mb-5">
         <div className="flex items-center gap-3">
@@ -93,7 +149,7 @@ const ResumeUpload = ({ onChange }) => {
             </svg>
           </div>
           <div>
-            <h2 className="font-semibold text-white text-base tracking-wide">
+            <h2 className="font-semibold text-white text-base tracking-wide font-sans">
               Your Resume
             </h2>
             <p className="text-xs text-cyan-400 font-medium mt-0.5">Required</p>
@@ -105,35 +161,83 @@ const ResumeUpload = ({ onChange }) => {
       </div>
 
       {/* Drag & Drop Container */}
-      <div className="flex-1 flex flex-col justify-center min-h-[300px]">
+      <div className="flex-grow flex flex-col justify-center min-h-[280px]">
         <label
           htmlFor="resume-upload-input"
           onDrop={handleDrop}
           onDragOver={handleDragOver}
           onDragLeave={handleDragLeave}
-          className={`flex flex-col items-center justify-center p-8 rounded-xl cursor-pointer transition-all duration-300 border-2 border-dashed h-full ${
+          className={`flex flex-col items-center justify-center p-6 rounded-xl cursor-pointer transition-all duration-300 border-2 border-dashed h-full ${
             isDragging
-              ? "border-cyan-400/80 bg-cyan-500/10 scale-[1.01]"
+              ? "border-purple-400/80 bg-purple-500/5 scale-[1.01]"
               : fileName
-              ? "border-cyan-500/40 bg-cyan-500/5 hover:border-cyan-500/60"
+              ? "border-purple-500/40 bg-purple-500/5 hover:border-purple-500/60"
               : fileError
               ? "border-red-500/40 bg-red-500/5"
-              : "border-slate-800 bg-slate-950/30 hover:bg-slate-950/60 hover:border-slate-700"
+              : "border-slate-800 bg-slate-950/30 hover:bg-slate-950/60 hover:border-slate-800"
           }`}
         >
           {/* Status Icon */}
-          <div className="text-4xl mb-4 transition-transform duration-300 hover:scale-110">
-            {fileError ? "⚠️" : fileName ? "📄" : "☁️"}
+          <div className={`mb-4 transition-transform duration-300 ${isDragging ? "scale-110" : ""}`}>
+            {fileError ? (
+              <svg className="w-12 h-12 text-red-500 animate-pulse" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+              </svg>
+            ) : isParsing ? (
+              <svg className="w-12 h-12 text-purple-400 animate-spin" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M4 4v5h.582m15.356 2A8.001 8.001 0 1121.248 10H18.22" />
+              </svg>
+            ) : isParsed ? (
+              <svg className="w-12 h-12 text-emerald-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2.5">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+            ) : (
+              <svg className={`w-12 h-12 transition-colors duration-300 ${isDragging ? "text-purple-400" : "text-slate-500"}`} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="1.5">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
+              </svg>
+            )}
           </div>
 
           {fileName ? (
-            <div className="flex flex-col items-center gap-2">
-              <p className="text-sm font-semibold text-slate-200 text-center max-w-[220px] truncate">
-                {fileName}
-              </p>
+            <div className="flex flex-col items-center gap-3 w-full max-w-xs text-center">
+              <div className="bg-slate-950/80 border border-slate-800/80 rounded-xl p-3 w-full">
+                <p className="text-sm font-semibold text-slate-200 truncate">
+                  {fileName}
+                </p>
+                <p className="text-[11px] text-slate-500 mt-1 font-mono">
+                  Size: {fileSize} · PDF Document
+                </p>
+              </div>
+
+              {/* Parsing status bar */}
+              {isParsing && (
+                <div className="w-full mt-1">
+                  <div className="flex justify-between items-center text-[10px] text-slate-400 mb-1">
+                    <span>Parsing structure...</span>
+                    <span>{parseProgress}%</span>
+                  </div>
+                  <div className="w-full h-1.5 bg-slate-800 rounded-full overflow-hidden">
+                    <div 
+                      className="h-full bg-gradient-to-r from-purple-500 to-cyan-500 transition-all duration-100" 
+                      style={{ width: `${parseProgress}%` }}
+                    />
+                  </div>
+                </div>
+              )}
+
+              {/* Parsed success indicator */}
+              {isParsed && (
+                <div className="flex items-center gap-1.5 text-[11px] text-emerald-400 font-semibold mt-1">
+                  <svg className="w-4 h-4 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="3">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+                  </svg>
+                  Metadata parsed successfully
+                </div>
+              )}
+
               <button
                 onClick={handleRemove}
-                className="mt-2 text-xs flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-slate-400 bg-slate-800/60 hover:text-red-400 hover:bg-red-500/10 transition-all duration-200"
+                className="mt-1 text-xs flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-slate-400 bg-slate-900 border border-slate-800/80 hover:text-red-400 hover:bg-red-500/10 hover:border-red-500/20 transition-all duration-200"
                 aria-label="Remove resume"
               >
                 <svg
@@ -149,17 +253,17 @@ const ResumeUpload = ({ onChange }) => {
                     d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
                   />
                 </svg>
-                Remove PDF
+                Remove Resume
               </button>
             </div>
           ) : (
-            <div className="text-center">
-              <p className="text-sm font-medium text-slate-300">
+            <div className="text-center px-4">
+              <p className="text-sm font-medium text-slate-300 leading-relaxed">
                 {fileError ? fileError : "Click to browse or drag & drop"}
               </p>
               {!fileError && (
-                <p className="text-xs text-slate-500 mt-2">
-                  Text-based PDF only · Max {MAX_FILE_SIZE_MB}MB
+                <p className="text-xs text-slate-500 mt-2 font-mono">
+                  PDF format only · Max {MAX_FILE_SIZE_MB}MB
                 </p>
               )}
             </div>
@@ -178,9 +282,9 @@ const ResumeUpload = ({ onChange }) => {
       </div>
 
       {/* Info Tip box */}
-      <div className="mt-5 flex items-start gap-3 p-3.5 rounded-xl text-xs text-slate-400 bg-cyan-500/5 border border-cyan-500/10">
+      <div className="mt-5 flex items-start gap-3 p-3.5 rounded-xl text-xs text-slate-400 bg-purple-500/5 border border-purple-500/10">
         <svg
-          className="w-4 h-4 mt-0.5 shrink-0 text-cyan-400"
+          className="w-4 h-4 mt-0.5 shrink-0 text-purple-400"
           fill="none"
           stroke="currentColor"
           viewBox="0 0 24 24"
@@ -192,8 +296,8 @@ const ResumeUpload = ({ onChange }) => {
             d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
           />
         </svg>
-        <p className="leading-relaxed">
-          Ensure your resume PDF contains selectable text (not scanned images) for the best analysis results.
+        <p className="leading-relaxed font-sans">
+          Make sure your resume is in text-based PDF format. Scanned image files cannot be read accurately by the AI engine.
         </p>
       </div>
     </div>

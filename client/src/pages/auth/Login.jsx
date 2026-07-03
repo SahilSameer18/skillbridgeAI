@@ -3,18 +3,7 @@ import { useNavigate, Link } from "react-router";
 import { useAuth } from "../../hooks/useAuth";
 import { loginSchema } from "../../schemas/auth.schema.js";
 import LoadingScreen from "../../components/common/LoadingScreen";
-
-const EyeIcon = ({ open }) =>
-  open ? (
-    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
-    </svg>
-  ) : (
-    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.88 9.88l-3.29-3.29m7.532 7.532l3.29 3.29M3 3l3.59 3.59m0 0A9.953 9.953 0 0112 5c4.478 0 8.268 2.943 9.543 7a10.025 10.025 0 01-4.132 5.411m0 0L21 21" />
-    </svg>
-  );
+import { FiMail, FiLock, FiEye, FiEyeOff } from "react-icons/fi";
 
 const Login = () => {
   const { loginLoading, handleLogin } = useAuth();
@@ -97,109 +86,131 @@ const Login = () => {
   }
 
   return (
-    <div
-      className="min-h-screen flex items-center justify-center bg-[#030712] px-4 py-12"
-      style={{
-        backgroundImage:
-          "radial-gradient(ellipse 80% 50% at 20% 0%, rgba(6,182,212,0.07) 0%, transparent 70%), radial-gradient(ellipse 60% 40% at 80% 10%, rgba(168,85,247,0.07) 0%, transparent 70%)",
-      }}
-    >
-      <div className="relative z-10 w-full max-w-md animate-fade-in-up">
-        <div
-          className="rounded-3xl p-8 md:p-10 shadow-2xl shadow-black/40"
-          style={{
-            background: "rgba(15,23,42,0.7)",
-            backdropFilter: "blur(16px)",
-            border: "1px solid rgba(255,255,255,0.07)",
+    <div className="min-h-screen w-full bg-[#030712] flex items-center justify-center px-4 py-16 relative overflow-hidden">
+      {/* Premium Multi-Layered Moving Gradient Background */}
+      <div className="absolute inset-0 pointer-events-none overflow-hidden">
+        {/* Sphere 1 */}
+        <div 
+          className="absolute -top-[10%] -left-[10%] w-[50%] h-[50%] rounded-full animate-pulse"
+          style={{ 
+            animationDuration: '8s',
+            background: 'radial-gradient(circle, rgba(6, 182, 212, 0.09) 0%, transparent 70%)',
+            willChange: 'opacity'
           }}
-        >
-          <Link to="/" className="flex items-center gap-2 mb-8">
-            <div
-              className="w-9 h-9 rounded-xl flex items-center justify-center text-white font-bold text-xl shadow-lg" style={{ background: "linear-gradient(135deg,#06b6d4,#a855f7)" }}
-            >
-              S
-            </div>
-            <span className="text-xl font-bold text-gradient-cyan">SkillBridge AI</span>
-          </Link>
+        />
+        {/* Sphere 2 */}
+        <div 
+          className="absolute -bottom-[10%] -right-[10%] w-[60%] h-[60%] rounded-full animate-pulse"
+          style={{ 
+            animationDuration: '12s',
+            background: 'radial-gradient(circle, rgba(168, 85, 247, 0.09) 0%, transparent 70%)',
+            willChange: 'opacity'
+          }}
+        />
+        {/* Grid pattern overlay */}
+        <div 
+          className="absolute inset-0 opacity-[0.015]"
+          style={{
+            backgroundImage: `radial-gradient(circle at 1px 1px, white 1px, transparent 0)`,
+            backgroundSize: '24px 24px'
+          }}
+        />
+      </div>
 
-          <div className="mb-8">
-            <h1 className="text-3xl font-bold text-white mb-2">Welcome back</h1>
-            <p className="text-slate-400">Sign in to your account to continue</p>
+      <div className="relative z-10 w-full max-w-[440px] animate-fade-in">
+        {/* Card Container */}
+        <div 
+          className="w-full backdrop-blur-xl bg-slate-950/40 border border-white/[0.06] rounded-3xl p-8 sm:p-10 shadow-[0_20px_50px_rgba(0,0,0,0.5)] relative overflow-hidden group"
+          style={{ willChange: 'backdrop-filter' }}
+        >
+          {/* Subtle top reflection border line */}
+          <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-cyan-500/30 to-transparent" />
+          
+          {/* Header */}
+          <div className="flex flex-col items-center text-center mb-8">
+            <Link to="/" className="inline-flex items-center gap-2.5 mb-6 group/logo">
+              <div className="w-10 h-10 rounded-2xl bg-gradient-to-tr from-cyan-500 to-purple-600 flex items-center justify-center text-white font-bold text-xl shadow-[0_0_20px_rgba(6,182,212,0.25)] group-hover/logo:scale-105 transition-transform duration-300">
+                S
+              </div>
+              <span className="text-xl font-bold bg-gradient-to-r from-cyan-400 to-purple-400 bg-clip-text text-transparent tracking-wide">
+                SkillBridge AI
+              </span>
+            </Link>
+            <h1 className="text-2xl font-bold text-white tracking-tight mb-2">Welcome Back</h1>
+            <p className="text-slate-400 text-sm">Sign in to resume your preparation plans</p>
           </div>
 
-          {/* FIX: button type="submit" lives inside this form, so e.preventDefault() is safe */}
-          <form onSubmit={handleSubmit} noValidate className="space-y-5">
-
-            {/* Email */}
-            <div className="space-y-1.5">
-              <label htmlFor="email" className="block text-sm font-medium text-slate-300">
-                Email address
+          <form onSubmit={handleSubmit} noValidate className="space-y-6">
+            {/* Email input group */}
+            <div className="space-y-2">
+              <label htmlFor="email" className="block text-xs font-semibold text-slate-400 uppercase tracking-wider">
+                Email Address
               </label>
-              <input
-                value={email}                          // FIX: controlled input
-                onChange={handleEmailChange}           // FIX: clears API error on re-type
-                onBlur={() => handleBlur("email")}     // FIX: validate on blur
-                type="email"
-                id="email"
-                name="email"
-                placeholder="you@example.com"
-                autoComplete="email"
-                required
-                className={`w-full px-4 py-3 rounded-xl bg-slate-900/60 border text-slate-200 placeholder-slate-600 focus:outline-none focus:ring-2 transition-all duration-200 text-sm ${
-                  fieldErrors.email && touched.email
-                    ? "border-red-500/60 focus:border-red-500/60 focus:ring-red-500/20"
-                    : "border-slate-700/60 focus:border-cyan-500/60 focus:ring-cyan-500/20"
-                }`}
-              />
-              {/* FIX: inline validation feedback */}
+              <div className="relative group/input">
+                {/* Prefix Icon */}
+                <div className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-500 group-focus-within/input:text-cyan-400 transition-colors duration-200">
+                  <FiMail className="w-4 h-4" />
+                </div>
+                <input
+                  id="email"
+                  name="email"
+                  type="email"
+                  value={email}
+                  onChange={handleEmailChange}
+                  onBlur={() => handleBlur("email")}
+                  placeholder="name@example.com"
+                  autoComplete="email"
+                  required
+                  className={`w-full pl-11 pr-4 py-3 bg-slate-900/40 border rounded-2xl text-slate-200 placeholder-slate-600 focus:outline-none focus:ring-2 focus:ring-cyan-500/10 focus:border-cyan-500/50 transition-all duration-300 text-sm ${
+                    fieldErrors.email && touched.email ? 'border-red-500/50 focus:border-red-500/50 focus:ring-red-500/10' : 'border-white/[0.06] hover:border-white/[0.12]'
+                  }`}
+                />
+              </div>
               {touched.email && fieldErrors.email && (
-                <p className="text-red-400 text-xs mt-1 flex items-center gap-1">
-                  <svg className="w-3 h-3 shrink-0" fill="currentColor" viewBox="0 0 20 20">
-                    <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clipRule="evenodd" />
-                  </svg>
+                <p className="text-red-400 text-xs mt-1.5 flex items-center gap-1.5 animate-slide-up">
+                  <span className="w-1.5 h-1.5 rounded-full bg-red-400 shrink-0" />
                   {fieldErrors.email}
                 </p>
               )}
             </div>
 
-            {/* Password */}
-            <div className="space-y-1.5">
-              <label htmlFor="password" className="block text-sm font-medium text-slate-300">
+            {/* Password input group */}
+            <div className="space-y-2">
+              <label htmlFor="password" className="block text-xs font-semibold text-slate-400 uppercase tracking-wider">
                 Password
               </label>
-              <div className="relative">
+              <div className="relative group/input">
+                {/* Prefix Icon */}
+                <div className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-500 group-focus-within/input:text-cyan-400 transition-colors duration-200">
+                  <FiLock className="w-4 h-4" />
+                </div>
                 <input
-                  value={password}                        // FIX: controlled input
-                  onChange={handlePasswordChange}         // FIX: clears API error on re-type
-                  onBlur={() => handleBlur("password")}   // FIX: validate on blur
-                  type={showPassword ? "text" : "password"} // FIX: visibility toggle
                   id="password"
                   name="password"
+                  type={showPassword ? "text" : "password"}
+                  value={password}
+                  onChange={handlePasswordChange}
+                  onBlur={() => handleBlur("password")}
                   placeholder="••••••••"
                   autoComplete="current-password"
                   required
-                  className={`w-full px-4 py-3 pr-11 rounded-xl bg-slate-900/60 border text-slate-200 placeholder-slate-600 focus:outline-none focus:ring-2 transition-all duration-200 text-sm ${
-                    fieldErrors.password && touched.password
-                      ? "border-red-500/60 focus:border-red-500/60 focus:ring-red-500/20"
-                      : "border-slate-700/60 focus:border-cyan-500/60 focus:ring-cyan-500/20"
+                  className={`w-full pl-11 pr-12 py-3 bg-slate-900/40 border rounded-2xl text-slate-200 placeholder-slate-600 focus:outline-none focus:ring-2 focus:ring-cyan-500/10 focus:border-cyan-500/50 transition-all duration-300 text-sm ${
+                    fieldErrors.password && touched.password ? 'border-red-500/50 focus:border-red-500/50 focus:ring-red-500/10' : 'border-white/[0.06] hover:border-white/[0.12]'
                   }`}
                 />
-                {/* FIX: password visibility toggle button */}
+                {/* Eye Icon Button */}
                 <button
-                  type="button"                           // FIX: type="button" prevents form submit
+                  type="button"
                   onClick={() => setShowPassword((v) => !v)}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-500 hover:text-slate-300 transition-colors focus:outline-none cursor-pointer"
+                  className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-500 hover:text-slate-300 transition-colors focus:outline-none cursor-pointer"
                   aria-label={showPassword ? "Hide password" : "Show password"}
                 >
-                  <EyeIcon open={showPassword} />
+                  {showPassword ? <FiEyeOff className="w-4 h-4" /> : <FiEye className="w-4 h-4" />}
                 </button>
               </div>
-              {/* FIX: inline validation feedback */}
               {touched.password && fieldErrors.password && (
-                <p className="text-red-400 text-xs mt-1 flex items-center gap-1">
-                  <svg className="w-3 h-3 shrink-0" fill="currentColor" viewBox="0 0 20 20">
-                    <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clipRule="evenodd" />
-                  </svg>
+                <p className="text-red-400 text-xs mt-1.5 flex items-center gap-1.5 animate-slide-up">
+                  <span className="w-1.5 h-1.5 rounded-full bg-red-400 shrink-0" />
                   {fieldErrors.password}
                 </p>
               )}
@@ -207,27 +218,23 @@ const Login = () => {
 
             {/* API-level error */}
             {error && (
-              <div
-                className="flex items-center gap-2 px-4 py-3 rounded-xl text-red-400 text-sm animate-slide-up"
-                style={{ background: "rgba(239,68,68,0.08)", border: "1px solid rgba(239,68,68,0.2)" }}
-              >
-                <svg className="w-4 h-4 shrink-0" fill="currentColor" viewBox="0 0 20 20">
-                  <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clipRule="evenodd" />
-                </svg>
+              <div className="flex items-center gap-2.5 px-4 py-3 rounded-2xl bg-red-500/5 border border-red-500/10 text-red-400 text-xs leading-relaxed animate-slide-up">
+                <span className="w-2 h-2 rounded-full bg-red-400 shrink-0 animate-pulse" />
                 {error}
               </div>
             )}
 
-            {/* FIX: type="submit" is explicit and lives inside the form */}
+            {/* Action Button */}
             <button
               type="submit"
               disabled={loginLoading}
-              className="w-full py-3.5 rounded-xl font-semibold text-white transition-all duration-300 disabled:opacity-60 disabled:cursor-not-allowed active:scale-[0.98] text-sm cursor-pointer" style={{ background: "linear-gradient(135deg,#06b6d4,#a855f7)" }}
+              className="w-full py-3.5 rounded-2xl font-bold text-white transition-all duration-300 hover:scale-[1.01] active:scale-[0.99] disabled:opacity-60 disabled:cursor-not-allowed text-sm cursor-pointer shadow-[0_8px_20px_rgba(6,182,212,0.15)] hover:shadow-[0_8px_25px_rgba(6,182,212,0.3)]"
+              style={{ background: "linear-gradient(135deg, #06b6d4 0%, #6366f1 50%, #a855f7 100%)" }}
             >
               {loginLoading ? (
                 <span className="flex items-center justify-center gap-2">
-                  <span className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
-                  Signing in...
+                  <span className="w-4 h-4 border-2 border-white/20 border-t-white rounded-full animate-spin" />
+                  Authenticating...
                 </span>
               ) : (
                 "Sign In"
@@ -235,9 +242,9 @@ const Login = () => {
             </button>
           </form>
 
-          <p className="text-center text-sm text-slate-500 mt-6">
+          <p className="text-center text-sm text-slate-500 mt-8">
             Don't have an account?{" "}
-            <Link to="/register" className="text-cyan-400 hover:text-cyan-300 font-medium transition-colors">
+            <Link to="/register" className="text-cyan-400 hover:text-cyan-300 font-medium hover:underline transition-colors">
               Create one free
             </Link>
           </p>

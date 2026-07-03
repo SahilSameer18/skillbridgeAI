@@ -255,6 +255,7 @@ const InterviewReport = () => {
     const { interviewId } = useParams()
 
     useEffect(() => {
+        window.scrollTo(0, 0)
         if (interviewId) getReportById(interviewId)
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [interviewId])
