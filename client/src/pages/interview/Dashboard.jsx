@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router';
 import Skeleton from '../../components/common/Skeleton.jsx';
 
 const ScoreBadge = ({ score }) => {
-    if (!score) return <span className="text-[11px] font-semibold text-slate-500 bg-slate-800/50 px-2 py-1 rounded">Pending</span>;
+    if (!score) return <span className="text-[11px] font-semibold text-secondary bg-surface/50 px-2 py-1 rounded">Pending</span>;
     const styles = score >= 80
         ? 'bg-emerald-500/10 text-emerald-400'
         : score >= 60
@@ -19,7 +19,7 @@ const ScoreBadge = ({ score }) => {
 };
 
 const SkeletonRow = () => (
-    <div className="flex items-center justify-between p-4 border-b border-slate-800/60 bg-slate-900/20">
+    <div className="flex items-center justify-between p-4 border-b border-border/60 bg-surface/20">
         <div className="flex-1 space-y-2">
             <Skeleton width="40%" height="1rem" />
             <Skeleton width="15%" height="0.75rem" />
@@ -32,12 +32,12 @@ const SkeletonRow = () => (
 );
 
 const EmptyState = ({ onNavigate }) => (
-    <div className="flex flex-col items-center justify-center py-24 text-center bg-slate-900/30 rounded-2xl border border-slate-800/50 mt-6">
-        <h3 className="text-lg font-medium text-white mb-2">No plans found</h3>
-        <p className="text-sm text-slate-400 mb-6">You haven't generated any interview preparation plans yet.</p>
+    <div className="flex flex-col items-center justify-center py-24 text-center bg-surface/30 rounded-2xl border border-border/50 mt-6">
+        <h3 className="text-lg font-medium text-primary mb-2">No plans found</h3>
+        <p className="text-sm text-secondary mb-6">You haven't generated any interview preparation plans yet.</p>
         <button
             onClick={onNavigate}
-            className="px-5 py-2.5 rounded-lg text-sm font-medium text-white bg-cyan-600 hover:bg-cyan-500 transition-colors duration-200"
+            className="px-5 py-2.5 rounded-lg text-sm font-medium text-primary bg-accent hover:opacity-90 active:scale-95 transition-all duration-200"
         >
             Create your first plan
         </button>
@@ -86,15 +86,15 @@ const Dashboard = () => {
             {/* ── Header ── */}
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8">
                 <div>
-                    <h1 className="text-2xl font-bold text-white mb-1">Interview Plans</h1>
-                    <p className="text-slate-400 text-sm">
+                    <h1 className="text-2xl font-bold text-primary mb-1">Interview Plans</h1>
+                    <p className="text-secondary text-sm">
                         {isInitialLoading ? 'Loading...' : `${totalReports} total ${totalReports === 1 ? 'plan' : 'plans'}`}
                     </p>
                 </div>
                 {!isInitialLoading && reports.length > 0 && (
                     <button
                         onClick={() => navigate('/generate')}
-                        className="flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium text-white bg-cyan-600 hover:bg-cyan-500 transition-colors duration-200"
+                        className="flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium text-primary bg-accent hover:opacity-90 active:scale-95 transition-all duration-200"
                     >
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                             <line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>
@@ -106,7 +106,7 @@ const Dashboard = () => {
 
             {/* ── Skeleton loading ── */}
             {isInitialLoading && (
-                <div className="rounded-xl overflow-hidden border border-slate-800 bg-slate-900/40">
+                <div className="rounded-xl overflow-hidden border border-border bg-surface/40">
                     {[...Array(5)].map((_, i) => <SkeletonRow key={i} />)}
                 </div>
             )}
@@ -123,13 +123,13 @@ const Dashboard = () => {
                         <div
                             key={report.id}
                             onClick={() => navigate(`/interview/${report.id}`)}
-                            className="group flex flex-col sm:flex-row sm:items-center justify-between p-5 bg-slate-900/40 border border-slate-800 rounded-xl hover:bg-slate-800/60 hover:border-slate-700 cursor-pointer transition-all duration-200"
+                            className="group flex flex-col sm:flex-row sm:items-center justify-between p-5 bg-surface/40 border border-border rounded-xl hover:bg-surface/60 hover:border-border/80 cursor-pointer transition-all duration-200"
                         >
                             <div className="flex-1 min-w-0 pr-4 mb-4 sm:mb-0">
-                                <h3 className="font-semibold text-slate-100 text-lg truncate mb-1">
+                                <h3 className="font-semibold text-primary text-lg truncate mb-1">
                                     {report.title || report.jobDescription || 'Custom Interview Plan'}
                                 </h3>
-                                <p className="text-sm text-slate-500">
+                                <p className="text-sm text-secondary">
                                     Created on {new Date(report.createdAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
                                 </p>
                             </div>
@@ -140,7 +140,7 @@ const Dashboard = () => {
                                     onClick={(e) => handleDelete(e, report.id)}
                                     disabled={deletingId === report.id}
                                     title="Delete plan"
-                                    className="w-9 h-9 rounded-lg flex items-center justify-center text-slate-500 hover:text-red-400 hover:bg-slate-800 transition-colors duration-150 disabled:opacity-50"
+                                    className="w-9 h-9 rounded-lg flex items-center justify-center text-secondary hover:text-red-400 hover:bg-surface transition-colors duration-150 disabled:opacity-50"
                                 >
                                     {deletingId === report.id ? (
                                         <span className="w-4 h-4 border-2 border-red-400/30 border-t-red-400 rounded-full animate-spin" />
@@ -160,10 +160,10 @@ const Dashboard = () => {
                             <button
                                 onClick={handleLoadMore}
                                 disabled={isFetching}
-                                className="px-6 py-2.5 rounded-lg text-sm font-medium text-slate-300 hover:text-white bg-slate-800 hover:bg-slate-700 transition-colors duration-150 flex items-center gap-2 shadow-sm"
+                                className="px-6 py-2.5 rounded-lg text-sm font-medium text-primary bg-surface hover:bg-surface/80 transition-colors duration-150 flex items-center gap-2 shadow-sm"
                             >
                                 {isFetching && (
-                                    <span className="w-4 h-4 border-2 border-slate-400/30 border-t-slate-300 rounded-full animate-spin" />
+                                    <span className="w-4 h-4 border-2 border-primary/30 border-t-primary rounded-full animate-spin" />
                                 )}
                                 {isFetching ? 'Loading...' : 'Load More Plans'}
                             </button>

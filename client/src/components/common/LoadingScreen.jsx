@@ -49,7 +49,7 @@ const LoadingScreen = ({
         height: fullScreen ? "100vh" : "auto",
         zIndex: fullScreen ? 99999 : "auto",
         background: fullScreen
-          ? "radial-gradient(circle at center, #0a1223 0%, #030712 100%)"
+          ? "radial-gradient(circle at center, #0a1223 0%, #0d0c0c 100%)"
           : "rgba(10, 18, 35, 0.4)",
         backdropFilter: fullScreen ? "none" : "blur(8px)",
         WebkitBackdropFilter: fullScreen ? "none" : "blur(8px)",
@@ -91,7 +91,7 @@ const LoadingScreen = ({
           />
           
           <svg
-            className="w-20 h-20 text-cyan-400 relative z-10"
+            className="w-20 h-20 text-rose-400 relative z-10"
             viewBox="0 0 100 100"
             fill="none"
             xmlns="http://www.w3.org/2000/svg"
@@ -127,14 +127,14 @@ const LoadingScreen = ({
             {/* Decorative orbit paths */}
             <path
               d="M50 15A35 35 0 0 1 85 50"
-              stroke="#a855f7"
+              stroke="#fe9a00"
               strokeWidth="2"
               strokeDasharray="4, 4"
               strokeLinecap="round"
             />
             <path
               d="M50 85A35 35 0 0 1 15 50"
-              stroke="#06b6d4"
+              stroke="var(--color-accent)"
               strokeWidth="2"
               strokeDasharray="4, 4"
               strokeLinecap="round"
@@ -143,9 +143,9 @@ const LoadingScreen = ({
             {/* Gradient Definitions */}
             <defs>
               <linearGradient id="loaderGradient" x1="0" y1="0" x2="100" y2="100">
-                <stop offset="0%" stopColor="#06b6d4" />
+                <stop offset="0%" stopColor="var(--color-accent)" />
                 <stop offset="50%" stopColor="#6366f1" />
-                <stop offset="100%" stopColor="#a855f7" />
+                <stop offset="100%" stopColor="#fe9a00" />
               </linearGradient>
               <linearGradient id="innerGradient" x1="28" y1="28" x2="72" y2="72">
                 <stop offset="0%" stopColor="rgba(6, 182, 212, 0.3)" />
@@ -156,16 +156,16 @@ const LoadingScreen = ({
         </div>
 
         {/* Dynamic Titles */}
-        <h3 className="text-2xl font-bold text-white mb-2 tracking-tight">
+        <h3 className="text-2xl font-bold text-primary mb-2 tracking-tight">
           {message}
         </h3>
-        <p className="text-slate-400 text-sm max-w-xs mx-auto mb-8 font-normal leading-relaxed">
+        <p className="text-secondary text-sm max-w-xs mx-auto mb-8 font-normal leading-relaxed">
           {subtitle}
         </p>
 
         {/* Steps Visualizer (If Steps are Provided) */}
         {steps.length > 0 && (
-          <div className="w-full flex flex-col gap-3.5 bg-slate-900/40 p-5 rounded-2xl border border-slate-800/50 text-left animate-fade-in-up">
+          <div className="w-full flex flex-col gap-3.5 bg-surface/40 p-5 rounded-2xl border border-border/50 text-left animate-fade-in-up">
             {steps.map((step, idx) => {
               const isCompleted = idx < currentStep;
               const isActive = idx === currentStep;
@@ -185,8 +185,8 @@ const LoadingScreen = ({
                       isCompleted
                         ? "bg-emerald-500/20 text-emerald-400 border border-emerald-500/30"
                         : isActive
-                        ? "bg-cyan-500/20 text-cyan-400 border border-cyan-400 animate-pulse"
-                        : "bg-slate-800 text-slate-500 border border-slate-700/50"
+                        ? "bg-accent/20 text-accent border border-accent animate-pulse"
+                        : "bg-surface text-secondary border border-border/50"
                     }`}
                   >
                     {isCompleted ? (
@@ -201,7 +201,7 @@ const LoadingScreen = ({
                   {/* Step Name */}
                   <span
                     className={`text-xs font-semibold ${
-                      isActive ? "text-cyan-400 font-medium" : isCompleted ? "text-slate-300" : "text-slate-500"
+                      isActive ? "text-accent font-medium" : isCompleted ? "text-primary/90" : "text-secondary/70"
                     }`}
                   >
                     {step}

@@ -7,29 +7,29 @@ const BENTO_FEATURES = [
     desc: "Scans your credentials against job prerequisites to extract matching stacks and highlight missing terms.",
     span: "col-span-1 md:col-span-2",
     icon: (
-      <svg className="w-5 h-5 text-cyan-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <svg className="w-5 h-5 text-accent" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
         <circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/><path d="M8 11h6"/><path d="M11 8v6"/>
       </svg>
     ),
     visual: (
-      <div className="mt-4 flex flex-col gap-2 text-xs font-mono bg-slate-950/60 p-4 rounded-xl border border-slate-800/40">
-        <div className="flex justify-between border-b border-slate-900 pb-1.5 text-slate-500">
+      <div className="mt-4 flex flex-col gap-2 text-xs font-mono bg-surface/60 p-4 rounded-xl border border-border/40">
+        <div className="flex justify-between border-b border-border pb-1.5 text-secondary">
           <span>Target Requirement</span>
           <span>Your Resume Match</span>
         </div>
-        <div className="flex justify-between items-center text-slate-300">
+        <div className="flex justify-between items-center text-primary/90">
           <span>React (Next.js)</span>
           <span className="text-emerald-400 font-semibold flex items-center gap-1">
             <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" /> Matches
           </span>
         </div>
-        <div className="flex justify-between items-center text-slate-300">
+        <div className="flex justify-between items-center text-primary/90">
           <span>TypeScript Typing</span>
           <span className="text-emerald-400 font-semibold flex items-center gap-1">
             <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" /> Matches
           </span>
         </div>
-        <div className="flex justify-between items-center text-slate-300">
+        <div className="flex justify-between items-center text-primary/90">
           <span>GraphQL Core</span>
           <span className="text-red-400 font-semibold flex items-center gap-1">
             <span className="w-1.5 h-1.5 rounded-full bg-red-400" /> Missing Gap
@@ -44,14 +44,14 @@ const BENTO_FEATURES = [
     desc: "A tailored list of core questions with clear mock guides, specifically tailored to the target role.",
     span: "col-span-1",
     icon: (
-      <svg className="w-5 h-5 text-cyan-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <svg className="w-5 h-5 text-accent" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
         <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
       </svg>
     ),
     visual: (
-      <div className="mt-4 bg-cyan-500/5 p-4 rounded-xl border border-cyan-500/10 text-xs">
-        <p className="text-cyan-400 font-semibold mb-1">Technical Question</p>
-        <p className="text-slate-300 line-clamp-3 leading-relaxed">
+      <div className="mt-4 bg-accent/5 p-4 rounded-xl border border-accent/10 text-xs">
+        <p className="text-accent font-semibold mb-1">Technical Question</p>
+        <p className="text-primary/90 line-clamp-3 leading-relaxed">
           "Explain how you would optimize database query rendering loops inside server components..."
         </p>
       </div>
@@ -93,12 +93,12 @@ const BENTO_FEATURES = [
     visual: (
       <div className="mt-4 flex flex-col sm:flex-row gap-2.5 text-xs">
         <div className="flex-1 p-3 rounded-xl bg-emerald-500/5 border border-emerald-500/10 flex flex-col justify-between h-20">
-          <span className="text-[10px] text-slate-500 uppercase tracking-wider font-semibold">Docs Link</span>
+          <span className="text-[10px] text-secondary uppercase tracking-wider font-semibold">Docs Link</span>
           <span className="text-emerald-400 font-semibold">Official Next.js Docs</span>
         </div>
-        <div className="flex-1 p-3 rounded-xl bg-cyan-500/5 border border-cyan-500/10 flex flex-col justify-between h-20">
-          <span className="text-[10px] text-slate-500 uppercase tracking-wider font-semibold">Video Tutorial</span>
-          <span className="text-cyan-400 font-semibold">Advanced App Router</span>
+        <div className="flex-1 p-3 rounded-xl bg-accent/5 border border-accent/10 flex flex-col justify-between h-20">
+          <span className="text-[10px] text-secondary uppercase tracking-wider font-semibold">Video Tutorial</span>
+          <span className="text-accent font-semibold">Advanced App Router</span>
         </div>
       </div>
     ),
@@ -115,15 +115,15 @@ const BENTO_FEATURES = [
     ),
     visual: (
       <div className="mt-4 grid grid-cols-1 sm:grid-cols-3 gap-2.5 text-xs font-mono">
-        <div className="p-3 bg-slate-950/40 rounded-xl border border-slate-800/40 flex items-center justify-between text-emerald-400">
+        <div className="p-3 bg-surface/40 rounded-xl border border-border/40 flex items-center justify-between text-emerald-400">
           <span>Day 1: Setup Docker</span>
           <span>[Done]</span>
         </div>
-        <div className="p-3 bg-slate-950/40 rounded-xl border border-slate-800/40 flex items-center justify-between text-cyan-400">
+        <div className="p-3 bg-surface/40 rounded-xl border border-border/40 flex items-center justify-between text-accent">
           <span>Day 2: Cache Locks</span>
           <span>[Active]</span>
         </div>
-        <div className="p-3 bg-slate-950/40 rounded-xl border border-slate-800/40 flex items-center justify-between text-slate-600">
+        <div className="p-3 bg-surface/40 rounded-xl border border-border/40 flex items-center justify-between text-accent">
           <span>Day 3: OAuth Flows</span>
           <span>[Pending]</span>
         </div>
@@ -141,39 +141,38 @@ const BentoFeatures = () => {
           <span
             className="inline-block px-3 py-1 text-xs font-semibold rounded-full mb-4"
             style={{
-              background: "rgba(6,182,212,0.06)",
-              border: "1px solid rgba(6,182,212,0.2)",
-              color: "#67e8f9",
+              background: "rgba(255, 102, 98, 0.06)",
+              border: "1px solid rgba(255, 102, 98, 0.2)",
+              color: "var(--color-accent)",
             }}
           >
             Core Capabilities
           </span>
-          <h2 className="text-3xl sm:text-4xl font-extrabold text-white mb-4 tracking-tight text-balance">
+          <h2 className="text-3xl sm:text-4xl font-extrabold text-primary mb-4 tracking-tight text-balance">
             Everything to Succeed in Tech Rounds
           </h2>
-          <p className="text-sm sm:text-base text-slate-400 max-w-lg mx-auto leading-relaxed">
+          <p className="text-sm sm:text-base text-secondary max-w-lg mx-auto leading-relaxed">
             A comprehensive study workbench designed to close tech gaps and align your profile with hiring standards.
           </p>
         </div>
 
-        {/* Bento Grid */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
           {BENTO_FEATURES.map((feat, i) => (
             <div
               key={i}
-              className={`relative rounded-2xl border border-slate-900 bg-[#090f1e]/40 p-6 flex flex-col justify-between overflow-hidden group hover:border-slate-800/80 transition-all duration-300 ${feat.span}`}
+              className={`relative rounded-2xl border border-border bg-surface/40 p-6 flex flex-col justify-between overflow-hidden group hover:border-border/80 transition-all duration-300 ${feat.span}`}
             >
               <div>
                 <div className="flex items-center justify-between gap-3 mb-4">
-                  <div className="w-10 h-10 rounded-xl bg-slate-950 flex items-center justify-center border border-slate-900 group-hover:scale-105 transition-transform duration-300">
+                  <div className="w-10 h-10 rounded-xl bg-background flex items-center justify-center border border-border group-hover:scale-105 transition-transform duration-300">
                     {feat.icon}
                   </div>
-                  <span className="text-[9px] font-bold font-mono tracking-widest text-slate-500 uppercase">
+                  <span className="text-[9px] font-bold font-mono tracking-widest text-secondary uppercase">
                     {feat.tag}
                   </span>
                 </div>
-                <h3 className="text-base font-bold text-white mb-2">{feat.title}</h3>
-                <p className="text-xs text-slate-400 leading-relaxed mb-4">{feat.desc}</p>
+                <h3 className="text-base font-bold text-primary mb-2">{feat.title}</h3>
+                <p className="text-xs text-secondary leading-relaxed mb-4">{feat.desc}</p>
               </div>
               {feat.visual}
             </div>

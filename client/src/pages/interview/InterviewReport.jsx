@@ -39,7 +39,7 @@ const YouTubeLogo = () => (
 )
 
 const DocsLogo = () => (
-    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-cyan-400">
+    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-rose-400">
         <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
         <polyline points="14 2 14 8 20 8" />
         <line x1="16" y1="13" x2="8" y2="13" />
@@ -82,29 +82,29 @@ const HeroStats = ({ report }) => {
 
     return (
         <div className="grid grid-cols-1 md:grid-cols-3 gap-3 sm:gap-4 mb-6">
-            <div className="md:col-span-1 rounded-2xl p-4 sm:p-5 bg-slate-900/80 border border-slate-800/80 relative overflow-hidden flex flex-col items-center justify-center text-center shadow-lg">
+            <div className="md:col-span-1 rounded-2xl p-4 sm:p-5 bg-surface/80 border border-border/80 relative overflow-hidden flex flex-col items-center justify-center text-center shadow-lg">
                 <div className="relative z-10 mb-3">
                     <ScoreRing score={report.matchScore} color={scoreColor} size={72} strokeWidth={6} />
                     <div className="absolute inset-0 flex items-center justify-center flex-col">
-                        <span className="text-xl font-bold text-white leading-none">{report.matchScore}</span>
+                        <span className="text-xl font-bold text-primary leading-none">{report.matchScore}</span>
                     </div>
                 </div>
-                <h3 className="relative z-10 text-sm font-semibold text-white mb-0.5">Match Score</h3>
+                <h3 className="relative z-10 text-sm font-semibold text-primary mb-0.5">Match Score</h3>
                 <p className={`relative z-10 text-[10px] font-bold uppercase tracking-wider ${scoreLabelColor}`}>{scoreLabel}</p>
             </div>
 
             <div className="md:col-span-2 grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
-                <div className="rounded-2xl p-4 sm:p-5 bg-slate-900/70 border border-slate-800/60 flex flex-col justify-center relative overflow-hidden group hover:bg-slate-900/90 transition-colors duration-200">
-                    <div className="absolute right-0 top-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity"><Icon name="messages" className="w-12 h-12 text-cyan-400" /></div>
-                    <p className="text-[11px] font-semibold text-slate-500 uppercase tracking-widest mb-1 relative z-10">Questions</p>
-                    <p className="text-2xl font-bold text-white mb-1 relative z-10">{report.technicalQuestions.length + report.behavioralQuestions.length}</p>
-                    <p className="text-xs text-cyan-400 font-medium relative z-10">Technical & Behavioral</p>
+                <div className="rounded-2xl p-4 sm:p-5 bg-surface/70 border border-border/60 flex flex-col justify-center relative overflow-hidden group hover:bg-surface/90 transition-colors duration-200">
+                    <div className="absolute right-0 top-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity"><Icon name="messages" className="w-12 h-12 text-accent" /></div>
+                    <p className="text-[11px] font-semibold text-secondary uppercase tracking-widest mb-1 relative z-10">Questions</p>
+                    <p className="text-2xl font-bold text-primary mb-1 relative z-10">{report.technicalQuestions.length + report.behavioralQuestions.length}</p>
+                    <p className="text-xs text-accent font-medium relative z-10">Technical & Behavioral</p>
                 </div>
-                <div className="rounded-2xl p-4 sm:p-5 bg-slate-900/70 border border-slate-800/60 flex flex-col justify-center relative overflow-hidden group hover:bg-slate-900/90 transition-colors duration-200">
-                    <div className="absolute right-0 top-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity"><Icon name="map-2" className="w-12 h-12 text-violet-400" /></div>
-                    <p className="text-[11px] font-semibold text-slate-500 uppercase tracking-widest mb-1 relative z-10">Roadmap</p>
-                    <p className="text-2xl font-bold text-white mb-1 relative z-10">{report.preparationPlan.length} Days</p>
-                    <p className="text-xs text-violet-400 font-medium relative z-10">Structured plan</p>
+                <div className="rounded-2xl p-4 sm:p-5 bg-surface/70 border border-border/60 flex flex-col justify-center relative overflow-hidden group hover:bg-surface/90 transition-colors duration-200">
+                    <div className="absolute right-0 top-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity"><Icon name="map-2" className="w-12 h-12 text-accent" /></div>
+                    <p className="text-[11px] font-semibold text-secondary uppercase tracking-widest mb-1 relative z-10">Roadmap</p>
+                    <p className="text-2xl font-bold text-primary mb-1 relative z-10">{report.preparationPlan.length} Days</p>
+                    <p className="text-xs text-accent font-medium relative z-10">Structured plan</p>
                 </div>
             </div>
         </div>
@@ -115,7 +115,7 @@ const HeroStats = ({ report }) => {
 const QuestionCard = ({ item, index, accentClass, bodyBg }) => {
     const [open, setOpen] = useState(false)
     return (
-        <div className={`rounded-xl overflow-hidden border transition-colors duration-200 ${open ? 'border-slate-700 shadow-md shadow-black/10 bg-slate-900/90' : 'border-slate-800/60 bg-slate-900/60 hover:border-slate-700/70'}`}>
+        <div className={`rounded-xl overflow-hidden border transition-colors duration-200 ${open ? 'border-border/80 shadow-md shadow-black/10 bg-surface/90' : 'border-border/60 bg-surface/60 hover:border-border/70'}`}>
             <button
                 className="w-full flex items-start gap-3 p-3 sm:p-4 text-left focus:outline-none"
                 onClick={() => setOpen(o => !o)}
@@ -124,11 +124,11 @@ const QuestionCard = ({ item, index, accentClass, bodyBg }) => {
                     {index + 1}
                 </div>
                 <div className="flex-1 pt-0.5">
-                    <p className={`text-sm font-medium leading-relaxed transition-colors duration-200 ${open ? 'text-white' : 'text-slate-300'}`}>
+                    <p className={`text-sm font-medium leading-relaxed transition-colors duration-200 ${open ? 'text-primary' : 'text-primary/90'}`}>
                         {item.question}
                     </p>
                 </div>
-                <div className={`shrink-0 w-6 h-6 rounded-full flex items-center justify-center bg-slate-800/50 border border-slate-700/50 text-slate-400 transition-transform duration-300 ${open ? 'rotate-180 bg-slate-700 text-white' : ''}`}>
+                <div className={`shrink-0 w-6 h-6 rounded-full flex items-center justify-center bg-surface/50 border border-border/50 text-secondary transition-transform duration-300 ${open ? 'rotate-180 bg-surface text-primary' : ''}`}>
                     <Icon name="chevron-down" className="w-3 h-3" />
                 </div>
             </button>
@@ -137,23 +137,23 @@ const QuestionCard = ({ item, index, accentClass, bodyBg }) => {
                 <div className="overflow-hidden">
                     <div className="px-3 pb-3 sm:px-4 sm:pb-4 space-y-3 pt-1">
                         <div className="flex gap-3">
-                            <div className="w-6 shrink-0 flex justify-center"><div className="w-px h-full bg-slate-800" /></div>
+                            <div className="w-6 shrink-0 flex justify-center"><div className="w-px h-full bg-surface" /></div>
                             <div className="flex-1">
-                                <p className="text-[9px] font-bold text-slate-500 uppercase tracking-widest mb-1 flex items-center gap-1">
+                                <p className="text-[9px] font-bold text-secondary uppercase tracking-widest mb-1 flex items-center gap-1">
                                     <Icon name="target" className="w-2.5 h-2.5" /> Intention
                                 </p>
-                                <p className="text-xs text-slate-400 leading-relaxed bg-slate-950/60 rounded-lg p-2.5 border border-slate-800/50">
+                                <p className="text-xs text-secondary leading-relaxed bg-background/60 rounded-lg p-2.5 border border-border/50">
                                     {item.intention}
                                 </p>
                             </div>
                         </div>
                         <div className="flex gap-3">
-                            <div className="w-6 shrink-0 flex justify-center"><div className="w-px h-full bg-slate-800" /></div>
+                            <div className="w-6 shrink-0 flex justify-center"><div className="w-px h-full bg-surface" /></div>
                             <div className="flex-1">
-                                <p className="text-[9px] font-bold text-slate-500 uppercase tracking-widest mb-1 flex items-center gap-1">
-                                    <Icon name="sparkle" className="w-2.5 h-2.5 text-cyan-500" /> Model Answer
+                                <p className="text-[9px] font-bold text-secondary uppercase tracking-widest mb-1 flex items-center gap-1">
+                                    <Icon name="sparkle" className="w-2.5 h-2.5 text-accent" /> Model Answer
                                 </p>
-                                <div className={`text-sm text-slate-300 leading-relaxed rounded-lg p-3 shadow-inner ${bodyBg}`}>
+                                <div className={`text-sm text-primary/90 leading-relaxed rounded-lg p-3 shadow-inner ${bodyBg}`}>
                                     {item.answer}
                                 </div>
                             </div>
@@ -171,11 +171,11 @@ const SkillGapCard = ({ gap }) => {
     const severityKey = gap.severity?.toLowerCase()
 
     return (
-        <div className="rounded-xl p-3 sm:p-4 border border-slate-800/70 bg-slate-900/60 hover:bg-slate-900/80 transition-colors duration-200 mb-2">
+        <div className="rounded-xl p-3 sm:p-4 border border-border/70 bg-surface/60 hover:bg-surface/80 transition-colors duration-200 mb-2">
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-3">
                 <div className="flex items-center gap-2.5">
                     <div className={`w-1 h-5 rounded-full ${severityKey === 'high' ? 'bg-red-500' : severityKey === 'medium' ? 'bg-amber-500' : 'bg-blue-500'}`} />
-                    <h3 className="text-base font-semibold text-white tracking-tight">{gap.skill}</h3>
+                    <h3 className="text-base font-semibold text-primary tracking-tight">{gap.skill}</h3>
                 </div>
                 <span className={`px-2 py-0.5 rounded-md text-[10px] font-bold tracking-wide uppercase self-start sm:self-auto ${SEVERITY_STYLES[severityKey] ?? SEVERITY_STYLES.low}`}>
                     {gap.severity ?? 'low'} Priority
@@ -190,16 +190,16 @@ const SkillGapCard = ({ gap }) => {
                             href={resource.url}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="group flex items-center gap-2.5 p-2 rounded-lg border border-slate-800/60 bg-slate-900/80 hover:bg-slate-800 hover:border-slate-700 transition-colors duration-200"
+                            className="group flex items-center gap-2.5 p-2 rounded-lg border border-border/60 bg-surface/80 hover:bg-surface hover:border-border/80 transition-colors duration-200"
                         >
-                            <div className="shrink-0 w-8 h-8 rounded-md flex items-center justify-center bg-slate-950 border border-slate-800/80 shadow-inner group-hover:scale-105 transition-transform duration-200">
+                            <div className="shrink-0 w-8 h-8 rounded-md flex items-center justify-center bg-background border border-border/80 shadow-inner group-hover:scale-105 transition-transform duration-200">
                                 {resource.type === 'VIDEO' ? <YouTubeLogo /> : <DocsLogo />}
                             </div>
                             <div className="flex-1 min-w-0">
-                                <p className="text-xs font-medium text-slate-200 group-hover:text-white transition-colors duration-200 truncate">
+                                <p className="text-xs font-medium text-primary/90 group-hover:text-primary transition-colors duration-200 truncate">
                                     {resource.title || (resource.type === 'VIDEO' ? 'Watch Tutorial' : 'Read Documentation')}
                                 </p>
-                                <p className="text-[9px] text-slate-500 uppercase tracking-wider mt-0.5">
+                                <p className="text-[9px] text-secondary uppercase tracking-wider mt-0.5">
                                     {resource.type === 'VIDEO' ? 'YouTube' : 'Documentation'}
                                 </p>
                             </div>
@@ -207,7 +207,7 @@ const SkillGapCard = ({ gap }) => {
                     ))}
                 </div>
             ) : (
-                <div className="flex items-center gap-1.5 p-2.5 mt-2 rounded-lg bg-slate-800/40 border border-slate-800/50 text-xs text-slate-400">
+                <div className="flex items-center gap-1.5 p-2.5 mt-2 rounded-lg bg-surface/40 border border-border/50 text-xs text-secondary">
                     <Icon name="help-circle" className="w-3.5 h-3.5" />
                     <span>No curated resources available yet.</span>
                 </div>
@@ -221,25 +221,25 @@ const RoadmapDay = ({ day, index, total }) => (
     <div className="relative flex gap-3 sm:gap-4 pb-6 group">
         {/* Timeline vertical line */}
         {index < total - 1 && (
-            <div className="absolute left-[18px] sm:left-5 top-9 bottom-0 w-[2px] bg-gradient-to-b from-cyan-500/30 to-violet-500/10 transition-colors duration-300" />
+            <div className="absolute left-[18px] sm:left-5 top-9 bottom-0 w-[2px] bg-gradient-to-b from-rose-500/30 to-violet-500/10 transition-colors duration-300" />
         )}
         
         {/* Node */}
-        <div className="relative z-10 shrink-0 w-9 h-9 sm:w-10 sm:h-10 rounded-xl flex flex-col items-center justify-center bg-slate-900 border border-slate-700 shadow-[0_0_10px_rgba(6,182,212,0.1)] group-hover:border-cyan-500/50 transition-colors duration-300">
-            <span className="text-[7px] sm:text-[8px] font-bold text-slate-400 uppercase tracking-widest leading-none mb-0.5 sm:mb-1">Day</span>
-            <span className="text-xs sm:text-sm font-bold text-transparent bg-clip-text bg-gradient-to-br from-cyan-400 to-violet-400 leading-none">{day.day}</span>
+        <div className="relative z-10 shrink-0 w-9 h-9 sm:w-10 sm:h-10 rounded-xl flex flex-col items-center justify-center bg-surface border border-border/80 shadow-[0_0_10px_rgba(255,102,98,0.1)] group-hover:border-accent/50 transition-colors duration-300">
+            <span className="text-[7px] sm:text-[8px] font-bold text-secondary uppercase tracking-widest leading-none mb-0.5 sm:mb-1">Day</span>
+            <span className="text-xs sm:text-sm font-bold text-accent leading-none">{day.day}</span>
         </div>
 
         {/* Content Box */}
-        <div className="flex-1 bg-slate-900/60 border border-slate-800/60 rounded-xl p-3 sm:p-4 hover:bg-slate-900/80 hover:border-slate-700/60 transition-colors duration-200 mt-0">
-            <h3 className="text-sm font-semibold text-white mb-2 flex items-center gap-1.5">
-                <Icon name="target" className="text-cyan-400 w-3.5 h-3.5" />
+        <div className="flex-1 bg-surface/60 border border-border/60 rounded-xl p-3 sm:p-4 hover:bg-surface/80 hover:border-border/60 transition-colors duration-200 mt-0">
+            <h3 className="text-sm font-semibold text-primary mb-2 flex items-center gap-1.5">
+                <Icon name="target" className="text-accent w-3.5 h-3.5" />
                 {day.focus}
             </h3>
             <ul className="space-y-1.5">
                 {day.tasks.map((task, i) => (
-                    <li key={i} className="flex items-start gap-2 text-xs text-slate-300 leading-relaxed">
-                        <span className="mt-1 w-1 h-1 rounded-full bg-violet-400 shrink-0 shadow-[0_0_4px_rgba(167,139,250,0.5)]" />
+                    <li key={i} className="flex items-start gap-2 text-xs text-primary/90 leading-relaxed">
+                        <span className="mt-1 w-1 h-1 rounded-full bg-accent shrink-0 shadow-[0_0_4px_rgba(255,102,98,0.5)]" />
                         {task}
                     </li>
                 ))}
@@ -284,17 +284,17 @@ const InterviewReport = () => {
             {/* ── Page Header ── */}
             <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-6">
                 <div>
-                    <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-cyan-500/10 border border-cyan-500/20 text-cyan-400 text-[10px] font-bold uppercase tracking-wider mb-2 shadow-[0_0_8px_rgba(6,182,212,0.1)]">
+                    <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-accent/10 border border-accent/20 text-accent text-[10px] font-bold uppercase tracking-wider mb-2 shadow-[0_0_8px_rgba(255,102,98,0.1)]">
                         <Icon name="sparkle" className="w-3 h-3" /> AI Analysis Complete
                     </div>
-                    <h1 className="text-2xl font-bold text-white tracking-tight mb-1">Interview Strategy</h1>
-                    <p className="text-slate-400 text-sm">
-                        <span className="text-white font-medium">{report.jobTitle ?? 'Target Role'}</span> at {report.company ?? 'Company'}
+                    <h1 className="text-2xl font-bold text-primary tracking-tight mb-1">Interview Strategy</h1>
+                    <p className="text-secondary text-sm">
+                        <span className="text-primary font-medium">{report.jobTitle ?? 'Target Role'}</span> at {report.company ?? 'Company'}
                     </p>
                 </div>
                 <button
                     onClick={() => getResumePdf(interviewId)}
-                    className="group flex items-center justify-center gap-1.5 px-4 py-2 rounded-lg text-xs font-bold text-white transition-transform duration-200 hover:scale-[1.02] active:scale-95 shadow-[0_0_15px_rgba(168,85,247,0.2)] hover:shadow-[0_0_20px_rgba(168,85,247,0.4)] shrink-0" style={{ background: "linear-gradient(135deg,#06b6d4,#a855f7)" }}
+                    className="group flex items-center justify-center gap-1.5 px-4 py-2 rounded-lg text-xs font-bold text-primary transition-transform duration-200 hover:scale-[1.02] active:scale-95 shadow-[0_0_15px_rgba(255,102,98,0.2)] hover:shadow-[0_0_20px_rgba(255,102,98,0.4)] shrink-0 bg-accent"
                 >
                     <Icon name="download" className="w-4 h-4 group-hover:-translate-y-px transition-transform duration-200" />
                     Export PDF
@@ -309,7 +309,7 @@ const InterviewReport = () => {
                 
                 {/* Navigation Sidebar */}
                 <div className="w-full lg:w-56 shrink-0">
-                    <div className="lg:sticky lg:top-20 bg-slate-900/80 border border-slate-800/80 rounded-2xl p-2 flex flex-row lg:flex-col gap-1.5 overflow-x-auto lg:overflow-visible no-scrollbar shadow-sm">
+                    <div className="lg:sticky lg:top-20 bg-surface/80 border border-border/80 rounded-2xl p-2 flex flex-row lg:flex-col gap-1.5 overflow-x-auto lg:overflow-visible no-scrollbar shadow-sm">
                         {NAV_ITEMS.map(item => {
                             const isActive = activeNav === item.id;
                             return (
@@ -318,16 +318,16 @@ const InterviewReport = () => {
                                     onClick={() => setActiveNav(item.id)}
                                     className={`flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-xs font-medium whitespace-nowrap transition-colors duration-200 ${
                                         isActive 
-                                        ? 'bg-gradient-to-r from-cyan-500/15 to-violet-500/15 text-white shadow-inner border border-slate-700/40' 
-                                        : 'text-slate-400 hover:bg-slate-800/80 hover:text-slate-200 border border-transparent'
+                                        ? 'bg-accent/15 text-primary shadow-inner border border-border/40' 
+                                        : 'text-secondary hover:bg-surface/80 hover:text-primary border border-transparent'
                                     }`}
                                 >
-                                    <div className={`w-7 h-7 rounded-lg flex items-center justify-center transition-colors duration-200 ${isActive ? 'bg-slate-800 text-cyan-400 shadow-sm' : 'bg-slate-800/50 text-slate-500'}`}>
+                                    <div className={`w-7 h-7 rounded-lg flex items-center justify-center transition-colors duration-200 ${isActive ? 'bg-surface text-accent shadow-sm' : 'bg-surface/50 text-secondary'}`}>
                                         <Icon name={item.icon} className="w-4 h-4" />
                                     </div>
                                     {item.label}
                                     {item.id === 'skills' && skillGaps.length > 0 && (
-                                        <span className={`ml-auto px-1.5 py-0.5 rounded-full text-[9px] font-bold ${isActive ? 'bg-cyan-500 text-slate-950' : 'bg-slate-800 text-slate-300'}`}>
+                                        <span className={`ml-auto px-1.5 py-0.5 rounded-full text-[9px] font-bold ${isActive ? 'bg-accent text-background' : 'bg-surface text-primary/90'}`}>
                                             {skillGaps.length}
                                         </span>
                                     )}
@@ -340,13 +340,13 @@ const InterviewReport = () => {
                 {/* Main Content Area */}
                 <div className="flex-1 min-w-0 pb-8">
                     <div className="mb-5 sm:mb-6">
-                        <h2 className="text-lg font-semibold text-white mb-1">
+                        <h2 className="text-lg font-semibold text-primary mb-1">
                             {activeNav === 'technical' && 'Technical Questions'}
                             {activeNav === 'behavioral' && 'Behavioral Questions'}
                             {activeNav === 'skills' && 'Skill Gaps & Resources'}
                             {activeNav === 'roadmap' && '10-Day Preparation Plan'}
                         </h2>
-                        <p className="text-slate-400 text-xs">
+                        <p className="text-secondary text-xs">
                             {activeNav === 'technical' && 'Tailored technical questions based on your resume and the job description.'}
                             {activeNav === 'behavioral' && 'Situational questions to validate your soft skills and experience.'}
                             {activeNav === 'skills' && 'Identified areas for improvement with curated video and documentation resources.'}
@@ -362,8 +362,8 @@ const InterviewReport = () => {
                                     key={i}
                                     item={q}
                                     index={i}
-                                    accentClass="bg-cyan-500/10 text-cyan-400"
-                                    bodyBg="bg-cyan-500/5 border border-cyan-500/10"
+                                    accentClass="bg-accent/10 text-accent"
+                                    bodyBg="bg-accent/5 border border-accent/10"
                                 />
                             ))}
                         </div>
@@ -377,8 +377,8 @@ const InterviewReport = () => {
                                     key={i}
                                     item={q}
                                     index={i}
-                                    accentClass="bg-violet-500/10 text-violet-400"
-                                    bodyBg="bg-violet-500/5 border border-violet-500/10"
+                                    accentClass="bg-accent/10 text-accent"
+                                    bodyBg="bg-accent/5 border border-accent/10"
                                 />
                             ))}
                         </div>
@@ -392,12 +392,12 @@ const InterviewReport = () => {
                                     <SkillGapCard key={i} gap={gap} />
                                 ))
                             ) : (
-                                <div className="rounded-2xl p-6 sm:p-8 border border-slate-800/60 bg-slate-900/70 text-center shadow-inner">
-                                    <div className="w-12 h-12 mx-auto rounded-xl bg-slate-800/50 flex items-center justify-center mb-3">
-                                        <Icon name="target" className="w-6 h-6 text-slate-500" />
+                                <div className="rounded-2xl p-6 sm:p-8 border border-border/60 bg-surface/70 text-center shadow-inner">
+                                    <div className="w-12 h-12 mx-auto rounded-xl bg-background/50 flex items-center justify-center mb-3">
+                                        <Icon name="target" className="w-6 h-6 text-secondary" />
                                     </div>
-                                    <p className="text-sm font-semibold text-white mb-1">No Skill Gaps Identified</p>
-                                    <p className="text-xs text-slate-500 max-w-xs mx-auto">Your resume perfectly matches the job description requirements. You're fully aligned!</p>
+                                    <p className="text-sm font-semibold text-primary mb-1">No Skill Gaps Identified</p>
+                                    <p className="text-xs text-secondary max-w-xs mx-auto">Your resume perfectly matches the job description requirements. You're fully aligned!</p>
                                 </div>
                             )}
                         </div>

@@ -3,11 +3,11 @@ import { useNavigate, Link } from "react-router";
 import { useAuth } from "../../hooks/useAuth";
 import { registerSchema, registerBaseSchema } from "../../schemas/auth.schema.js";
 import LoadingScreen from "../../components/common/LoadingScreen";
-import { FiUser, FiMail, FiLock, FiEye, FiEyeOff } from "react-icons/fi";
+import { FiUser, FiMail, FiLock, FiEye, FiEyeOff, FiArrowRight } from "react-icons/fi";
 
 const FieldError = ({ msg }) =>
   msg ? (
-    <p className="text-red-400 text-xs mt-1.5 flex items-center gap-1.5 animate-slide-up">
+    <p className="text-red-400 text-sm mt-1.5 flex items-center gap-1.5 animate-fade-in">
       <span className="w-1.5 h-1.5 rounded-full bg-red-400 shrink-0" />
       {msg}
     </p>
@@ -17,7 +17,6 @@ const Register = () => {
   const navigate = useNavigate();
   const { registerLoading, handleRegister } = useAuth();
 
-  // Controlled state
   const [fields, setFields] = useState({ username: "", email: "", password: "", confirmPassword: "" });
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirm, setShowConfirm] = useState(false);
@@ -46,7 +45,7 @@ const Register = () => {
   const handleChange = (name) => (e) => {
     const value = e.target.value;
     setFields((prev) => ({ ...prev, [name]: value }));
-    setError(null); // clear API error on re-type
+    setError(null);
     
     if (touched[name]) {
       if (name === "confirmPassword") {
@@ -60,7 +59,6 @@ const Register = () => {
       }
     }
     
-    // Re-validate confirmPassword live if password changes
     if (name === "password" && touched.confirmPassword) {
       const err = fields.confirmPassword === value ? null : "Passwords do not match.";
       setFieldErrors((prev) => ({ ...prev, confirmPassword: err }));
@@ -76,7 +74,6 @@ const Register = () => {
     e.preventDefault();
     setError(null);
 
-    // Touch all fields and validate
     const allTouched = { username: true, email: true, password: true, confirmPassword: true };
     setTouched(allTouched);
 
@@ -113,74 +110,90 @@ const Register = () => {
   }
 
   const inputClass = (hasError) =>
-    `w-full pl-11 pr-4 py-3 bg-slate-900/40 border rounded-2xl text-slate-200 placeholder-slate-600 focus:outline-none focus:ring-2 focus:ring-cyan-500/10 focus:border-cyan-500/50 transition-all duration-300 text-sm ${
-      hasError ? 'border-red-500/50 focus:border-red-500/50 focus:ring-red-500/10' : 'border-white/[0.06] hover:border-white/[0.12]'
+    `w-full pl-12 pr-4 py-3.5 bg-surface/50 border rounded-xl text-primary placeholder-secondary/40 focus:outline-none focus:ring-4 focus:ring-accent/10 focus:border-accent/60 transition-all duration-300 ${
+      hasError 
+        ? 'border-red-500/50 focus:border-red-500/50 focus:ring-red-500/10 bg-red-500/5' 
+        : 'border-white/[0.08] hover:border-white/[0.15]'
     }`;
 
   return (
-    <div className="min-h-screen w-full bg-[#030712] flex items-center justify-center px-4 py-16 relative overflow-hidden">
-      {/* Premium Multi-Layered Moving Gradient Background */}
-      <div className="absolute inset-0 pointer-events-none overflow-hidden">
-        {/* Sphere 1 */}
-        <div 
-          className="absolute -top-[10%] -right-[10%] w-[50%] h-[50%] rounded-full animate-pulse"
-          style={{ 
-            animationDuration: '9s',
-            background: 'radial-gradient(circle, rgba(168, 85, 247, 0.09) 0%, transparent 70%)',
-            willChange: 'opacity'
-          }}
-        />
-        {/* Sphere 2 */}
-        <div 
-          className="absolute -bottom-[10%] -left-[10%] w-[60%] h-[60%] rounded-full animate-pulse"
-          style={{ 
-            animationDuration: '11s',
-            background: 'radial-gradient(circle, rgba(6, 182, 212, 0.09) 0%, transparent 70%)',
-            willChange: 'opacity'
-          }}
-        />
-        {/* Grid pattern overlay */}
-        <div 
-          className="absolute inset-0 opacity-[0.015]"
-          style={{
-            backgroundImage: `radial-gradient(circle at 1px 1px, white 1px, transparent 0)`,
-            backgroundSize: '24px 24px'
-          }}
-        />
+    <div className="min-h-screen w-full bg-background flex flex-col lg:flex-row">
+      {/* Left Section - Branding & Visuals (Hidden on small screens) */}
+      <div className="hidden lg:flex w-[45%] flex-col justify-between bg-surface/30 p-12 relative overflow-hidden border-r border-white/[0.04]">
+        {/* Abstract Glowing Orbs */}
+        <div className="absolute inset-0 pointer-events-none">
+          <div className="absolute top-[20%] left-[-10%] w-[50%] h-[50%] bg-[#fe9a00]/20 rounded-full blur-[120px] animate-pulse-slow" />
+          <div className="absolute bottom-[10%] right-[-10%] w-[60%] h-[60%] bg-accent/15 rounded-full blur-[140px] animate-pulse-slow delay-500" />
+          {/* Subtle Grid overlay */}
+          <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyMCIgaGVpZ2h0PSIyMCI+CjxwYXRoIGQ9Ik0gMjAgMCBMMCAwIDAgMjAiIGZpbGw9Im5vbmUiIHN0cm9rZT0icmdiYSgyNTUsMjU1LDI1NSwwLjAyKSIgc3Ryb2tlLXdpZHRoPSIxIi8+Cjwvc3ZnPg==')] opacity-50" />
+        </div>
+
+        <div className="relative z-10 animate-fade-in-up">
+          <Link to="/" className="inline-flex items-center gap-3 group">
+            <span className="text-2xl font-bold text-primary tracking-wide">
+              Skill<span className="text-accent">Bridge</span> <span className="font-light text-white/70">AI</span>
+            </span>
+          </Link>
+        </div>
+
+        <div className="relative z-10 mt-auto mb-10 animate-fade-in-up delay-200">
+          <div className="inline-flex items-center justify-center p-3 rounded-2xl bg-white/[0.03] border border-white/[0.05] mb-8 backdrop-blur-md">
+            <svg className="w-8 h-8 text-[#fe9a00]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M13 10V3L4 14h7v7l9-11h-7z" />
+            </svg>
+          </div>
+          <h2 className="text-[2.75rem] font-bold text-white mb-6 leading-[1.1] tracking-tight">
+            Accelerate your <br /> career growth <br /> 
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-accent to-[#fe9a00]">
+              starting today.
+            </span>
+          </h2>
+          <p className="text-secondary/90 text-lg mb-10 max-w-md font-light leading-relaxed">
+            Get personalized mock interviews, instant AI feedback, and actionable insights to become the top candidate in any field.
+          </p>
+          
+          <div className="inline-flex items-center gap-4 p-4 rounded-2xl bg-white/[0.02] border border-white/[0.05] backdrop-blur-md">
+            <div className="w-12 h-12 rounded-full bg-accent/20 flex items-center justify-center shrink-0">
+              <svg className="w-6 h-6 text-accent" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+            </div>
+            <div>
+              <p className="text-white font-medium">Instant Setup</p>
+              <p className="text-sm text-secondary/80 mt-0.5">Start practicing in under 60 seconds</p>
+            </div>
+          </div>
+        </div>
       </div>
 
-      <div className="relative z-10 w-full max-w-[440px] animate-fade-in">
-        {/* Card Container */}
-        <div 
-          className="w-full backdrop-blur-xl bg-slate-950/40 border border-white/[0.06] rounded-3xl p-8 sm:p-10 shadow-[0_20px_50px_rgba(0,0,0,0.5)] relative overflow-hidden group"
-          style={{ willChange: 'backdrop-filter' }}
-        >
-          {/* Subtle top reflection border line */}
-          <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-purple-500/30 to-transparent" />
-          
-          {/* Header */}
-          <div className="flex flex-col items-center text-center mb-8">
-            <Link to="/" className="inline-flex items-center gap-2.5 mb-6 group/logo">
-              <div className="w-10 h-10 rounded-2xl bg-gradient-to-tr from-cyan-500 to-purple-600 flex items-center justify-center text-white font-bold text-xl shadow-[0_0_20px_rgba(168,85,247,0.25)] group-hover/logo:scale-105 transition-transform duration-300">
-                S
-              </div>
-              <span className="text-xl font-bold bg-gradient-to-r from-cyan-400 to-purple-400 bg-clip-text text-transparent tracking-wide">
-                SkillBridge AI
-              </span>
-            </Link>
-            <h1 className="text-2xl font-bold text-white tracking-tight mb-2">Create Account</h1>
-            <p className="text-slate-400 text-sm">Start your AI-powered preparation journey</p>
+      {/* Right Section - Form */}
+      <div className="flex-1 flex items-center justify-center p-6 sm:p-12 relative overflow-y-auto">
+        {/* Mobile Logo */}
+        <div className="absolute top-8 left-6 lg:hidden">
+          <Link to="/" className="inline-flex items-center gap-2">
+            <span className="text-lg font-bold text-primary">SkillBridge</span>
+          </Link>
+        </div>
+
+        <div className="w-full max-w-[420px] animate-fade-in-up delay-100 py-10 lg:py-0">
+          <div className="mb-8 text-center lg:text-left">
+            <h1 className="text-3xl sm:text-4xl font-bold text-primary tracking-tight mb-3">
+              Create an account
+            </h1>
+            <p className="text-secondary/80 text-base">
+              Start your journey to interview success today.
+            </p>
           </div>
 
-          <form onSubmit={handleSubmit} noValidate className="space-y-5">
+          <form onSubmit={handleSubmit} noValidate className="space-y-4">
             {/* Username Input */}
-            <div className="space-y-1.5">
-              <label htmlFor="username" className="block text-xs font-semibold text-slate-400 uppercase tracking-wider">
+            <div className="space-y-2">
+              <label htmlFor="username" className="block text-sm font-medium text-white/90">
                 Username
               </label>
               <div className="relative group/input">
-                <div className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-500 group-focus-within/input:text-cyan-400 transition-colors duration-200">
-                  <FiUser className="w-4 h-4" />
+                <div className="absolute left-4 top-1/2 -translate-y-1/2 text-secondary/50 group-focus-within/input:text-accent transition-colors duration-300">
+                  <FiUser className="w-5 h-5" />
                 </div>
                 <input
                   id="username"
@@ -189,9 +202,8 @@ const Register = () => {
                   value={fields.username}
                   onChange={handleChange("username")}
                   onBlur={() => handleBlur("username")}
-                  placeholder="sameer"
+                  placeholder="e.g. alex_dev"
                   autoComplete="username"
-                  required
                   className={inputClass(touched.username && fieldErrors.username)}
                 />
               </div>
@@ -199,13 +211,13 @@ const Register = () => {
             </div>
 
             {/* Email Input */}
-            <div className="space-y-1.5">
-              <label htmlFor="email" className="block text-xs font-semibold text-slate-400 uppercase tracking-wider">
-                Email Address
+            <div className="space-y-2">
+              <label htmlFor="email" className="block text-sm font-medium text-white/90">
+                Email
               </label>
               <div className="relative group/input">
-                <div className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-500 group-focus-within/input:text-cyan-400 transition-colors duration-200">
-                  <FiMail className="w-4 h-4" />
+                <div className="absolute left-4 top-1/2 -translate-y-1/2 text-secondary/50 group-focus-within/input:text-accent transition-colors duration-300">
+                  <FiMail className="w-5 h-5" />
                 </div>
                 <input
                   id="email"
@@ -216,7 +228,6 @@ const Register = () => {
                   onBlur={() => handleBlur("email")}
                   placeholder="name@example.com"
                   autoComplete="email"
-                  required
                   className={inputClass(touched.email && fieldErrors.email)}
                 />
               </div>
@@ -224,13 +235,13 @@ const Register = () => {
             </div>
 
             {/* Password Input */}
-            <div className="space-y-1.5">
-              <label htmlFor="password" className="block text-xs font-semibold text-slate-400 uppercase tracking-wider">
+            <div className="space-y-2">
+              <label htmlFor="password" className="block text-sm font-medium text-white/90">
                 Password
               </label>
               <div className="relative group/input">
-                <div className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-500 group-focus-within/input:text-cyan-400 transition-colors duration-200">
-                  <FiLock className="w-4 h-4" />
+                <div className="absolute left-4 top-1/2 -translate-y-1/2 text-secondary/50 group-focus-within/input:text-accent transition-colors duration-300">
+                  <FiLock className="w-5 h-5" />
                 </div>
                 <input
                   id="password"
@@ -241,29 +252,27 @@ const Register = () => {
                   onBlur={() => handleBlur("password")}
                   placeholder="••••••••"
                   autoComplete="new-password"
-                  required
                   className={`${inputClass(touched.password && fieldErrors.password)} pr-12`}
                 />
                 <button
                   type="button"
                   onClick={() => setShowPassword((v) => !v)}
-                  className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-500 hover:text-slate-300 transition-colors focus:outline-none cursor-pointer"
-                  aria-label={showPassword ? "Hide password" : "Show password"}
+                  className="absolute right-4 top-1/2 -translate-y-1/2 text-secondary/50 hover:text-primary transition-colors focus:outline-none cursor-pointer"
                 >
-                  {showPassword ? <FiEyeOff className="w-4 h-4" /> : <FiEye className="w-4 h-4" />}
+                  {showPassword ? <FiEyeOff className="w-5 h-5" /> : <FiEye className="w-5 h-5" />}
                 </button>
               </div>
               {touched.password && <FieldError msg={fieldErrors.password} />}
             </div>
 
             {/* Confirm Password Input */}
-            <div className="space-y-1.5">
-              <label htmlFor="confirmPassword" className="block text-xs font-semibold text-slate-400 uppercase tracking-wider">
+            <div className="space-y-2">
+              <label htmlFor="confirmPassword" className="block text-sm font-medium text-white/90">
                 Confirm Password
               </label>
               <div className="relative group/input">
-                <div className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-500 group-focus-within/input:text-cyan-400 transition-colors duration-200">
-                  <FiLock className="w-4 h-4" />
+                <div className="absolute left-4 top-1/2 -translate-y-1/2 text-secondary/50 group-focus-within/input:text-accent transition-colors duration-300">
+                  <FiLock className="w-5 h-5" />
                 </div>
                 <input
                   id="confirmPassword"
@@ -274,49 +283,51 @@ const Register = () => {
                   onBlur={() => handleBlur("confirmPassword")}
                   placeholder="••••••••"
                   autoComplete="new-password"
-                  required
                   className={`${inputClass(touched.confirmPassword && fieldErrors.confirmPassword)} pr-12`}
                 />
                 <button
                   type="button"
                   onClick={() => setShowConfirm((v) => !v)}
-                  className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-500 hover:text-slate-300 transition-colors focus:outline-none cursor-pointer"
-                  aria-label={showConfirm ? "Hide confirm password" : "Show confirm password"}
+                  className="absolute right-4 top-1/2 -translate-y-1/2 text-secondary/50 hover:text-primary transition-colors focus:outline-none cursor-pointer"
                 >
-                  {showConfirm ? <FiEyeOff className="w-4 h-4" /> : <FiEye className="w-4 h-4" />}
+                  {showConfirm ? <FiEyeOff className="w-5 h-5" /> : <FiEye className="w-5 h-5" />}
                 </button>
               </div>
               {touched.confirmPassword && <FieldError msg={fieldErrors.confirmPassword} />}
             </div>
 
-            {/* API-level Error Message */}
             {error && (
-              <div className="flex items-center gap-2.5 px-4 py-3 rounded-2xl bg-red-500/5 border border-red-500/10 text-red-400 text-xs leading-relaxed animate-slide-up">
-                <span className="w-2 h-2 rounded-full bg-red-400 shrink-0 animate-pulse" />
-                {error}
+              <div className="p-4 mt-2 rounded-xl bg-red-500/10 border border-red-500/20 text-red-400 text-sm animate-fade-in flex items-start gap-3">
+                <svg className="w-5 h-5 shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+                <span>{error}</span>
               </div>
             )}
 
-            {/* Action Button */}
             <button
               type="submit"
               disabled={registerLoading}
-              className="w-full py-3.5 mt-2 rounded-2xl font-bold text-white transition-all duration-300 hover:scale-[1.01] active:scale-[0.99] disabled:opacity-60 disabled:cursor-not-allowed text-sm cursor-pointer shadow-[0_8px_20px_rgba(168,85,247,0.15)] hover:shadow-[0_8px_25px_rgba(168,85,247,0.3)]"
-              style={{ background: "linear-gradient(135deg, #a855f7 0%, #6366f1 50%, #06b6d4 100%)" }}
+              className="w-full py-4 mt-4 rounded-xl font-semibold text-white bg-gradient-to-r from-accent to-[#fe9a00] hover:from-accent hover:to-[#eb8e00] transition-all duration-300 hover:-translate-y-0.5 active:translate-y-0 disabled:opacity-70 disabled:cursor-not-allowed disabled:transform-none shadow-[0_10px_25px_rgba(255,102,98,0.25)] hover:shadow-[0_15px_35px_rgba(255,102,98,0.35)] flex items-center justify-center gap-2 group cursor-pointer"
             >
               {registerLoading ? (
-                <span className="flex items-center justify-center gap-2">
-                  <span className="w-4 h-4 border-2 border-white/20 border-t-white rounded-full animate-spin" />
-                  Creating account...
-                </span>
-              ) : "Create Account"}
+                <>
+                  <span className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                  <span>Creating account...</span>
+                </>
+              ) : (
+                <>
+                  <span>Create Account</span>
+                  <FiArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+                </>
+              )}
             </button>
           </form>
 
-          <p className="text-center text-sm text-slate-500 mt-8">
+          <p className="text-center text-secondary/80 mt-10 text-sm">
             Already have an account?{" "}
-            <Link to="/login" className="text-cyan-400 hover:text-cyan-300 font-medium hover:underline transition-colors">
-              Sign in
+            <Link to="/login" className="text-accent font-semibold hover:text-orange-400 transition-colors">
+              Sign in instead
             </Link>
           </p>
         </div>
@@ -326,3 +337,5 @@ const Register = () => {
 };
 
 export default Register;
+
+

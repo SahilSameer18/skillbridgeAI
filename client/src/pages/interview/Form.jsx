@@ -110,14 +110,14 @@ const Form = () => {
     <div className="animate-fade-in py-4 max-w-6xl mx-auto">
       {/* Header Info */}
       <div className="mb-8 text-center">
-        <span className="inline-flex items-center gap-1.5 px-3.5 py-1 text-xs font-semibold rounded-full mb-4 bg-cyan-500/10 text-cyan-400 border border-cyan-500/20">
-          <span className="w-1.5 h-1.5 rounded-full bg-cyan-400 animate-pulse" />
+        <span className="inline-flex items-center gap-1.5 px-3.5 py-1 text-xs font-semibold rounded-full mb-4 bg-accent/10 text-accent border border-accent/20">
+          <span className="w-1.5 h-1.5 rounded-full bg-accent animate-pulse" />
           AI-Powered Match Engine v2.0
         </span>
-        <h1 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-white mb-4 tracking-tight">
-          Compare Your <span className="text-gradient-cyan">Resume & Job Description</span>
+        <h1 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-primary mb-4 tracking-tight">
+          Compare Your <span className="text-accent">Resume & Job Description</span>
         </h1>
-        <p className="text-slate-400 max-w-2xl mx-auto text-sm leading-relaxed">
+        <p className="text-secondary max-w-2xl mx-auto text-sm leading-relaxed">
           Upload your resume and paste the job description to get a customized interview questions bank, matched skill gaps assessment, and a 10-day prep roadmap.
         </p>
       </div>
@@ -168,14 +168,14 @@ const Form = () => {
 
       {/* Main Console Box */}
       <div
-        className="rounded-3xl overflow-hidden shadow-2xl shadow-black/40 border border-slate-800/80 bg-gradient-to-b from-[#0a0f1e] to-[#040711] relative"
+        className="rounded-3xl overflow-hidden shadow-2xl shadow-black/40 border border-border/80 bg-surface relative"
       >
         {/* Calibration Status Bar at top of Workspace */}
-        <div className="flex items-center gap-3 px-6 md:px-8 py-3.5 bg-slate-950/60 border-b border-slate-900/80">
+        <div className="flex items-center gap-3 px-6 md:px-8 py-3.5 bg-background/60 border-b border-border/80">
           <span className={`w-2.5 h-2.5 rounded-full shrink-0 ${
             canGenerate ? "bg-emerald-400 animate-pulse shadow-[0_0_8px_rgba(52,211,153,0.6)]" : "bg-amber-400"
           }`} />
-          <span className="text-xs font-mono font-bold tracking-wide text-slate-400 truncate">
+          <span className="text-xs font-mono font-bold tracking-wide text-secondary truncate">
             {getConsoleStatusText()}
           </span>
         </div>
@@ -208,9 +208,9 @@ const Form = () => {
         </div>
 
         {/* Footer Area */}
-        <div className="flex flex-col sm:flex-row items-center justify-between gap-4 px-6 md:px-8 py-5 border-t border-slate-900 bg-slate-950/40">
-          <div className="flex items-center gap-2 text-xs text-slate-500">
-            <svg className="w-4 h-4 text-cyan-500/60" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <div className="flex flex-col sm:flex-row items-center justify-between gap-4 px-6 md:px-8 py-5 border-t border-border bg-background/40">
+          <div className="flex items-center gap-2 text-xs text-secondary/70">
+            <svg className="w-4 h-4 text-accent/60" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
             </svg>
             <span>Orchestrates technical and behavioral roadmap matches</span>
@@ -219,10 +219,10 @@ const Form = () => {
           <button
             onClick={handleGenerateReport}
             disabled={!canGenerate}
-            className={`w-full sm:w-auto flex items-center justify-center gap-2 px-7 py-3 rounded-2xl font-bold text-white text-sm transition-all duration-300 disabled:opacity-40 disabled:cursor-not-allowed hover:shadow-lg active:scale-98 ${
+            className={`w-full sm:w-auto flex items-center justify-center gap-2 px-7 py-3 rounded-2xl font-bold text-primary text-sm transition-all duration-300 disabled:opacity-40 disabled:cursor-not-allowed hover:shadow-lg active:scale-95 ${
               canGenerate 
-                ? "bg-gradient-to-r from-cyan-500 via-indigo-500 to-purple-500 hover:shadow-indigo-500/20 shadow-[0_4px_20px_rgba(99,102,241,0.2)] cursor-pointer" 
-                : "bg-slate-800"
+                ? "bg-accent hover:shadow-accent/20 shadow-[0_4px_20px_rgba(255,102,98,0.2)] cursor-pointer" 
+                : "bg-surface"
             }`}
           >
             <svg

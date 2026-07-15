@@ -1,5 +1,14 @@
 @import "tailwindcss";
 
+@theme {
+  --color-background: #0A0A0A;
+  --color-surface: #141414;
+  --color-accent: #FF6662;
+  --color-primary: #FFFFFF;
+  --color-secondary: #A1A1AA;
+  --color-border: #27272A;
+}
+
 @layer base {
   *,
   *::before,
@@ -13,8 +22,8 @@
 
   body {
     font-family: "Inter", system-ui, sans-serif;
-    background-color: #030712;
-    color: #e2e8f0;
+    background-color: var(--color-background);
+    color: var(--color-primary);
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
   }
@@ -29,8 +38,8 @@
   }
 
   ::selection {
-    background: rgba(6, 182, 212, 0.25);
-    color: #67e8f9;
+    background: rgba(255, 102, 98, 0.25);
+    color: var(--color-accent);
   }
 
   ::-webkit-scrollbar {
@@ -39,51 +48,51 @@
   }
 
   ::-webkit-scrollbar-track {
-    background: #0f172a;
+    background: var(--color-surface);
   }
 
   ::-webkit-scrollbar-thumb {
-    background: #334155;
+    background: var(--color-border);
     border-radius: 3px;
   }
 
   ::-webkit-scrollbar-thumb:hover {
-    background: #06b6d4;
+    background: var(--color-accent);
   }
 }
 
 @layer utilities {
   /* Gradient text */
-  .text-gradient-cyan {
-    background: linear-gradient(135deg, #06b6d4 0%, #a855f7 100%);
+  .text-gradient-primary {
+    background: linear-gradient(135deg, #ff6662 0%, #fe9a00 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
   }
 
   /* Glow effects */
-  .glow-cyan {
+  .glow-primary {
     box-shadow:
-      0 0 20px rgba(6, 182, 212, 0.3),
-      0 0 60px rgba(6, 182, 212, 0.1);
+      0 0 20px rgba(255, 102, 98, 0.3),
+      0 0 60px rgba(255, 102, 98, 0.1);
   }
 
-  .glow-purple {
+  .glow-secondary {
     box-shadow:
-      0 0 20px rgba(168, 85, 247, 0.3),
-      0 0 60px rgba(168, 85, 247, 0.1);
+      0 0 20px rgba(254, 154, 0, 0.3),
+      0 0 60px rgba(254, 154, 0, 0.1);
   }
 
   /* Glass morphism */
   .glass {
-    background: rgba(15, 23, 42, 0.6);
+    background: rgba(24, 23, 22, 0.6);
     backdrop-filter: blur(16px);
     -webkit-backdrop-filter: blur(16px);
     border: 1px solid rgba(255, 255, 255, 0.06);
   }
 
   .glass-light {
-    background: rgba(30, 41, 59, 0.5);
+    background: rgba(34, 32, 32, 0.5);
     backdrop-filter: blur(12px);
     -webkit-backdrop-filter: blur(12px);
     border: 1px solid rgba(255, 255, 255, 0.07);
@@ -93,28 +102,28 @@
   .gradient-border {
     position: relative;
     background:
-      linear-gradient(#0f172a, #0f172a) padding-box,
-      linear-gradient(135deg, #06b6d4, #a855f7) border-box;
+      linear-gradient(var(--color-surface), var(--color-surface)) padding-box,
+      linear-gradient(135deg, var(--color-accent), #fe9a00) border-box;
     border: 1px solid transparent;
   }
 
   /* Mesh gradient background */
   .mesh-bg {
-    background-color: #030712;
+    background-color: var(--color-background);
     background-image:
       radial-gradient(
         ellipse 80% 50% at 20% 0%,
-        rgba(6, 182, 212, 0.08) 0%,
+        rgba(255, 102, 98, 0.08) 0%,
         transparent 70%
       ),
       radial-gradient(
         ellipse 60% 40% at 80% 10%,
-        rgba(168, 85, 247, 0.08) 0%,
+        rgba(254, 154, 0, 0.08) 0%,
         transparent 70%
       ),
       radial-gradient(
         ellipse 50% 30% at 50% 90%,
-        rgba(6, 182, 212, 0.05) 0%,
+        rgba(255, 102, 98, 0.05) 0%,
         transparent 70%
       );
   }
@@ -123,9 +132,9 @@
   .skeleton-shimmer {
     background: linear-gradient(
       90deg,
-      rgba(30, 41, 59, 0.6) 0%,
-      rgba(51, 65, 85, 0.8) 50%,
-      rgba(30, 41, 59, 0.6) 100%
+      rgba(34, 32, 32, 0.6) 0%,
+      rgba(34, 32, 32, 0.8) 50%,
+      rgba(34, 32, 32, 0.6) 100%
     );
     background-size: 200% 100%;
     animation: shimmer 1.8s ease-in-out infinite;
@@ -138,15 +147,15 @@
     gap: 1rem;
     padding: 2rem;
     text-align: center;
-    color: #cbd5e1;
-    background: rgba(3, 7, 18, 0.95);
+    color: var(--color-secondary);
+    background: rgba(10, 10, 10, 0.95);
   }
 
   .spinner {
     width: 3rem;
     height: 3rem;
-    border: 4px solid rgba(148, 163, 184, 0.25);
-    border-top-color: #06b6d4;
+    border: 4px solid rgba(165, 160, 160, 0.25);
+    border-top-color: var(--color-accent);
     border-radius: 9999px;
     animation: spin 0.9s linear infinite;
   }

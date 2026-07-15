@@ -120,8 +120,8 @@ const ResumeUpload = ({ value, onChange }) => {
   };
 
   return (
-    <div className={`flex flex-col h-full bg-slate-950/40 p-6 rounded-2xl border transition-all duration-300 ${
-      isDragging ? "border-purple-500/50 shadow-[0_0_15px_rgba(168,85,247,0.15)]" : "border-slate-800/80 hover:border-slate-700/80"
+    <div className={`flex flex-col h-full bg-background/40 p-6 rounded-2xl border transition-all duration-300 ${
+      isDragging ? "border-amber-500/50 shadow-[0_0_15px_rgba(255,102,98,0.15)]" : "border-border/80 hover:border-border/60"
     }`}>
       {/* Header section */}
       <div className="flex items-center justify-between mb-5">
@@ -129,8 +129,8 @@ const ResumeUpload = ({ value, onChange }) => {
           <div
             className="w-10 h-10 rounded-xl flex items-center justify-center transition-transform duration-300 hover:scale-105"
             style={{
-              background: "rgba(168,85,247,0.08)",
-              border: "1px solid rgba(168,85,247,0.2)",
+              background: "rgba(255,102,98,0.08)",
+              border: "1px solid rgba(255,102,98,0.2)",
             }}
           >
             <svg
@@ -139,7 +139,7 @@ const ResumeUpload = ({ value, onChange }) => {
               height="18"
               viewBox="0 0 24 24"
               fill="none"
-              stroke="#a855f7"
+              stroke="var(--color-accent)"
               strokeWidth="2.5"
               strokeLinecap="round"
               strokeLinejoin="round"
@@ -149,10 +149,10 @@ const ResumeUpload = ({ value, onChange }) => {
             </svg>
           </div>
           <div>
-            <h2 className="font-semibold text-white text-base tracking-wide font-sans">
+            <h2 className="font-semibold text-primary text-base tracking-wide font-sans">
               Your Resume
             </h2>
-            <p className="text-xs text-cyan-400 font-medium mt-0.5">Required</p>
+            <p className="text-xs text-accent font-medium mt-0.5">Required</p>
           </div>
         </div>
         <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 uppercase tracking-wider">
@@ -169,12 +169,12 @@ const ResumeUpload = ({ value, onChange }) => {
           onDragLeave={handleDragLeave}
           className={`flex flex-col items-center justify-center p-6 rounded-xl cursor-pointer transition-all duration-300 border-2 border-dashed h-full ${
             isDragging
-              ? "border-purple-400/80 bg-purple-500/5 scale-[1.01]"
+              ? "border-amber-400/80 bg-amber-500/5 scale-[1.01]"
               : fileName
-              ? "border-purple-500/40 bg-purple-500/5 hover:border-purple-500/60"
+              ? "border-amber-500/40 bg-amber-500/5 hover:border-amber-500/60"
               : fileError
               ? "border-red-500/40 bg-red-500/5"
-              : "border-slate-800 bg-slate-950/30 hover:bg-slate-950/60 hover:border-slate-800"
+              : "border-border bg-background/30 hover:bg-background/60 hover:border-border/80"
           }`}
         >
           {/* Status Icon */}
@@ -184,7 +184,7 @@ const ResumeUpload = ({ value, onChange }) => {
                 <path strokeLinecap="round" strokeLinejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
               </svg>
             ) : isParsing ? (
-              <svg className="w-12 h-12 text-purple-400 animate-spin" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
+              <svg className="w-12 h-12 text-amber-400 animate-spin" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
                 <path strokeLinecap="round" strokeLinejoin="round" d="M4 4v5h.582m15.356 2A8.001 8.001 0 1121.248 10H18.22" />
               </svg>
             ) : isParsed ? (
@@ -192,7 +192,7 @@ const ResumeUpload = ({ value, onChange }) => {
                 <path strokeLinecap="round" strokeLinejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
               </svg>
             ) : (
-              <svg className={`w-12 h-12 transition-colors duration-300 ${isDragging ? "text-purple-400" : "text-slate-500"}`} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="1.5">
+              <svg className={`w-12 h-12 transition-colors duration-300 ${isDragging ? "text-amber-400" : "text-secondary"}`} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="1.5">
                 <path strokeLinecap="round" strokeLinejoin="round" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
               </svg>
             )}
@@ -200,11 +200,11 @@ const ResumeUpload = ({ value, onChange }) => {
 
           {fileName ? (
             <div className="flex flex-col items-center gap-3 w-full max-w-xs text-center">
-              <div className="bg-slate-950/80 border border-slate-800/80 rounded-xl p-3 w-full">
-                <p className="text-sm font-semibold text-slate-200 truncate">
+              <div className="bg-background/80 border border-border/80 rounded-xl p-3 w-full">
+                <p className="text-sm font-semibold text-primary/90 truncate">
                   {fileName}
                 </p>
-                <p className="text-[11px] text-slate-500 mt-1 font-mono">
+                <p className="text-[11px] text-secondary mt-1 font-mono">
                   Size: {fileSize} · PDF Document
                 </p>
               </div>
@@ -212,13 +212,13 @@ const ResumeUpload = ({ value, onChange }) => {
               {/* Parsing status bar */}
               {isParsing && (
                 <div className="w-full mt-1">
-                  <div className="flex justify-between items-center text-[10px] text-slate-400 mb-1">
+                  <div className="flex justify-between items-center text-[10px] text-secondary mb-1">
                     <span>Parsing structure...</span>
                     <span>{parseProgress}%</span>
                   </div>
-                  <div className="w-full h-1.5 bg-slate-800 rounded-full overflow-hidden">
+                  <div className="w-full h-1.5 bg-surface rounded-full overflow-hidden">
                     <div 
-                      className="h-full bg-gradient-to-r from-purple-500 to-cyan-500 transition-all duration-100" 
+                      className="h-full bg-accent transition-all duration-100" 
                       style={{ width: `${parseProgress}%` }}
                     />
                   </div>
@@ -237,7 +237,7 @@ const ResumeUpload = ({ value, onChange }) => {
 
               <button
                 onClick={handleRemove}
-                className="mt-1 text-xs flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-slate-400 bg-slate-900 border border-slate-800/80 hover:text-red-400 hover:bg-red-500/10 hover:border-red-500/20 transition-all duration-200"
+                className="mt-1 text-xs flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-secondary bg-surface border border-border/80 hover:text-red-400 hover:bg-red-500/10 hover:border-red-500/20 transition-all duration-200"
                 aria-label="Remove resume"
               >
                 <svg
@@ -258,11 +258,11 @@ const ResumeUpload = ({ value, onChange }) => {
             </div>
           ) : (
             <div className="text-center px-4">
-              <p className="text-sm font-medium text-slate-300 leading-relaxed">
+              <p className="text-sm font-medium text-primary/90 leading-relaxed">
                 {fileError ? fileError : "Click to browse or drag & drop"}
               </p>
               {!fileError && (
-                <p className="text-xs text-slate-500 mt-2 font-mono">
+                <p className="text-xs text-secondary mt-2 font-mono">
                   PDF format only · Max {MAX_FILE_SIZE_MB}MB
                 </p>
               )}
@@ -282,9 +282,9 @@ const ResumeUpload = ({ value, onChange }) => {
       </div>
 
       {/* Info Tip box */}
-      <div className="mt-5 flex items-start gap-3 p-3.5 rounded-xl text-xs text-slate-400 bg-purple-500/5 border border-purple-500/10">
+      <div className="mt-5 flex items-start gap-3 p-3.5 rounded-xl text-xs text-secondary bg-amber-500/5 border border-amber-500/10">
         <svg
-          className="w-4 h-4 mt-0.5 shrink-0 text-purple-400"
+          className="w-4 h-4 mt-0.5 shrink-0 text-amber-400"
           fill="none"
           stroke="currentColor"
           viewBox="0 0 24 24"

@@ -53,8 +53,8 @@ const JobDescriptionInput = ({ value, onChange }) => {
   }, [localValue]);
 
   return (
-    <div className={`flex flex-col h-full bg-slate-950/40 p-6 rounded-2xl border transition-all duration-300 ${
-      isFocused ? "border-cyan-500/40 shadow-[0_0_15px_rgba(6,182,212,0.15)]" : "border-slate-800/80 hover:border-slate-700/80"
+    <div className={`flex flex-col h-full bg-background/40 p-6 rounded-2xl border transition-all duration-300 ${
+      isFocused ? "border-accent/40 shadow-[0_0_15px_rgba(255,102,98,0.15)]" : "border-border/80 hover:border-border/60"
     }`}>
       {/* Header section with Icon and Title */}
       <div className="flex items-center justify-between mb-5">
@@ -62,8 +62,8 @@ const JobDescriptionInput = ({ value, onChange }) => {
           <div
             className="w-10 h-10 rounded-xl flex items-center justify-center transition-transform duration-300 hover:scale-105"
             style={{
-              background: "rgba(6,182,212,0.08)",
-              border: "1px solid rgba(6,182,212,0.2)",
+              background: "rgba(255,102,98,0.08)",
+              border: "1px solid rgba(255,102,98,0.2)",
             }}
           >
             <svg
@@ -72,7 +72,7 @@ const JobDescriptionInput = ({ value, onChange }) => {
               height="18"
               viewBox="0 0 24 24"
               fill="none"
-              stroke="#06b6d4"
+              stroke="#ff6662"
               strokeWidth="2.5"
               strokeLinecap="round"
               strokeLinejoin="round"
@@ -82,10 +82,10 @@ const JobDescriptionInput = ({ value, onChange }) => {
             </svg>
           </div>
           <div>
-            <h2 className="font-semibold text-white text-base tracking-wide font-sans">
+            <h2 className="font-semibold text-primary text-base tracking-wide font-sans">
               Target Job Description
             </h2>
-            <p className="text-xs text-cyan-400 font-medium mt-0.5">Required</p>
+            <p className="text-xs text-accent font-medium mt-0.5">Required</p>
           </div>
         </div>
 
@@ -106,28 +106,28 @@ const JobDescriptionInput = ({ value, onChange }) => {
           onBlur={handleBlur}
           placeholder={`Paste the full job description details here...\ne.g. 'Senior Frontend Engineer at Google. Requires proficiency in React, TypeScript, and architectural principles...'`}
           maxLength={5000}
-          className="flex-1 min-h-[280px] w-full rounded-xl p-4 text-sm text-slate-300 placeholder-slate-600 resize-none focus:outline-none transition-all duration-200 leading-relaxed border border-slate-800/80 bg-slate-950/80 no-scrollbar"
+          className="flex-1 min-h-[280px] w-full rounded-xl p-4 text-sm text-primary/90 placeholder-secondary resize-none focus:outline-none transition-all duration-200 leading-relaxed border border-border/80 bg-background/80 no-scrollbar"
         />
       </div>
 
       {/* Live Extracted Skills tags */}
       <div className="mb-4">
-        <p className="text-xs text-slate-500 mb-2 font-medium flex items-center gap-1.5">
-          <span className="w-1.5 h-1.5 rounded-full bg-cyan-400 animate-pulse" />
+        <p className="text-xs text-secondary mb-2 font-medium flex items-center gap-1.5">
+          <span className="w-1.5 h-1.5 rounded-full bg-accent animate-pulse" />
           Live Extracted Skills
         </p>
-        <div className="flex flex-wrap gap-1.5 min-h-[28px] p-2 rounded-xl bg-slate-950/50 border border-slate-900/60">
+        <div className="flex flex-wrap gap-1.5 min-h-[28px] p-2 rounded-xl bg-background/50 border border-border/60">
           {extractedSkills.length > 0 ? (
             extractedSkills.map(skill => (
               <span
                 key={skill}
-                className="px-2 py-0.5 text-[10px] font-semibold rounded-md border bg-cyan-500/10 text-cyan-300 border-cyan-500/20 animate-fade-in"
+                className="px-2 py-0.5 text-[10px] font-semibold rounded-md border bg-accent/10 text-accent border-accent/20 animate-fade-in"
               >
                 {skill}
               </span>
             ))
           ) : (
-            <span className="text-[10px] text-slate-600 italic px-1 self-center">
+            <span className="text-[10px] text-secondary/60 italic px-1 self-center">
               Type or paste job description to auto-detect core skills
             </span>
           )}
@@ -135,9 +135,9 @@ const JobDescriptionInput = ({ value, onChange }) => {
       </div>
 
       {/* Character Count & Tip */}
-      <div className="flex justify-between items-center text-[11px] text-slate-500 border-t border-slate-900/80 pt-3">
+      <div className="flex justify-between items-center text-[11px] text-secondary border-t border-border/80 pt-3">
         <span>Tailor your resume against these specific guidelines</span>
-        <span className={`${localValue.length > 4500 ? 'text-amber-400' : 'text-slate-500'} font-mono`}>
+        <span className={`${localValue.length > 4500 ? 'text-amber-400' : 'text-secondary'} font-mono`}>
           {localValue.length} / 5000
         </span>
       </div>

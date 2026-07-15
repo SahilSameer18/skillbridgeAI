@@ -30,9 +30,9 @@ const Footer = () => {
   ];
 
   return (
-    <footer className="mt-24 border-t border-white/[0.06] bg-[#030712] relative overflow-hidden">
+    <footer className="mt-24 border-t border-white/[0.06] bg-background relative overflow-hidden">
       {/* Subtle ambient glow to match background theme */}
-      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-[150px] bg-cyan-500/[0.03] rounded-full blur-[120px] pointer-events-none" />
+      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-[150px] bg-accent/[0.03] rounded-full blur-[120px] pointer-events-none" />
 
       <div className="max-w-7xl mx-auto px-6 py-12 relative z-10">
         <div className="grid md:grid-cols-[1.5fr_1fr_1fr] gap-10 pb-10 border-b border-white/[0.05]">
@@ -40,14 +40,12 @@ const Footer = () => {
           {/* Column 1: Brand & Social */}
           <div className="space-y-4">
             <div className="flex items-center gap-2.5">
-              <div className="w-7 h-7 rounded-lg bg-gradient-to-tr from-cyan-500 to-purple-600 flex items-center justify-center text-white font-bold text-xs shadow-md shadow-cyan-500/10">
-                S
-              </div>
-              <span className="text-base font-bold text-white tracking-wide">
-                Skill<span className="text-cyan-400">Bridge</span>
+
+              <span className="text-base font-bold text-primary tracking-wide">
+                Skill<span className="text-accent">Bridge</span>
               </span>
             </div>
-            <p className="text-slate-400 text-sm leading-relaxed max-w-xs">
+            <p className="text-secondary text-sm leading-relaxed max-w-xs">
               Reimagining career preparation. Turn resume data and job requirements into structured strategy plans.
             </p>
             <div className="flex items-center gap-2 pt-2">
@@ -58,7 +56,7 @@ const Footer = () => {
                   target="_blank"
                   rel="noopener noreferrer"
                   aria-label={s.label}
-                  className="w-9 h-9 rounded-xl bg-white/[0.02] border border-white/[0.05] flex items-center justify-center text-slate-400 hover:text-cyan-400 hover:bg-cyan-500/10 hover:border-cyan-500/30 transition-all duration-300"
+                  className="w-9 h-9 rounded-xl bg-white/[0.02] border border-white/[0.05] flex items-center justify-center text-secondary hover:text-accent hover:bg-accent/10 hover:border-accent/30 transition-all duration-300"
                 >
                   {s.icon}
                 </a>
@@ -68,7 +66,7 @@ const Footer = () => {
 
           {/* Column 2: Platform Navigation */}
           <div>
-            <h4 className="text-xs font-semibold text-white mb-4 tracking-wider uppercase">Platform</h4>
+            <h4 className="text-xs font-semibold text-primary mb-4 tracking-wider uppercase">Platform</h4>
             <ul className="space-y-2.5">
               {[
                 { name: "Home", url: "/" },
@@ -76,7 +74,7 @@ const Footer = () => {
                 { name: "History & Reports", url: "/dashboard" }
               ].map((link) => (
                 <li key={link.name}>
-                  <Link to={link.url} className="text-sm text-slate-400 hover:text-cyan-400 transition-colors duration-200">
+                  <Link to={link.url} className="text-sm text-secondary hover:text-accent transition-colors duration-200">
                     {link.name}
                   </Link>
                 </li>
@@ -87,14 +85,14 @@ const Footer = () => {
           {/* Column 3: Legal & Contact */}
           <div className="space-y-6">
             <div>
-              <h4 className="text-xs font-semibold text-white mb-4 tracking-wider uppercase">Legal</h4>
+              <h4 className="text-xs font-semibold text-primary mb-4 tracking-wider uppercase">Legal</h4>
               <ul className="space-y-2">
                 {[
                   { name: "Privacy Policy", url: "#" }, 
                   { name: "Terms of Use", url: "#" }
                 ].map((l) => (
                   <li key={l.name}>
-                    <a href={l.url} className="text-sm text-slate-400 hover:text-cyan-400 transition-colors duration-200">
+                    <a href={l.url} className="text-sm text-secondary hover:text-accent transition-colors duration-200">
                       {l.name}
                     </a>
                   </li>
@@ -102,10 +100,10 @@ const Footer = () => {
               </ul>
             </div>
             <div>
-              <h4 className="text-xs font-semibold text-white mb-2 tracking-wider uppercase">Contact</h4>
+              <h4 className="text-xs font-semibold text-primary mb-2 tracking-wider uppercase">Contact</h4>
               <a 
                 href="mailto:sahilsameer.dev18@gmail.com" 
-                className="text-sm text-slate-400 hover:text-cyan-400 flex items-center gap-1.5 transition-colors duration-200"
+                className="text-sm text-secondary hover:text-accent flex items-center gap-1.5 transition-colors duration-200"
               >
                 <FiMail className="w-3.5 h-3.5" />
                 sahilsameer.dev18@gmail.com
@@ -117,10 +115,10 @@ const Footer = () => {
 
         {/* Bottom bar */}
         <div className="flex flex-col sm:flex-row items-center justify-between gap-4 pt-6">
-          <p className="text-slate-500 text-xs font-mono">
+          <p className="text-secondary/80 text-xs font-mono">
             © {new Date().getFullYear()} SkillBridge AI. All rights reserved.
           </p>
-          <p className="text-slate-500 text-xs font-mono">Made by Sahil Sameer</p>
+          <p className="text-secondary/80 text-xs font-mono">Made by Sahil Sameer</p>
         </div>
       </div>
     </footer>
@@ -128,3 +126,6 @@ const Footer = () => {
 };
 
 export default Footer;
+
+
+

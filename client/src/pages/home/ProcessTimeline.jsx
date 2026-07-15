@@ -39,9 +39,9 @@ const REDESIGNED_STEPS = [
 const ProcessTimeline = () => {
   return (
     <section
-      className="py-24 px-4 sm:px-6 lg:px-8 bg-slate-950/30 border-y border-slate-900 relative overflow-hidden"
+      className="py-24 px-4 sm:px-6 lg:px-8 bg-background/30 border-y border-border relative overflow-hidden"
       style={{
-        background: "radial-gradient(circle at 50% 50%, rgba(168,85,247,0.03) 0%, transparent 60%)",
+        background: "radial-gradient(circle at 50% 50%, rgba(255,102,98,0.03) 0%, transparent 60%)",
       }}
     >
       <div className="max-w-5xl mx-auto">
@@ -50,14 +50,14 @@ const ProcessTimeline = () => {
           <span
             className="inline-block px-3 py-1 text-xs font-semibold rounded-full mb-4"
             style={{
-              background: "rgba(168,85,247,0.06)",
-              border: "1px solid rgba(168,85,247,0.2)",
-              color: "#c084fc",
+              background: "rgba(255,102,98,0.06)",
+              border: "1px solid rgba(255,102,98,0.2)",
+              color: "var(--color-accent)",
             }}
           >
             Step-by-step Setup
           </span>
-          <h2 className="text-3xl sm:text-4xl font-extrabold text-white mb-4 tracking-tight">
+          <h2 className="text-3xl sm:text-4xl font-extrabold text-primary mb-4 tracking-tight">
             Zero to Ready in 3 Steps
           </h2>
         </div>
@@ -68,7 +68,7 @@ const ProcessTimeline = () => {
             className="hidden md:block absolute top-10 left-[15%] right-[15%] h-px pointer-events-none"
             style={{
               background:
-                "linear-gradient(90deg, transparent, rgba(6,182,212,0.3) 30%, rgba(168,85,247,0.3) 70%, transparent)",
+                "linear-gradient(90deg, transparent, rgba(255,102,98,0.3) 30%, rgba(255,102,98,0.3) 70%, transparent)",
             }}
           />
 
@@ -77,19 +77,19 @@ const ProcessTimeline = () => {
               <div
                 className="relative z-10 w-20 h-20 rounded-2xl flex flex-col items-center justify-center mb-5 shadow-2xl transition-transform duration-300 hover:scale-105"
                 style={{
-                  background: "linear-gradient(135deg, rgba(6,182,212,0.1), rgba(168,85,247,0.1))",
-                  border: "1px solid rgba(6,182,212,0.2)",
+                  background: "linear-gradient(135deg, rgba(255,102,98,0.1), rgba(255,102,98,0.05))",
+                  border: "1px solid rgba(255,102,98,0.2)",
                 }}
               >
-                <div className="text-cyan-400 mb-1">{step.icon}</div>
-                <span className="text-[10px] font-bold font-mono text-slate-500 uppercase tracking-widest">{step.num}</span>
+                <div className="text-accent mb-1">{step.icon}</div>
+                <span className="text-[10px] font-bold font-mono text-secondary uppercase tracking-widest">{step.num}</span>
               </div>
               
-              <span className="text-[9px] font-bold text-cyan-400 uppercase tracking-wider mb-2 font-mono">
+              <span className="text-[9px] font-bold text-accent uppercase tracking-wider mb-2 font-mono">
                 {step.label}
               </span>
-              <h3 className="text-base font-bold text-white mb-2">{step.title}</h3>
-              <p className="text-xs text-slate-400 leading-relaxed max-w-xs">
+              <h3 className="text-base font-bold text-primary mb-2">{step.title}</h3>
+              <p className="text-xs text-secondary leading-relaxed max-w-xs">
                 {step.desc}
               </p>
             </div>
