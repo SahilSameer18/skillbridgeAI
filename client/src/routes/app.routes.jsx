@@ -2,10 +2,10 @@ import { createBrowserRouter } from 'react-router';
 import Login from '../pages/auth/Login';
 import Register from '../pages/auth/Register';
 import Protected from '../components/auth/Protected';
-import Home from '../pages/Home';
-import Form from '../pages/interview/Form';
-import InterviewReport from '../pages/interview/InterviewReport';
-import Dashboard from '../pages/interview/Dashboard';
+import Home from '../pages/home/Home';
+import Form from '../pages/form/Form';
+import InterviewReport from '../pages/interviewReports/InterviewReport';
+import Dashboard from '../pages/dashboard/Dashboard';
 import AppLayout from '../layouts/AppLayout';
 import NotFound from '../pages/NotFound';
 

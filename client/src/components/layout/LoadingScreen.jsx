@@ -5,13 +5,6 @@ import { createPortal } from "react-dom";
  * LoadingScreen Component
  * A premium, full-screen loading overlay that replaces generic spinners.
  * Features an animated gradient SVG logo, dynamic text, and a visual progress step tracker.
- * 
- * Props:
- * - message: Primary state description (e.g., "Authenticating user profile...")
- * - subtitle: Secondary helpful text (e.g., "Verifying credentials with the security center")
- * - steps: Optional array of string steps (e.g., ["Uploading resume", "Analyzing details", "Saving report"])
- * - currentStep: Optional 0-indexed number representing the current active step in the array
- * - fullScreen: boolean, defaults to true. If false, fits parent container.
  */
 const LoadingScreen = ({
   message = "Loading...",
@@ -56,7 +49,7 @@ const LoadingScreen = ({
         border: fullScreen ? "none" : "1px solid rgba(255, 255, 255, 0.05)",
       }}
     >
-      {/* Dynamic Ambient Background Glows (Optimized via pre-faded gradients to avoid heavy CPU blur re-renders) */}
+      {/* Dynamic Ambient Background Glows */}
       {fullScreen && (
         <>
           <div
@@ -79,9 +72,8 @@ const LoadingScreen = ({
       {/* Main Glass Card Loader */}
       <div className="flex flex-col items-center max-w-md w-full px-8 py-10 rounded-3xl text-center relative z-10">
         
-        {/* Animated Premium SVG Icon (Replacing the basic spinner) */}
+        {/* Animated Premium SVG Icon */}
         <div className="relative mb-8 group animate-float" style={{ willChange: "transform" }}>
-          {/* Pulsing Outer Glow (Optimized via radial gradient to avoid blur filters) */}
           <div
             className="absolute inset-0 scale-150 animate-pulse duration-[3000ms] pointer-events-none"
             style={{
@@ -104,7 +96,7 @@ const LoadingScreen = ({
               stroke="rgba(255, 255, 255, 0.03)"
               strokeWidth="6"
             />
-            {/* Outer animated rotating arc */}
+            {/* Outer animated arc */}
             <circle
               cx="50"
               cy="50"
@@ -124,7 +116,7 @@ const LoadingScreen = ({
               fill="url(#innerGradient)"
               className="animate-pulse"
             />
-            {/* Decorative orbit paths */}
+            {/* Decorative orbits */}
             <path
               d="M50 15A35 35 0 0 1 85 50"
               stroke="#fe9a00"
@@ -163,7 +155,7 @@ const LoadingScreen = ({
           {subtitle}
         </p>
 
-        {/* Steps Visualizer (If Steps are Provided) */}
+        {/* Steps Visualizer */}
         {steps.length > 0 && (
           <div className="w-full flex flex-col gap-3.5 bg-surface/40 p-5 rounded-2xl border border-border/50 text-left animate-fade-in-up">
             {steps.map((step, idx) => {
@@ -179,7 +171,6 @@ const LoadingScreen = ({
                     opacity: isUpcoming ? 0.35 : 1,
                   }}
                 >
-                  {/* Status Indicator Circle */}
                   <div
                     className={`w-5 h-5 rounded-full flex items-center justify-center shrink-0 text-[10px] font-bold transition-all duration-300 ${
                       isCompleted
@@ -198,7 +189,6 @@ const LoadingScreen = ({
                     )}
                   </div>
 
-                  {/* Step Name */}
                   <span
                     className={`text-xs font-semibold ${
                       isActive ? "text-accent font-medium" : isCompleted ? "text-primary/90" : "text-secondary/70"

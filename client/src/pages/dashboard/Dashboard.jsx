@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useInterview } from '../../hooks/useInterview.js';
 import { useNavigate } from 'react-router';
-import Skeleton from '../../components/common/Skeleton.jsx';
+import Skeleton from '../../components/ui/Skeleton.jsx';
 import { FiSearch, FiTrash2, FiDownload, FiX, FiArrowRight } from "react-icons/fi";
 
 // ── Match Level Configuration ────────────────────────────────────────────────

@@ -4,7 +4,7 @@ import { useNavigate } from "react-router";
 import { interviewFormSchema } from "../../schemas/interview.schema.js";
 import JobDescriptionInput from "./components/JobDescriptionInput.jsx";
 import ResumeUpload from "./components/ResumeUpload.jsx";
-import LoadingScreen from "../../components/common/LoadingScreen.jsx";
+import LoadingScreen from "../../components/layout/LoadingScreen.jsx";
 
 // Simulated step notifications during AI generation process
 const LOADING_STEPS = [
@@ -160,7 +160,7 @@ const Form = () => {
             aria-label="Dismiss error"
           >
             <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
-              <path fillRule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 011.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clipRule="evenodd" />
+              <path fillRule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 01-1.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clipRule="evenodd" />
             </svg>
           </button>
         </div>
@@ -244,4 +244,3 @@ const Form = () => {
 };
 
 export default Form;
-

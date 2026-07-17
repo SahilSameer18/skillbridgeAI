@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { useInterview } from '../../hooks/useInterview.js'
 import { useParams } from 'react-router'
-import LoadingScreen from '../../components/common/LoadingScreen'
+import LoadingScreen from '../../components/layout/LoadingScreen'
 
 const NAV_ITEMS = [
     { id: 'technical', label: 'Technical Q&A', icon: 'code' },
@@ -111,7 +111,7 @@ const HeroStats = ({ report }) => {
     )
 }
 
-/* ── Question accordion card (Redesigned) ── */
+/* ── Question accordion card ── */
 const QuestionCard = ({ item, index, accentClass, bodyBg }) => {
     const [open, setOpen] = useState(false)
     return (
@@ -165,7 +165,7 @@ const QuestionCard = ({ item, index, accentClass, bodyBg }) => {
     )
 }
 
-/* ── Skill Gap Card with YouTube and Docs Logos ── */
+/* ── Skill Gap Card ── */
 const SkillGapCard = ({ gap }) => {
     const resources = gap.skillRef?.resources ?? []
     const severityKey = gap.severity?.toLowerCase()
@@ -423,6 +423,3 @@ const InterviewReport = () => {
 }
 
 export default InterviewReport
-
-
-

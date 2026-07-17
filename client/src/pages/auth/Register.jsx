@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useNavigate, Link } from "react-router";
 import { useAuth } from "../../hooks/useAuth";
 import { registerSchema, registerBaseSchema } from "../../schemas/auth.schema.js";
-import LoadingScreen from "../../components/common/LoadingScreen";
+import LoadingScreen from "../../components/layout/LoadingScreen";
 import { FiUser, FiMail, FiLock, FiEye, FiEyeOff, FiArrowRight } from "react-icons/fi";
 
 const FieldError = ({ msg }) =>

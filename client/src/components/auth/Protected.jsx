@@ -1,7 +1,7 @@
 import React from 'react'
 import { useAuth } from '../../hooks/useAuth'
 import { Navigate } from 'react-router';
-import LoadingScreen from '../common/LoadingScreen';
+import LoadingScreen from '../layout/LoadingScreen';
 
 
 const Protected = ({ children }) => {

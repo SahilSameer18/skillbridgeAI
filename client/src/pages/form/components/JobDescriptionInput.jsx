@@ -11,8 +11,6 @@ const COMMON_SKILLS = [
 /**
  * JobDescriptionInput Component
  * Renders the input section for the target job description.
- * Features a modern, border-glowing text area with character counter,
- * IDE window controls aesthetic, and real-time skill keyword extraction.
  */
 const JobDescriptionInput = ({ value, onChange }) => {
   const [localValue, setLocalValue] = useState(value);
@@ -45,7 +43,6 @@ const JobDescriptionInput = ({ value, onChange }) => {
   const extractedSkills = useMemo(() => {
     if (!localValue.trim()) return [];
     return COMMON_SKILLS.filter(skill => {
-      // Regex search with word boundaries to avoid false positives (e.g. "Go" inside "Google")
       const escapedSkill = skill.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&');
       const regex = new RegExp(`\\b${escapedSkill}\\b`, 'i');
       return regex.test(localValue);

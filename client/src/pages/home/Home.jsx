@@ -1,10 +1,10 @@
 import React from "react";
-import { useAuth } from "../hooks/useAuth";
-import HeroSection from "./home/HeroSection";
-import HomeStats from "./home/HomeStats";
-import BentoFeatures from "./home/BentoFeatures";
-import ProcessTimeline from "./home/ProcessTimeline";
-import AudiencePersonas from "./home/AudiencePersonas";
+import { useAuth } from "../../hooks/useAuth";
+import HeroSection from "./HeroSection";
+import HomeStats from "./HomeStats";
+import BentoFeatures from "./BentoFeatures";
+import ProcessTimeline from "./ProcessTimeline";
+import AudiencePersonas from "./AudiencePersonas";
 
 /**
  * Home Component
@@ -27,5 +27,3 @@ const Home = () => {
 };
 
 export default Home;
-
-
