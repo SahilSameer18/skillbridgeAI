@@ -16,7 +16,7 @@ const Home = () => {
   const { user } = useAuth();
 
   return (
-    <div className="animate-fade-in -mx-4 sm:-mx-6 lg:-mx-8">
+    <div className="animate-fade-in -mx-4 sm:-mx-6 lg:-mx-8 overflow-x-hidden">
       <HeroSection user={user} />
       <HomeStats />
       <BentoFeatures />
