@@ -1,13 +1,10 @@
 import { getAllInterviewReports, generateInterviewReport, getInterviewReportById, generateResumePdf, deleteInterviewReport } from "../services/interview.api"
-import { useContext, useEffect } from "react"
+import { useContext } from "react"
 import { InterviewContext } from "../context/InterviewContext";
-import { useParams } from "react-router"
-
 
 export const useInterview = () => {
 
     const context = useContext(InterviewContext)
-    const { interviewId } = useParams()
 
     if (!context) {
         throw new Error("useInterview must be used within an InterviewProvider")
@@ -94,14 +91,6 @@ export const useInterview = () => {
             setPdfLoading(false)
         }
     }
-
-    useEffect(() => {
-        if (interviewId) {
-            getReportById(interviewId)
-        } else {
-            getReports()
-        }
-    }, [interviewId])
 
     return { loading, pdfLoading, report, reports, totalReports, generateReport, getReportById, getReports, getResumePdf, deleteReport }
 

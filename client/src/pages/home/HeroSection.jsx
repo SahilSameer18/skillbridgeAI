@@ -159,7 +159,7 @@ const HeroSection = ({ user }) => {
 
           {/* ── Headline ── */}
           <h1
-            className="font-extrabold tracking-tight mb-6 animate-fade-in-up"
+            className="font-bold tracking-tight mb-6 animate-fade-in-up"
             style={{ fontSize: "clamp(2rem, 6vw, 5rem)", maxWidth: "820px", lineHeight: 1.1 }}
           >
             <span style={{ color: "#ffffff", display: "block" }}>Land Your</span>
@@ -172,14 +172,11 @@ const HeroSection = ({ user }) => {
               }}
             >
               <span
+                className="text-gradient-primary"
                 style={{
                   opacity: fade ? 1 : 0,
                   transition: "opacity 0.3s ease",
                   display: "block",
-                  background: "linear-gradient(135deg, #ff6662 0%, #fe9a00 100%)",
-                  WebkitBackgroundClip: "text",
-                  WebkitTextFillColor: "transparent",
-                  backgroundClip: "text",
                 }}
               >
                 {CYCLING_WORDS[wordIndex]}
