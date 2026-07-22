@@ -3,6 +3,7 @@ import cookieParser from "cookie-parser";
 import cors from "cors";
 import authRouter from "./routes/auth.routes.js";
 import interviewRouter from "./routes/interview.routes.js";
+import userRouter from "./routes/user.routes.js";
 import errorMiddleware from "./middlewares/error.middleware.js";
 import ApiError from "./utils/ApiError.js";
 
@@ -17,9 +18,10 @@ app.use(
   }),
 );
 
-// using all the routes here
+// Mount API routers
 app.use("/api/auth", authRouter);
 app.use("/api/interview", interviewRouter);
+app.use("/api/user", userRouter);
 
 // Fallback for 404 - Route Not Found
 app.use((req, res, next) => {
