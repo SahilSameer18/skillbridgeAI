@@ -30,7 +30,6 @@ export const useAuth = () => {
       setUser(data.user);
       return data;
     } catch (err) {
-      setLoginLoading(false);
       throw err;
     } finally {
       setLoginLoading(false);
@@ -44,39 +43,36 @@ export const useAuth = () => {
       setUser(data.user);
       return data;
     } catch (err) {
-      setRegisterLoading(false);
       throw err;
     } finally {
       setRegisterLoading(false);
     }
   };
 
-  const handleGoogleAuth = async ({ idToken }) => {
+  const handleGoogleAuth = async ({ accessToken }) => {
     setGoogleLoading(true);
     try {
-      const data = await googleAuth({ idToken });
+      const data = await googleAuth({ accessToken });
       if (data && data.user) {
         setUser(data.user);
       }
       return data;
     } catch (err) {
-      setGoogleLoading(false);
       throw err;
     } finally {
       setGoogleLoading(false);
     }
   };
 
-  const handleLinkGoogle = async ({ idToken }) => {
+  const handleLinkGoogle = async ({ accessToken }) => {
     setGoogleLoading(true);
     try {
-      const data = await linkGoogle({ idToken });
+      const data = await linkGoogle({ accessToken });
       if (data && data.user) {
         setUser(data.user);
       }
       return data;
     } catch (err) {
-      setGoogleLoading(false);
       throw err;
     } finally {
       setGoogleLoading(false);
@@ -110,4 +106,3 @@ export const useAuth = () => {
     handleLogout,
   };
 };
-

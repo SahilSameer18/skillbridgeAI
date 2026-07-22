@@ -1,9 +1,9 @@
-import React, { useState } from "react";
-import { useNavigate, Link } from "react-router";
-import { GoogleLogin } from "@react-oauth/google";
+import React, { useState, useEffect } from "react";
+import { useNavigate, Link, useLocation } from "react-router";
 import { useAuth } from "../../hooks/useAuth";
 import { loginSchema } from "../../schemas/auth.schema.js";
 import LoadingScreen from "../../components/layout/LoadingScreen";
+import GoogleButton from "../../components/auth/GoogleButton";
 import { FiMail, FiLock, FiEye, FiEyeOff, FiArrowRight, FiLink } from "react-icons/fi";
 
 const Login = () => {
@@ -21,6 +21,23 @@ const Login = () => {
   const [fieldErrors, setFieldErrors] = useState({ email: null, password: null });
 
   const navigate = useNavigate();
+  const location = useLocation();
+
+  // Restore pending Google token from sessionStorage (set by Register.jsx on 409)
+  useEffect(() => {
+    const storedToken = sessionStorage.getItem("pendingGoogleToken");
+    const fromRegister = location.state?.pendingGoogleLink;
+
+    if (storedToken && fromRegister) {
+      setPendingGoogleToken(storedToken);
+      setConflictNotice(
+        "An account with this Google email already exists. Enter your password below to link Google to your account."
+      );
+      sessionStorage.removeItem("pendingGoogleToken");
+      // Clear router state so refresh doesn't re-trigger
+      window.history.replaceState({}, "");
+    }
+  }, [location.state]);
 
   const validateField = (name, value) => {
     const fieldSchema = loginSchema.shape[name];
@@ -49,15 +66,15 @@ const Login = () => {
     validateField(name, name === "email" ? email : password);
   };
 
-  const handleGoogleSuccess = async (credentialResponse) => {
+  const handleGoogleSuccess = async (tokenResponse) => {
     setError(null);
     setConflictNotice(null);
     try {
-      await handleGoogleAuth({ idToken: credentialResponse.credential });
+      await handleGoogleAuth({ accessToken: tokenResponse.access_token });
       navigate("/");
     } catch (err) {
       if (err?.response?.status === 409) {
-        setPendingGoogleToken(credentialResponse.credential);
+        setPendingGoogleToken(tokenResponse.access_token);
         setConflictNotice(
           err.response.data?.message ||
             "An account with this email already exists. Enter your password below to link Google."
@@ -68,12 +85,17 @@ const Login = () => {
     }
   };
 
+  const handleGoogleError = (err) => {
+    if (err?.cancelled) return; // User closed the popup — no error to show
+    setError("Google Sign-In failed. Please try again.");
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError(null);
 
     setTouched({ email: true, password: true });
-    
+
     const result = loginSchema.safeParse({ email, password });
     if (!result.success) {
       const errors = { email: null, password: null };
@@ -94,7 +116,7 @@ const Login = () => {
       // Step 2: If there was a pending Google account link request, execute link
       if (pendingGoogleToken) {
         try {
-          await handleLinkGoogle({ idToken: pendingGoogleToken });
+          await handleLinkGoogle({ accessToken: pendingGoogleToken });
         } catch (linkErr) {
           console.error("Failed linking Google account after login:", linkErr);
         }
@@ -106,7 +128,8 @@ const Login = () => {
     }
   };
 
-  if (loginLoading || googleLoading) {
+  // Only show full-screen loader for credential form submit (not Google — it has inline spinner)
+  if (loginLoading) {
     return (
       <LoadingScreen
         message="Authenticating your profile..."
@@ -135,7 +158,7 @@ const Login = () => {
 
         <div className="relative z-10 mt-auto mb-10 animate-fade-in-up delay-200">
           <h2 className="text-[2.75rem] font-bold text-white mb-6 leading-[1.1] tracking-tight">
-            Master your <br /> next interview with <br /> 
+            Master your <br /> next interview with <br />
             <span className="text-transparent bg-clip-text bg-gradient-to-r from-accent to-[#fe9a00]">
               AI intelligence.
             </span>
@@ -158,18 +181,14 @@ const Login = () => {
             </p>
           </div>
 
-          {/* Google Sign-In Container */}
-          <div className="mb-6 flex justify-center w-full">
-            <div className="w-full overflow-hidden rounded-xl border border-white/[0.08] hover:border-accent/40 transition-colors">
-              <GoogleLogin
-                onSuccess={handleGoogleSuccess}
-                onError={() => setError("Google Sign-In failed or was cancelled.")}
-                theme="filled_black"
-                shape="rectangular"
-                width="100%"
-                text="continue_with"
-              />
-            </div>
+          {/* Custom Google Sign-In Button */}
+          <div className="mb-6">
+            <GoogleButton
+              text="continue_with"
+              onSuccess={handleGoogleSuccess}
+              onError={handleGoogleError}
+              isLoading={googleLoading}
+            />
           </div>
 
           <div className="relative flex items-center justify-center my-6">
@@ -211,9 +230,9 @@ const Login = () => {
                   placeholder="name@example.com"
                   autoComplete="email"
                   className={`w-full pl-12 pr-4 py-3.5 bg-surface/50 border rounded-xl text-primary placeholder-secondary/40 focus:outline-none focus:ring-4 focus:ring-accent/10 focus:border-accent/60 transition-all duration-300 ${
-                    fieldErrors.email && touched.email 
-                      ? 'border-red-500/50 focus:border-red-500/50 focus:ring-red-500/10 bg-red-500/5' 
-                      : 'border-white/[0.08] hover:border-white/[0.15]'
+                    fieldErrors.email && touched.email
+                      ? "border-red-500/50 focus:border-red-500/50 focus:ring-red-500/10 bg-red-500/5"
+                      : "border-white/[0.08] hover:border-white/[0.15]"
                   }`}
                 />
               </div>
@@ -249,9 +268,9 @@ const Login = () => {
                   placeholder="••••••••"
                   autoComplete="current-password"
                   className={`w-full pl-12 pr-12 py-3.5 bg-surface/50 border rounded-xl text-primary placeholder-secondary/40 focus:outline-none focus:ring-4 focus:ring-accent/10 focus:border-accent/60 transition-all duration-300 ${
-                    fieldErrors.password && touched.password 
-                      ? 'border-red-500/50 focus:border-red-500/50 focus:ring-red-500/10 bg-red-500/5' 
-                      : 'border-white/[0.08] hover:border-white/[0.15]'
+                    fieldErrors.password && touched.password
+                      ? "border-red-500/50 focus:border-red-500/50 focus:ring-red-500/10 bg-red-500/5"
+                      : "border-white/[0.08] hover:border-white/[0.15]"
                   }`}
                 />
                 <button
@@ -311,3 +330,4 @@ const Login = () => {
 };
 
 export default Login;
+

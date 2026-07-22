@@ -103,12 +103,12 @@ const loginUserController = asyncHandler(async (req, res) => {
   });
 });
 
-// Authenticate or register user via Google OAuth ID token
+// Authenticate or register user via Google OAuth access token
 const googleAuthController = asyncHandler(async (req, res) => {
-  const { idToken } = req.body;
+  const { accessToken } = req.body;
 
-  // Verify Google token signature, audience, and email_verified claim
-  const { sub, email, name, picture } = await verifyGoogleToken(idToken);
+  // Verify access token via Google userinfo endpoint and extract user info
+  const { sub, email, name, picture } = await verifyGoogleToken(accessToken);
   const normalizedEmail = email.toLowerCase();
 
   // Check if Google provider is already linked to an account
@@ -125,11 +125,12 @@ const googleAuthController = asyncHandler(async (req, res) => {
   if (existingProvider) {
     let user = existingProvider.user;
 
-    // Update avatar if profile photo changed
-    if (picture && (!user.avatar || user.avatar !== picture)) {
+    // Always sync avatar from Google — handles new pic, updated pic, and removed pic (null)
+    const freshAvatar = picture || null;
+    if (user.avatar !== freshAvatar) {
       user = await prisma.user.update({
         where: { id: user.id },
-        data: { avatar: picture },
+        data: { avatar: freshAvatar },
         include: { providers: true },
       });
     }
@@ -222,8 +223,8 @@ const googleAuthController = asyncHandler(async (req, res) => {
 
 // Link Google account to currently authenticated user account
 const linkGoogleController = asyncHandler(async (req, res) => {
-  const { idToken } = req.body;
-  const { sub, email, picture } = await verifyGoogleToken(idToken);
+  const { accessToken } = req.body;
+  const { sub, email, picture } = await verifyGoogleToken(accessToken);
 
   const currentUser = await prisma.user.findUnique({
     where: { id: req.user.id },
@@ -269,7 +270,7 @@ const linkGoogleController = asyncHandler(async (req, res) => {
 
   const updatedUser = await prisma.user.update({
     where: { id: currentUser.id },
-    data: { avatar: currentUser.avatar || picture },
+    data: { avatar: picture || currentUser.avatar },
     include: { providers: true },
   });
 

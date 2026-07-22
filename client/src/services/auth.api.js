@@ -22,13 +22,13 @@ export async function login({ email, password }) {
   return response.data;
 }
 
-export async function googleAuth({ idToken }) {
-  const response = await api.post("/api/auth/google", { idToken });
+export async function googleAuth({ accessToken }) {
+  const response = await api.post("/api/auth/google", { accessToken });
   return response.data;
 }
 
-export async function linkGoogle({ idToken }) {
-  const response = await api.post("/api/auth/link-google", { idToken });
+export async function linkGoogle({ accessToken }) {
+  const response = await api.post("/api/auth/link-google", { accessToken });
   return response.data;
 }
 

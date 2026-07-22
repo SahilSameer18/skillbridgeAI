@@ -4,14 +4,6 @@ import ApiError from "../utils/ApiError.js";
 import asyncHandler from "../utils/asyncHandler.js";
 import { formatUserResponse } from "../utils/auth.utils.js";
 
-// Helper to ensure user avatar defaults to DiceBear SVG
-const formatProfileUser = (user) => {
-  const formatted = formatUserResponse(user);
-  if (formatted && !formatted.avatar) {
-    formatted.avatar = `https://api.dicebear.com/7.x/bottts/svg?seed=${encodeURIComponent(user.username)}`;
-  }
-  return formatted;
-};
 
 // Get current user profile and candidate preparation stats
 const getProfileController = asyncHandler(async (req, res) => {
@@ -40,7 +32,7 @@ const getProfileController = asyncHandler(async (req, res) => {
   res.status(200).json({
     success: true,
     message: "Profile retrieved successfully",
-    user: formatProfileUser(user),
+    user: formatUserResponse(user),
     stats: {
       totalReports,
       averageScore,
@@ -90,7 +82,7 @@ const updateProfileController = asyncHandler(async (req, res) => {
   res.status(200).json({
     success: true,
     message: "Profile updated successfully",
-    user: formatProfileUser(updatedUser),
+    user: formatUserResponse(updatedUser),
   });
 });
 

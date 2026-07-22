@@ -3,7 +3,7 @@ import { useAuth } from "../../hooks/useAuth";
 import { getProfile, updateProfile, changePassword } from "../../services/user.api";
 import { profileUpdateSchema, changePasswordSchema } from "../../schemas/profile.schema";
 import LoadingScreen from "../../components/layout/LoadingScreen";
-import { GoogleLogin } from "@react-oauth/google";
+import GoogleButton from "../../components/auth/GoogleButton";
 import {
   FiUser,
   FiMail,
@@ -16,48 +16,59 @@ import {
   FiLayers,
   FiAward,
   FiTrendingUp,
+  FiEye,
+  FiEyeOff,
 } from "react-icons/fi";
 
 const getDiceBearAvatar = (seed) =>
   `https://api.dicebear.com/7.x/bottts/svg?seed=${encodeURIComponent(seed || "SkillBridge")}`;
 
 const Profile = () => {
-  const { user, setUser, handleLinkGoogle } = useAuth();
+  const { user, setUser, handleLinkGoogle, googleLoading } = useAuth();
 
   const [activeTab, setActiveTab] = useState("profile");
   const [profileLoading, setProfileLoading] = useState(true);
   const [stats, setStats] = useState({ totalReports: 0, averageScore: 0, topScore: 0 });
 
-  // Form states
+  // Form states — initialized from AuthContext user (no double fetch)
   const [username, setUsername] = useState(user?.username || "");
   const [email, setEmail] = useState(user?.email || "");
   const [avatar, setAvatar] = useState(user?.avatar || "");
-  
+
   // Password form states
   const [currentPassword, setCurrentPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
+
+  // Password visibility toggles
+  const [showCurrentPassword, setShowCurrentPassword] = useState(false);
+  const [showNewPassword, setShowNewPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
   // Feedback messages
   const [profileMessage, setProfileMessage] = useState(null);
   const [profileError, setProfileError] = useState(null);
   const [passwordMessage, setPasswordMessage] = useState(null);
   const [passwordError, setPasswordError] = useState(null);
-  const [saving, setSaving] = useState(false);
 
+  // Separate saving states — prevent cross-form disabled states
+  const [savingProfile, setSavingProfile] = useState(false);
+  const [savingPassword, setSavingPassword] = useState(false);
+
+  // Fetch only stats on mount — user data already in AuthContext from getMe()
   useEffect(() => {
-    const fetchUserData = async () => {
+    const fetchStats = async () => {
       setProfileLoading(true);
       try {
         const data = await getProfile();
-        if (data && data.user) {
-          setUser(data.user);
+        if (data?.stats) {
+          setStats(data.stats);
+        }
+        // Sync form fields with freshest user data from server response
+        if (data?.user) {
           setUsername(data.user.username);
           setEmail(data.user.email);
           setAvatar(data.user.avatar || "");
-        }
-        if (data && data.stats) {
-          setStats(data.stats);
         }
       } catch (err) {
         console.error("Failed fetching profile data:", err);
@@ -65,11 +76,30 @@ const Profile = () => {
         setProfileLoading(false);
       }
     };
-    fetchUserData();
+    fetchStats();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  // Real-time Zod Schema Validation for Profile Update
+  // Auto-clear feedback messages after 5 seconds
+  useEffect(() => {
+    if (!profileMessage && !profileError) return;
+    const timer = setTimeout(() => {
+      setProfileMessage(null);
+      setProfileError(null);
+    }, 5000);
+    return () => clearTimeout(timer);
+  }, [profileMessage, profileError]);
+
+  useEffect(() => {
+    if (!passwordMessage && !passwordError) return;
+    const timer = setTimeout(() => {
+      setPasswordMessage(null);
+      setPasswordError(null);
+    }, 5000);
+    return () => clearTimeout(timer);
+  }, [passwordMessage, passwordError]);
+
+  // Real-time Zod validation for Profile Update
   const profileValidation = profileUpdateSchema.safeParse({ username, email, avatar });
   const profileErrors = {};
   if (!profileValidation.success && profileValidation.error) {
@@ -80,7 +110,7 @@ const Profile = () => {
     });
   }
 
-  // Real-time Zod Schema Validation for Password Change
+  // Real-time Zod validation for Password Change
   const passwordValidation = changePasswordSchema.safeParse({
     currentPassword,
     newPassword,
@@ -101,8 +131,8 @@ const Profile = () => {
     email.trim().toLowerCase() !== (user?.email || "").toLowerCase() ||
     (avatar || "") !== (user?.avatar || "");
 
-  const canSaveProfile = hasProfileChanged && profileValidation.success && !saving;
-  const canSavePassword = passwordValidation.success && !saving;
+  const canSaveProfile = hasProfileChanged && profileValidation.success && !savingProfile;
+  const canSavePassword = passwordValidation.success && !savingPassword;
 
   const handleUpdateProfile = async (e) => {
     e.preventDefault();
@@ -110,7 +140,7 @@ const Profile = () => {
     setProfileError(null);
 
     if (!canSaveProfile) return;
-    setSaving(true);
+    setSavingProfile(true);
 
     try {
       const response = await updateProfile({
@@ -119,14 +149,14 @@ const Profile = () => {
         avatar: avatar ? avatar.trim() : null,
       });
 
-      if (response && response.user) {
+      if (response?.user) {
         setUser(response.user);
         setProfileMessage("Profile updated successfully!");
       }
     } catch (err) {
       setProfileError(err?.response?.data?.message || "Failed to update profile.");
     } finally {
-      setSaving(false);
+      setSavingProfile(false);
     }
   };
 
@@ -137,7 +167,7 @@ const Profile = () => {
 
     if (!canSavePassword) return;
 
-    setSaving(true);
+    setSavingPassword(true);
     try {
       await changePassword({ currentPassword, newPassword });
       setPasswordMessage("Password changed successfully!");
@@ -147,21 +177,24 @@ const Profile = () => {
     } catch (err) {
       setPasswordError(err?.response?.data?.message || "Failed to change password.");
     } finally {
-      setSaving(false);
+      setSavingPassword(false);
     }
   };
 
-  const handleGoogleLinkSuccess = async (credentialResponse) => {
+  const handleGoogleLinkSuccess = async (tokenResponse) => {
     setProfileMessage(null);
     setProfileError(null);
     try {
-      const data = await handleLinkGoogle({ idToken: credentialResponse.credential });
-      if (data && data.user) {
-        setProfileMessage("Google account linked successfully!");
-      }
+      await handleLinkGoogle({ accessToken: tokenResponse.access_token });
+      setProfileMessage("Google account linked successfully!");
     } catch (err) {
       setProfileError(err?.response?.data?.message || "Failed to link Google account.");
     }
+  };
+
+  const handleGoogleLinkError = (err) => {
+    if (err?.cancelled) return;
+    setProfileError("Google linking failed. Please try again.");
   };
 
   if (profileLoading) {
@@ -181,7 +214,7 @@ const Profile = () => {
       {/* ── Top Header Banner ── */}
       <div className="relative rounded-3xl p-6 sm:p-8 bg-surface/30 border border-border/80 overflow-hidden mb-8 shadow-xl">
         <div className="absolute top-0 right-0 w-96 h-96 bg-accent/10 rounded-full blur-[120px] pointer-events-none" />
-        
+
         <div className="flex flex-col md:flex-row items-center gap-6 relative z-10">
           {/* Avatar with onError fallback */}
           <div className="relative group">
@@ -338,6 +371,7 @@ const Profile = () => {
                   type="email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
+                  placeholder="name@example.com"
                   className={`w-full pl-11 pr-4 py-3 bg-surface/50 border rounded-xl text-sm text-primary focus:outline-none transition-all ${
                     profileErrors.email ? "border-red-500/50 focus:border-red-500" : "border-white/[0.08] focus:border-accent/60"
                   }`}
@@ -384,12 +418,12 @@ const Profile = () => {
                   : "bg-surface/50 text-secondary/40 border border-white/[0.05] cursor-not-allowed opacity-60"
               }`}
             >
-              {saving ? (
+              {savingProfile ? (
                 <span className="w-4 h-4 border-2 border-primary/30 border-t-primary rounded-full animate-spin" />
               ) : (
                 <FiSave className="w-4 h-4" />
               )}
-              {saving ? "Saving Changes..." : "Save Changes"}
+              {savingProfile ? "Saving Changes..." : "Save Changes"}
             </button>
 
             {!hasProfileChanged && (
@@ -412,6 +446,19 @@ const Profile = () => {
                 Manage external OAuth single sign-on connections for your SkillBridge AI account.
               </p>
 
+              {/* Profile-level messages */}
+              {profileMessage && (
+                <div className="mb-4 p-3.5 rounded-xl bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-xs flex items-center gap-2">
+                  <FiCheckCircle className="w-4 h-4 shrink-0" />
+                  {profileMessage}
+                </div>
+              )}
+              {profileError && (
+                <div className="mb-4 p-3.5 rounded-xl bg-red-500/10 border border-red-500/20 text-red-400 text-xs">
+                  {profileError}
+                </div>
+              )}
+
               {isGoogleLinked ? (
                 <div className="flex items-center justify-between p-3.5 rounded-xl bg-emerald-500/10 border border-emerald-500/20">
                   <div className="flex items-center gap-3">
@@ -430,14 +477,12 @@ const Profile = () => {
                   <p className="text-xs text-amber-300 bg-amber-500/10 p-3 rounded-xl border border-amber-500/20">
                     Google account is not linked. Click below to link your Google account.
                   </p>
-                  <div className="flex justify-start">
-                    <GoogleLogin
-                      onSuccess={handleGoogleLinkSuccess}
-                      onError={() => setProfileError("Google linking was cancelled.")}
-                      theme="filled_black"
-                      text="continue_with"
-                    />
-                  </div>
+                  <GoogleButton
+                    text="link_with"
+                    onSuccess={handleGoogleLinkSuccess}
+                    onError={handleGoogleLinkError}
+                    isLoading={googleLoading}
+                  />
                 </div>
               )}
             </div>
@@ -460,23 +505,30 @@ const Profile = () => {
                   </div>
                 )}
 
-                {/* Current Password Input */}
+                {/* Current Password */}
                 <div>
                   <label className="block text-xs font-bold text-secondary uppercase tracking-wider mb-2">Current Password</label>
                   <div className="relative">
                     <FiLock className="absolute left-4 top-1/2 -translate-y-1/2 text-secondary/50" />
                     <input
-                      type="password"
+                      type={showCurrentPassword ? "text" : "password"}
                       value={currentPassword}
                       onChange={(e) => setCurrentPassword(e.target.value)}
                       placeholder="••••••••"
-                      className="w-full pl-11 pr-4 py-2.5 bg-surface/50 border border-white/[0.08] rounded-xl text-sm text-primary focus:outline-none focus:border-accent/60"
+                      className="w-full pl-11 pr-12 py-2.5 bg-surface/50 border border-white/[0.08] rounded-xl text-sm text-primary focus:outline-none focus:border-accent/60"
                       required
                     />
+                    <button
+                      type="button"
+                      onClick={() => setShowCurrentPassword((v) => !v)}
+                      className="absolute right-4 top-1/2 -translate-y-1/2 text-secondary/50 hover:text-primary transition-colors focus:outline-none cursor-pointer"
+                    >
+                      {showCurrentPassword ? <FiEyeOff className="w-4 h-4" /> : <FiEye className="w-4 h-4" />}
+                    </button>
                   </div>
                 </div>
 
-                {/* New Password Input */}
+                {/* New Password */}
                 <div>
                   <label className="block text-xs font-bold text-secondary uppercase tracking-wider mb-2">
                     New Password <span className="text-secondary/50 font-normal">(Min 6 characters)</span>
@@ -484,15 +536,22 @@ const Profile = () => {
                   <div className="relative">
                     <FiLock className="absolute left-4 top-1/2 -translate-y-1/2 text-secondary/50" />
                     <input
-                      type="password"
+                      type={showNewPassword ? "text" : "password"}
                       value={newPassword}
                       onChange={(e) => setNewPassword(e.target.value)}
                       placeholder="••••••••"
-                      className={`w-full pl-11 pr-4 py-2.5 bg-surface/50 border rounded-xl text-sm text-primary focus:outline-none transition-all ${
+                      className={`w-full pl-11 pr-12 py-2.5 bg-surface/50 border rounded-xl text-sm text-primary focus:outline-none transition-all ${
                         passwordErrors.newPassword ? "border-red-500/50 focus:border-red-500" : "border-white/[0.08] focus:border-accent/60"
                       }`}
                       required
                     />
+                    <button
+                      type="button"
+                      onClick={() => setShowNewPassword((v) => !v)}
+                      className="absolute right-4 top-1/2 -translate-y-1/2 text-secondary/50 hover:text-primary transition-colors focus:outline-none cursor-pointer"
+                    >
+                      {showNewPassword ? <FiEyeOff className="w-4 h-4" /> : <FiEye className="w-4 h-4" />}
+                    </button>
                   </div>
                   {passwordErrors.newPassword && (
                     <p className="text-red-400 text-xs mt-1.5 flex items-center gap-1">
@@ -502,21 +561,28 @@ const Profile = () => {
                   )}
                 </div>
 
-                {/* Confirm New Password Input */}
+                {/* Confirm New Password */}
                 <div>
                   <label className="block text-xs font-bold text-secondary uppercase tracking-wider mb-2">Confirm New Password</label>
                   <div className="relative">
                     <FiLock className="absolute left-4 top-1/2 -translate-y-1/2 text-secondary/50" />
                     <input
-                      type="password"
+                      type={showConfirmPassword ? "text" : "password"}
                       value={confirmPassword}
                       onChange={(e) => setConfirmPassword(e.target.value)}
                       placeholder="••••••••"
-                      className={`w-full pl-11 pr-4 py-2.5 bg-surface/50 border rounded-xl text-sm text-primary focus:outline-none transition-all ${
+                      className={`w-full pl-11 pr-12 py-2.5 bg-surface/50 border rounded-xl text-sm text-primary focus:outline-none transition-all ${
                         passwordErrors.confirmPassword ? "border-red-500/50 focus:border-red-500" : "border-white/[0.08] focus:border-accent/60"
                       }`}
                       required
                     />
+                    <button
+                      type="button"
+                      onClick={() => setShowConfirmPassword((v) => !v)}
+                      className="absolute right-4 top-1/2 -translate-y-1/2 text-secondary/50 hover:text-primary transition-colors focus:outline-none cursor-pointer"
+                    >
+                      {showConfirmPassword ? <FiEyeOff className="w-4 h-4" /> : <FiEye className="w-4 h-4" />}
+                    </button>
                   </div>
                   {passwordErrors.confirmPassword && (
                     <p className="text-red-400 text-xs mt-1.5 flex items-center gap-1">
@@ -536,12 +602,12 @@ const Profile = () => {
                       : "bg-surface/50 text-secondary/40 border border-white/[0.05] cursor-not-allowed opacity-60"
                   }`}
                 >
-                  {saving ? (
+                  {savingPassword ? (
                     <span className="w-4 h-4 border-2 border-primary/30 border-t-primary rounded-full animate-spin" />
                   ) : (
                     <FiLock className="w-4 h-4" />
                   )}
-                  {saving ? "Updating Password..." : "Update Password"}
+                  {savingPassword ? "Updating Password..." : "Update Password"}
                 </button>
               </form>
             ) : (

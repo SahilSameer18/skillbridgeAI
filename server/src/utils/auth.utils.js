@@ -1,8 +1,4 @@
-import { OAuth2Client } from "google-auth-library";
 import ApiError from "./ApiError.js";
-
-// Initialize Google OAuth2 Client using environment variable
-const googleClient = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
 
 /**
  * Standardizes user response payload across all authentication routes.
@@ -28,25 +24,33 @@ export function formatUserResponse(user) {
 }
 
 /**
- * Verifies a Google ID Token JWT sent from the React client.
- * Validates token signature, expiration, client ID audience, and email_verified claim.
- * @param {string} idToken - The JWT credential token from Google Identity Services
+ * Verifies a Google OAuth2 access token by calling Google's userinfo endpoint.
+ * Google validates the token server-side and returns verified user information.
+ * Enforces email_verified claim before trusting the email address.
+ *
+ * @param {string} accessToken - The OAuth2 access token from useGoogleLogin() implicit flow
  * @returns {Promise<{sub: string, email: string, name: string, picture: string|null}>}
  */
-export async function verifyGoogleToken(idToken) {
-  if (!idToken || typeof idToken !== "string") {
-    throw new ApiError(400, "Google ID token is required");
+export async function verifyGoogleToken(accessToken) {
+  if (!accessToken || typeof accessToken !== "string") {
+    throw new ApiError(400, "Google access token is required");
   }
 
   try {
-    const ticket = await googleClient.verifyIdToken({
-      idToken,
-      audience: process.env.GOOGLE_CLIENT_ID,
-    });
+    const response = await fetch(
+      `https://www.googleapis.com/oauth2/v3/userinfo`,
+      {
+        headers: { Authorization: `Bearer ${accessToken}` },
+      }
+    );
 
-    const payload = ticket.getPayload();
+    if (!response.ok) {
+      throw new ApiError(401, `Google token validation failed (${response.status})`);
+    }
 
-    if (!payload) {
+    const payload = await response.json();
+
+    if (!payload || !payload.sub) {
       throw new ApiError(401, "Invalid Google token payload");
     }
 
@@ -66,6 +70,3 @@ export async function verifyGoogleToken(idToken) {
     throw new ApiError(401, `Google token authentication failed: ${error.message}`);
   }
 }
-
-
-

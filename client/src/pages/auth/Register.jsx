@@ -1,9 +1,9 @@
 import React, { useState } from "react";
 import { useNavigate, Link } from "react-router";
-import { GoogleLogin } from "@react-oauth/google";
 import { useAuth } from "../../hooks/useAuth";
 import { registerSchema, registerBaseSchema } from "../../schemas/auth.schema.js";
 import LoadingScreen from "../../components/layout/LoadingScreen";
+import GoogleButton from "../../components/auth/GoogleButton";
 import { FiUser, FiMail, FiLock, FiEye, FiEyeOff, FiArrowRight } from "react-icons/fi";
 
 const FieldError = ({ msg }) =>
@@ -47,7 +47,7 @@ const Register = () => {
     const value = e.target.value;
     setFields((prev) => ({ ...prev, [name]: value }));
     setError(null);
-    
+
     if (touched[name]) {
       if (name === "confirmPassword") {
         const err = value === fields.password ? null : "Passwords do not match.";
@@ -59,7 +59,7 @@ const Register = () => {
         setFieldErrors((prev) => ({ ...prev, [name]: err }));
       }
     }
-    
+
     if (name === "password" && touched.confirmPassword) {
       const err = fields.confirmPassword === value ? null : "Passwords do not match.";
       setFieldErrors((prev) => ({ ...prev, confirmPassword: err }));
@@ -71,21 +71,27 @@ const Register = () => {
     validateField(name, fields[name]);
   };
 
-  const handleGoogleSuccess = async (credentialResponse) => {
+  const handleGoogleSuccess = async (tokenResponse) => {
     setError(null);
     try {
-      await handleGoogleAuth({ idToken: credentialResponse.credential });
+      await handleGoogleAuth({ accessToken: tokenResponse.access_token });
       navigate("/");
     } catch (err) {
       if (err?.response?.status === 409) {
-        setError(
-          err.response.data?.message ||
-            "An account with this email already exists. Please sign in with your password to link Google."
-        );
+        // Store the token and redirect to Login to complete the link flow
+        sessionStorage.setItem("pendingGoogleToken", tokenResponse.access_token);
+        navigate("/login", {
+          state: { pendingGoogleLink: true },
+        });
       } else {
         setError(err?.response?.data?.message || "Google registration failed.");
       }
     }
+  };
+
+  const handleGoogleError = (err) => {
+    if (err?.cancelled) return; // User closed popup — no error needed
+    setError("Google Sign-In failed. Please try again.");
   };
 
   const handleSubmit = async (e) => {
@@ -118,7 +124,8 @@ const Register = () => {
     }
   };
 
-  if (registerLoading || googleLoading) {
+  // Only show full-screen loader for credential registration (not Google — it has inline spinner)
+  if (registerLoading) {
     return (
       <LoadingScreen
         message="Setting up your account..."
@@ -129,9 +136,9 @@ const Register = () => {
 
   const inputClass = (hasError) =>
     `w-full pl-12 pr-4 py-3.5 bg-surface/50 border rounded-xl text-primary placeholder-secondary/40 focus:outline-none focus:ring-4 focus:ring-accent/10 focus:border-accent/60 transition-all duration-300 ${
-      hasError 
-        ? 'border-red-500/50 focus:border-red-500/50 focus:ring-red-500/10 bg-red-500/5' 
-        : 'border-white/[0.08] hover:border-white/[0.15]'
+      hasError
+        ? "border-red-500/50 focus:border-red-500/50 focus:ring-red-500/10 bg-red-500/5"
+        : "border-white/[0.08] hover:border-white/[0.15]"
     }`;
 
   return (
@@ -159,7 +166,7 @@ const Register = () => {
             </svg>
           </div>
           <h2 className="text-[2.75rem] font-bold text-white mb-6 leading-[1.1] tracking-tight">
-            Accelerate your <br /> career growth <br /> 
+            Accelerate your <br /> career growth <br />
             <span className="text-transparent bg-clip-text bg-gradient-to-r from-accent to-[#fe9a00]">
               starting today.
             </span>
@@ -182,18 +189,14 @@ const Register = () => {
             </p>
           </div>
 
-          {/* Google Sign-In Container */}
-          <div className="mb-6 flex justify-center w-full">
-            <div className="w-full overflow-hidden rounded-xl border border-white/[0.08] hover:border-accent/40 transition-colors">
-              <GoogleLogin
-                onSuccess={handleGoogleSuccess}
-                onError={() => setError("Google Sign-In failed or was cancelled.")}
-                theme="filled_black"
-                shape="rectangular"
-                width="100%"
-                text="signup_with"
-              />
-            </div>
+          {/* Custom Google Sign-Up Button */}
+          <div className="mb-6">
+            <GoogleButton
+              text="signup_with"
+              onSuccess={handleGoogleSuccess}
+              onError={handleGoogleError}
+              isLoading={googleLoading}
+            />
           </div>
 
           <div className="relative flex items-center justify-center my-6">
@@ -356,6 +359,3 @@ const Register = () => {
 };
 
 export default Register;
-
-
-

@@ -23,9 +23,9 @@ export const loginSchema = z.object({
 });
 
 export const googleAuthSchema = z.object({
-  idToken: z
-    .string({ required_error: "Google ID token is required" })
+  accessToken: z
+    .string({ required_error: "Google access token is required" })
     .trim()
-    .min(1, "Google ID token cannot be empty"),
+    .min(1, "Google access token cannot be empty"),
 });
 
