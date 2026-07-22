@@ -1,14 +1,15 @@
-# SkillBridge AI 🚀
+# SkillBridge AI
 
 [![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg?style=for-the-badge)](LICENSE)
 [![React Version](https://img.shields.io/badge/React-19.2-61dafb.svg?logo=react&style=for-the-badge)](https://react.dev/)
 [![Tailwind Version](https://img.shields.io/badge/Tailwind-4.2-38bdf8.svg?logo=tailwindcss&style=for-the-badge)](https://tailwindcss.com/)
 [![Express Version](https://img.shields.io/badge/Express-5.2-000000.svg?logo=express&style=for-the-badge)](https://expressjs.com/)
+[![Google OAuth](https://img.shields.io/badge/OAuth-Google-4285F4.svg?logo=google&style=for-the-badge)](https://developers.google.com/identity)
 [![AI Integration](https://img.shields.io/badge/Gemini--AI-Structured-red.svg?logo=googlegemini&style=for-the-badge)](https://ai.google.dev/)
 
 SkillBridge AI is a full-stack interview preparation platform that transforms a resume and job description into a structured, AI-powered career readiness report.
 
-It combines secure account management, PDF resume parsing, Google Gemini AI analysis, and a modern React dashboard to help candidates prepare for technical and behavioral interviews.
+It combines secure account management, **Google OAuth 2.0 Single Sign-On**, **User Profile Workspace with DiceBear Avatars**, PDF resume parsing, Google Gemini AI analysis, and a modern React dashboard to help candidates prepare for technical and behavioral interviews.
 
 ---
 
@@ -38,12 +39,15 @@ Job seekers often struggle to translate their resume into interview readiness. S
 
 - **Structured AI Output:** Backend prompts Google Gemini to return a strict JSON payload containing `matchScore`, `technicalQuestions`, `behavioralQuestions`, `skillGaps`, `preparationPlan`, and `title`.
 - **Deterministic Skill-Resource Matching:** Each AI-generated skill gap is resolved server-side against a seeded, normalized `Skill` catalog — using bounded keyword matching (with a word-boundary check that prevents false positives like "Java" matching inside "JavaScript") and a Levenshtein-based fuzzy fallback for typos. No prompt changes, no AI-generated URLs — every resource link is pre-curated and verified.
+- **Google OAuth & Secure Account Linking:** Integrated Google Identity Services (GIS) using `@react-oauth/google` and `google-auth-library`. Features a 409 account linking flow that prevents unauthorized automatic account merging while letting candidates link Google to existing accounts.
+- **Dynamic DiceBear Avatar Generation:** Automatically assigns custom vector robot avatars (`https://api.dicebear.com/7.x/bottts/svg?seed=${username}`) as a default or fallback whenever a profile image is missing or fails to load.
+- **User Profile Console:** Dedicated `/profile` workspace featuring candidate preparation analytics (Total Audited Roles, Average Compatibility Score, Top Match Score), profile field updates (with space restrictions), and password security.
 - **Secure Session Management:** JWT-based auth is stored as an HTTP-only cookie and validated with a token blacklist.
-- **API Rate Limiting:** Express rate-limit middleware protects the login endpoint and AI generation calls from abuse.
-- **Input Validation:** Zod schemas validate auth and interview payloads on both client and server, ensuring consistent request data and user form validation.
+- **API Rate Limiting:** Express rate-limit middleware protects the login endpoint, account linking, and AI generation calls from abuse.
+- **Input Validation:** Zod schemas validate auth, profile, and interview payloads on both client (`profile.schema.js`) and server (`user.schema.js`), ensuring consistent request data, no spaces in usernames, and user form validation.
 - **PDF Resume Parsing:** Uploaded resumes are parsed using `pdf-parse`, then analyzed alongside job descriptions.
 - **Downloadable Resume Export:** Generated resume HTML is converted to PDF through Puppeteer for a polished candidate asset.
-- **Protected React Routing:** Authenticated flows use React Router and a `Protected` wrapper for `/generate`, `/dashboard`, and report detail routes.
+- **Protected React Routing:** Authenticated flows use React Router and a `Protected` wrapper for `/generate`, `/dashboard`, `/profile`, and report detail routes.
 - **PostgreSQL + Prisma ORM:** Type-safe database layer using Prisma ORM with PostgreSQL hosted on Neon, enabling efficient relational queries and schema migrations.
 
 ---
@@ -57,12 +61,13 @@ flowchart LR
         UI[React Components]
         Router[React Router]
         Context[Context API]
+        OAuth[Google OAuth Provider]
         Forms[React Hook Form + Zod]
     end
 
     subgraph Backend["Express 5 API"]
         API[REST Controllers]
-        Auth[JWT Authentication]
+        Auth[JWT + OAuth Middleware]
         Middleware[Zod Validation<br/>Rate Limiter]
         Services[Business Services]
         Matcher[Skill Matcher Service]
@@ -74,7 +79,9 @@ flowchart LR
     end
 
     subgraph External["External Services"]
+        GoogleOAuth[Google Identity Services]
         Gemini[Google Gemini AI]
+        DiceBear[DiceBear Avatar API]
         Parser[pdf-parse]
         PDF[Puppeteer PDF Generator]
     end
@@ -82,8 +89,10 @@ flowchart LR
     User --> UI
     UI --> Router
     UI --> Context
+    UI --> OAuth
     UI --> Forms
 
+    OAuth -->|Google ID Token| GoogleOAuth
     Forms -->|HTTPS / REST| API
     Context -->|HTTP-only JWT Cookie| Auth
 
@@ -94,6 +103,7 @@ flowchart LR
     Services --> Parser
     Services --> PDF
     Services --> Matcher
+    Services --> DiceBear
 
     Matcher --> Prisma
     Services --> Prisma
@@ -117,13 +127,27 @@ skillBridgeAI/
 │       ├── main.jsx
 │       ├── assets/
 │       ├── components/
+│       │   ├── auth/
+│       │   ├── layout/
+│       │   └── ui/
 │       ├── context/
 │       ├── hooks/
 │       ├── layouts/
 │       ├── pages/
+│       │   ├── auth/
+│       │   ├── dashboard/
+│       │   ├── form/
+│       │   ├── home/
+│       │   ├── interviewReports/
+│       │   └── profile/
 │       ├── routes/
 │       ├── schemas/
+│       │   ├── auth.schema.js
+│       │   └── profile.schema.js
 │       ├── services/
+│       │   ├── auth.api.js
+│       │   ├── interview.api.js
+│       │   └── user.api.js
 │       └── styles/
 └── server/
     ├── package.json
@@ -137,16 +161,39 @@ skillBridgeAI/
         ├── app.js
         ├── config/
         ├── controllers/
+        │   ├── auth.controller.js
+        │   ├── interview.controller.js
+        │   └── user.controller.js
         ├── lib/
         ├── middlewares/
         ├── routes/
+        │   ├── auth.routes.js
+        │   ├── interview.routes.js
+        │   └── user.routes.js
         ├── schemas/
-        └── services/
+        │   ├── auth.schema.js
+        │   ├── interview.schema.js
+        │   └── user.schema.js
+        ├── services/
+        └── utils/
 ```
 
 ---
 
 ## ✨ Core Features
+
+### 🔑 Google OAuth & Account Security
+
+- **Google Single Sign-On:** Instant one-click authentication with Google.
+- **Account Linking:** Prevents automatic merging on email collisions — prompts users to sign in with their password to link their Google account securely.
+- **Multi-Provider Architecture:** Relational groundwork for expanding to GitHub and other OAuth providers.
+
+### 👤 Profile Workspace & Avatar Management
+
+- **User Profile Dashboard (`/profile`):** View identity details, joined date, connected providers, and candidate prep analytics.
+- **DiceBear SVG Avatar Generator:** Dynamic vector bot avatars generated automatically for password accounts or image load errors.
+- **Profile Customization:** Edit username (with no-spaces validation) and custom avatar URL.
+- **Password Controls:** Change password for credential accounts with bcrypt hashing.
 
 ### 🤖 AI Interview Analyzer
 
@@ -196,7 +243,9 @@ skillBridgeAI/
 - React 19
 - Vite 7
 - Tailwind CSS v4
+- `@react-oauth/google`
 - React Router DOM 7
+- Zod (client validation)
 - Axios
 
 ### Backend
@@ -205,6 +254,7 @@ skillBridgeAI/
 - Express 5
 - PostgreSQL (via Neon)
 - Prisma ORM
+- `google-auth-library`
 - Zod (request validation)
 - @google/genai
 - Puppeteer
@@ -222,10 +272,11 @@ Managed with **Prisma ORM** on **PostgreSQL (Neon)**. Full schema at [`server/pr
 
 | Model                | Key Fields                                                                                              |
 | --------------------- | --------------------------------------------------------------------------------------------------------- |
-| `User`                | `id`, `username`, `email`, `password` → has many `InterviewReport`                                        |
-| `InterviewReport`     | `matchScore`, `title`, `jobDescription`, `resume` → belongs to `User`                  |
-| `TechnicalQuestion`   | `question`, `intention`, `answer` → belongs to `InterviewReport`                                           |
-| `BehavioralQuestion`  | `question`, `intention`, `answer` → belongs to `InterviewReport`                                           |
+| `User`                | `id`, `username`, `email`, optional `password`, optional `avatar` → has many `OAuthProvider`, `InterviewReport` |
+| `OAuthProvider`       | `id`, `userId`, `providerName`, `providerId` → `@unique([providerName, providerId])`, belongs to `User`  |
+| `InterviewReport`     | `matchScore`, `title`, `jobDescription`, `resume` → belongs to `User`                                    |
+| `TechnicalQuestion`   | `question`, `intention`, `answer` → belongs to `InterviewReport`                                          |
+| `BehavioralQuestion`  | `question`, `intention`, `answer` → belongs to `InterviewReport`                                          |
 | `SkillGap`            | `skill`, `severity` (`low \| medium \| high`), optional `skillRef` → belongs to `InterviewReport`, optionally links to a `Skill` |
 | `Skill`               | `name` (unique), `aliases` → has many `LearningResource`, has many `SkillGap`                              |
 | `LearningResource`    | `type` (`DOCUMENTATION \| VIDEO`), `title`, `url` → belongs to `Skill`                                     |
@@ -242,8 +293,16 @@ All relations use `onDelete: Cascade`, except `SkillGap.skillRef → Skill`, whi
 
 - `POST /api/auth/register` - create a new user
 - `POST /api/auth/login` - sign in and receive secure auth cookie
+- `POST /api/auth/google` - Google OAuth authentication & account creation
+- `POST /api/auth/link-google` - Link Google account to existing user account
 - `POST /api/auth/logout` - revoke session and blacklist token
 - `GET /api/auth/get-me` - return current user profile
+
+### User Profile Endpoints
+
+- `GET /api/user/profile` - fetch current user profile & candidate preparation analytics
+- `PUT /api/user/profile` - update username, email, and avatar URL
+- `PUT /api/user/change-password` - change account password (credential accounts)
 
 ### Interview Endpoints
 
@@ -292,6 +351,7 @@ DATABASE_URL=postgresql://user:password@host/database
 DIRECT_URL=postgresql://user:password@host/database
 JWT_SECRET=your_jwt_secret
 GOOGLE_GENAI_API_KEY=your_google_genai_key
+GOOGLE_CLIENT_ID=your_google_oauth_client_id
 ```
 
 > Note: the backend currently listens on port `3000` in [`server/server.js`](server/server.js), so `PORT` is not used yet.
@@ -316,6 +376,13 @@ npx prisma db seed
 ```bash
 cd ../client
 npm install
+```
+
+Create a `.env.development` file in `client/` with:
+
+```env
+VITE_API_URL=http://localhost:3000
+VITE_GOOGLE_CLIENT_ID=your_google_oauth_client_id
 ```
 
 ### 5. Start both apps
