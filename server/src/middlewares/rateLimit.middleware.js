@@ -23,5 +23,17 @@ const authLimiter = rateLimit({
   legacyHeaders: false,
 });
 
-export { aiGenerationLimiter, authLimiter };
+const googleLinkLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  max: 30, // 30 account link attempts per 15 min
+  message: {
+    success: false,
+    message: "Too many account linking requests. Please try again later.",
+  },
+  standardHeaders: true,
+  legacyHeaders: false,
+});
+
+export { aiGenerationLimiter, authLimiter, googleLinkLimiter };
+
 

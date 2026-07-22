@@ -23,10 +23,26 @@ model User {
   id               String            @id @default(cuid())
   username         String            @unique
   email            String            @unique
-  password         String
+  password         String?           // Optional for password-less OAuth users
+  avatar           String?           // Google or custom profile image URL
+  providers        OAuthProvider[]
   interviewReports InterviewReport[]
   createdAt        DateTime          @default(now())
   updatedAt        DateTime          @updatedAt
+}
+
+model OAuthProvider {
+  id           String   @id @default(cuid())
+  providerName String   // e.g., "google"
+  providerId   String   // Provider unique identifier
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId       String
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  @@unique([providerName, providerId])
+  @@index([providerName, providerId])
+  @@index([userId])
 }
 
 // INTERVIEW REPORT

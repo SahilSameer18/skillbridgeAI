@@ -3,13 +3,20 @@ import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import ApiError from "../utils/ApiError.js";
 import asyncHandler from "../utils/asyncHandler.js";
+import { formatUserResponse, verifyGoogleToken } from "../utils/auth.utils.js";
 
-/**
- * @name registerUserController
- * @description register a new user with username, email and password in request body
- * @access Public
- */
-const registerUserController = asyncHandler(async (req, res, next) => {
+// Utility helper to attach HTTP-only session cookie
+const setAuthCookie = (res, token) => {
+  res.cookie("token", token, {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === "production",
+    sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
+    maxAge: 24 * 60 * 60 * 1000,
+  });
+};
+
+// Register user with username, email, and password
+const registerUserController = asyncHandler(async (req, res) => {
   const { username, email, password } = req.body;
 
   if (!username || !email || !password) {
@@ -18,57 +25,41 @@ const registerUserController = asyncHandler(async (req, res, next) => {
 
   const isUserAlreadyExist = await prisma.user.findFirst({
     where: {
-      OR: [{ email }, { username }],
+      OR: [{ email: email.toLowerCase() }, { username }],
     },
   });
 
   if (isUserAlreadyExist) {
-    throw new ApiError(400, "User already exists");
+    throw new ApiError(400, "Username or email already exists");
   }
 
   const hash = await bcrypt.hash(password, 10);
-
   const user = await prisma.user.create({
     data: {
       username,
-      email,
+      email: email.toLowerCase(),
       password: hash,
     },
+    include: { providers: true },
   });
 
   const token = jwt.sign(
-    {
-      id: user.id,
-      username: user.username,
-    },
+    { id: user.id, username: user.username },
     process.env.JWT_SECRET,
-    { expiresIn: "1d" },
+    { expiresIn: "1d" }
   );
 
-  res.cookie("token", token, {
-    httpOnly: true,
-    secure: process.env.NODE_ENV === "production",
-    sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
-    maxAge: 24 * 60 * 60 * 1000,
-  });
+  setAuthCookie(res, token);
 
   res.status(201).json({
     success: true,
     message: "User registered successfully",
-    user: {
-      id: user.id,
-      username: user.username,
-      email: user.email,
-    },
+    user: formatUserResponse(user),
   });
 });
 
-/**
- * @name loginUserController
- * @description login user with email and password in request body
- * @access Public
- */
-const loginUserController = asyncHandler(async (req, res, next) => {
+// Login user with email and password
+const loginUserController = asyncHandler(async (req, res) => {
   const { email, password } = req.body;
 
   if (!email || !password) {
@@ -76,58 +67,225 @@ const loginUserController = asyncHandler(async (req, res, next) => {
   }
 
   const user = await prisma.user.findUnique({
-    where: { email },
+    where: { email: email.toLowerCase() },
+    include: { providers: true },
   });
 
   if (!user) {
     throw new ApiError(401, "Invalid email or password");
   }
 
-  const isPasswordValid = await bcrypt.compare(password, user.password);
+  // Prevent password login on password-less OAuth accounts
+  if (!user.password) {
+    throw new ApiError(
+      401,
+      "This account uses Google Sign-In. Please continue with Google."
+    );
+  }
 
+  const isPasswordValid = await bcrypt.compare(password, user.password);
   if (!isPasswordValid) {
     throw new ApiError(401, "Invalid email or password");
   }
 
   const token = jwt.sign(
-    {
-      id: user.id,
-      username: user.username,
-    },
+    { id: user.id, username: user.username },
     process.env.JWT_SECRET,
-    { expiresIn: "1d" },
+    { expiresIn: "1d" }
   );
 
-  res.cookie("token", token, {
-    httpOnly: true,
-    secure: process.env.NODE_ENV === "production",
-    sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
-    maxAge: 24 * 60 * 60 * 1000,
-  });
+  setAuthCookie(res, token);
 
   res.status(200).json({
     success: true,
     message: "Login successful",
-    user: {
-      id: user.id,
-      username: user.username,
-      email: user.email,
-    },
+    user: formatUserResponse(user),
   });
 });
 
-/**
- * @name logoutUserController
- * @description logout user by clearing the token cookie and adding the token to blacklist
- * @access Public
- */
-const logoutUserController = asyncHandler(async (req, res, next) => {
+// Authenticate or register user via Google OAuth ID token
+const googleAuthController = asyncHandler(async (req, res) => {
+  const { idToken } = req.body;
+
+  // Verify Google token signature, audience, and email_verified claim
+  const { sub, email, name, picture } = await verifyGoogleToken(idToken);
+  const normalizedEmail = email.toLowerCase();
+
+  // Check if Google provider is already linked to an account
+  const existingProvider = await prisma.oAuthProvider.findUnique({
+    where: {
+      providerName_providerId: { providerName: "google", providerId: sub },
+    },
+    include: {
+      user: { include: { providers: true } },
+    },
+  });
+
+  // Returning Google user login
+  if (existingProvider) {
+    let user = existingProvider.user;
+
+    // Update avatar if profile photo changed
+    if (picture && (!user.avatar || user.avatar !== picture)) {
+      user = await prisma.user.update({
+        where: { id: user.id },
+        data: { avatar: picture },
+        include: { providers: true },
+      });
+    }
+
+    const token = jwt.sign(
+      { id: user.id, username: user.username },
+      process.env.JWT_SECRET,
+      { expiresIn: "1d" }
+    );
+
+    setAuthCookie(res, token);
+
+    return res.status(200).json({
+      success: true,
+      message: "Google login successful",
+      user: formatUserResponse(user),
+    });
+  }
+
+  // Account conflict: Email exists without Google link
+  const existingUserWithEmail = await prisma.user.findUnique({
+    where: { email: normalizedEmail },
+  });
+
+  if (existingUserWithEmail) {
+    throw new ApiError(
+      409,
+      "An account with this email already exists. Please log in with your password to link Google."
+    );
+  }
+
+  // Generate clean username from name with fallback for non-Latin characters
+  let baseUsername = name.toLowerCase().replace(/[^a-z0-9_]/g, "").trim();
+  if (baseUsername.length < 3) {
+    baseUsername = `user_${Math.random().toString(36).substring(2, 8)}`;
+  } else if (baseUsername.length > 15) {
+    baseUsername = baseUsername.substring(0, 15);
+  }
+
+  let createdUser = null;
+  let attempt = 0;
+  let targetUsername = baseUsername;
+
+  // Retry logic for unique username collisions
+  while (!createdUser && attempt < 3) {
+    try {
+      createdUser = await prisma.user.create({
+        data: {
+          username: targetUsername,
+          email: normalizedEmail,
+          password: null,
+          avatar: picture,
+          providers: {
+            create: { providerName: "google", providerId: sub },
+          },
+        },
+        include: { providers: true },
+      });
+    } catch (err) {
+      if (err.code === "P2002") {
+        if (Array.isArray(err.meta?.target) && err.meta.target.includes("email")) {
+          throw new ApiError(409, "An account with this email already exists.");
+        }
+        attempt++;
+        targetUsername = `${baseUsername}_${Math.floor(100 + Math.random() * 900)}`;
+      } else {
+        throw err;
+      }
+    }
+  }
+
+  if (!createdUser) {
+    throw new ApiError(500, "Failed to create user account. Please try again.");
+  }
+
+  const token = jwt.sign(
+    { id: createdUser.id, username: createdUser.username },
+    process.env.JWT_SECRET,
+    { expiresIn: "1d" }
+  );
+
+  setAuthCookie(res, token);
+
+  return res.status(201).json({
+    success: true,
+    message: "User registered with Google successfully",
+    user: formatUserResponse(createdUser),
+  });
+});
+
+// Link Google account to currently authenticated user account
+const linkGoogleController = asyncHandler(async (req, res) => {
+  const { idToken } = req.body;
+  const { sub, email, picture } = await verifyGoogleToken(idToken);
+
+  const currentUser = await prisma.user.findUnique({
+    where: { id: req.user.id },
+    include: { providers: true },
+  });
+
+  if (!currentUser) {
+    throw new ApiError(404, "User account not found");
+  }
+
+  // Security check: Google email must match logged-in account email
+  if (email.toLowerCase() !== currentUser.email.toLowerCase()) {
+    throw new ApiError(
+      403,
+      "Google account email does not match your current SkillBridge AI account email."
+    );
+  }
+
+  const existingProvider = await prisma.oAuthProvider.findUnique({
+    where: {
+      providerName_providerId: { providerName: "google", providerId: sub },
+    },
+  });
+
+  if (existingProvider) {
+    if (existingProvider.userId === currentUser.id) {
+      return res.status(200).json({
+        success: true,
+        message: "Google account is already linked",
+        user: formatUserResponse(currentUser),
+      });
+    }
+    throw new ApiError(409, "This Google account is already linked to another user.");
+  }
+
+  await prisma.oAuthProvider.create({
+    data: {
+      providerName: "google",
+      providerId: sub,
+      userId: currentUser.id,
+    },
+  });
+
+  const updatedUser = await prisma.user.update({
+    where: { id: currentUser.id },
+    data: { avatar: currentUser.avatar || picture },
+    include: { providers: true },
+  });
+
+  res.status(200).json({
+    success: true,
+    message: "Google account linked successfully",
+    user: formatUserResponse(updatedUser),
+  });
+});
+
+// Clear authentication cookie and blacklist session token
+const logoutUserController = asyncHandler(async (req, res) => {
   const token = req.cookies.token;
 
   if (token) {
-    await prisma.tokenBlacklist.create({
-      data: { token },
-    });
+    await prisma.tokenBlacklist.create({ data: { token } });
   }
 
   res.clearCookie("token", {
@@ -142,14 +300,11 @@ const logoutUserController = asyncHandler(async (req, res, next) => {
   });
 });
 
-/**
- * @name getMeController
- * @description get the current logged in user details
- * @access Private
- */
-const getMeController = asyncHandler(async (req, res, next) => {
+// Get current logged-in user profile details
+const getMeController = asyncHandler(async (req, res) => {
   const user = await prisma.user.findUnique({
     where: { id: req.user.id },
+    include: { providers: true },
   });
 
   if (!user) {
@@ -159,17 +314,15 @@ const getMeController = asyncHandler(async (req, res, next) => {
   res.status(200).json({
     success: true,
     message: "User details retrieved successfully",
-    user: {
-      id: user.id,
-      username: user.username,
-      email: user.email,
-    },
+    user: formatUserResponse(user),
   });
 });
 
 export {
   registerUserController,
   loginUserController,
+  googleAuthController,
+  linkGoogleController,
   logoutUserController,
   getMeController,
 };
