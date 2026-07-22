@@ -6,6 +6,7 @@ import Home from '../pages/home/Home';
 import Form from '../pages/form/Form';
 import InterviewReport from '../pages/interviewReports/InterviewReport';
 import Dashboard from '../pages/dashboard/Dashboard';
+import Profile from '../pages/profile/Profile';
 import AppLayout from '../layouts/AppLayout';
 import NotFound from '../pages/NotFound';
 
@@ -46,6 +47,14 @@ export const router = createBrowserRouter([
         ),
       },
       {
+        path: '/profile',
+        element: (
+          <Protected>
+            <Profile />
+          </Protected>
+        ),
+      },
+      {
         path: '/interview/:interviewId',
         element: (
           <Protected>
@@ -60,4 +69,4 @@ export const router = createBrowserRouter([
       },
     ],
   },
-])
+]);
