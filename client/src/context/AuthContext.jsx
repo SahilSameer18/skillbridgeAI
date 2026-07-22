@@ -1,15 +1,15 @@
-import { createContext, useEffect, useState } from 'react';
-import { getMe } from '../services/auth.api';
+import { createContext, useEffect, useState } from "react";
+import { getMe } from "../services/auth.api";
 
-export const AuthContext = createContext()
+export const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
-
-  const [user, setUser] = useState(null)
-  const [loading, setLoading] = useState(true)
-  const [loginLoading, setLoginLoading] = useState(false)
-  const [registerLoading, setRegisterLoading] = useState(false)
-  const [logoutLoading, setLogoutLoading] = useState(false)
+  const [user, setUser] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [loginLoading, setLoginLoading] = useState(false);
+  const [registerLoading, setRegisterLoading] = useState(false);
+  const [googleLoading, setGoogleLoading] = useState(false);
+  const [logoutLoading, setLogoutLoading] = useState(false);
 
   useEffect(() => {
     const getAndSetUser = async () => {
@@ -27,10 +27,24 @@ export const AuthProvider = ({ children }) => {
     getAndSetUser();
   }, []);
 
-
   return (
-    <AuthContext.Provider value={{ user, setUser, loading, setLoading, loginLoading, setLoginLoading, registerLoading, setRegisterLoading, logoutLoading, setLogoutLoading }} >
+    <AuthContext.Provider
+      value={{
+        user,
+        setUser,
+        loading,
+        setLoading,
+        loginLoading,
+        setLoginLoading,
+        registerLoading,
+        setRegisterLoading,
+        googleLoading,
+        setGoogleLoading,
+        logoutLoading,
+        setLogoutLoading,
+      }}
+    >
       {children}
     </AuthContext.Provider>
-  )
-}
+  );
+};

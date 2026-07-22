@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate, Link } from "react-router";
+import { GoogleLogin } from "@react-oauth/google";
 import { useAuth } from "../../hooks/useAuth";
 import { registerSchema, registerBaseSchema } from "../../schemas/auth.schema.js";
 import LoadingScreen from "../../components/layout/LoadingScreen";
@@ -15,7 +16,7 @@ const FieldError = ({ msg }) =>
 
 const Register = () => {
   const navigate = useNavigate();
-  const { registerLoading, handleRegister } = useAuth();
+  const { registerLoading, googleLoading, handleRegister, handleGoogleAuth } = useAuth();
 
   const [fields, setFields] = useState({ username: "", email: "", password: "", confirmPassword: "" });
   const [showPassword, setShowPassword] = useState(false);
@@ -70,6 +71,23 @@ const Register = () => {
     validateField(name, fields[name]);
   };
 
+  const handleGoogleSuccess = async (credentialResponse) => {
+    setError(null);
+    try {
+      await handleGoogleAuth({ idToken: credentialResponse.credential });
+      navigate("/");
+    } catch (err) {
+      if (err?.response?.status === 409) {
+        setError(
+          err.response.data?.message ||
+            "An account with this email already exists. Please sign in with your password to link Google."
+        );
+      } else {
+        setError(err?.response?.data?.message || "Google registration failed.");
+      }
+    }
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError(null);
@@ -100,7 +118,7 @@ const Register = () => {
     }
   };
 
-  if (registerLoading) {
+  if (registerLoading || googleLoading) {
     return (
       <LoadingScreen
         message="Setting up your account..."
@@ -118,13 +136,11 @@ const Register = () => {
 
   return (
     <div className="min-h-screen w-full bg-background flex flex-col lg:flex-row">
-      {/* Left Section - Branding & Visuals (Hidden on small screens) */}
+      {/* Left Section - Branding */}
       <div className="hidden lg:flex w-[45%] flex-col justify-between bg-surface/30 p-12 relative overflow-hidden border-r border-white/[0.04]">
-        {/* Abstract Glowing Orbs */}
         <div className="absolute inset-0 pointer-events-none">
           <div className="absolute top-[20%] left-[-10%] w-[50%] h-[50%] bg-[#fe9a00]/20 rounded-full blur-[120px] animate-pulse-slow" />
           <div className="absolute bottom-[10%] right-[-10%] w-[60%] h-[60%] bg-accent/15 rounded-full blur-[140px] animate-pulse-slow delay-500" />
-          {/* Subtle Grid overlay */}
           <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyMCIgaGVpZ2h0PSIyMCI+CjxwYXRoIGQ9Ik0gMjAgMCBMMCAwIDAgMjAiIGZpbGw9Im5vbmUiIHN0cm9rZT0icmdiYSgyNTUsMjU1LDI1NSwwLjAyKSIgc3Ryb2tlLXdpZHRoPSIxIi8+Cjwvc3ZnPg==')] opacity-50" />
         </div>
 
@@ -151,38 +167,41 @@ const Register = () => {
           <p className="text-secondary/90 text-lg mb-10 max-w-md font-light leading-relaxed">
             Get personalized mock interviews, instant AI feedback, and actionable insights to become the top candidate in any field.
           </p>
-          
-          <div className="inline-flex items-center gap-4 p-4 rounded-2xl bg-white/[0.02] border border-white/[0.05] backdrop-blur-md">
-            <div className="w-12 h-12 rounded-full bg-accent/20 flex items-center justify-center shrink-0">
-              <svg className="w-6 h-6 text-accent" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-              </svg>
-            </div>
-            <div>
-              <p className="text-white font-medium">Instant Setup</p>
-              <p className="text-sm text-secondary/80 mt-0.5">Start practicing in under 60 seconds</p>
-            </div>
-          </div>
         </div>
       </div>
 
       {/* Right Section - Form */}
       <div className="flex-1 flex items-center justify-center p-6 sm:p-12 relative overflow-y-auto">
-        {/* Mobile Logo */}
-        <div className="absolute top-8 left-6 lg:hidden">
-          <Link to="/" className="inline-flex items-center gap-2">
-            <span className="text-lg font-bold text-primary">SkillBridge</span>
-          </Link>
-        </div>
-
         <div className="w-full max-w-[420px] animate-fade-in-up delay-100 py-10 lg:py-0">
-          <div className="mb-8 text-center lg:text-left">
+          <div className="mb-6 text-center lg:text-left">
             <h1 className="text-3xl sm:text-4xl font-bold text-primary tracking-tight mb-3">
               Create an account
             </h1>
             <p className="text-secondary/80 text-base">
               Start your journey to interview success today.
             </p>
+          </div>
+
+          {/* Google Sign-In Container */}
+          <div className="mb-6 flex justify-center w-full">
+            <div className="w-full overflow-hidden rounded-xl border border-white/[0.08] hover:border-accent/40 transition-colors">
+              <GoogleLogin
+                onSuccess={handleGoogleSuccess}
+                onError={() => setError("Google Sign-In failed or was cancelled.")}
+                theme="filled_black"
+                shape="rectangular"
+                width="100%"
+                text="signup_with"
+              />
+            </div>
+          </div>
+
+          <div className="relative flex items-center justify-center my-6">
+            <div className="border-t border-white/[0.08] w-full" />
+            <span className="bg-background px-3 text-xs text-secondary/60 uppercase tracking-wider font-mono shrink-0">
+              Or register with email
+            </span>
+            <div className="border-t border-white/[0.08] w-full" />
           </div>
 
           <form onSubmit={handleSubmit} noValidate className="space-y-4">
@@ -308,7 +327,7 @@ const Register = () => {
             <button
               type="submit"
               disabled={registerLoading}
-              className="w-full py-4 mt-4 rounded-xl font-semibold text-white bg-gradient-to-r from-accent to-[#fe9a00] hover:from-accent hover:to-[#eb8e00] transition-all duration-300 hover:-translate-y-0.5 active:translate-y-0 disabled:opacity-70 disabled:cursor-not-allowed disabled:transform-none shadow-[0_10px_25px_rgba(255,102,98,0.25)] hover:shadow-[0_15px_35px_rgba(255,102,98,0.35)] flex items-center justify-center gap-2 group cursor-pointer"
+              className="w-full py-4 mt-4 rounded-xl font-semibold text-white bg-gradient-to-r from-accent to-[#fe9a00] hover:from-accent hover:to-[#eb8e00] transition-all duration-300 hover:-translate-y-0.5 active:translate-y-0 disabled:opacity-70 disabled:cursor-not-allowed shadow-[0_10px_25px_rgba(255,102,98,0.25)] flex items-center justify-center gap-2 cursor-pointer"
             >
               {registerLoading ? (
                 <>
@@ -318,7 +337,7 @@ const Register = () => {
               ) : (
                 <>
                   <span>Create Account</span>
-                  <FiArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+                  <FiArrowRight className="w-5 h-5" />
                 </>
               )}
             </button>
@@ -337,5 +356,6 @@ const Register = () => {
 };
 
 export default Register;
+
 
 

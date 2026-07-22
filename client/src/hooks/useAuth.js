@@ -1,24 +1,40 @@
 import { useContext } from "react";
 import { AuthContext } from "../context/AuthContext";
-import { login, register, logout } from "../services/auth.api";
+import { login, register, googleAuth, linkGoogle, logout } from "../services/auth.api";
 
 export const useAuth = () => {
-
   const context = useContext(AuthContext);
 
-  const { user, setUser, loading, loginLoading, setLoginLoading, registerLoading, setRegisterLoading, logoutLoading, setLogoutLoading } = context;
+  if (!context) {
+    throw new Error("useAuth must be used within an AuthProvider");
+  }
+
+  const {
+    user,
+    setUser,
+    loading,
+    loginLoading,
+    setLoginLoading,
+    registerLoading,
+    setRegisterLoading,
+    googleLoading,
+    setGoogleLoading,
+    logoutLoading,
+    setLogoutLoading,
+  } = context;
 
   const handleLogin = async ({ email, password }) => {
     setLoginLoading(true);
     try {
       const data = await login({ email, password });
       setUser(data.user);
+      return data;
     } catch (err) {
       setLoginLoading(false);
-      // Re-throw so Login.jsx can catch and show error
       throw err;
+    } finally {
+      setLoginLoading(false);
     }
-    setLoginLoading(false);
   };
 
   const handleRegister = async ({ username, email, password }) => {
@@ -26,12 +42,45 @@ export const useAuth = () => {
     try {
       const data = await register({ username, email, password });
       setUser(data.user);
+      return data;
     } catch (err) {
       setRegisterLoading(false);
-      // Re-throw so Register.jsx can catch and show error
       throw err;
+    } finally {
+      setRegisterLoading(false);
     }
-    setRegisterLoading(false);
+  };
+
+  const handleGoogleAuth = async ({ idToken }) => {
+    setGoogleLoading(true);
+    try {
+      const data = await googleAuth({ idToken });
+      if (data && data.user) {
+        setUser(data.user);
+      }
+      return data;
+    } catch (err) {
+      setGoogleLoading(false);
+      throw err;
+    } finally {
+      setGoogleLoading(false);
+    }
+  };
+
+  const handleLinkGoogle = async ({ idToken }) => {
+    setGoogleLoading(true);
+    try {
+      const data = await linkGoogle({ idToken });
+      if (data && data.user) {
+        setUser(data.user);
+      }
+      return data;
+    } catch (err) {
+      setGoogleLoading(false);
+      throw err;
+    } finally {
+      setGoogleLoading(false);
+    }
   };
 
   const handleLogout = async () => {
@@ -40,12 +89,25 @@ export const useAuth = () => {
       await logout();
       setUser(null);
     } catch {
-      // Silent — clear user state regardless
       setUser(null);
     } finally {
       setLogoutLoading(false);
     }
   };
 
-  return { user, loading, loginLoading, registerLoading, logoutLoading, handleRegister, handleLogin, handleLogout };
+  return {
+    user,
+    setUser,
+    loading,
+    loginLoading,
+    registerLoading,
+    googleLoading,
+    logoutLoading,
+    handleRegister,
+    handleLogin,
+    handleGoogleAuth,
+    handleLinkGoogle,
+    handleLogout,
+  };
 };
+
