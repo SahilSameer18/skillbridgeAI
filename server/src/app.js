@@ -18,6 +18,14 @@ app.use(
   }),
 );
 
+// Health check root endpoint for Render & Uptime Monitors
+app.get("/", (req, res) => {
+  res.status(200).json({
+    success: true,
+    message: "SkillBridge AI API Server is live",
+  });
+});
+
 // Mount API routers
 app.use("/api/auth", authRouter);
 app.use("/api/interview", interviewRouter);
