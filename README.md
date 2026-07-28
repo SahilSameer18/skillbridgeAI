@@ -39,8 +39,8 @@ Job seekers often struggle to translate their resume into interview readiness. S
 
 - **Structured AI Output:** Backend prompts Google Gemini to return a strict JSON payload containing `matchScore`, `technicalQuestions`, `behavioralQuestions`, `skillGaps`, `preparationPlan`, and `title`.
 - **Deterministic Skill-Resource Matching:** Each AI-generated skill gap is resolved server-side against a seeded, normalized `Skill` catalog — using bounded keyword matching (with a word-boundary check that prevents false positives like "Java" matching inside "JavaScript") and a Levenshtein-based fuzzy fallback for typos. No prompt changes, no AI-generated URLs — every resource link is pre-curated and verified.
-- **Google OAuth & Secure Account Linking:** Integrated Google Identity Services (GIS) using `@react-oauth/google` and `google-auth-library`. Features a 409 account linking flow that prevents unauthorized automatic account merging while letting candidates link Google to existing accounts.
-- **Dynamic DiceBear Avatar Generation:** Automatically assigns custom vector robot avatars (`https://api.dicebear.com/7.x/bottts/svg?seed=${username}`) as a default or fallback whenever a profile image is missing or fails to load.
+- **Google OAuth & Secure Account Linking:** Integrated Google OAuth 2.0 using `@react-oauth/google` (`useGoogleLogin` implicit flow) with a fully custom-styled button. Access tokens are verified server-side via Google's `/oauth2/v3/userinfo` endpoint. Features a 409 conflict detection flow — Register redirects to Login with the pending token stored in `sessionStorage` so candidates can link Google to an existing credential account without losing context. Google profile pictures are always synced on login, including removal (reverts to DiceBear).
+- **Dynamic DiceBear Avatar Generation:** Automatically renders custom vector robot avatars (`https://api.dicebear.com/7.x/bottts/svg?seed=${username}`) as a **frontend-only display fallback** whenever a profile image is absent or fails to load. DiceBear URLs are never stored in the database — the server always stores the real Google picture URL or `null`.
 - **User Profile Console:** Dedicated `/profile` workspace featuring candidate preparation analytics (Total Audited Roles, Average Compatibility Score, Top Match Score), profile field updates (with space restrictions), and password security.
 - **Secure Session Management:** JWT-based auth is stored as an HTTP-only cookie and validated with a token blacklist.
 - **API Rate Limiting:** Express rate-limit middleware protects the login endpoint, account linking, and AI generation calls from abuse.
@@ -92,7 +92,7 @@ flowchart LR
     UI --> OAuth
     UI --> Forms
 
-    OAuth -->|Google ID Token| GoogleOAuth
+    OAuth -->|Google Access Token| GoogleOAuth
     Forms -->|HTTPS / REST| API
     Context -->|HTTP-only JWT Cookie| Auth
 
@@ -254,7 +254,7 @@ skillBridgeAI/
 - Express 5
 - PostgreSQL (via Neon)
 - Prisma ORM
-- `google-auth-library`
+- Google OAuth2 (`/oauth2/v3/userinfo` — no extra library needed)
 - Zod (request validation)
 - @google/genai
 - Puppeteer
@@ -295,7 +295,7 @@ All relations use `onDelete: Cascade`, except `SkillGap.skillRef → Skill`, whi
 - `POST /api/auth/login` - sign in and receive secure auth cookie
 - `POST /api/auth/google` - Google OAuth authentication & account creation
 - `POST /api/auth/link-google` - Link Google account to existing user account
-- `POST /api/auth/logout` - revoke session and blacklist token
+- `POST /api/auth/logout` - revoke session and blacklist token (**requires auth cookie**)
 - `GET /api/auth/get-me` - return current user profile
 
 ### User Profile Endpoints
