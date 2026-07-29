@@ -1,5 +1,6 @@
 import jwt from "jsonwebtoken";
 import prisma from "../lib/prisma.js";
+import blacklistService from "../services/blacklist.service.js";
 import ApiError from "../utils/ApiError.js";
 
 async function authUser(req, res, next) {
@@ -10,11 +11,7 @@ async function authUser(req, res, next) {
       throw new ApiError(401, "Token not provided");
     }
 
-    const isTokenBlacklisted = await prisma.tokenBlacklist.findUnique({
-      where: { token },
-    });
-
-    if (isTokenBlacklisted) {
+    if (await blacklistService.isBlacklisted(token)) {
       throw new ApiError(401, "Token is invalid");
     }
 
@@ -28,4 +25,4 @@ async function authUser(req, res, next) {
   }
 }
 
-export { authUser };
+export { authUser };

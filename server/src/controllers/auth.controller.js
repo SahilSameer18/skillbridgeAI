@@ -4,6 +4,7 @@ import jwt from "jsonwebtoken";
 import ApiError from "../utils/ApiError.js";
 import asyncHandler from "../utils/asyncHandler.js";
 import { formatUserResponse, verifyGoogleToken } from "../utils/auth.utils.js";
+import blacklistService from "../services/blacklist.service.js";
 
 // Utility helper to attach HTTP-only session cookie
 const setAuthCookie = (res, token) => {
@@ -286,7 +287,10 @@ const logoutUserController = asyncHandler(async (req, res) => {
   const token = req.cookies.token;
 
   if (token) {
-    await prisma.tokenBlacklist.create({ data: { token } });
+    const decoded = jwt.decode(token);
+    if (decoded?.exp) {
+      await blacklistService.blacklist(token, decoded.exp);
+    }
   }
 
   res.clearCookie("token", {
