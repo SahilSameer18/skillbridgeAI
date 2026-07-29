@@ -5,6 +5,7 @@ import ApiError from "../utils/ApiError.js";
 import asyncHandler from "../utils/asyncHandler.js";
 import { formatUserResponse, verifyGoogleToken } from "../utils/auth.utils.js";
 import blacklistService from "../services/blacklist.service.js";
+import userCache from "../services/userCache.service.js";
 
 // Utility helper to attach HTTP-only session cookie
 const setAuthCookie = (res, token) => {
@@ -134,6 +135,7 @@ const googleAuthController = asyncHandler(async (req, res) => {
         data: { avatar: freshAvatar },
         include: { providers: true },
       });
+      await userCache.invalidate(user.id);
     }
 
     const token = jwt.sign(
@@ -274,6 +276,8 @@ const linkGoogleController = asyncHandler(async (req, res) => {
     data: { avatar: picture || currentUser.avatar },
     include: { providers: true },
   });
+
+  await userCache.invalidate(currentUser.id);
 
   res.status(200).json({
     success: true,

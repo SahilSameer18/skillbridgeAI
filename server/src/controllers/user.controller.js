@@ -3,6 +3,7 @@ import bcrypt from "bcryptjs";
 import ApiError from "../utils/ApiError.js";
 import asyncHandler from "../utils/asyncHandler.js";
 import { formatUserResponse } from "../utils/auth.utils.js";
+import userCache from "../services/userCache.service.js";
 
 
 // Get current user profile and candidate preparation stats
@@ -79,6 +80,8 @@ const updateProfileController = asyncHandler(async (req, res) => {
     include: { providers: true },
   });
 
+  await userCache.invalidate(userId);
+
   res.status(200).json({
     success: true,
     message: "Profile updated successfully",
@@ -125,3 +128,4 @@ export {
   updateProfileController,
   changePasswordController,
 };
+
