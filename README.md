@@ -4,6 +4,7 @@
 [![React Version](https://img.shields.io/badge/React-19.2-61dafb.svg?logo=react&style=for-the-badge)](https://react.dev/)
 [![Tailwind Version](https://img.shields.io/badge/Tailwind-4.2-38bdf8.svg?logo=tailwindcss&style=for-the-badge)](https://tailwindcss.com/)
 [![Express Version](https://img.shields.io/badge/Express-5.2-000000.svg?logo=express&style=for-the-badge)](https://expressjs.com/)
+[![Redis Version](https://img.shields.io/badge/Redis-Cloud-DC382D.svg?logo=redis&style=for-the-badge)](https://redis.io/)
 [![Google OAuth](https://img.shields.io/badge/OAuth-Google-4285F4.svg?logo=google&style=for-the-badge)](https://developers.google.com/identity)
 [![AI Integration](https://img.shields.io/badge/Gemini--AI-Structured-red.svg?logo=googlegemini&style=for-the-badge)](https://ai.google.dev/)
 
@@ -42,6 +43,7 @@ Job seekers often struggle to translate their resume into interview readiness. S
 - **Google OAuth & Secure Account Linking:** Integrated Google OAuth 2.0 using `@react-oauth/google` (`useGoogleLogin` implicit flow) with a fully custom-styled button. Access tokens are verified server-side via Google's `/oauth2/v3/userinfo` endpoint. Features a 409 conflict detection flow — Register redirects to Login with the pending token stored in `sessionStorage` so candidates can link Google to an existing credential account without losing context. Google profile pictures are always synced on login, including removal (reverts to DiceBear).
 - **Dynamic DiceBear Avatar Generation:** Automatically renders custom vector robot avatars (`https://api.dicebear.com/7.x/bottts/svg?seed=${username}`) as a **frontend-only display fallback** whenever a profile image is absent or fails to load. DiceBear URLs are never stored in the database — the server always stores the real Google picture URL or `null`.
 - **User Profile Console:** Dedicated `/profile` workspace featuring candidate preparation analytics (Total Audited Roles, Average Compatibility Score, Top Match Score), profile field updates (with space restrictions), and password security.
+- **High-Performance Redis Caching:** Integrated Redis Cloud to handle rate limiting, lightning-fast user profile caching, and a self-expiring JWT token blacklist, improving security and database read performance.
 - **Secure Session Management:** JWT-based auth is stored as an HTTP-only cookie and validated with a token blacklist.
 - **API Rate Limiting:** Express rate-limit middleware protects the login endpoint, account linking, and AI generation calls from abuse.
 - **Input Validation:** Zod schemas validate auth, profile, and interview payloads on both client (`profile.schema.js`) and server (`user.schema.js`), ensuring consistent request data, no spaces in usernames, and user form validation.
@@ -76,6 +78,7 @@ flowchart LR
     subgraph Database["Database"]
         Prisma[Prisma ORM]
         DB[(PostgreSQL · Neon)]
+        RedisCache[(Redis Cloud)]
     end
 
     subgraph External["External Services"]
@@ -98,6 +101,9 @@ flowchart LR
 
     API --> Middleware
     Middleware --> Services
+    
+    Auth --> RedisCache
+    Middleware --> RedisCache
 
     Services --> Gemini
     Services --> Parser
@@ -109,6 +115,18 @@ flowchart LR
     Services --> Prisma
     Prisma --> DB
 ```
+
+---
+
+## ⚠️ Known Trade-off: Redis Fail-Open Behavior
+
+Rate limiting, the token blacklist, and the user cache are all backed by Redis. If Redis becomes unreachable, all three fail **open** rather than closed — meaning the app keeps functioning normally instead of blocking every request. Practically, this means:
+
+- Rate limits are not enforced during a Redis outage.
+- A logged-out token could remain valid until it naturally expires.
+- User revalidation falls back to a direct database read on every request.
+
+This is intentional: keeping the core application available takes priority over strict enforcement of these secondary security and performance layers, since the primary auth mechanism (JWT signature verification) remains unaffected either way.
 
 ---
 
@@ -160,11 +178,14 @@ skillBridgeAI/
     └── src/
         ├── app.js
         ├── config/
+        │   └── redis.constants.js
         ├── controllers/
         │   ├── auth.controller.js
         │   ├── interview.controller.js
         │   └── user.controller.js
         ├── lib/
+        │   ├── redis.js
+        │   └── safeRedis.js
         ├── middlewares/
         ├── routes/
         │   ├── auth.routes.js
@@ -175,6 +196,8 @@ skillBridgeAI/
         │   ├── interview.schema.js
         │   └── user.schema.js
         ├── services/
+        │   ├── blacklist.service.js
+        │   └── userCache.service.js
         └── utils/
 ```
 
@@ -220,7 +243,7 @@ skillBridgeAI/
 - register, login, and logout flows
 - HTTP-only auth cookie stored by the backend
 - authenticated route guard for protected app sections
-- token blacklist support on logout
+- Redis-backed token blacklist support on logout for maximum security
 
 ### 📂 Report Management
 
@@ -253,6 +276,7 @@ skillBridgeAI/
 - Node.js
 - Express 5
 - PostgreSQL (via Neon)
+- Redis Cloud (Caching, Rate Limiting, Blacklisting)
 - Prisma ORM
 - Google OAuth2 (`/oauth2/v3/userinfo` — no extra library needed)
 - Zod (request validation)
@@ -324,7 +348,7 @@ Make sure you have the following installed before running the project:
 | npm     | 9.x or higher      |
 | Git     | any recent version |
 
-> A [Neon](https://neon.tech/) account is also required for the PostgreSQL database, and a [Google AI Studio](https://aistudio.google.com/) account for the Gemini API key.
+> A [Neon](https://neon.tech/) account is also required for the PostgreSQL database, a [Redis Cloud](https://redis.io/) account for caching, and a [Google AI Studio](https://aistudio.google.com/) account for the Gemini API key.
 
 ---
 
@@ -352,6 +376,7 @@ DIRECT_URL=postgresql://user:password@host/database
 JWT_SECRET=your_jwt_secret
 GOOGLE_GENAI_API_KEY=your_google_genai_key
 GOOGLE_CLIENT_ID=your_google_oauth_client_id
+REDIS_URL=rediss://default:password@host:port
 ```
 
 > Note: the backend currently listens on port `3000` in [`server/server.js`](server/server.js), so `PORT` is not used yet.
@@ -429,3 +454,4 @@ This project is licensed under the MIT License.
 ---
 
 <p align="center">Built by Sahil Sameer Siddique.</p>
+
