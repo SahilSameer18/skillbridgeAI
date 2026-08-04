@@ -61,7 +61,18 @@ const skills = [
   },
   {
     name: "Java",
-    aliases: ["java", "java programming", "java language", "jdk"],
+    aliases: [
+      "java",
+      "java programming",
+      "java language",
+      "jdk",
+      "jvm",
+      "jvm internals",
+      "garbage collection",
+      "concurrency in java",
+      "multithreading in java",
+      "multithreading and concurrency in java",
+    ],
     resources: [
       {
         type: "DOCUMENTATION",
@@ -107,6 +118,22 @@ const skills = [
       },
     ],
   },
+  {
+    name: "PHP",
+    aliases: ["php", "php8", "php programming", "modern php", "php / laravel"],
+    resources: [
+      {
+        type: "DOCUMENTATION",
+        title: "PHP Official Documentation",
+        url: "https://www.php.net/docs.php",
+      },
+      {
+        type: "VIDEO",
+        title: "PHP Full Course - freeCodeCamp",
+        url: "https://youtu.be/OK_JCtrrv-c",
+      },
+    ],
+  },
 
   // ---------- Frontend ----------
   {
@@ -143,7 +170,7 @@ const skills = [
   },
   {
     name: "Angular",
-    aliases: ["angular", "AngularJS", "angular.js"],
+    aliases: ["angular", "angularjs", "angular.js", "angular 2+", "angular framework"],
     resources: [
       {
         type: "DOCUMENTATION",
@@ -327,7 +354,16 @@ const skills = [
   },
   {
     name: "Spring Boot",
-    aliases: ["spring boot", "springboot", "spring", "spring boot framework", "spring framework"],
+    aliases: [
+      "spring boot",
+      "springboot",
+      "spring",
+      "spring boot framework",
+      "spring framework",
+      "spring boot/hibernate",
+      "spring boot / hibernate",
+      "java ecosystem",
+    ],
     resources: [
       {
         type: "DOCUMENTATION",
@@ -338,6 +374,50 @@ const skills = [
         type: "VIDEO",
         title: "Spring Boot Full Course",
         url: "https://youtube.com/playlist?list=PLEYgx5hMdopw&si=U3z6Hi9UGZCdXuOI",
+      },
+    ],
+  },
+  {
+    name: "Hibernate / JPA",
+    aliases: [
+      "hibernate",
+      "jpa",
+      "java persistence api",
+      "spring data jpa",
+      "orm hibernate",
+    ],
+    resources: [
+      {
+        type: "DOCUMENTATION",
+        title: "Hibernate ORM Documentation",
+        url: "https://hibernate.org/orm/documentation/",
+      },
+      {
+        type: "VIDEO",
+        title: "Hibernate & JPA Full Course",
+        url: "https://youtu.be/VRpH91Gsmk4",
+      },
+    ],
+  },
+  {
+    name: "Build Tools (Maven/Gradle)",
+    aliases: [
+      "maven",
+      "gradle",
+      "java-based build tools",
+      "java build tools",
+      "build tools (maven/gradle)",
+    ],
+    resources: [
+      {
+        type: "DOCUMENTATION",
+        title: "Apache Maven Documentation",
+        url: "https://maven.apache.org/guides/",
+      },
+      {
+        type: "VIDEO",
+        title: "Maven & Gradle Crash Course",
+        url: "https://youtu.be/0b59bY4qfio",
       },
     ],
   },
@@ -375,7 +455,16 @@ const skills = [
   },
   {
     name: "Socket.io",
-    aliases: ["socket.io", "socketio", "websockets", "websocket", "web socket", "web sockets"],
+    aliases: [
+      "socket.io",
+      "socketio",
+      "websockets",
+      "websocket",
+      "web socket",
+      "web sockets",
+      "real-time communication",
+      "real time communication",
+    ],
     resources: [
       {
         type: "DOCUMENTATION",
@@ -537,7 +626,15 @@ const skills = [
   },
   {
     name: "Redis",
-    aliases: ["redis", "redis cache", "redis caching"],
+    aliases: [
+      "redis",
+      "redis cache",
+      "redis caching",
+      "redis caching implementation",
+      "redis (caching & pub/sub)",
+      "caching strategies",
+      "caching strategies (redis/memcached)",
+    ],
     resources: [
       {
         type: "DOCUMENTATION",
@@ -635,7 +732,15 @@ const skills = [
   // ---------- DevOps / Cloud ----------
   {
     name: "Docker",
-    aliases: ["docker", "docker containers", "containerization"],
+    aliases: [
+      "docker",
+      "docker containers",
+      "containerization",
+      "docker containerization",
+      "docker & containerization",
+      "containerization (docker)",
+      "containerization (docker/kubernetes)",
+    ],
     resources: [
       {
         type: "DOCUMENTATION",
@@ -720,8 +825,14 @@ const skills = [
       "continuous deployment",
       "ci/cd",
       "ci cd",
+      "cicd",
       "deployment pipeline",
       "deployment pipelines",
+      "devops",
+      "cloud infrastructure & devops",
+      "ci/cd pipeline",
+      "ci/cd pipeline implementation",
+      "ci/cd pipeline configuration",
     ],
     resources: [
       {
@@ -733,6 +844,28 @@ const skills = [
         type: "VIDEO",
         title: "CI/CD Crash Course",
         url: "https://youtube.com/playlist?list=PLzpJO-82rjC6ZD0uAhP8HR9RV9xGaPbIJ&si=EBlLozpJVg-5aY4c",
+      },
+    ],
+  },
+  {
+    name: "Terraform",
+    aliases: [
+      "terraform",
+      "infrastructure as code",
+      "iac",
+      "hashicorp terraform",
+      "infrastructure as code (terraform)",
+    ],
+    resources: [
+      {
+        type: "DOCUMENTATION",
+        title: "Terraform Documentation",
+        url: "https://developer.hashicorp.com/terraform/docs",
+      },
+      {
+        type: "VIDEO",
+        title: "Terraform Full Course - freeCodeCamp",
+        url: "https://youtu.be/7xngnjfIlK4",
       },
     ],
   },
@@ -754,7 +887,14 @@ const skills = [
   },
   {
     name: "Linux/Bash",
-    aliases: ["shell scripting", "bash", "linux"],
+    aliases: [
+      "shell scripting",
+      "bash",
+      "linux",
+      "linux system administration",
+      "bash scripting",
+      "linux administration",
+    ],
     resources: [
       {
         type: "DOCUMENTATION",
@@ -828,6 +968,11 @@ const skills = [
       "integration testing",
       "unit/integration",
       "testing",
+      "software testing",
+      "automated testing (unit/integration)",
+      "automated testing (unit/e2e)",
+      "unit and integration testing",
+      "professional software testing",
     ],
     resources: [
       {
@@ -844,7 +989,13 @@ const skills = [
   },
   {
     name: "Jest",
-    aliases: ["jest"],
+    aliases: [
+      "jest",
+      "jest testing",
+      "jest/cypress",
+      "jest/mocha",
+      "jest/react testing library",
+    ],
     resources: [
       {
         type: "DOCUMENTATION",
@@ -990,7 +1141,14 @@ const skills = [
   // ---------- CS Fundamentals ----------
   {
     name: "Data Structures",
-    aliases: ["data structures", "data structure"],
+    aliases: [
+      "data structures",
+      "data structure",
+      "dsa",
+      "competitive programming",
+      "advanced competitive programming",
+      "data structures and algorithms",
+    ],
     resources: [
       {
         type: "DOCUMENTATION",
@@ -1006,7 +1164,7 @@ const skills = [
   },
   {
     name: "Algorithms",
-    aliases: ["algorithm", "algorithms"],
+    aliases: ["algorithm", "algorithms", "dsa", "algorithmic problem solving"],
     resources: [
       {
         type: "DOCUMENTATION",
@@ -1022,7 +1180,13 @@ const skills = [
   },
   {
     name: "System Design",
-    aliases: ["system design", "systems design", "architecting systems"],
+    aliases: [
+      "system design",
+      "systems design",
+      "architecting systems",
+      "system design & scalability",
+      "scalability",
+    ],
     resources: [
       {
         type: "DOCUMENTATION",
@@ -1357,7 +1521,11 @@ const skills = [
       "typography",
       "user experience",
       "user interface",
-      "design theory"
+      "design theory",
+      "advanced ux research",
+      "visual hierarchy and typography",
+      "typography theory",
+      "visual hierarchy and typography theory",
     ],
     resources: [
       {
@@ -1378,7 +1546,10 @@ const skills = [
       "figma",
       "figma mastery",
       "figma prototyping",
-      "figma design"
+      "figma design",
+      "professional figma",
+      "prototyping & design",
+      "professional figma mastery",
     ],
     resources: [
       {
@@ -1437,3 +1608,5 @@ main()
     await prisma.$disconnect();
   });
 
+
+  
