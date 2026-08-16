@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { useInterview } from '../../hooks/useInterview.js'
 import { useParams } from 'react-router'
 import LoadingScreen from '../../components/layout/LoadingScreen'
+import { exportReportPdf } from '../../utils/exportReportPdf.js'
 
 const NAV_ITEMS = [
     { id: 'technical', label: 'Technical Q&A', icon: 'code' },
@@ -251,6 +252,7 @@ const RoadmapDay = ({ day, index, total }) => (
 /* ── Main Component ── */
 const InterviewReport = () => {
     const [activeNav, setActiveNav] = useState('technical')
+    const [isExporting, setIsExporting] = useState(false)
     const { report, getReportById, loading } = useInterview()
     const { interviewId } = useParams()
 
@@ -259,6 +261,18 @@ const InterviewReport = () => {
         if (interviewId) getReportById(interviewId)
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [interviewId])
+
+    const handleExportPdf = async () => {
+        if (!report || isExporting) return;
+        setIsExporting(true);
+        try {
+            await exportReportPdf(report);
+        } catch (err) {
+            console.error("Failed exporting report PDF:", err);
+        } finally {
+            setIsExporting(false);
+        }
+    };
 
     if (loading || !report) {
         return (
@@ -281,9 +295,26 @@ const InterviewReport = () => {
                     </div>
                     <h1 className="text-2xl font-bold text-primary tracking-tight mb-1">Interview Strategy</h1>
                     <p className="text-secondary text-sm">
-                        <span className="text-primary font-medium">{report.jobTitle ?? 'Target Role'}</span> at {report.company ?? 'Company'}
+                        <span className="text-primary font-medium">{report.title || 'Target Role Plan'}</span>
                     </p>
                 </div>
+                <button
+                    onClick={handleExportPdf}
+                    disabled={isExporting}
+                    className="group flex items-center justify-center gap-1.5 px-4 py-2 rounded-lg text-xs font-bold text-primary transition-all duration-200 hover:scale-[1.02] active:scale-95 shadow-[0_0_15px_rgba(255,102,98,0.2)] hover:shadow-[0_0_20px_rgba(255,102,98,0.4)] shrink-0 bg-accent disabled:opacity-60 cursor-pointer"
+                >
+                    {isExporting ? (
+                        <>
+                            <span className="w-3.5 h-3.5 border-2 border-primary/30 border-t-primary rounded-full animate-spin" />
+                            Generating PDF...
+                        </>
+                    ) : (
+                        <>
+                            <Icon name="download" className="w-4 h-4 group-hover:-translate-y-px transition-transform duration-200" />
+                            Download Report PDF
+                        </>
+                    )}
+                </button>
             </div>
 
             {/* ── Hero Stats ── */}
