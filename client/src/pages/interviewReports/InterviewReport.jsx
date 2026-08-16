@@ -251,7 +251,7 @@ const RoadmapDay = ({ day, index, total }) => (
 /* ── Main Component ── */
 const InterviewReport = () => {
     const [activeNav, setActiveNav] = useState('technical')
-    const { report, getReportById, loading, pdfLoading, getResumePdf } = useInterview()
+    const { report, getReportById, loading } = useInterview()
     const { interviewId } = useParams()
 
     useEffect(() => {
@@ -273,14 +273,6 @@ const InterviewReport = () => {
 
     return (
         <div className="animate-fade-in w-full max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 py-4 sm:py-6 pb-24 lg:pb-12">
-            {pdfLoading && (
-                <LoadingScreen
-                    message="Compiling PDF Report..."
-                    subtitle="Generating a polished document layout. The download will start automatically."
-                    fullScreen={true}
-                />
-            )}
-
             {/* ── Page Header ── */}
             <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-6">
                 <div>
@@ -292,13 +284,6 @@ const InterviewReport = () => {
                         <span className="text-primary font-medium">{report.jobTitle ?? 'Target Role'}</span> at {report.company ?? 'Company'}
                     </p>
                 </div>
-                <button
-                    onClick={() => getResumePdf(interviewId)}
-                    className="group flex items-center justify-center gap-1.5 px-4 py-2 rounded-lg text-xs font-bold text-primary transition-transform duration-200 hover:scale-[1.02] active:scale-95 shadow-[0_0_15px_rgba(255,102,98,0.2)] hover:shadow-[0_0_20px_rgba(255,102,98,0.4)] shrink-0 bg-accent"
-                >
-                    <Icon name="download" className="w-4 h-4 group-hover:-translate-y-px transition-transform duration-200" />
-                    Export PDF
-                </button>
             </div>
 
             {/* ── Hero Stats ── */}

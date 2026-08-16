@@ -1,4 +1,4 @@
-import { getAllInterviewReports, generateInterviewReport, getInterviewReportById, generateResumePdf, deleteInterviewReport } from "../services/interview.api"
+import { getAllInterviewReports, generateInterviewReport, getInterviewReportById, deleteInterviewReport } from "../services/interview.api"
 import { useContext } from "react"
 import { InterviewContext } from "../context/InterviewContext";
 
@@ -10,7 +10,7 @@ export const useInterview = () => {
         throw new Error("useInterview must be used within an InterviewProvider")
     }
 
-    const { loading, setLoading, pdfLoading, setPdfLoading, report, setReport, reports, setReports, totalReports, setTotalReports } = context
+    const { loading, setLoading, report, setReport, reports, setReports, totalReports, setTotalReports } = context
 
     const generateReport = async ({ jobDescription, resumeFile }) => {
         setLoading(true)
@@ -73,25 +73,6 @@ export const useInterview = () => {
         }
     }
 
-    const getResumePdf = async (interviewReportId) => {
-        setPdfLoading(true)
-        let response = null
-        try {
-            response = await generateResumePdf({ interviewReportId })
-            const url = window.URL.createObjectURL(new Blob([response], { type: "application/pdf" }))
-            const link = document.createElement("a")
-            link.href = url
-            link.setAttribute("download", `resume_${interviewReportId}.pdf`)
-            document.body.appendChild(link)
-            link.click()
-        }
-        catch (error) {
-            console.log(error)
-        } finally {
-            setPdfLoading(false)
-        }
-    }
-
-    return { loading, pdfLoading, report, reports, totalReports, generateReport, getReportById, getReports, getResumePdf, deleteReport }
+    return { loading, report, reports, totalReports, generateReport, getReportById, getReports, deleteReport }
 
 }

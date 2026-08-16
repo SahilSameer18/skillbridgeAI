@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useInterview } from '../../hooks/useInterview.js';
 import { useNavigate } from 'react-router';
 import Skeleton from '../../components/ui/Skeleton.jsx';
-import { FiSearch, FiTrash2, FiDownload, FiX, FiArrowRight } from "react-icons/fi";
+import { FiSearch, FiTrash2, FiX, FiArrowRight } from "react-icons/fi";
 
 // ── Match Level Configuration ────────────────────────────────────────────────
 const getMatchDetails = (score) => {
@@ -100,10 +100,9 @@ const EmptyState = ({ onNavigate }) => (
 );
 
 const Dashboard = () => {
-    const { reports, totalReports, getReports, deleteReport, getResumePdf, pdfLoading } = useInterview();
+    const { reports, totalReports, getReports, deleteReport } = useInterview();
     const navigate = useNavigate();
     const [deletingId, setDeletingId] = useState(null);
-    const [downloadingId, setDownloadingId] = useState(null);
     const [isFetching, setIsFetching] = useState(false);
     const [searchTerm, setSearchTerm] = useState("");
     const [filterTier, setFilterTier] = useState("all");
@@ -133,13 +132,6 @@ const Dashboard = () => {
         setDeletingId(id);
         await deleteReport(id);
         setDeletingId(null);
-    };
-
-    const handlePdfDownload = async (e, id) => {
-        e.stopPropagation();
-        setDownloadingId(id);
-        await getResumePdf(id);
-        setDownloadingId(null);
     };
 
     // Calculate Summary Stats from loaded reports
@@ -337,20 +329,6 @@ const Dashboard = () => {
                                             </button>
 
                                             <div className="flex gap-2">
-                                                {/* PDF export */}
-                                                <button
-                                                    onClick={(e) => handlePdfDownload(e, report.id)}
-                                                    disabled={downloadingId === report.id || pdfLoading}
-                                                    title="Quick Export PDF"
-                                                    className="w-8 h-8 rounded-lg flex items-center justify-center bg-surface hover:bg-accent/15 border border-border/80 text-secondary hover:text-accent hover:border-accent/20 transition-all duration-200 disabled:opacity-50 cursor-pointer"
-                                                >
-                                                    {downloadingId === report.id ? (
-                                                        <span className="w-3.5 h-3.5 border-2 border-accent/20 border-t-accent rounded-full animate-spin" />
-                                                    ) : (
-                                                        <FiDownload className="w-4 h-4" />
-                                                    )}
-                                                </button>
-
                                                 {/* Delete report */}
                                                 <button
                                                     onClick={(e) => handleDelete(e, report.id)}

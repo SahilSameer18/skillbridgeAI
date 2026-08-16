@@ -48,7 +48,6 @@ Job seekers often struggle to translate their resume into interview readiness. S
 - **API Rate Limiting:** Express rate-limit middleware protects the login endpoint, account linking, and AI generation calls from abuse.
 - **Input Validation:** Zod schemas validate auth, profile, and interview payloads on both client (`profile.schema.js`) and server (`user.schema.js`), ensuring consistent request data, no spaces in usernames, and user form validation.
 - **PDF Resume Parsing:** Uploaded resumes are parsed using `pdf-parse`, then analyzed alongside job descriptions.
-- **Downloadable Resume Export:** Generated resume HTML is converted to PDF through Puppeteer for a polished candidate asset.
 - **Protected React Routing:** Authenticated flows use React Router and a `Protected` wrapper for `/generate`, `/dashboard`, `/profile`, and report detail routes.
 - **PostgreSQL + Prisma ORM:** Type-safe database layer using Prisma ORM with PostgreSQL hosted on Neon, enabling efficient relational queries and schema migrations.
 
@@ -86,7 +85,6 @@ flowchart LR
         Gemini[Google Gemini AI]
         DiceBear[DiceBear Avatar API]
         Parser[pdf-parse]
-        PDF[Puppeteer PDF Generator]
     end
 
     User --> UI
@@ -107,7 +105,6 @@ flowchart LR
 
     Services --> Gemini
     Services --> Parser
-    Services --> PDF
     Services --> Matcher
     Services --> DiceBear
 
@@ -281,7 +278,6 @@ skillBridgeAI/
 - Google OAuth2 (`/oauth2/v3/userinfo` — no extra library needed)
 - Zod (request validation)
 - @google/genai
-- Puppeteer
 - pdf-parse
 - express-rate-limit
 - bcryptjs
@@ -334,7 +330,6 @@ All relations use `onDelete: Cascade`, except `SkillGap.skillRef → Skill`, whi
 - `GET /api/interview/` - list all saved reports for the authenticated user
 - `GET /api/interview/report/:interviewId` - fetch a single report detail, including skill gap resources
 - `DELETE /api/interview/:interviewId` - delete a saved report
-- `POST /api/interview/resume/pdf/:interviewReportId` - generate and download resume PDF from saved report
 
 ---
 

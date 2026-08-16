@@ -3,7 +3,6 @@ const require = createRequire(import.meta.url);
 const pdfParse = require("pdf-parse");
 import {
   generateInterviewReport,
-  generateResumePdf,
 } from "../services/ai.service.js";
 import prisma from "../lib/prisma.js";
 import { attachSkillIds } from "../services/skillMatcher.service.js";
@@ -189,39 +188,10 @@ const deleteInterviewReportController = asyncHandler(async (req, res, next) => {
   });
 });
 
-/**
- * @description Controller to generate resume PDF based on user self description, resume and job description.
- */
-const generateResumePdfController = asyncHandler(async (req, res, next) => {
-  const { interviewReportId } = req.params;
-
-  const interviewReport = await prisma.interviewReport.findUnique({
-    where: { id: interviewReportId },
-  });
-
-  if (!interviewReport || interviewReport.userId !== req.user.id) {
-    throw new ApiError(404, "Interview report not found");
-  }
-
-  const { resume, jobDescription } = interviewReport;
-
-  const pdfBuffer = await generateResumePdf({
-    resume,
-    jobDescription,
-  });
-
-  res.set({
-    "Content-Type": "application/pdf",
-    "Content-Disposition": `attachment; filename=resume_${interviewReportId}.pdf`,
-  });
-
-  res.send(pdfBuffer);
-});
-
 export {
   generateInterViewReportController,
   getInterviewReportByIdController,
   getAllInterviewReportsController,
   deleteInterviewReportController,
-  generateResumePdfController,
 };
+

@@ -13,10 +13,3 @@ export const interviewIdParamSchema = z.object({
     .trim()
     .min(1, "Interview ID is required"),
 });
-
-export const resumePdfParamSchema = z.object({
-  interviewReportId: z
-    .string({ required_error: "Interview Report ID is required" })
-    .trim()
-    .min(1, "Interview Report ID is required"),
-});

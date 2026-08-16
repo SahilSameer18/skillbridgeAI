@@ -7,7 +7,6 @@ import { validateBody, validateParams } from "../middlewares/validate.middleware
 import {
   createInterviewSchema,
   interviewIdParamSchema,
-  resumePdfParamSchema,
 } from "../schemas/interview.schema.js";
 
 const interviewRouter = express.Router();
@@ -62,13 +61,6 @@ interviewRouter.delete(
   authUser,
   validateParams(interviewIdParamSchema),
   interviewController.deleteInterviewReportController,
-);
-
-interviewRouter.post(
-  "/resume/pdf/:interviewReportId",
-  authUser,
-  validateParams(resumePdfParamSchema),
-  interviewController.generateResumePdfController,
 );
 
 export default interviewRouter;
