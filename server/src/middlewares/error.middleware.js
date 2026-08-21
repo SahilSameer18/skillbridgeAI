@@ -52,7 +52,7 @@ const errorMiddleware = (err, req, res, next) => {
   else if (err.name === "MulterError" || err.code?.startsWith("LIMIT_")) {
     let message = err.message;
     if (err.code === "LIMIT_FILE_SIZE") {
-      message = "File size limit exceeded (maximum size is 3MB)";
+      message = "File size limit exceeded (maximum size is 4MB)";
     }
     error = new ApiError(400, message, [], err.stack);
   }

@@ -46,8 +46,8 @@ Job seekers often struggle to translate their resume into interview readiness. S
 - **High-Performance Redis Caching:** Integrated Redis Cloud to handle rate limiting, lightning-fast user profile caching, and a self-expiring JWT token blacklist, improving security and database read performance.
 - **Secure Session Management:** JWT-based auth is stored as an HTTP-only cookie and validated with a token blacklist.
 - **API Rate Limiting:** Express rate-limit middleware protects the login endpoint, account linking, and AI generation calls from abuse.
-- **Input Validation:** Zod schemas validate auth, profile, and interview payloads on both client (`profile.schema.js`) and server (`user.schema.js`), ensuring consistent request data, no spaces in usernames, and user form validation.
 - **PDF Resume Parsing:** Uploaded resumes are parsed using `pdf-parse`, then analyzed alongside job descriptions.
+- **Client-Side Vector PDF Export:** Instant, 100% free interview strategy report download powered by `@react-pdf/renderer` with zero server overhead or additional AI calls.
 - **Protected React Routing:** Authenticated flows use React Router and a `Protected` wrapper for `/generate`, `/dashboard`, `/profile`, and report detail routes.
 - **PostgreSQL + Prisma ORM:** Type-safe database layer using Prisma ORM with PostgreSQL hosted on Neon, enabling efficient relational queries and schema migrations.
 
@@ -64,6 +64,7 @@ flowchart LR
         Context[Context API]
         OAuth[Google OAuth Provider]
         Forms[React Hook Form + Zod]
+        PDF[Client-Side PDF Engine<br/>@react-pdf/renderer]
     end
 
     subgraph Backend["Express 5 API"]
@@ -263,6 +264,7 @@ skillBridgeAI/
 - React 19
 - Vite 7
 - Tailwind CSS v4
+- `@react-pdf/renderer` (Client-side vector PDF generation)
 - `@react-oauth/google`
 - React Router DOM 7
 - Zod (client validation)
