@@ -17,19 +17,26 @@ const SKILL_CHIPS = [
 /* ── Match score meter ── */
 const ScoreMeter = ({ score }) => {
   const [displayed, setDisplayed] = useState(0);
+
   useEffect(() => {
-    const step = score / 60;
-    let current = 0;
-    const interval = setInterval(() => {
-      current += step;
-      if (current >= score) {
-        setDisplayed(score);
-        clearInterval(interval);
-      } else {
-        setDisplayed(Math.round(current));
+    if (!score) return;
+    let startTimestamp = null;
+    let animationFrameId;
+    const duration = 1000;
+
+    const step = (timestamp) => {
+      if (!startTimestamp) startTimestamp = timestamp;
+      const progress = Math.min((timestamp - startTimestamp) / duration, 1);
+      const eased = 1 - Math.pow(1 - progress, 3);
+      setDisplayed(Math.round(eased * score));
+
+      if (progress < 1) {
+        animationFrameId = requestAnimationFrame(step);
       }
-    }, 16);
-    return () => clearInterval(interval);
+    };
+
+    animationFrameId = requestAnimationFrame(step);
+    return () => cancelAnimationFrame(animationFrameId);
   }, [score]);
 
   const circumference = 2 * Math.PI * 54;
@@ -46,7 +53,7 @@ const ScoreMeter = ({ score }) => {
           strokeLinecap="round"
           strokeDasharray={circumference}
           strokeDashoffset={dashOffset}
-          style={{ transition: "stroke-dashoffset 0.05s linear, stroke 0.3s ease" }}
+          style={{ transition: "stroke 0.3s ease" }}
         />
       </svg>
       <div className="absolute inset-0 flex flex-col items-center justify-center">
@@ -407,3 +414,4 @@ const HeroSection = ({ user }) => {
 };
 
 export default HeroSection;
+

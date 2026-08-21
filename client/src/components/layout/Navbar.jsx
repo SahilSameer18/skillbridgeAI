@@ -25,7 +25,10 @@ const Navbar = () => {
   const userDropdownRef = useRef(null);
 
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 12);
+    const onScroll = () => {
+      const isScrolled = window.scrollY > 12;
+      setScrolled((prev) => (prev !== isScrolled ? isScrolled : prev));
+    };
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
@@ -258,4 +261,3 @@ const Navbar = () => {
 };
 
 export default Navbar;
-
