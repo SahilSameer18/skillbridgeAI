@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { useInterview } from '../../hooks/useInterview.js'
 import { useParams } from 'react-router'
-import LoadingScreen from '../../components/layout/LoadingScreen'
+import Skeleton from '../../components/ui/Skeleton'
 import { exportReportPdf } from '../../utils/exportReportPdf.js'
 
 const NAV_ITEMS = [
@@ -276,10 +276,22 @@ const InterviewReport = () => {
 
     if (loading || !report) {
         return (
-            <LoadingScreen
-                message="Retrieving your preparation data..."
-                subtitle="Assembling questions, answers, and curated learning resources."
-            />
+            <div className="animate-pulse w-full max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 py-6 pb-24 lg:pb-12 flex flex-col gap-6">
+                <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4">
+                    <div className="flex flex-col gap-2">
+                        <Skeleton width="180px" height="1.5rem" />
+                        <Skeleton width="320px" height="2.5rem" />
+                    </div>
+                    <Skeleton width="160px" height="2.5rem" />
+                </div>
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                    <Skeleton height="7rem" />
+                    <Skeleton height="7rem" />
+                    <Skeleton height="7rem" />
+                    <Skeleton height="7rem" />
+                </div>
+                <Skeleton height="22rem" />
+            </div>
         )
     }
 

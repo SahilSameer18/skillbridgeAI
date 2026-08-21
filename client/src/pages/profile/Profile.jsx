@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import { useAuth } from "../../hooks/useAuth";
 import { getProfile, updateProfile, changePassword } from "../../services/user.api";
 import { profileUpdateSchema, changePasswordSchema } from "../../schemas/profile.schema";
-import LoadingScreen from "../../components/layout/LoadingScreen";
 import Skeleton from "../../components/ui/Skeleton";
 import GoogleButton from "../../components/auth/GoogleButton";
 import {

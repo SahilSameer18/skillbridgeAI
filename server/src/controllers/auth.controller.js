@@ -53,10 +53,13 @@ const registerUserController = asyncHandler(async (req, res) => {
 
   setAuthCookie(res, token);
 
+  const formattedUser = formatUserResponse(user);
+
   res.status(201).json({
     success: true,
     message: "User registered successfully",
-    user: formatUserResponse(user),
+    data: { user: formattedUser },
+    user: formattedUser,
   });
 });
 
@@ -98,10 +101,13 @@ const loginUserController = asyncHandler(async (req, res) => {
 
   setAuthCookie(res, token);
 
+  const formattedUser = formatUserResponse(user);
+
   res.status(200).json({
     success: true,
     message: "Login successful",
-    user: formatUserResponse(user),
+    data: { user: formattedUser },
+    user: formattedUser,
   });
 });
 
@@ -146,10 +152,13 @@ const googleAuthController = asyncHandler(async (req, res) => {
 
     setAuthCookie(res, token);
 
+    const formattedUser = formatUserResponse(user);
+
     return res.status(200).json({
       success: true,
       message: "Google login successful",
-      user: formatUserResponse(user),
+      data: { user: formattedUser },
+      user: formattedUser,
     });
   }
 
@@ -217,10 +226,13 @@ const googleAuthController = asyncHandler(async (req, res) => {
 
   setAuthCookie(res, token);
 
+  const formattedCreatedUser = formatUserResponse(createdUser);
+
   return res.status(201).json({
     success: true,
     message: "User registered with Google successfully",
-    user: formatUserResponse(createdUser),
+    data: { user: formattedCreatedUser },
+    user: formattedCreatedUser,
   });
 });
 
@@ -254,10 +266,12 @@ const linkGoogleController = asyncHandler(async (req, res) => {
 
   if (existingProvider) {
     if (existingProvider.userId === currentUser.id) {
+      const formattedCurrent = formatUserResponse(currentUser);
       return res.status(200).json({
         success: true,
         message: "Google account is already linked",
-        user: formatUserResponse(currentUser),
+        data: { user: formattedCurrent },
+        user: formattedCurrent,
       });
     }
     throw new ApiError(409, "This Google account is already linked to another user.");
@@ -279,10 +293,13 @@ const linkGoogleController = asyncHandler(async (req, res) => {
 
   await userCache.invalidate(currentUser.id);
 
+  const formattedUpdated = formatUserResponse(updatedUser);
+
   res.status(200).json({
     success: true,
     message: "Google account linked successfully",
-    user: formatUserResponse(updatedUser),
+    data: { user: formattedUpdated },
+    user: formattedUpdated,
   });
 });
 
@@ -320,10 +337,13 @@ const getMeController = asyncHandler(async (req, res) => {
     throw new ApiError(404, "User not found");
   }
 
+  const formattedMe = formatUserResponse(user);
+
   res.status(200).json({
     success: true,
     message: "User details retrieved successfully",
-    user: formatUserResponse(user),
+    data: { user: formattedMe },
+    user: formattedMe,
   });
 });
 

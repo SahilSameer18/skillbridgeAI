@@ -92,6 +92,7 @@ const generateInterViewReportController = asyncHandler(async (req, res, next) =>
   res.status(201).json({
     success: true,
     message: "Interview report generated successfully",
+    data: { interviewReport },
     interviewReport: interviewReport,
   });
 });
@@ -127,6 +128,7 @@ const getInterviewReportByIdController = asyncHandler(async (req, res, next) => 
   res.status(200).json({
     success: true,
     message: "Interview report retrieved successfully",
+    data: { interviewReport },
     interviewReport: interviewReport,
   });
 });
@@ -158,9 +160,17 @@ const getAllInterviewReportsController = asyncHandler(async (req, res, next) => 
     },
   });
 
+  const paginationData = {
+    interviewReports,
+    totalCount,
+    currentPage: page,
+    totalPages: Math.ceil(totalCount / limit),
+  };
+
   res.status(200).json({
     success: true,
     message: "Interview reports retrieved successfully",
+    data: paginationData,
     interviewReports,
     totalCount,
     currentPage: page,

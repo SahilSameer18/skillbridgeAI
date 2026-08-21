@@ -30,15 +30,22 @@ const getProfileController = asyncHandler(async (req, res) => {
     : 0;
   const topScore = validScores.length > 0 ? Math.max(...validScores) : 0;
 
+  const formattedUser = formatUserResponse(user);
+  const statsData = {
+    totalReports,
+    averageScore,
+    topScore,
+  };
+
   res.status(200).json({
     success: true,
     message: "Profile retrieved successfully",
-    user: formatUserResponse(user),
-    stats: {
-      totalReports,
-      averageScore,
-      topScore,
+    data: {
+      user: formattedUser,
+      stats: statsData,
     },
+    user: formattedUser,
+    stats: statsData,
   });
 });
 
@@ -82,10 +89,13 @@ const updateProfileController = asyncHandler(async (req, res) => {
 
   await userCache.invalidate(userId);
 
+  const formattedUpdatedUser = formatUserResponse(updatedUser);
+
   res.status(200).json({
     success: true,
     message: "Profile updated successfully",
-    user: formatUserResponse(updatedUser),
+    data: { user: formattedUpdatedUser },
+    user: formattedUpdatedUser,
   });
 });
 

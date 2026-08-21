@@ -89,8 +89,6 @@ const HeroSection = ({ user }) => {
   const [wordIndex, setWordIndex] = useState(0);
   const [fade, setFade] = useState(true);
   const [score, setScore] = useState(0);
-  const [scoreTriggered, setScoreTriggered] = useState(false);
-  const cardRef = useRef(null);
 
   /* Cycle words */
   useEffect(() => {
@@ -108,7 +106,6 @@ const HeroSection = ({ user }) => {
   useEffect(() => {
     const timer = setTimeout(() => {
       setScore(88);
-      setScoreTriggered(true);
     }, 800);
     return () => clearTimeout(timer);
   }, []);
