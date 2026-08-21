@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect } from "react";
 import { Link } from "react-router";
 
 /* ── Animated typewriter words ── */
@@ -237,7 +237,6 @@ const HeroSection = ({ user }) => {
 
           {/* ── Live demo card ── */}
           <div
-            ref={cardRef}
             className="w-full animate-fade-in-up delay-300"
             style={{ maxWidth: "820px" }}
           >

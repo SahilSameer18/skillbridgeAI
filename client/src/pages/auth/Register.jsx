@@ -30,14 +30,14 @@ const Register = () => {
     if (name === "confirmPassword") {
       const result = registerBaseSchema.shape.confirmPassword.safeParse(value);
       if (!result.success) {
-        err = result.error.errors[0].message;
+        err = result.error.issues?.[0]?.message || result.error.errors?.[0]?.message;
       } else if (value !== fields.password) {
         err = "Passwords do not match.";
       }
     } else {
       const fieldSchema = registerBaseSchema.shape[name];
       const result = fieldSchema.safeParse(value);
-      err = result.success ? null : result.error.errors[0].message;
+      err = result.success ? null : (result.error.issues?.[0]?.message || result.error.errors?.[0]?.message);
     }
     setFieldErrors((prev) => ({ ...prev, [name]: err }));
     return err;
@@ -55,7 +55,7 @@ const Register = () => {
       } else {
         const fieldSchema = registerBaseSchema.shape[name];
         const result = fieldSchema.safeParse(value);
-        const err = result.success ? null : result.error.errors[0].message;
+        const err = result.success ? null : (result.error.issues?.[0]?.message || result.error.errors?.[0]?.message);
         setFieldErrors((prev) => ({ ...prev, [name]: err }));
       }
     }
@@ -104,7 +104,8 @@ const Register = () => {
     const result = registerSchema.safeParse(fields);
     if (!result.success) {
       const errors = { username: null, email: null, password: null, confirmPassword: null };
-      result.error.errors.forEach((err) => {
+      const issues = result.error.issues || result.error.errors || [];
+      issues.forEach((err) => {
         const path = err.path[0];
         if (!errors[path]) {
           errors[path] = err.message;

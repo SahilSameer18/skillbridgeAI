@@ -53,7 +53,11 @@ const Form = () => {
     });
     
     if (!validationResult.success) {
-      setError(validationResult.error.errors[0].message);
+      const firstError =
+        validationResult.error.issues?.[0]?.message ||
+        validationResult.error.errors?.[0]?.message ||
+        "Please fill in all required fields.";
+      setError(firstError);
       return;
     }
 

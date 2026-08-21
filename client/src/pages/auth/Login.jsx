@@ -42,7 +42,7 @@ const Login = () => {
   const validateField = (name, value) => {
     const fieldSchema = loginSchema.shape[name];
     const result = fieldSchema.safeParse(value);
-    const err = result.success ? null : result.error.errors[0].message;
+    const err = result.success ? null : (result.error.issues?.[0]?.message || result.error.errors?.[0]?.message);
     setFieldErrors((prev) => ({ ...prev, [name]: err }));
     return err;
   };
@@ -68,15 +68,14 @@ const Login = () => {
 
   const handleGoogleSuccess = async (tokenResponse) => {
     setError(null);
-    setConflictNotice(null);
     try {
       await handleGoogleAuth({ accessToken: tokenResponse.access_token });
       navigate("/");
     } catch (err) {
       if (err?.response?.status === 409) {
         setPendingGoogleToken(tokenResponse.access_token);
-        setConflictNotice(
-          err.response.data?.message ||
+        setError(
+          err?.response?.data?.message ||
             "An account with this email already exists. Enter your password below to link Google."
         );
       } else {
@@ -99,7 +98,8 @@ const Login = () => {
     const result = loginSchema.safeParse({ email, password });
     if (!result.success) {
       const errors = { email: null, password: null };
-      result.error.errors.forEach((err) => {
+      const issues = result.error.issues || result.error.errors || [];
+      issues.forEach((err) => {
         const path = err.path[0];
         if (!errors[path]) errors[path] = err.message;
       });
