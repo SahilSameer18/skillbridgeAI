@@ -113,9 +113,11 @@ const Dashboard = () => {
 
     useEffect(() => {
         const fetchReports = async () => {
-            setIsFetching(true);
-            await getReports(1, limit);
-            setIsFetching(false);
+            if (reports.length === 0) {
+                setIsFetching(true);
+                await getReports(1, limit);
+                setIsFetching(false);
+            }
         };
         fetchReports();
         // eslint-disable-next-line react-hooks/exhaustive-deps

@@ -14,40 +14,44 @@ const COMMON_SKILLS = [
  */
 const JobDescriptionInput = ({ value, onChange }) => {
   const [localValue, setLocalValue] = useState(value);
+  const [debouncedValue, setDebouncedValue] = useState(value);
   const [isFocused, setIsFocused] = useState(false);
 
   // Sync local state if parent value changes externally
   useEffect(() => {
     setLocalValue(value);
+    setDebouncedValue(value);
   }, [value]);
 
-  // Debounce the parent onChange callback to avoid lagging the form on every keystroke
+  // Debounce the parent onChange callback and skill extractor to keep typing fluid
   useEffect(() => {
     const handler = setTimeout(() => {
+      setDebouncedValue(localValue);
       if (localValue !== value) {
         onChange(localValue);
       }
-    }, 120); // Fast 120ms debounce
+    }, 180);
 
     return () => clearTimeout(handler);
   }, [localValue, onChange, value]);
 
   const handleBlur = () => {
     setIsFocused(false);
+    setDebouncedValue(localValue);
     if (localValue !== value) {
       onChange(localValue);
     }
   };
 
-  // Extract skills dynamically based on input content
+  // Extract skills dynamically based on debounced content
   const extractedSkills = useMemo(() => {
-    if (!localValue.trim()) return [];
+    if (!debouncedValue.trim()) return [];
     return COMMON_SKILLS.filter(skill => {
       const escapedSkill = skill.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&');
       const regex = new RegExp(`\\b${escapedSkill}\\b`, 'i');
-      return regex.test(localValue);
+      return regex.test(debouncedValue);
     });
-  }, [localValue]);
+  }, [debouncedValue]);
 
   return (
     <div className={`flex flex-col h-full bg-background/40 p-6 rounded-2xl border transition-all duration-300 ${

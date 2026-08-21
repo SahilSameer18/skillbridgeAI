@@ -3,6 +3,7 @@ import { useAuth } from "../../hooks/useAuth";
 import { getProfile, updateProfile, changePassword } from "../../services/user.api";
 import { profileUpdateSchema, changePasswordSchema } from "../../schemas/profile.schema";
 import LoadingScreen from "../../components/layout/LoadingScreen";
+import Skeleton from "../../components/ui/Skeleton";
 import GoogleButton from "../../components/auth/GoogleButton";
 import {
   FiUser,
@@ -27,13 +28,22 @@ const Profile = () => {
   const { user, setUser, handleLinkGoogle, googleLoading } = useAuth();
 
   const [activeTab, setActiveTab] = useState("profile");
-  const [profileLoading, setProfileLoading] = useState(true);
+  const [statsLoading, setStatsLoading] = useState(true);
   const [stats, setStats] = useState({ totalReports: 0, averageScore: 0, topScore: 0 });
 
-  // Form states — initialized from AuthContext user (no double fetch)
+  // Form states — initialized from AuthContext user (instant render)
   const [username, setUsername] = useState(user?.username || "");
   const [email, setEmail] = useState(user?.email || "");
   const [avatar, setAvatar] = useState(user?.avatar || "");
+
+  // Sync with AuthContext user if it updates
+  useEffect(() => {
+    if (user) {
+      setUsername((prev) => prev || user.username);
+      setEmail((prev) => prev || user.email);
+      setAvatar((prev) => prev || user.avatar || "");
+    }
+  }, [user]);
 
   // Password form states
   const [currentPassword, setCurrentPassword] = useState("");
@@ -55,10 +65,10 @@ const Profile = () => {
   const [savingProfile, setSavingProfile] = useState(false);
   const [savingPassword, setSavingPassword] = useState(false);
 
-  // Fetch only stats on mount — user data already in AuthContext from getMe()
+  // Fetch only stats in background — user data is already in AuthContext
   useEffect(() => {
     const fetchStats = async () => {
-      setProfileLoading(true);
+      setStatsLoading(true);
       try {
         const data = await getProfile();
         if (data?.stats) {
@@ -73,7 +83,7 @@ const Profile = () => {
       } catch (err) {
         console.error("Failed fetching profile data:", err);
       } finally {
-        setProfileLoading(false);
+        setStatsLoading(false);
       }
     };
     fetchStats();
@@ -197,15 +207,6 @@ const Profile = () => {
     setProfileError("Google linking failed. Please try again.");
   };
 
-  if (profileLoading) {
-    return (
-      <LoadingScreen
-        message="Loading your profile workspace..."
-        subtitle="Retrieving user identity, account settings, and interview performance metrics."
-      />
-    );
-  }
-
   const isGoogleLinked = user?.providers?.includes("google");
   const displayAvatar = avatar || getDiceBearAvatar(user?.username);
 
@@ -269,7 +270,11 @@ const Profile = () => {
           </div>
           <div>
             <span className="text-[10px] font-bold text-secondary uppercase tracking-widest block">Total Audited</span>
-            <span className="text-2xl font-extrabold text-primary">{stats.totalReports} roles</span>
+            {statsLoading ? (
+              <div className="mt-1"><Skeleton width="65px" height="1.5rem" /></div>
+            ) : (
+              <span className="text-2xl font-extrabold text-primary">{stats.totalReports} roles</span>
+            )}
           </div>
         </div>
 
@@ -279,7 +284,11 @@ const Profile = () => {
           </div>
           <div>
             <span className="text-[10px] font-bold text-secondary uppercase tracking-widest block">Avg Compatibility</span>
-            <span className="text-2xl font-extrabold text-amber-400">{stats.averageScore}%</span>
+            {statsLoading ? (
+              <div className="mt-1"><Skeleton width="55px" height="1.5rem" /></div>
+            ) : (
+              <span className="text-2xl font-extrabold text-amber-400">{stats.averageScore}%</span>
+            )}
           </div>
         </div>
 
@@ -289,7 +298,11 @@ const Profile = () => {
           </div>
           <div>
             <span className="text-[10px] font-bold text-secondary uppercase tracking-widest block">Highest Match</span>
-            <span className="text-2xl font-extrabold text-emerald-400">{stats.topScore}%</span>
+            {statsLoading ? (
+              <div className="mt-1"><Skeleton width="55px" height="1.5rem" /></div>
+            ) : (
+              <span className="text-2xl font-extrabold text-emerald-400">{stats.topScore}%</span>
+            )}
           </div>
         </div>
       </div>

@@ -19,6 +19,8 @@ export const useInterview = () => {
             response = await generateInterviewReport({ jobDescription, resumeFile })
             if (response?.interviewReport) {
                 setReport(response.interviewReport)
+                setReports(prev => [response.interviewReport, ...prev])
+                setTotalReports(prev => prev + 1)
             }
         } catch (error) {
             console.error("Failed to generate report:", error)
@@ -72,6 +74,7 @@ export const useInterview = () => {
         try {
             await deleteInterviewReport(id)
             setReports(prev => prev.filter(report => report.id !== id))
+            setTotalReports(prev => Math.max(0, prev - 1))
         } catch (error) {
             console.error("Failed to delete report:", error)
         }
@@ -80,3 +83,5 @@ export const useInterview = () => {
     return { loading, report, reports, totalReports, generateReport, getReportById, getReports, deleteReport }
 
 }
+
+
