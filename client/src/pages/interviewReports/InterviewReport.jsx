@@ -49,8 +49,8 @@ const DocsLogo = () => (
     </svg>
 )
 
-/* ── Circular score ring ── */
-const ScoreRing = ({ score, color, size = 64, strokeWidth = 5 }) => {
+/* ── Circular score ring (Memoized) ── */
+const ScoreRing = React.memo(({ score, color, size = 64, strokeWidth = 5 }) => {
     const radius = (size - strokeWidth) / 2
     const circumference = 2 * Math.PI * radius
     const [offset, setOffset] = useState(circumference)
@@ -73,10 +73,10 @@ const ScoreRing = ({ score, color, size = 64, strokeWidth = 5 }) => {
             />
         </svg>
     )
-}
+})
 
-/* ── Hero Stats Component ── */
-const HeroStats = ({ report }) => {
+/* ── Hero Stats Component (Memoized) ── */
+const HeroStats = React.memo(({ report }) => {
     const scoreColor = report.matchScore >= 80 ? '#34d399' : report.matchScore >= 60 ? '#fbbf24' : '#f87171'
     const scoreLabel = report.matchScore >= 80 ? 'Strong match' : report.matchScore >= 60 ? 'Average match' : 'Low match'
     const scoreLabelColor = report.matchScore >= 80 ? 'text-emerald-400' : report.matchScore >= 60 ? 'text-amber-400' : 'text-red-400'
@@ -110,10 +110,10 @@ const HeroStats = ({ report }) => {
             </div>
         </div>
     )
-}
+})
 
-/* ── Question accordion card ── */
-const QuestionCard = ({ item, index, accentClass, bodyBg }) => {
+/* ── Question accordion card (Memoized) ── */
+const QuestionCard = React.memo(({ item, index, accentClass, bodyBg }) => {
     const [open, setOpen] = useState(false)
     return (
         <div className={`rounded-xl overflow-hidden border transition-colors duration-200 ${open ? 'border-border/80 shadow-md shadow-black/10 bg-surface/90' : 'border-border/60 bg-surface/60 hover:border-border/70'}`}>
@@ -164,10 +164,10 @@ const QuestionCard = ({ item, index, accentClass, bodyBg }) => {
             </div>
         </div>
     )
-}
+})
 
-/* ── Skill Gap Card ── */
-const SkillGapCard = ({ gap }) => {
+/* ── Skill Gap Card (Memoized) ── */
+const SkillGapCard = React.memo(({ gap }) => {
     const resources = gap.skillRef?.resources ?? []
     const severityKey = gap.severity?.toLowerCase()
 
@@ -215,10 +215,10 @@ const SkillGapCard = ({ gap }) => {
             )}
         </div>
     )
-}
+})
 
-/* ── Roadmap Day Timeline ── */
-const RoadmapDay = ({ day, index, total }) => (
+/* ── Roadmap Day Timeline (Memoized) ── */
+const RoadmapDay = React.memo(({ day, index, total }) => (
     <div className="relative flex gap-3 sm:gap-4 pb-6 group">
         {/* Timeline vertical line */}
         {index < total - 1 && (
@@ -247,7 +247,7 @@ const RoadmapDay = ({ day, index, total }) => (
             </ul>
         </div>
     </div>
-)
+))
 
 /* ── Main Component ── */
 const InterviewReport = () => {
@@ -262,7 +262,7 @@ const InterviewReport = () => {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [interviewId])
 
-    const handleExportPdf = async () => {
+    const handleExportPdf = React.useCallback(async () => {
         if (!report || isExporting) return;
         setIsExporting(true);
         try {
@@ -272,7 +272,7 @@ const InterviewReport = () => {
         } finally {
             setIsExporting(false);
         }
-    };
+    }, [report, isExporting]);
 
     if (loading || !report) {
         return (

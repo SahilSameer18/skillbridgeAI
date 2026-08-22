@@ -199,11 +199,11 @@ const HeroSection = ({ user }) => {
           </p>
 
           {/* ── CTA buttons ── */}
-          <div className="flex flex-col sm:flex-row items-center gap-4 mb-20 animate-fade-in-up delay-200">
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-16 sm:mb-20 animate-fade-in-up delay-200 w-full max-w-md sm:max-w-none">
             <Link
               to={user ? "/generate" : "/register"}
               id="hero-cta-primary"
-              className="group relative inline-flex items-center justify-center gap-3 px-8 py-4 rounded-2xl font-bold text-base transition-all duration-300 overflow-hidden"
+              className="w-full sm:w-auto group relative inline-flex items-center justify-center gap-3 px-8 py-4 rounded-2xl font-bold text-base transition-all duration-300 overflow-hidden text-center"
               style={{
                 background: "linear-gradient(135deg, #ff6662, #fe7a00)",
                 color: "#fff",
@@ -223,7 +223,7 @@ const HeroSection = ({ user }) => {
             <Link
               to={user ? "/dashboard" : "/login"}
               id="hero-cta-secondary"
-              className="inline-flex items-center justify-center gap-2 px-8 py-4 rounded-2xl font-bold text-base transition-all duration-300"
+              className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-8 py-4 rounded-2xl font-bold text-base transition-all duration-300 text-center"
               style={{
                 background: "rgba(255,255,255,0.04)",
                 border: "1px solid rgba(255,255,255,0.1)",

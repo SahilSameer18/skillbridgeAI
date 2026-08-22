@@ -30,12 +30,12 @@ const Footer = () => {
   ];
 
   return (
-    <footer className="mt-24 border-t border-white/[0.06] bg-background relative overflow-hidden">
+    <footer className="mt-20 sm:mt-24 border-t border-white/[0.06] bg-background relative overflow-hidden w-full max-w-full">
       {/* Subtle ambient glow to match background theme */}
-      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-[150px] bg-accent/[0.03] rounded-full blur-[120px] pointer-events-none" />
+      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] max-w-full h-[150px] bg-accent/[0.03] rounded-full blur-[120px] pointer-events-none" />
 
-      <div className="max-w-7xl mx-auto px-6 py-12 relative z-10">
-        <div className="grid md:grid-cols-[1.5fr_1fr_1fr] gap-10 pb-10 border-b border-white/[0.05]">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 py-10 sm:py-12 relative z-10">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-[1.5fr_1fr_1fr] gap-8 sm:gap-10 pb-10 border-b border-white/[0.05]">
 
           {/* Column 1: Brand & Social */}
           <div className="space-y-4">

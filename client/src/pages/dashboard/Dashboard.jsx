@@ -13,8 +13,8 @@ const getMatchDetails = (score) => {
     return { bg: "bg-red-500", text: "text-red-400", border: "border-red-500/20", badgeBg: "bg-red-500/10", label: "Calibrating" };
 };
 
-// ── Linear Progress Bar Component ────────────────────────────────────────────
-const HorizontalProgressBar = ({ score }) => {
+// ── Linear Progress Bar Component (Memoized) ─────────────────────────────────
+const HorizontalProgressBar = React.memo(({ score }) => {
     if (!score) return null;
     const { bg, text } = getMatchDetails(score);
 
@@ -32,7 +32,88 @@ const HorizontalProgressBar = ({ score }) => {
             </div>
         </div>
     );
-};
+});
+
+// ── Memoized Individual Report Card Component ────────────────────────────────
+const ReportCard = React.memo(({ report, onNavigate, onDownloadPdf, onDelete, isDownloading, isDeleting }) => {
+    const { label, text, border, badgeBg } = getMatchDetails(report.matchScore);
+
+    return (
+        <div
+            onClick={() => onNavigate(`/interview/${report.id}`)}
+            className="group relative rounded-2xl border border-border/80 bg-surface/30 p-5 flex flex-col justify-between min-h-52 hover:border-accent/40 hover:bg-surface/65 hover:shadow-xl hover:shadow-accent/[0.02] cursor-pointer transition-all duration-300"
+        >
+            {/* Card Ambient Glow */}
+            <div className="absolute inset-0 bg-gradient-to-br from-accent/5 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
+
+            {/* Card Header (Title & Status Tag) */}
+            <div className="flex items-start justify-between gap-3 relative z-10">
+                <div className="min-w-0 flex-1">
+                    <h3 className="font-bold text-primary text-base leading-snug group-hover:text-accent transition-colors duration-200 truncate" title={report.title || 'Custom Interview Plan'}>
+                        {report.title || 'Custom Interview Plan'}
+                    </h3>
+                    <p className="text-[10px] text-secondary/70 mt-1 font-mono">
+                        Audited {new Date(report.createdAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}
+                    </p>
+                </div>
+                {report.matchScore && (
+                    <span className={`shrink-0 text-[9px] font-bold px-2 py-0.5 rounded border uppercase tracking-wider ${text} ${border} ${badgeBg}`}>
+                        {label}
+                    </span>
+                )}
+            </div>
+
+            {/* Progress Bar Widget */}
+            <HorizontalProgressBar score={report.matchScore} />
+
+            {/* Description Snippet */}
+            <p className="text-xs text-secondary/75 leading-relaxed flex-grow mt-1.5 line-clamp-2 relative z-10" style={{ display: '-webkit-box', WebkitLineClamp: '2', WebkitBoxOrient: 'vertical', overflow: 'hidden' }}>
+                {report.jobDescription || "Custom target interview analysis details."}
+            </p>
+
+            {/* Card Footer Actions */}
+            <div className="flex items-center justify-between mt-4 pt-3 border-t border-border/40 relative z-10" onClick={(e) => e.stopPropagation()}>
+                <button
+                    onClick={() => onNavigate(`/interview/${report.id}`)}
+                    className="text-xs font-bold text-primary flex items-center gap-1 group/btn hover:text-accent transition-colors cursor-pointer"
+                >
+                    View Strategy
+                    <FiArrowRight className="w-3.5 h-3.5 group-hover/btn:translate-x-0.5 transition-transform duration-200" />
+                </button>
+
+                <div className="flex gap-2">
+                    {/* PDF export */}
+                    <button
+                        onClick={(e) => onDownloadPdf(e, report)}
+                        disabled={isDownloading}
+                        title="Quick Export PDF"
+                        className="w-8 h-8 rounded-lg flex items-center justify-center bg-surface hover:bg-accent/15 border border-border/80 text-secondary hover:text-accent hover:border-accent/20 transition-all duration-200 disabled:opacity-50 cursor-pointer"
+                    >
+                        {isDownloading ? (
+                            <span className="w-3.5 h-3.5 border-2 border-accent/20 border-t-accent rounded-full animate-spin" />
+                        ) : (
+                            <FiDownload className="w-4 h-4" />
+                        )}
+                    </button>
+
+                    {/* Delete report */}
+                    <button
+                        onClick={(e) => onDelete(e, report.id)}
+                        disabled={isDeleting}
+                        title="Delete plan"
+                        className="w-8 h-8 rounded-lg flex items-center justify-center bg-surface hover:bg-red-500/15 border border-border/80 text-secondary hover:text-red-400 hover:border-red-500/20 transition-all duration-200 disabled:opacity-50 cursor-pointer"
+                    >
+                        {isDeleting ? (
+                            <span className="w-3.5 h-3.5 border-2 border-red-500/30 border-t-red-400 rounded-full animate-spin" />
+                        ) : (
+                            <FiTrash2 className="w-4 h-4" />
+                        )}
+                    </button>
+                </div>
+            </div>
+        </div>
+    );
+});
 
 // ── Skeleton Loader Card ─────────────────────────────────────────────────────
 const SkeletonCard = () => (
@@ -123,22 +204,22 @@ const Dashboard = () => {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
-    const handleLoadMore = async () => {
+    const handleLoadMore = React.useCallback(async () => {
         const nextPage = page + 1;
         setPage(nextPage);
         setIsFetching(true);
         await getReports(nextPage, limit);
         setIsFetching(false);
-    };
+    }, [page, limit, getReports]);
 
-    const handleDelete = async (e, id) => {
+    const handleDelete = React.useCallback(async (e, id) => {
         e.stopPropagation();
         setDeletingId(id);
         await deleteReport(id);
         setDeletingId(null);
-    };
+    }, [deleteReport]);
 
-    const handlePdfDownload = async (e, report) => {
+    const handlePdfDownload = React.useCallback(async (e, report) => {
         e.stopPropagation();
         setDownloadingId(report.id);
         try {
@@ -148,7 +229,11 @@ const Dashboard = () => {
         } finally {
             setDownloadingId(null);
         }
-    };
+    }, []);
+
+    const handleNavigate = React.useCallback((path) => {
+        navigate(path);
+    }, [navigate]);
 
     // Calculate Summary Stats from loaded reports
     const scoreValids = reports.filter(r => r.matchScore !== null);
@@ -298,85 +383,17 @@ const Dashboard = () => {
                 <>
                     {filteredReports.length > 0 ? (
                         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 animate-fade-in-up">
-                            {filteredReports.map((report) => {
-                                const { label, text, border, badgeBg } = getMatchDetails(report.matchScore);
-                                return (
-                                    <div
-                                        key={report.id}
-                                        onClick={() => navigate(`/interview/${report.id}`)}
-                                        className="group relative rounded-2xl border border-border/80 bg-surface/30 p-5 flex flex-col justify-between h-52 hover:border-accent/40 hover:bg-surface/65 hover:shadow-xl hover:shadow-accent/[0.02] cursor-pointer transition-all duration-300"
-                                    >
-                                        {/* Card Ambient Glow */}
-                                        <div className="absolute inset-0 bg-gradient-to-br from-accent/5 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
-
-                                        {/* Card Header (Title & Status Tag) */}
-                                        <div className="flex items-start justify-between gap-3 relative z-10">
-                                            <div className="min-w-0 flex-1">
-                                                <h3 className="font-bold text-primary text-base leading-snug group-hover:text-accent transition-colors duration-200 truncate" title={report.title || 'Custom Interview Plan'}>
-                                                    {report.title || 'Custom Interview Plan'}
-                                                </h3>
-                                                <p className="text-[10px] text-secondary/70 mt-1 font-mono">
-                                                    Audited {new Date(report.createdAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}
-                                                </p>
-                                            </div>
-                                            {report.matchScore && (
-                                                <span className={`shrink-0 text-[9px] font-bold px-2 py-0.5 rounded border uppercase tracking-wider ${text} ${border} ${badgeBg}`}>
-                                                    {label}
-                                                </span>
-                                            )}
-                                        </div>
-
-                                        {/* Progress Bar Widget */}
-                                        <HorizontalProgressBar score={report.matchScore} />
-
-                                        {/* Description Snippet */}
-                                        <p className="text-xs text-secondary/75 leading-relaxed flex-grow mt-1.5 line-clamp-2 relative z-10" style={{ display: '-webkit-box', WebkitLineClamp: '2', WebkitBoxOrient: 'vertical', overflow: 'hidden' }}>
-                                            {report.jobDescription || "Custom target interview analysis details."}
-                                        </p>
-
-                                        {/* Card Footer Actions */}
-                                        <div className="flex items-center justify-between mt-4 pt-3 border-t border-border/40 relative z-10" onClick={(e) => e.stopPropagation()}>
-                                            <button
-                                                onClick={() => navigate(`/interview/${report.id}`)}
-                                                className="text-xs font-bold text-primary flex items-center gap-1 group/btn hover:text-accent transition-colors cursor-pointer"
-                                            >
-                                                View Strategy
-                                                <FiArrowRight className="w-3.5 h-3.5 group-hover/btn:translate-x-0.5 transition-transform duration-200" />
-                                            </button>
-
-                                            <div className="flex gap-2">
-                                                {/* PDF export */}
-                                                <button
-                                                    onClick={(e) => handlePdfDownload(e, report)}
-                                                    disabled={downloadingId === report.id}
-                                                    title="Quick Export PDF"
-                                                    className="w-8 h-8 rounded-lg flex items-center justify-center bg-surface hover:bg-accent/15 border border-border/80 text-secondary hover:text-accent hover:border-accent/20 transition-all duration-200 disabled:opacity-50 cursor-pointer"
-                                                >
-                                                    {downloadingId === report.id ? (
-                                                        <span className="w-3.5 h-3.5 border-2 border-accent/20 border-t-accent rounded-full animate-spin" />
-                                                    ) : (
-                                                        <FiDownload className="w-4 h-4" />
-                                                    )}
-                                                </button>
-
-                                                {/* Delete report */}
-                                                <button
-                                                    onClick={(e) => handleDelete(e, report.id)}
-                                                    disabled={deletingId === report.id}
-                                                    title="Delete plan"
-                                                    className="w-8 h-8 rounded-lg flex items-center justify-center bg-surface hover:bg-red-500/15 border border-border/80 text-secondary hover:text-red-400 hover:border-red-500/20 transition-all duration-200 disabled:opacity-50 cursor-pointer"
-                                                >
-                                                    {deletingId === report.id ? (
-                                                        <span className="w-3.5 h-3.5 border-2 border-red-500/30 border-t-red-400 rounded-full animate-spin" />
-                                                    ) : (
-                                                        <FiTrash2 className="w-4 h-4" />
-                                                    )}
-                                                </button>
-                                            </div>
-                                        </div>
-                                    </div>
-                                );
-                            })}
+                            {filteredReports.map((report) => (
+                                <ReportCard
+                                    key={report.id}
+                                    report={report}
+                                    onNavigate={handleNavigate}
+                                    onDownloadPdf={handlePdfDownload}
+                                    onDelete={handleDelete}
+                                    isDownloading={downloadingId === report.id}
+                                    isDeleting={deletingId === report.id}
+                                />
+                            ))}
                         </div>
                     ) : (
                         <div className="flex flex-col items-center justify-center py-16 text-center bg-surface/5 border border-border/50 rounded-2xl mt-4">
@@ -398,9 +415,6 @@ const Dashboard = () => {
                                 disabled={isFetching}
                                 className="px-6 py-2.5 rounded-2xl text-xs font-bold text-primary bg-surface/50 border border-border hover:bg-surface/80 transition-all duration-200 flex items-center gap-2 shadow-sm cursor-pointer active:scale-95"
                             >
-                                {isFetching && (
-                                    <span className="w-4 h-4 border-2 border-primary/30 border-t-primary rounded-full animate-spin" />
-                                )}
                                 {isFetching ? 'Loading...' : 'Load More Plans'}
                             </button>
                         </div>
@@ -412,3 +426,6 @@ const Dashboard = () => {
 };
 
 export default Dashboard;
+
+
+

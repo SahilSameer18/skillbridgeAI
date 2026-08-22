@@ -11,9 +11,9 @@ const AppLayout = ({ children }) => {
     }, [pathname]);
 
     return (
-        <div className="min-h-screen flex flex-col bg-background">
+        <div className="min-h-screen w-full max-w-full flex flex-col bg-background overflow-x-hidden">
             <Navbar />
-            <main className="flex-grow w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+            <main className="flex-grow w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
                 {children ? children : <Outlet />}
             </main>
             <Footer />
