@@ -66,28 +66,32 @@ const errorMiddleware = (err, req, res, next) => {
     error.isOperational = false;
   }
 
-  // Build JSON response format
+  // Build unified JSON response format matching API standards
   const response = {
     success: false,
     message: error.message,
-    ...(error.errors && error.errors.length ? { errors: error.errors } : {}),
+    errors: Array.isArray(error.errors) ? error.errors : [],
   };
 
-  // Add stack trace in non-production mode
+  // Add stack trace in development mode only
   if (process.env.NODE_ENV !== "production") {
     response.stack = error.stack;
   } else if (!error.isOperational) {
-    // Obscure internal server error messages in production
-    response.message = "Something went wrong on the server";
+    // Obscure internal server error details in production
+    response.message = "Internal server error. Please try again later.";
   }
 
-  // Log the error
+  // Sanitized logging
   if (error.statusCode >= 500) {
-    console.error("Unhandled Server Error:", err);
+    if (process.env.NODE_ENV === "production") {
+      console.error(`[500 Server Error] ${req.method} ${req.originalUrl} - ${error.message}`);
+    } else {
+      console.error(`[500 Server Error] ${req.method} ${req.originalUrl}:`, err);
+    }
   } else if (error.statusCode === 401 && error.message === "Token not provided") {
-    // Silent for standard guest checks (no cookie yet) to prevent terminal noise
+    // Silent for standard unauthenticated guest pings to prevent terminal log noise
   } else {
-    console.warn(`Client Error (${error.statusCode}):`, error.message);
+    console.warn(`[${error.statusCode} Client Warning] ${req.method} ${req.originalUrl}:`, error.message);
   }
 
   res.status(error.statusCode).json(response);

@@ -62,7 +62,7 @@ model InterviewReport {
   createdAt           DateTime             @default(now())
   updatedAt           DateTime             @updatedAt
 
-  @@index([userId])
+  @@index([userId, createdAt(sort: Desc)])
 }
 
 model TechnicalQuestion {

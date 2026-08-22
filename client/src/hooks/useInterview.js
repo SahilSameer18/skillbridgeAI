@@ -62,7 +62,7 @@ export const useInterview = () => {
                 setTotalReports(response.totalCount)
             }
         } catch (error) {
-            console.log(error)
+            console.error("Failed to fetch interview reports:", error?.response?.data?.message || error?.message || error);
         } finally {
             setLoading(false)
         }

@@ -1,11 +1,10 @@
 import React from "react";
-import { pdf } from "@react-pdf/renderer";
-import InterviewReportPDF from "../components/pdf/InterviewReportPDF";
 import { getInterviewReportById } from "../services/interview.api";
 
 /**
  * Generates and triggers an instant client-side download of the interview report PDF.
  * Runs 100% on the client device with zero AI calls and zero server CPU overhead.
+ * Dynamically loaded only when user clicks export to keep initial bundle ultra lightweight.
  * 
  * @param {Object} reportInput - The report object (can be full report or dashboard preview item)
  */
@@ -15,6 +14,11 @@ export const exportReportPdf = async (reportInput) => {
   }
 
   try {
+    // Dynamically load heavy PDF engines only on demand
+    const [{ pdf }, { default: InterviewReportPDF }] = await Promise.all([
+      import("@react-pdf/renderer"),
+      import("../components/pdf/InterviewReportPDF")
+    ]);
     let reportData = reportInput;
 
     // Edge Case: If called from Dashboard where only summary fields exist,
