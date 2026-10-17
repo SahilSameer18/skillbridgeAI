@@ -10,6 +10,37 @@ import ApiError from "../utils/ApiError.js";
 import asyncHandler from "../utils/asyncHandler.js";
 
 /**
+ * Validates extracted resume text to reject scanned or low-text PDFs
+ * and sanitizes null bytes to protect PostgreSQL text fields (Fix B2).
+ */
+export function validateExtractedResumeText(rawText) {
+  if (!rawText || typeof rawText !== "string") {
+    throw new ApiError(
+      400,
+      "Uploaded PDF appears to be empty. Please upload a text-based resume PDF."
+    );
+  }
+
+  const sanitized = rawText.replace(/\0/g, "").trim();
+  const textWithoutPageMarkers = sanitized
+    .replace(/--\s*\d+\s*(of|\/)\s*\d+\s*--/gi, "")
+    .replace(/page\s+\d+(\s+of\s+\d+)?/gi, "");
+
+  const words = textWithoutPageMarkers
+    .split(/\s+/)
+    .filter((w) => w.length > 1 && /[a-zA-Z0-9]/.test(w));
+
+  if (words.length < 30) {
+    throw new ApiError(
+      400,
+      "Uploaded PDF appears to be scanned or contains insufficient text. Please upload a text-based resume PDF."
+    );
+  }
+
+  return sanitized;
+}
+
+/**
  * @description Controller to generate interview report based on user self description, resume and job description.
  */
 const generateInterViewReportController = asyncHandler(async (req, res, next) => {
@@ -24,20 +55,23 @@ const generateInterViewReportController = asyncHandler(async (req, res, next) =>
     throw new ApiError(400, "Resume PDF file is required");
   }
 
-  let resumeText = "";
+  let rawResumeText = "";
   try {
     const resumeContent = await new pdfParse.PDFParse(
       Uint8Array.from(req.file.buffer),
     ).getText();
-    resumeText = resumeContent.text;
+    rawResumeText = resumeContent.text;
   } catch (error) {
     console.error("Error parsing PDF:", error);
     throw new ApiError(400, "Failed to parse uploaded resume PDF");
   }
 
+  // Enforce scanned PDF detection and NUL byte sanitization before calling AI
+  const resumeText = validateExtractedResumeText(rawResumeText);
+
   const interViewReportByAi = await generateInterviewReport({
     resume: resumeText,
-    jobDescription,
+    jobDescription: jobDescription.trim(),
   });
 
   const skillGapsWithIds = await attachSkillIds(
