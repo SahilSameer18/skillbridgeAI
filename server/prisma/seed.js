@@ -39,7 +39,7 @@ const skills = [
       {
         type: "VIDEO",
         title: "TypeScript Full Course - freeCodeCamp",
-        url: "https://youtube.com/playlist?list=PLu71SKxNbfoBkkr8lblqtsJvxrw3j1tWC&si=zuHBF0b-BZlOsIzF",
+        url: "https://youtube.com/playlist?list=PLu71SKxNbfoBkkr8lblqtsJvxrw3j1tWC",
       },
     ],
   },
@@ -55,7 +55,7 @@ const skills = [
       {
         type: "VIDEO",
         title: "Python Full Course - freeCodeCamp",
-        url: "https://youtu.be/ERCMXc8x7mc?si=PoQLBp4bS6JWUg6K",
+        url: "https://youtu.be/ERCMXc8x7mc",
       },
     ],
   },
@@ -82,7 +82,7 @@ const skills = [
       {
         type: "VIDEO",
         title: "Java Full Course - freeCodeCamp",
-        url: "https://youtube.com/playlist?list=PLQEaRBV9gAFsR15tNo2QLF9d2qc-c018p&si=3YcQJJLwwa2HnuqC",
+        url: "https://youtube.com/playlist?list=PLQEaRBV9gAFsR15tNo2QLF9d2qc-c018p",
       },
     ],
   },
@@ -98,13 +98,13 @@ const skills = [
       {
         type: "VIDEO",
         title: "C++ Full Course - freeCodeCamp",
-        url: "https://youtu.be/Z2oxGj36vZk?si=whXD71yw0dkE_8Mg",
+        url: "https://youtu.be/Z2oxGj36vZk",
       },
     ],
   },
   {
     name: "Go",
-    aliases: ["golang", "go"],
+    aliases: ["golang", "go programming", "go language", "golang dev"],
     resources: [
       {
         type: "DOCUMENTATION",
@@ -114,7 +114,7 @@ const skills = [
       {
         type: "VIDEO",
         title: "Go Full Course - freeCodeCamp",
-        url: "https://youtu.be/yZgwW6Yuc_E?si=36PmnBxT5aYk2Cdq",
+        url: "https://youtu.be/yZgwW6Yuc_E",
       },
     ],
   },
@@ -148,7 +148,7 @@ const skills = [
       {
         type: "VIDEO",
         title: "React Full Course",
-        url: "https://youtube.com/playlist?list=PLu71SKxNbfoDqgPchmvIsL4hTnJIrtige&si=7yownj5uA0KLDJVn",
+        url: "https://youtube.com/playlist?list=PLu71SKxNbfoDqgPchmvIsL4hTnJIrtige",
       },
     ],
   },
@@ -164,7 +164,7 @@ const skills = [
       {
         type: "VIDEO",
         title: "Vue.js Full Course",
-        url: "https://youtu.be/jT7F1hK6hJ8?si=gW8y76V1-4WdK-5W",
+        url: "https://youtu.be/jT7F1hK6hJ8",
       },
     ],
   },
@@ -180,7 +180,7 @@ const skills = [
       {
         type: "VIDEO",
         title: "Angular Full Course",
-        url: "https://youtube.com/playlist?list=PLu71SKxNbfoB57gV87_bIUP9Q_gq81m3I&si=Q12nJ2X98Xv6_oQZ",
+        url: "https://youtube.com/playlist?list=PLu71SKxNbfoB57gV87_bIUP9Q_gq81m3I",
       },
     ],
   },
@@ -196,7 +196,7 @@ const skills = [
       {
         type: "VIDEO",
         title: "Tailwind CSS Crash Course",
-        url: "https://youtu.be/_9mTJ84uL1Q?si=82hDabuirNBlpt-v",
+        url: "https://youtu.be/_9mTJ84uL1Q",
       },
     ],
   },
@@ -212,7 +212,7 @@ const skills = [
       {
         type: "VIDEO",
         title: "Redux Crash Course",
-        url: "https://youtu.be/Q5TqsetwCoE?si=8tL_gWRvYYFhpe_f",
+        url: "https://youtu.be/Q5TqsetwCoE",
       },
     ],
   },
@@ -228,7 +228,7 @@ const skills = [
       {
         type: "VIDEO",
         title: "Zustand Crash Course",
-        url: "https://youtu.be/HU6YEFfzopo?si=3wvc93JIWktj9olP",
+        url: "https://youtu.be/HU6YEFfzopo",
       },
     ],
   },
@@ -250,7 +250,7 @@ const skills = [
       {
         type: "VIDEO",
         title: "React Query Crash Course",
-        url: "https://youtu.be/KrruJTTwOgU?si=-Gfvs1SlEXdj13uq",
+        url: "https://youtu.be/KrruJTTwOgU",
       },
     ],
   },
@@ -266,7 +266,7 @@ const skills = [
       {
         type: "VIDEO",
         title: "Material UI Tutorial",
-        url: "https://youtube.com/playlist?list=PLC3y8-rFHvwh-K9mDlrrcDywl7CeVL2rO&si=lni1olkEj9Vbls0v",
+        url: "https://youtube.com/playlist?list=PLC3y8-rFHvwh-K9mDlrrcDywl7CeVL2rO",
       },
     ],
   },
@@ -282,7 +282,7 @@ const skills = [
       {
         type: "VIDEO",
         title: "Bootstrap 5 Crash Course",
-        url: "https://youtu.be/fB00t4At0rk?si=JraoRgzbVNz8GO_U",
+        url: "https://youtu.be/fB00t4At0rk",
       },
     ],
   },
@@ -298,7 +298,7 @@ const skills = [
       {
         type: "VIDEO",
         title: "Next.js Full Course",
-        url: "https://youtu.be/MZbwu3-uz3Y?si=45kU3gCSYA9gyWIw",
+        url: "https://youtu.be/MZbwu3-uz3Y",
       },
     ],
   },
@@ -316,7 +316,7 @@ const skills = [
       {
         type: "VIDEO",
         title: "Node.js Full Course",
-        url: "https://youtube.com/playlist?list=PL78RhpUUKSwfeSOOwfE9x6l5jTjn5LbY3&si=5pxR-eTJTlH_gQci",
+        url: "https://youtube.com/playlist?list=PL78RhpUUKSwfeSOOwfE9x6l5jTjn5LbY3",
       },
     ],
   },
@@ -332,7 +332,7 @@ const skills = [
       {
         type: "VIDEO",
         title: "Express.js Crash Course",
-        url: "https://youtube.com/playlist?list=PL78RhpUUKSwfeSOOwfE9x6l5jTjn5LbY3&si=5pxR-eTJTlH_gQci",
+        url: "https://youtube.com/playlist?list=PL78RhpUUKSwfeSOOwfE9x6l5jTjn5LbY3",
       },
     ],
   },
@@ -348,7 +348,7 @@ const skills = [
       {
         type: "VIDEO",
         title: "Django Full Course",
-        url: "https://youtu.be/iflSRpcyzdI?si=xwMweeLm5tvAFWVv",
+        url: "https://youtu.be/iflSRpcyzdI",
       },
     ],
   },
@@ -373,7 +373,7 @@ const skills = [
       {
         type: "VIDEO",
         title: "Spring Boot Full Course",
-        url: "https://youtube.com/playlist?list=PLEYgx5hMdopw&si=U3z6Hi9UGZCdXuOI",
+        url: "https://youtube.com/playlist?list=PLEYgx5hMdopw",
       },
     ],
   },
@@ -433,7 +433,7 @@ const skills = [
       {
         type: "VIDEO",
         title: "REST API Crash Course",
-        url: "https://youtu.be/XvFmUE-36Kc?si=zNNIjRoetLyxDyAF",
+        url: "https://youtu.be/XvFmUE-36Kc",
       },
     ],
   },
@@ -449,7 +449,7 @@ const skills = [
       {
         type: "VIDEO",
         title: "GraphQL Crash Course",
-        url: "https://youtu.be/WtkKwO1viI8?si=0jUI1Loav0lpl8GW",
+        url: "https://youtu.be/WtkKwO1viI8",
       },
     ],
   },
@@ -474,7 +474,7 @@ const skills = [
       {
         type: "VIDEO",
         title: "Socket.io Crash Course",
-        url: "https://youtu.be/CzcfeL7ymbU?si=fIdyWt85rElSnJ-Q",
+        url: "https://youtu.be/CzcfeL7ymbU",
       },
     ],
   },
@@ -490,7 +490,7 @@ const skills = [
       {
         type: "VIDEO",
         title: "NestJS Full Course",
-        url: "https://youtu.be/KMg_Qg0WCds?si=R-5DQngiKv1UF6Rk",
+        url: "https://youtu.be/KMg_Qg0WCds",
       },
     ],
   },
@@ -506,7 +506,7 @@ const skills = [
       {
         type: "VIDEO",
         title: "FastAPI Course",
-        url: "https://youtu.be/fxRCoEUmq8s?si=S5ytqiOjruNwz4on",
+        url: "https://youtu.be/fxRCoEUmq8s",
       },
     ],
   },
@@ -522,7 +522,7 @@ const skills = [
       {
         type: "VIDEO",
         title: "Flask Course",
-        url: "https://youtu.be/QZfaRHzWM0k?si=xsFvzebKhZgMhMa6",
+        url: "https://youtu.be/QZfaRHzWM0k",
       },
     ],
   },
@@ -538,7 +538,7 @@ const skills = [
       {
         type: "VIDEO",
         title: "ASP.NET Core Full Course",
-        url: "https://youtu.be/YbRe4iIVYJk?si=5meY9Dj4h-lqbGBN",
+        url: "https://youtu.be/YbRe4iIVYJk",
       },
     ],
   },
@@ -554,7 +554,7 @@ const skills = [
       {
         type: "VIDEO",
         title: "Laravel Full Course",
-        url: "https://youtu.be/MYyJ4PuL4pY?si=DxM3e4W3H6c1_vvP",
+        url: "https://youtu.be/MYyJ4PuL4pY",
       },
     ],
   },
@@ -570,7 +570,7 @@ const skills = [
       {
         type: "VIDEO",
         title: "Ruby on Rails Course",
-        url: "https://youtu.be/fmyvWz5TUWg?si=AfM-5Qg6U_4hcbW7",
+        url: "https://youtu.be/fmyvWz5TUWg",
       },
     ],
   },
@@ -588,7 +588,7 @@ const skills = [
       {
         type: "VIDEO",
         title: "SQL Full Course",
-        url: "https://youtu.be/yE6tIle64tU?si=qJ--xX3IM-WiFmDi",
+        url: "https://youtu.be/yE6tIle64tU",
       },
     ],
   },
@@ -604,7 +604,7 @@ const skills = [
       {
         type: "VIDEO",
         title: "PostgreSQL Full Course",
-        url: "https://youtu.be/cnzka7kF5Zk?si=Lr8wFWkjFILQvtOu",
+        url: "https://youtu.be/cnzka7kF5Zk",
       },
     ],
   },
@@ -620,7 +620,7 @@ const skills = [
       {
         type: "VIDEO",
         title: "MongoDB Full Course",
-        url: "https://youtu.be/M1dKYQ7GsTg?si=Czr6msSSqbO-AzfQ",
+        url: "https://youtu.be/M1dKYQ7GsTg",
       },
     ],
   },
@@ -644,7 +644,7 @@ const skills = [
       {
         type: "VIDEO",
         title: "Redis Crash Course",
-        url: "https://youtube.com/playlist?list=PLxamJ86SDCj28nzE9l6frczaVhPX7P7o7&si=jBXuZhuJ6WdHF17Y",
+        url: "https://youtube.com/playlist?list=PLxamJ86SDCj28nzE9l6frczaVhPX7P7o7",
       },
     ],
   },
@@ -660,7 +660,7 @@ const skills = [
       {
         type: "VIDEO",
         title: "Oracle SQL Tutorial",
-        url: "https://youtube.com/playlist?list=PLsphD3EpR7F9mmtY2jBt_O8Q9XmvrhQEF&si=wyp8zQmUFafwEwOO",
+        url: "https://youtube.com/playlist?list=PLsphD3EpR7F9mmtY2jBt_O8Q9XmvrhQEF",
       },
     ],
   },
@@ -676,7 +676,7 @@ const skills = [
       {
         type: "VIDEO",
         title: "Firebase Full Course",
-        url: "https://youtu.be/fgdpvwEWJ9M?si=fbSKvz1h5TG1qM6_",
+        url: "https://youtu.be/fgdpvwEWJ9M",
       },
     ],
   },
@@ -692,7 +692,7 @@ const skills = [
       {
         type: "VIDEO",
         title: "Prisma ORM Crash Course",
-        url: "https://youtu.be/kkwrvcTVd1k?si=IIxUsHkL97ANlc5g",
+        url: "https://youtu.be/kkwrvcTVd1k",
       },
     ],
   },
@@ -708,7 +708,7 @@ const skills = [
       {
         type: "VIDEO",
         title: "MySQL Full Course",
-        url: "https://youtu.be/yE6tIle64tU?si=qJ--xX3IM-WiFmDi",
+        url: "https://youtu.be/yE6tIle64tU",
       },
     ],
   },
@@ -724,7 +724,7 @@ const skills = [
       {
         type: "VIDEO",
         title: "SQLite Full Course",
-        url: "https://youtu.be/yE6tIle64tU?si=qJ--xX3IM-WiFmDi",
+        url: "https://youtu.be/yE6tIle64tU",
       },
     ],
   },
@@ -750,7 +750,7 @@ const skills = [
       {
         type: "VIDEO",
         title: "Docker Full Course",
-        url: "https://youtu.be/OhnTMWmfTBE?si=r0UZvguY6INh_u8R",
+        url: "https://youtu.be/OhnTMWmfTBE",
       },
     ],
   },
@@ -766,7 +766,7 @@ const skills = [
       {
         type: "VIDEO",
         title: "Kubernetes Full Course",
-        url: "https://youtu.be/_4uQI4ihGVU?si=kwBBFasjkWKjHW1V",
+        url: "https://youtu.be/_4uQI4ihGVU",
       },
     ],
   },
@@ -782,7 +782,7 @@ const skills = [
       {
         type: "VIDEO",
         title: "AWS Full Course",
-        url: "https://youtu.be/N4sJj-SxX00?si=FHUnjRnk132Wu96C",
+        url: "https://youtu.be/N4sJj-SxX00",
       },
     ],
   },
@@ -798,7 +798,7 @@ const skills = [
       {
         type: "VIDEO",
         title: "Azure Full Course",
-        url: "https://www.youtube.com/live/hUxB_Uenq14?si=CdYB2756GslJzUlX",
+        url: "https://www.youtube.com/live/hUxB_Uenq14",
       },
     ],
   },
@@ -814,7 +814,7 @@ const skills = [
       {
         type: "VIDEO",
         title: "GCP Full Course",
-        url: "https://youtu.be/hUxB_Uenq14?si=CdYB2756GslJzUlX",
+        url: "https://youtu.be/hUxB_Uenq14",
       },
     ],
   },
@@ -843,7 +843,7 @@ const skills = [
       {
         type: "VIDEO",
         title: "CI/CD Crash Course",
-        url: "https://youtube.com/playlist?list=PLzpJO-82rjC6ZD0uAhP8HR9RV9xGaPbIJ&si=EBlLozpJVg-5aY4c",
+        url: "https://youtube.com/playlist?list=PLzpJO-82rjC6ZD0uAhP8HR9RV9xGaPbIJ",
       },
     ],
   },
@@ -881,7 +881,7 @@ const skills = [
       {
         type: "VIDEO",
         title: "Git & GitHub Full Course",
-        url: "https://youtu.be/zTjRZNkhiEU?si=1VJ5DTv9a1n2kwCW",
+        url: "https://youtu.be/zTjRZNkhiEU",
       },
     ],
   },
@@ -904,7 +904,7 @@ const skills = [
       {
         type: "VIDEO",
         title: "Linux Command Line Full Course",
-        url: "https://youtube.com/playlist?list=PL5Qp2b7x1b6d899d3E1-78Qd1C1oW3W9p&si=g0l1p345f67d8e9f",
+        url: "https://youtube.com/playlist?list=PL5Qp2b7x1b6d899d3E1-78Qd1C1oW3W9p",
       },
     ],
   },
@@ -920,7 +920,7 @@ const skills = [
       {
         type: "VIDEO",
         title: "GitHub Actions Tutorial",
-        url: "https://youtu.be/Xwpi0ITkL3U?si=_aV91HiyAtrmi3Fe",
+        url: "https://youtu.be/Xwpi0ITkL3U",
       },
     ],
   },
@@ -936,7 +936,7 @@ const skills = [
       {
         type: "VIDEO",
         title: "Apache Kafka Course",
-        url: "https://youtu.be/ZJJHm_bd9Zo?si=oKgXSiNeIue7RpaS",
+        url: "https://youtu.be/ZJJHm_bd9Zo",
       },
     ],
   },
@@ -952,7 +952,7 @@ const skills = [
       {
         type: "VIDEO",
         title: "RabbitMQ Tutorial",
-        url: "https://youtu.be/FGU3oFIeG0Q?si=ON4j77M1poOQ8Bx7",
+        url: "https://youtu.be/FGU3oFIeG0Q",
       },
     ],
   },
@@ -983,7 +983,7 @@ const skills = [
       {
         type: "VIDEO",
         title: "Unit Testing Full Course",
-        url: "https://youtube.com/playlist?list=PL4cUxeGkcC9iyuClsf48SSgsJPBStHo7F&si=kcnbdmA-ClSZiZNO",
+        url: "https://youtube.com/playlist?list=PL4cUxeGkcC9iyuClsf48SSgsJPBStHo7F",
       },
     ],
   },
@@ -1005,7 +1005,7 @@ const skills = [
       {
         type: "VIDEO",
         title: "Jest Full Course",
-        url: "https://youtube.com/playlist?list=PL8p2I9GklV47ZpFC9sNHTXwJRgwwzdkNG&si=tkDeHKsFH0WZPD2n",
+        url: "https://youtube.com/playlist?list=PL8p2I9GklV47ZpFC9sNHTXwJRgwwzdkNG",
       },
     ],
   },
@@ -1021,7 +1021,7 @@ const skills = [
       {
         type: "VIDEO",
         title: "Cypress Crash Course",
-        url: "https://youtu.be/u8vMu7viCm8?si=Tf8b17GwN2ryR5dt",
+        url: "https://youtu.be/u8vMu7viCm8",
       },
     ],
   },
@@ -1037,7 +1037,7 @@ const skills = [
       {
         type: "VIDEO",
         title: "Playwright Crash Course",
-        url: "https://youtu.be/mX6fK9q_lq4?si=Xo4t9v5l4t5w4t5w",
+        url: "https://youtu.be/mX6fK9q_lq4",
       },
     ],
   },
@@ -1053,7 +1053,7 @@ const skills = [
       {
         type: "VIDEO",
         title: "Mocha & Chai Crash Course",
-        url: "https://youtu.be/QhK4rY4y4y4?si=QhK4rY4y4y4y4y4y",
+        url: "https://youtu.be/QhK4rY4y4y4",
       },
     ],
   },
@@ -1069,7 +1069,7 @@ const skills = [
       {
         type: "VIDEO",
         title: "TDD Crash Course",
-        url: "https://youtu.be/QhK4rY4y4y4?si=QhK4rY4y4y4y4y4y",
+        url: "https://youtu.be/QhK4rY4y4y4",
       },
     ],
   },
@@ -1158,13 +1158,13 @@ const skills = [
       {
         type: "VIDEO",
         title: "Data Structures Full Course",
-        url: "https://youtube.com/playlist?list=PLgUwDviBIf0oF6QL8m22w1hIDC1vJ_BHz&si=-9zcL4wdErJEvW3t",
+        url: "https://youtube.com/playlist?list=PLgUwDviBIf0oF6QL8m22w1hIDC1vJ_BHz",
       },
     ],
   },
   {
     name: "Algorithms",
-    aliases: ["algorithm", "algorithms", "dsa", "algorithmic problem solving"],
+    aliases: ["algorithm", "algorithms", "algorithmic problem solving", "algorithm design"],
     resources: [
       {
         type: "DOCUMENTATION",
@@ -1174,7 +1174,7 @@ const skills = [
       {
         type: "VIDEO",
         title: "Algorithms Full Course",
-        url: "https://youtube.com/playlist?list=PLgUwDviBIf0oF6QL8m22w1hIDC1vJ_BHz&si=-9zcL4wdErJEvW3t",
+        url: "https://youtube.com/playlist?list=PLgUwDviBIf0oF6QL8m22w1hIDC1vJ_BHz",
       },
     ],
   },
@@ -1196,7 +1196,7 @@ const skills = [
       {
         type: "VIDEO",
         title: "System Design Full Course",
-        url: "https://youtube.com/playlist?list=PLMCXHnjXnTnvo6alSjVkgxV-VH6EPyvoX&si=lv2x4ylfdVV0rRmZ",
+        url: "https://youtube.com/playlist?list=PLMCXHnjXnTnvo6alSjVkgxV-VH6EPyvoX",
       },
     ],
   },
@@ -1212,7 +1212,7 @@ const skills = [
       {
         type: "VIDEO",
         title: "OOP Crash Course",
-        url: "https://youtube.com/playlist?list=PL9gnSGHSqcno1G3XjUbwzXHL8_EttOuKk&si=BlpI1KJyW7fGbNeI",
+        url: "https://youtube.com/playlist?list=PL9gnSGHSqcno1G3XjUbwzXHL8_EttOuKk",
       },
     ],
   },
@@ -1228,7 +1228,7 @@ const skills = [
       {
         type: "VIDEO",
         title: "Design Patterns Crash Course",
-        url: "https://youtu.be/vNXuyhsSFbg?si=N7j4mX7gW410i7Hn",
+        url: "https://youtu.be/vNXuyhsSFbg",
       },
     ],
   },
@@ -1244,7 +1244,7 @@ const skills = [
       {
         type: "VIDEO",
         title: "Big O Crash Course",
-        url: "https://youtu.be/5T0SiJocPCI?si=MIdD_SvRXff9MZVV",
+        url: "https://youtu.be/5T0SiJocPCI",
       },
     ],
   },
@@ -1262,7 +1262,7 @@ const skills = [
       {
         type: "VIDEO",
         title: "Microservices Crash Course",
-        url: "https://youtu.be/Jl9OKQ92SJU?si=oKWnviiSaplGZTz6",
+        url: "https://youtu.be/Jl9OKQ92SJU",
       },
     ],
   },
@@ -1278,7 +1278,7 @@ const skills = [
       {
         type: "VIDEO",
         title: "Load Balancing Crash Course",
-        url: "https://youtu.be/C842vFY5kRo?si=jKY1GhvY9hbuuY5n",
+        url: "https://youtu.be/C842vFY5kRo",
       },
     ],
   },
@@ -1294,7 +1294,7 @@ const skills = [
       {
         type: "VIDEO",
         title: "Message Queues Crash Course",
-        url: "https://youtu.be/IJkYipYNEtI?si=Iwth3f_0P9rBEieF",
+        url: "https://youtu.be/IJkYipYNEtI",
       },
     ],
   },
@@ -1312,7 +1312,7 @@ const skills = [
       {
         type: "VIDEO",
         title: "Authentication Crash Course",
-        url: "https://youtu.be/A95rliroC8Q?si=muCwn3AYqN-3bqqX",
+        url: "https://youtu.be/A95rliroC8Q",
       },
     ],
   },
@@ -1328,7 +1328,7 @@ const skills = [
       {
         type: "VIDEO",
         title: "JWT Crash Course",
-        url: "https://youtu.be/pkKn8q5AvsY?si=cucOrNX3JCoHkV6x",
+        url: "https://youtu.be/pkKn8q5AvsY",
       },
     ],
   },
@@ -1344,7 +1344,7 @@ const skills = [
       {
         type: "VIDEO",
         title: "OAuth 2.0 Crash Course",
-        url: "https://youtu.be/WSsOXo07LeE?si=fXBfTdHFMKqBhS09",
+        url: "https://youtu.be/WSsOXo07LeE",
       },
     ],
   },
@@ -1360,7 +1360,7 @@ const skills = [
       {
         type: "VIDEO",
         title: "Web Security Crash Course",
-        url: "https://youtu.be/pG2wDIG3Kww?si=qBQfLjtvPLI9cbkp",
+        url: "https://youtu.be/pG2wDIG3Kww",
       },
     ],
   },
@@ -1568,25 +1568,139 @@ const skills = [
 
 async function seedSkill(skillData) {
   const { resources, ...skillFields } = skillData;
-  const skill = await prisma.skill.upsert({
-    where: { name: skillFields.name },
-    update: { aliases: skillFields.aliases },
-    create: skillFields,
+
+  await prisma.$transaction(async (tx) => {
+    const skill = await tx.skill.upsert({
+      where: { name: skillFields.name },
+      update: { aliases: skillFields.aliases },
+      create: skillFields,
+    });
+
+    await tx.learningResource.deleteMany({ where: { skillId: skill.id } });
+    await tx.learningResource.createMany({
+      data: resources.map((r) => ({ ...r, skillId: skill.id })),
+    });
   });
 
-  // Wipe and recreate resources each run so re-seeding after editing
-  // URLs above never leaves stale/duplicate rows behind.
-  await prisma.learningResource.deleteMany({ where: { skillId: skill.id } });
-  await prisma.learningResource.createMany({
-    data: resources.map((r) => ({ ...r, skillId: skill.id })),
-  });
-
-  console.log(`Seeded: ${skill.name} (${resources.length} resources)`);
+  console.log(`Seeded: ${skillData.name} (${resources.length} resources)`);
 }
 
 async function main() {
   const CONCURRENCY_LIMIT = 10;
-  const chunks = [];
+  const chunks = [  {
+    name: "Operating Systems",
+    aliases: ["operating systems","os concepts","operating system fundamentals","concurrency and threading","process scheduling"],
+    resources: [
+      {
+            "type": "DOCUMENTATION",
+            "title": "Operating Systems Three Easy Pieces (OSTEP)",
+            "url": "https://pages.cs.wisc.edu/~remzi/OSTEP/"
+      },
+      {
+            "type": "VIDEO",
+            "title": "Operating Systems Full Course - freeCodeCamp",
+            "url": "https://youtu.be/26QPDBe-NB8"
+      }
+],
+  },
+  {
+    name: "Computer Networks",
+    aliases: ["computer networks","networking","tcp/ip","osi model","http/https","dns networking"],
+    resources: [
+      {
+            "type": "DOCUMENTATION",
+            "title": "MDN Web Docs - How the Web Works",
+            "url": "https://developer.mozilla.org/en-US/docs/Learn/Common_questions/Web_mechanics/How_does_the_Internet_work"
+      },
+      {
+            "type": "VIDEO",
+            "title": "Computer Networking Course - NetworkChuck",
+            "url": "https://youtu.be/IPvYjXCsTg8"
+      }
+],
+  },
+  {
+    name: "Database Indexing & Optimization",
+    aliases: ["database indexing","db indexing","b-tree indexing","indexing strategies","query optimization","explain analyze"],
+    resources: [
+      {
+            "type": "DOCUMENTATION",
+            "title": "Use The Index, Luke! - Guide to DB Performance",
+            "url": "https://use-the-index-luke.com/"
+      },
+      {
+            "type": "VIDEO",
+            "title": "Database Indexing Fundamentals - Hussein Nasser",
+            "url": "https://youtu.be/-qNSXK7s7_w"
+      }
+],
+  },
+  {
+    name: "Apache Cassandra & NoSQL",
+    aliases: ["cassandra","apache cassandra","nosql databases","wide-column store","nosql modeling"],
+    resources: [
+      {
+            "type": "DOCUMENTATION",
+            "title": "Apache Cassandra Official Documentation",
+            "url": "https://cassandra.apache.org/doc/latest/"
+      },
+      {
+            "type": "VIDEO",
+            "title": "Apache Cassandra in 100 Seconds - Fireship",
+            "url": "https://youtu.be/4GWzU_mXyHQ"
+      }
+],
+  },
+  {
+    name: "Machine Learning Fundamentals",
+    aliases: ["machine learning","ml fundamentals","scikit-learn","deep learning","ai and ml"],
+    resources: [
+      {
+            "type": "DOCUMENTATION",
+            "title": "Scikit-Learn Official User Guide",
+            "url": "https://scikit-learn.org/stable/user_guide.html"
+      },
+      {
+            "type": "VIDEO",
+            "title": "Machine Learning Course for Beginners - freeCodeCamp",
+            "url": "https://youtu.be/NWONtOF6Vno"
+      }
+],
+  },
+  {
+    name: "gRPC & Protocol Buffers",
+    aliases: ["grpc","protocol buffers","protobuf","grpc microservices"],
+    resources: [
+      {
+            "type": "DOCUMENTATION",
+            "title": "gRPC Official Documentation",
+            "url": "https://grpc.io/docs/"
+      },
+      {
+            "type": "VIDEO",
+            "title": "gRPC Crash Course - Hussein Nasser",
+            "url": "https://youtu.be/gn73U174YgU"
+      }
+],
+  },
+  {
+    name: "Agile & Scrum",
+    aliases: ["agile","scrum","agile development","kanban","sprint planning"],
+    resources: [
+      {
+            "type": "DOCUMENTATION",
+            "title": "The Scrum Guide",
+            "url": "https://scrumguides.org/scrum-guide.html"
+      },
+      {
+            "type": "VIDEO",
+            "title": "Agile Scrum Methodology - Edureka",
+            "url": "https://youtu.be/9TycLR0TqFA"
+      }
+],
+  },
+];
+
   
   for (let i = 0; i < skills.length; i += CONCURRENCY_LIMIT) {
     chunks.push(skills.slice(i, i + CONCURRENCY_LIMIT));
