@@ -41,7 +41,6 @@ model OAuthProvider {
   updatedAt    DateTime @updatedAt
 
   @@unique([providerName, providerId])
-  @@index([providerName, providerId])
   @@index([userId])
 }
 
@@ -137,11 +136,4 @@ model LearningResource {
   skillId String
 
   @@index([skillId])
-}
-
-model TokenBlacklist {
-  id        String   @id @default(cuid())
-  token     String   @unique
-  createdAt DateTime @default(now())
-  expiresAt DateTime @default(dbgenerated("NOW() + INTERVAL '1 day'"))
 }

@@ -35,7 +35,10 @@ const errorMiddleware = (err, req, res, next) => {
       statusCode = 400;
       message = "Invalid reference: related record not found";
     } else {
-      message = `Prisma error ${err.code}: ${err.message}`;
+      message =
+        process.env.NODE_ENV === "production"
+          ? "Database operation failed. Please try again."
+          : `Prisma error ${err.code}: ${err.message}`;
     }
     
     error = new ApiError(statusCode, message, errors, err.stack);
@@ -49,7 +52,7 @@ const errorMiddleware = (err, req, res, next) => {
   }
 
   // Handle Multer Upload Errors
-  else if (err.name === "MulterError" || err.code?.startsWith("LIMIT_")) {
+  else if (err.name === "MulterError" || (typeof err.code === "string" && err.code.startsWith("LIMIT_"))) {
     let message = err.message;
     if (err.code === "LIMIT_FILE_SIZE") {
       message = "File size limit exceeded (maximum size is 4MB)";

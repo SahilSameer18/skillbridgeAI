@@ -171,8 +171,9 @@ const getInterviewReportByIdController = asyncHandler(async (req, res, next) => 
  * @description Controller to get all interview reports of logged in user.
  */
 const getAllInterviewReportsController = asyncHandler(async (req, res, next) => {
-  const page = parseInt(req.query.page) || 1;
-  const limit = parseInt(req.query.limit) || 6;
+  // Clamped pagination to prevent DoS or negative offset crashes (Fix C1)
+  const page = Math.max(1, parseInt(req.query.page, 10) || 1);
+  const limit = Math.min(50, Math.max(1, parseInt(req.query.limit, 10) || 6));
   const skip = (page - 1) * limit;
 
   const totalCount = await prisma.interviewReport.count({

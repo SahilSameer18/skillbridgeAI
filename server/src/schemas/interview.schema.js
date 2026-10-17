@@ -2,14 +2,15 @@ import { z } from "zod";
 
 export const createInterviewSchema = z.object({
   jobDescription: z
-    .string({ required_error: "Job description is required" })
+    .string({ message: "Job description is required" })
     .trim()
-    .min(1, "Job description is required"),
+    .min(30, "Job description must be at least 30 characters")
+    .max(1200, "Job description cannot exceed 1200 characters"),
 });
 
 export const interviewIdParamSchema = z.object({
   interviewId: z
-    .string({ required_error: "Interview ID is required" })
+    .string({ message: "Interview ID is required" })
     .trim()
     .min(1, "Interview ID is required"),
 });
