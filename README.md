@@ -38,18 +38,17 @@ Job seekers often struggle to translate their resume into interview readiness. S
 
 ## ⚡ Technical Highlights
 
-- **Structured AI Output:** Backend prompts Google Gemini to return a strict JSON payload containing `matchScore`, `technicalQuestions`, `behavioralQuestions`, `skillGaps`, `preparationPlan`, and `title`.
-- **Deterministic Skill-Resource Matching:** Each AI-generated skill gap is resolved server-side against a seeded, normalized `Skill` catalog — using bounded keyword matching (with a word-boundary check that prevents false positives like "Java" matching inside "JavaScript") and a Levenshtein-based fuzzy fallback for typos. No prompt changes, no AI-generated URLs — every resource link is pre-curated and verified.
-- **Google OAuth & Secure Account Linking:** Integrated Google OAuth 2.0 using `@react-oauth/google` (`useGoogleLogin` implicit flow) with a fully custom-styled button. Access tokens are verified server-side via Google's `/oauth2/v3/userinfo` endpoint. Features a 409 conflict detection flow — Register redirects to Login with the pending token stored in `sessionStorage` so candidates can link Google to an existing credential account without losing context. Google profile pictures are always synced on login, including removal (reverts to DiceBear).
-- **Dynamic DiceBear Avatar Generation:** Automatically renders custom vector robot avatars (`https://api.dicebear.com/7.x/bottts/svg?seed=${username}`) as a **frontend-only display fallback** whenever a profile image is absent or fails to load. DiceBear URLs are never stored in the database — the server always stores the real Google picture URL or `null`.
-- **User Profile Console:** Dedicated `/profile` workspace featuring candidate preparation analytics (Total Audited Roles, Average Compatibility Score, Top Match Score), profile field updates (with space restrictions), and password security.
-- **High-Performance Redis Caching:** Integrated Redis Cloud to handle rate limiting, lightning-fast user profile caching, and a self-expiring JWT token blacklist, improving security and database read performance.
-- **Dynamic On-Demand PDF Engine & Vendor Chunking:** Client-side PDF export powered by `@react-pdf/renderer` is dynamically loaded via asynchronous `import()`. The ~1.29 MB layout engine is never downloaded during standard browsing — it is fetched strictly when the user clicks "Download PDF". Configured Vite Rollup `manualChunks` (`vendor-react`, `vendor-icons`, `vendor-toast`, `vendor-zod`) for optimal HTTP caching.
-- **Database Compound Indexing ($O(\log N)$ Queries):** Optimized `InterviewReport` queries with a compound PostgreSQL index `@@index([userId, createdAt(sort: Desc)])`, enabling single-scan sorted reads and instant dashboard pagination.
-- **Unified API Response Schema & Sanitized Error Logging:** Enforces a consistent `{ success, message, data / errors }` JSON contract. In production, database internals and sensitive stack traces are masked, and unauthenticated guest 401 pings are silenced to maintain clean diagnostic logs.
-- **Targeted React Component Memoization:** Key interactive components (`ReportCard`, `QuestionCard`, `SkillGapCard`, `RoadmapDay`, `ScoreRing`) are wrapped in `React.memo` with memoized handlers (`useCallback`), preventing unnecessary re-renders during tab switches and dashboard search filtering.
-- **Responsive Sticky Layout Architecture:** Desktop viewport features a sticky in-container sidebar with live badge counts and animated match rating ring, paired with a touch-friendly horizontal scroll pill navigation on mobile (`overflow-x: clip`).
-- **PostgreSQL + Prisma ORM:** Type-safe database layer using Prisma ORM with PostgreSQL hosted on Neon, enabling efficient relational queries and schema migrations.
+- **Structured AI Output (Gemini 3.5 Flash Lite):** Backend orchestrates Google Gemini (`gemini-3.5-flash-lite` with automatic fallback to `gemini-3.1-flash-lite`) to return a strict Zod-validated JSON payload containing `matchScore`, `technicalQuestions`, `behavioralQuestions`, `skillGaps`, `preparationPlan`, and `title`. All prompts are isolated within structural XML tags (`<job_description>`, `<resume_text>`) with strict instruction boundary separation.
+- **Deterministic Skill-Resource Matching (94 Skills):** Each AI-generated skill gap is resolved server-side against a seeded, normalized 94-skill catalog — using bounded whole-word checks (preventing false positives like "Java" inside "JavaScript" or "Go" in English sentences), 0.80 calibrated fuzzy matching for 1-char typos (e.g. "Doker" -> "Docker"), and automatic compound gap splitting (e.g. "Docker / Kubernetes" into individual roadmap cards). Tracking parameters (`?si=`) were stripped from seed resources, and seeds are transactionally upserted.
+- **Job Description & Resume Guardrails:** Enforces a synchronized 30-to-1200 character bounds constraint on job descriptions across frontend and backend. Resumes undergo text validation with null-byte sanitization to protect PostgreSQL storage and rejection of scanned/image-only PDFs (< 30 meaningful words).
+- **Google OAuth & Secure Account Linking:** Integrated Google OAuth 2.0 with token audience verification against `GOOGLE_CLIENT_ID`. Features a 409 conflict detection flow enabling credential users to link Google single sign-on securely.
+- **User Profile Console & GDPR Compliance:** Dedicated `/profile` workspace featuring candidate preparation analytics, secure password changes with session revocation on other devices, credential verification on email changes, and account deletion (`DELETE /api/user`).
+- **High-Performance Redis Caching:** Integrated Redis to handle user-keyed rate limiting, user profile caching, and self-expiring JWT token revocation blacklists.
+- **Dynamic On-Demand PDF Engine & Vendor Chunking:** Client-side PDF export powered by `@react-pdf/renderer` is dynamically loaded on demand via asynchronous `import()`. Configured Vite Rollup chunking (`vendor-react`, `vendor-icons`, `vendor-toast`, `vendor-zod`) for optimal delivery.
+- **Database Compound Indexing ($O(\log N)$ Queries):** Optimized `InterviewReport` queries with a compound index `@@index([userId, createdAt(sort: Desc)])` and clamped pagination (`page >= 1`, `limit` capped at 50).
+- **Unified API Response Schema & Sanitized Error Logging:** Enforces a consistent `{ success, message, data / errors }` JSON contract. In production, database internals and sensitive stack traces are masked to maintain clean diagnostic logs.
+- **Zero-Dependency Native Automated Testing:** Complete test suites built on Node.js native `node:test` and `node:assert`, validating schemas, algorithms, and parser edge cases with 0 new dependencies.
+- **PostgreSQL + Prisma ORM:** Type-safe database layer using Prisma ORM with PostgreSQL hosted on Neon.
 
 ---
 
@@ -440,13 +439,15 @@ Then open `http://localhost:5173` in your browser.
 
 - `npm run dev` - start Express with Nodemon
 - `npm start` - run production server with Node
-- `npx prisma db seed` - seed/refresh the `Skill` and `LearningResource` catalog
+- `npm test` - run native Node.js unit tests (schemas, matcher, resume parser)
+- `npx prisma db seed` - seed/refresh the 94-skill catalog and verified learning resources
 
 ### Frontend (`client/`)
 
 - `npm run dev` - start Vite dev server
-- `npm run build` - build the production bundle
-- `npm run lint` - run ESLint
+- `npm run build` - build the production bundle with Rollup chunking
+- `npm run lint` - run ESLint checks (0 errors, 0 warnings)
+- `npm test` - run native Node.js unit tests for client schemas
 - `npm run preview` - preview the production build
 
 ---
@@ -458,4 +459,3 @@ This project is licensed under the MIT License.
 ---
 
 <p align="center">Built by Sahil Sameer Siddique.</p>
-
