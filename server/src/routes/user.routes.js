@@ -6,6 +6,7 @@ import {
   getProfileController,
   updateProfileController,
   changePasswordController,
+  deleteAccountController,
 } from "../controllers/user.controller.js";
 
 const userRouter = express.Router();
@@ -18,5 +19,9 @@ userRouter.put("/profile", authUser, validateBody(updateProfileSchema), updatePr
 
 // Change password for credential accounts
 userRouter.put("/change-password", authUser, validateBody(changePasswordSchema), changePasswordController);
+
+// Delete user account and associated candidate data (GDPR Compliance)
+userRouter.delete("/", authUser, deleteAccountController);
+userRouter.delete("/profile", authUser, deleteAccountController);
 
 export default userRouter;

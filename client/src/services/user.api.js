@@ -19,3 +19,8 @@ export async function changePassword(data) {
   const response = await api.put("/api/user/change-password", data);
   return response.data;
 }
+
+export async function deleteAccount() {
+  const response = await api.delete("/api/user");
+  return response.data;
+}

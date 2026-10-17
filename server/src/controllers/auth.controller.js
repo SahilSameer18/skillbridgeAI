@@ -25,9 +25,16 @@ const registerUserController = asyncHandler(async (req, res) => {
     throw new ApiError(400, "All fields are required");
   }
 
+  const normalizedEmail = email.toLowerCase().trim();
+  const trimmedUsername = username.trim();
+
+  // Case-insensitive username and email collision check
   const isUserAlreadyExist = await prisma.user.findFirst({
     where: {
-      OR: [{ email: email.toLowerCase() }, { username }],
+      OR: [
+        { email: normalizedEmail },
+        { username: { equals: trimmedUsername, mode: "insensitive" } },
+      ],
     },
   });
 
@@ -38,8 +45,8 @@ const registerUserController = asyncHandler(async (req, res) => {
   const hash = await bcrypt.hash(password, 10);
   const user = await prisma.user.create({
     data: {
-      username,
-      email: email.toLowerCase(),
+      username: trimmedUsername,
+      email: normalizedEmail,
       password: hash,
     },
     include: { providers: true },
@@ -59,7 +66,6 @@ const registerUserController = asyncHandler(async (req, res) => {
     success: true,
     message: "User registered successfully",
     data: { user: formattedUser },
-    user: formattedUser,
   });
 });
 
@@ -107,7 +113,6 @@ const loginUserController = asyncHandler(async (req, res) => {
     success: true,
     message: "Login successful",
     data: { user: formattedUser },
-    user: formattedUser,
   });
 });
 
@@ -158,7 +163,6 @@ const googleAuthController = asyncHandler(async (req, res) => {
       success: true,
       message: "Google login successful",
       data: { user: formattedUser },
-      user: formattedUser,
     });
   }
 
@@ -232,7 +236,6 @@ const googleAuthController = asyncHandler(async (req, res) => {
     success: true,
     message: "User registered with Google successfully",
     data: { user: formattedCreatedUser },
-    user: formattedCreatedUser,
   });
 });
 
@@ -299,13 +302,16 @@ const linkGoogleController = asyncHandler(async (req, res) => {
     success: true,
     message: "Google account linked successfully",
     data: { user: formattedUpdated },
-    user: formattedUpdated,
   });
 });
 
 // Clear authentication cookie and blacklist session token
 const logoutUserController = asyncHandler(async (req, res) => {
-  const token = req.cookies.token;
+  const token =
+    req.cookies?.token ||
+    (req.headers.authorization?.startsWith("Bearer ")
+      ? req.headers.authorization.split(" ")[1]
+      : null);
 
   if (token) {
     const decoded = jwt.decode(token);
@@ -343,7 +349,6 @@ const getMeController = asyncHandler(async (req, res) => {
     success: true,
     message: "User details retrieved successfully",
     data: { user: formattedMe },
-    user: formattedMe,
   });
 });
 
