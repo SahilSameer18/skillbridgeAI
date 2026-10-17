@@ -120,31 +120,31 @@ const Form = () => {
   return (
     <div className="animate-fade-in py-4 max-w-6xl mx-auto">
       {/* Header Info */}
-      <div className="mb-8 text-center">
-        <span className="inline-flex items-center gap-1.5 px-3.5 py-1 text-xs font-semibold rounded-full mb-4 bg-accent/10 text-accent border border-accent/20">
-          <span className="w-1.5 h-1.5 rounded-full bg-accent animate-pulse" />
-          AI-Powered Match Engine v2.0
+      <div className="mb-10 text-center">
+        <span className="studio-badge-coral mb-4">
+          <span className="w-1.5 h-1.5 rounded-full bg-accent animate-ping" />
+          CALIBRATION CONSOLE V2.0
         </span>
-        <h1 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-primary mb-4 tracking-tight">
-          Compare Your <span className="text-accent">Resume & Job Description</span>
+        <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-primary mb-3 tracking-tight font-display">
+          Compare Your <span className="text-gradient-coral">Resume & Target Role</span>
         </h1>
         <p className="text-secondary max-w-2xl mx-auto text-sm leading-relaxed">
-          Upload your resume and paste the job description to get a customized interview questions bank, matched skill gaps assessment, and a 10-day prep roadmap.
+          Synthesize your resume credentials against your target job description to generate a bespoke interview questions bank, skill gap matrix, and a 10-day preparation roadmap.
         </p>
       </div>
 
       {/* Clear state button */}
       {(jobDescription.trim() || resumeFile) && (
-        <div className="mb-6 flex justify-end">
+        <div className="mb-5 flex justify-end">
           <button
             onClick={handleClear}
-            className="text-xs flex items-center gap-1 px-3 py-1.5 rounded-xl border border-dashed border-red-500/20 text-red-400 hover:bg-red-500/10 hover:text-red-200 transition-all duration-200"
+            className="text-xs studio-btn-secondary px-3 py-1.5 rounded-lg text-red-400 hover:text-red-300"
           >
             <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
               <line x1="18" y1="6" x2="6" y2="18" />
               <line x1="6" y1="6" x2="18" y2="18" />
             </svg>
-            Reset Console
+            Reset Calibration
           </button>
         </div>
       )}
@@ -152,10 +152,9 @@ const Form = () => {
       {/* Global error banner */}
       {error && (
         <div
-          className="mb-6 flex items-start gap-3 px-4 py-3.5 rounded-2xl text-sm text-red-300 animate-fade-in"
+          className="mb-6 flex items-start gap-3 px-4 py-3.5 rounded-2xl text-sm text-red-300 animate-fade-in studio-card border-red-500/30"
           style={{
-            background: "rgba(239,68,68,0.08)",
-            border: "1px solid rgba(239,68,68,0.25)",
+            background: "rgba(239, 68, 68, 0.08)",
           }}
         >
           <svg className="w-4 h-4 mt-0.5 shrink-0 text-red-400" fill="currentColor" viewBox="0 0 20 20">
@@ -163,7 +162,7 @@ const Form = () => {
           </svg>
           <div className="flex-grow">
             <p className="font-semibold text-red-200">Execution Error</p>
-            <p className="text-xs text-red-350/90 mt-0.5">{error}</p>
+            <p className="text-xs text-red-300/80 mt-0.5">{error}</p>
           </div>
           <button
             onClick={() => setError("")}
@@ -179,14 +178,14 @@ const Form = () => {
 
       {/* Main Console Box */}
       <div
-        className="rounded-3xl overflow-hidden shadow-2xl shadow-black/40 border border-border/80 bg-surface relative"
+        className="studio-card overflow-hidden shadow-2xl relative"
       >
         {/* Calibration Status Bar at top of Workspace */}
-        <div className="flex items-center gap-3 px-6 md:px-8 py-3.5 bg-background/60 border-b border-border/80">
-          <span className={`w-2.5 h-2.5 rounded-full shrink-0 ${
-            canGenerate ? "bg-emerald-400 animate-pulse shadow-[0_0_8px_rgba(52,211,153,0.6)]" : "bg-amber-400"
+        <div className="flex items-center gap-3 px-6 md:px-8 py-3.5 bg-black/40 border-b border-white/[0.06]">
+          <span className={`w-2 h-2 rounded-full shrink-0 ${
+            canGenerate ? "bg-emerald-400 shadow-[0_0_8px_rgba(52,211,153,0.8)]" : "bg-amber"
           }`} />
-          <span className="text-xs font-mono font-bold tracking-wide text-secondary truncate">
+          <span className="text-xs font-mono font-medium tracking-wide text-secondary truncate">
             {getConsoleStatusText()}
           </span>
         </div>
@@ -219,21 +218,21 @@ const Form = () => {
         </div>
 
         {/* Footer Area */}
-        <div className="flex flex-col sm:flex-row items-center justify-between gap-4 px-6 md:px-8 py-5 border-t border-border bg-background/40">
-          <div className="flex items-center gap-2 text-xs text-secondary/70">
+        <div className="flex flex-col sm:flex-row items-center justify-between gap-4 px-6 md:px-8 py-5 border-t border-white/[0.06] bg-black/30">
+          <div className="flex items-center gap-2 text-xs text-muted font-mono">
             <svg className="w-4 h-4 text-accent/60" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
             </svg>
-            <span>Orchestrates technical and behavioral roadmap matches</span>
+            <span>ORCHESTRATES TECHNICAL AND BEHAVIORAL ROADMAP MATCHES</span>
           </div>
 
           <button
             onClick={handleGenerateReport}
             disabled={!canGenerate}
-            className={`w-full sm:w-auto flex items-center justify-center gap-2 px-7 py-3 rounded-2xl font-bold text-primary text-sm transition-all duration-300 disabled:opacity-40 disabled:cursor-not-allowed hover:shadow-lg active:scale-95 ${
+            className={`w-full sm:w-auto px-7 py-3 rounded-xl font-bold text-sm transition-all duration-200 ${
               canGenerate 
-                ? "bg-accent hover:shadow-accent/20 shadow-[0_4px_20px_rgba(255,102,98,0.2)] cursor-pointer" 
-                : "bg-surface"
+                ? "studio-btn-primary" 
+                : "bg-white/[0.04] text-muted border border-white/[0.06] cursor-not-allowed opacity-50"
             }`}
           >
             <svg

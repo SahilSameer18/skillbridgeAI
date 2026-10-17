@@ -72,7 +72,7 @@ const GoogleButton = ({
       type="button"
       onClick={() => !isLoading && login()}
       disabled={isLoading}
-      className="w-full flex items-center justify-center gap-3 px-4 py-3.5 rounded-xl bg-[#131314] border border-white/[0.12] hover:bg-[#1a1a1b] hover:border-white/[0.22] active:bg-[#111] transition-all duration-200 disabled:opacity-60 disabled:cursor-not-allowed group cursor-pointer"
+      className="w-full flex items-center justify-center gap-3 px-4 py-3.5 rounded-xl bg-[#0E0E12] border-t border-white/[0.14] border-x border-b border-white/[0.08] hover:border-white/[0.2] hover:bg-[#15151C] active:scale-[0.985] shadow-[0_4px_20px_rgba(0,0,0,0.5)] transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed group cursor-pointer font-sans"
     >
       {isLoading ? (
         <>

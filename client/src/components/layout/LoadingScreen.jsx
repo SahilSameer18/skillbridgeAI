@@ -3,25 +3,26 @@ import { createPortal } from "react-dom";
 
 /**
  * LoadingScreen Component
- * A premium, full-screen loading overlay that replaces generic spinners.
- * Features an animated gradient SVG logo, dynamic text, and a visual progress step tracker.
+ * Executive-grade, ambient loading overlay designed by high-end studio principles.
+ * Replaces distracting spinners with a refined obsidian glass card, hairline laser progress,
+ * and high-precision monospace telemetry.
  */
 const LoadingScreen = ({
-  message = "Loading...",
-  subtitle = "Please wait while we set things up for you.",
+  message = "Calibrating Assessment...",
+  subtitle = "Synthesizing resume credentials and role expectations.",
   steps = [],
   currentStep = 0,
   fullScreen = true,
 }) => {
-  // Prevent page scrolling while full screen loader is active
+  // Prevent background scrolling while modal is mounted
   useEffect(() => {
     if (fullScreen) {
       const originalHtmlOverflow = document.documentElement.style.overflow;
       const originalBodyOverflow = document.body.style.overflow;
-      
+
       document.documentElement.style.overflow = "hidden";
       document.body.style.overflow = "hidden";
-      
+
       return () => {
         document.documentElement.style.overflow = originalHtmlOverflow;
         document.body.style.overflow = originalBodyOverflow;
@@ -32,132 +33,80 @@ const LoadingScreen = ({
   const content = (
     <div
       className={`flex flex-col items-center justify-center animate-fade-in ${
-        fullScreen ? "fixed inset-0 z-[99999] overflow-hidden" : "relative py-12 px-6 w-full rounded-2xl"
+        fullScreen
+          ? "fixed inset-0 z-[99999] overflow-hidden"
+          : "relative py-12 px-6 w-full"
       }`}
       style={{
-        position: fullScreen ? "fixed" : "relative",
-        top: fullScreen ? 0 : "auto",
-        left: fullScreen ? 0 : "auto",
-        width: fullScreen ? "100vw" : "100%",
-        height: fullScreen ? "100vh" : "auto",
-        zIndex: fullScreen ? 99999 : "auto",
         background: fullScreen
-          ? "radial-gradient(circle at center, #0a1223 0%, #0d0c0c 100%)"
-          : "rgba(10, 18, 35, 0.4)",
-        backdropFilter: fullScreen ? "none" : "blur(8px)",
-        WebkitBackdropFilter: fullScreen ? "none" : "blur(8px)",
-        border: fullScreen ? "none" : "1px solid rgba(255, 255, 255, 0.05)",
+          ? "rgba(8, 8, 10, 0.88)"
+          : "transparent",
+        backdropFilter: fullScreen ? "blur(24px) saturate(160%)" : "none",
+        WebkitBackdropFilter: fullScreen ? "blur(24px) saturate(160%)" : "none",
       }}
     >
-      {/* Dynamic Ambient Background Glows */}
-      {fullScreen && (
-        <>
-          <div
-            className="absolute top-1/4 left-1/4 w-[35rem] h-[35rem] pointer-events-none animate-pulse duration-[8000ms]"
-            style={{
-              background: "radial-gradient(circle at center, rgba(6, 182, 212, 0.08) 0%, transparent 65%)",
-              willChange: "opacity",
-            }}
-          />
-          <div
-            className="absolute bottom-1/4 right-1/4 w-[35rem] h-[35rem] pointer-events-none animate-pulse duration-[12000ms]"
-            style={{
-              background: "radial-gradient(circle at center, rgba(168, 85, 247, 0.08) 0%, transparent 65%)",
-              willChange: "opacity",
-            }}
-          />
-        </>
-      )}
+      {/* Subtle radial ambient highlight */}
+      <div
+        className="absolute w-[500px] h-[500px] rounded-full pointer-events-none"
+        style={{
+          background: "radial-gradient(circle at center, rgba(255, 102, 98, 0.06) 0%, transparent 65%)",
+        }}
+      />
 
-      {/* Main Glass Card Loader */}
-      <div className="flex flex-col items-center max-w-md w-full px-8 py-10 rounded-3xl text-center relative z-10">
+      {/* Main Studio Glass Console Card */}
+      <div className="studio-card max-w-md w-full px-8 py-9 relative z-10 text-center overflow-hidden border border-white/[0.08] shadow-2xl shadow-black/80">
         
-        {/* Animated Premium SVG Icon */}
-        <div className="relative mb-8 group animate-float" style={{ willChange: "transform" }}>
-          <div
-            className="absolute inset-0 scale-150 animate-pulse duration-[3000ms] pointer-events-none"
-            style={{
-              background: "radial-gradient(circle at center, rgba(6, 182, 212, 0.12) 0%, rgba(168, 85, 247, 0.12) 40%, transparent 70%)",
-              willChange: "opacity",
-            }}
-          />
-          
-          <svg
-            className="w-20 h-20 text-rose-400 relative z-10"
-            viewBox="0 0 100 100"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            {/* Background static circle */}
-            <circle
-              cx="50"
-              cy="50"
-              r="40"
-              stroke="rgba(255, 255, 255, 0.03)"
-              strokeWidth="6"
-            />
-            {/* Outer animated arc */}
-            <circle
-              cx="50"
-              cy="50"
-              r="40"
-              stroke="url(#loaderGradient)"
-              strokeWidth="6"
-              strokeLinecap="round"
-              strokeDasharray="251.2"
-              strokeDashoffset="120"
-              className="animate-spin-slow origin-center"
-            />
-            {/* Inner pulsating circle */}
-            <circle
-              cx="50"
-              cy="50"
-              r="22"
-              fill="url(#innerGradient)"
-              className="animate-pulse"
-            />
-            {/* Decorative orbits */}
-            <path
-              d="M50 15A35 35 0 0 1 85 50"
-              stroke="#fe9a00"
-              strokeWidth="2"
-              strokeDasharray="4, 4"
-              strokeLinecap="round"
-            />
-            <path
-              d="M50 85A35 35 0 0 1 15 50"
-              stroke="var(--color-accent)"
-              strokeWidth="2"
-              strokeDasharray="4, 4"
-              strokeLinecap="round"
-            />
+        {/* Whisper-thin laser progress line at the very top rim */}
+        <div className="absolute top-0 left-0 right-0 laser-progress" />
 
-            {/* Gradient Definitions */}
+        {/* Studio Monogram Emblem */}
+        <div className="relative mx-auto mb-6 w-16 h-16 rounded-2xl flex items-center justify-center bg-white/[0.03] border-t border-white/[0.18] border-x border-white/[0.06] border-b border-black/40 shadow-xl">
+          {/* Ambient inner aura */}
+          <div className="absolute inset-0 rounded-2xl bg-gradient-to-br from-accent/20 to-amber/10 blur-md pointer-events-none" />
+
+          {/* Precision Monogram SVG */}
+          <svg className="w-8 h-8 text-accent relative z-10" viewBox="0 0 32 32" fill="none">
+            <path
+              d="M8 10L16 6L24 10L24 22L16 26L8 22Z"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              className="opacity-90"
+            />
+            <path
+              d="M16 6V26"
+              stroke="url(#emblemGlow)"
+              strokeWidth="2"
+              strokeLinecap="round"
+            />
+            <circle cx="16" cy="16" r="3" fill="#fe9a00" />
             <defs>
-              <linearGradient id="loaderGradient" x1="0" y1="0" x2="100" y2="100">
-                <stop offset="0%" stopColor="var(--color-accent)" />
-                <stop offset="50%" stopColor="#6366f1" />
+              <linearGradient id="emblemGlow" x1="16" y1="6" x2="16" y2="26">
+                <stop offset="0%" stopColor="#ff6662" />
                 <stop offset="100%" stopColor="#fe9a00" />
-              </linearGradient>
-              <linearGradient id="innerGradient" x1="28" y1="28" x2="72" y2="72">
-                <stop offset="0%" stopColor="rgba(6, 182, 212, 0.3)" />
-                <stop offset="100%" stopColor="rgba(168, 85, 247, 0.3)" />
               </linearGradient>
             </defs>
           </svg>
         </div>
 
-        {/* Dynamic Titles */}
-        <h3 className="text-2xl font-bold text-primary mb-2 tracking-tight">
+        {/* Monospace System Telemetry Pill */}
+        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full studio-badge-coral mb-4">
+          <span className="w-1.5 h-1.5 rounded-full bg-accent animate-ping" />
+          <span>ENGINE ACTIVE</span>
+        </div>
+
+        {/* Dynamic Typography */}
+        <h3 className="text-xl sm:text-2xl font-bold text-primary mb-2 tracking-tight">
           {message}
         </h3>
-        <p className="text-secondary text-sm max-w-xs mx-auto mb-8 font-normal leading-relaxed">
+        <p className="text-secondary text-xs sm:text-sm max-w-xs mx-auto mb-7 leading-relaxed">
           {subtitle}
         </p>
 
-        {/* Steps Visualizer */}
+        {/* Architectural Checklist Telemetry */}
         {steps.length > 0 && (
-          <div className="w-full flex flex-col gap-3.5 bg-surface/40 p-5 rounded-2xl border border-border/50 text-left animate-fade-in-up">
+          <div className="w-full flex flex-col gap-2.5 studio-well p-4 text-left">
             {steps.map((step, idx) => {
               const isCompleted = idx < currentStep;
               const isActive = idx === currentStep;
@@ -166,36 +115,46 @@ const LoadingScreen = ({
               return (
                 <div
                   key={idx}
-                  className="flex items-center gap-3 transition-opacity duration-300"
-                  style={{
-                    opacity: isUpcoming ? 0.35 : 1,
-                  }}
+                  className={`flex items-center gap-3 py-1 transition-all duration-200 ${
+                    isUpcoming ? "opacity-35" : "opacity-100"
+                  }`}
                 >
+                  {/* Status Indicator */}
                   <div
-                    className={`w-5 h-5 rounded-full flex items-center justify-center shrink-0 text-[10px] font-bold transition-all duration-300 ${
+                    className={`w-5 h-5 rounded-md flex items-center justify-center shrink-0 font-mono text-[10px] font-semibold transition-all duration-200 ${
                       isCompleted
-                        ? "bg-emerald-500/20 text-emerald-400 border border-emerald-500/30"
+                        ? "bg-emerald-500/15 text-emerald-400 border border-emerald-500/30"
                         : isActive
-                        ? "bg-accent/20 text-accent border border-accent animate-pulse"
-                        : "bg-surface text-secondary border border-border/50"
+                        ? "bg-accent/20 text-accent border border-accent/40 shadow-[0_0_10px_rgba(255,102,98,0.3)]"
+                        : "bg-white/[0.03] text-muted border border-white/[0.06]"
                     }`}
                   >
                     {isCompleted ? (
-                      <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="3">
+                      <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2.5">
                         <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
                       </svg>
                     ) : (
-                      idx + 1
+                      `0${idx + 1}`
                     )}
                   </div>
 
+                  {/* Step Label */}
                   <span
-                    className={`text-xs font-semibold ${
-                      isActive ? "text-accent font-medium" : isCompleted ? "text-primary/90" : "text-secondary/70"
+                    className={`text-xs truncate ${
+                      isActive
+                        ? "text-primary font-semibold"
+                        : isCompleted
+                        ? "text-secondary font-medium"
+                        : "text-muted"
                     }`}
                   >
                     {step}
                   </span>
+
+                  {/* Live Beacon on Active Step */}
+                  {isActive && (
+                    <span className="ml-auto w-1.5 h-1.5 rounded-full bg-accent animate-pulse shrink-0" />
+                  )}
                 </div>
               );
             })}
@@ -213,3 +172,4 @@ const LoadingScreen = ({
 };
 
 export default LoadingScreen;
+

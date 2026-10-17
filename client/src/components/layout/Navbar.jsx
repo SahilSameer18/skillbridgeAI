@@ -70,23 +70,20 @@ const Navbar = () => {
     <nav
       className={`sticky top-0 z-50 w-full transition-all duration-300 ${
         scrolled
-          ? "border-b border-border shadow-lg shadow-black/20"
+          ? "border-b border-white/[0.08] shadow-2xl shadow-black/60"
           : "border-b border-transparent"
       }`}
       style={{
-        background: scrolled ? "rgba(10,10,10,0.92)" : "rgba(10,10,10,0.60)",
-        backdropFilter: "blur(20px)",
-        WebkitBackdropFilter: "blur(20px)",
+        background: scrolled ? "rgba(8, 8, 10, 0.88)" : "rgba(8, 8, 10, 0.40)",
+        backdropFilter: "blur(24px) saturate(160%)",
+        WebkitBackdropFilter: "blur(24px) saturate(160%)",
       }}
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
           {/* Brand */}
-          <Link to="/" className="flex items-center gap-2.5 group shrink-0">
-            <span
-              className="text-lg font-bold tracking-tight text-primary"
-              style={{ fontFamily: '"Space Grotesk", "Inter", sans-serif' }}
-            >
+          <Link to="/" className="flex items-center gap-2.5 group shrink-0 active:scale-[0.98] transition-transform">
+            <span className="text-lg font-bold tracking-tight text-primary">
               Skill<span className="text-accent">Bridge</span>
             </span>
           </Link>
@@ -99,15 +96,15 @@ const Navbar = () => {
                 <Link
                   key={to}
                   to={to}
-                  className={`relative px-4 py-2 text-sm font-medium rounded-lg transition-all duration-200 ${
+                  className={`relative px-4 py-2 text-sm font-medium rounded-xl transition-all duration-160 active:scale-[0.97] ${
                     isActive
                       ? "text-accent"
-                      : "text-secondary hover:text-primary hover:bg-surface"
+                      : "text-secondary hover:text-primary hover:bg-white/[0.04]"
                   }`}
                 >
                   {label}
                   {isActive && (
-                    <span className="absolute bottom-0 left-1/2 -translate-x-1/2 w-4 h-0.5 rounded-full bg-accent" />
+                    <span className="absolute bottom-1 left-1/2 -translate-x-1/2 w-4 h-0.5 rounded-full bg-accent" />
                   )}
                 </Link>
               );
@@ -120,7 +117,7 @@ const Navbar = () => {
               <div className="relative" ref={userDropdownRef}>
                 <button
                   onClick={() => setUserMenuOpen((prev) => !prev)}
-                  className="flex items-center gap-2 px-3 py-1.5 rounded-full border border-border/80 bg-surface/40 hover:bg-surface/80 transition-all duration-200 cursor-pointer"
+                  className="flex items-center gap-2.5 px-3 py-1.5 rounded-full border border-white/[0.08] bg-white/[0.03] hover:bg-white/[0.07] hover:border-white/[0.14] transition-all duration-160 cursor-pointer active:scale-[0.97]"
                 >
                   <img
                     src={avatarSrc}
@@ -139,10 +136,10 @@ const Navbar = () => {
 
                 {/* Dropdown Menu */}
                 {userMenuOpen && (
-                  <div className="absolute right-0 mt-2 w-48 rounded-2xl bg-background/95 border border-border/80 shadow-xl p-1.5 z-50 animate-fade-in backdrop-blur-xl">
+                  <div className="absolute right-0 mt-2 w-48 rounded-2xl studio-card p-1.5 z-50 animate-fade-in shadow-2xl">
                     <Link
                       to="/profile"
-                      className="flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-xs font-semibold text-primary hover:bg-surface hover:text-accent transition-colors"
+                      className="flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-xs font-semibold text-primary hover:bg-white/[0.06] hover:text-accent transition-colors"
                       onClick={() => setUserMenuOpen(false)}
                     >
                       <FiUser className="w-4 h-4" />
@@ -162,7 +159,7 @@ const Navbar = () => {
             ) : (
               <Link
                 to="/login"
-                className="px-5 py-2 text-sm font-semibold rounded-full text-primary bg-accent transition-all duration-200 hover:opacity-90 active:scale-95"
+                className="studio-btn-primary px-5 py-2 text-sm rounded-full"
               >
                 Login
               </Link>

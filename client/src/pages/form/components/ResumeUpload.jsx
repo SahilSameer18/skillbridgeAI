@@ -73,18 +73,14 @@ const ResumeUpload = ({ value, onChange }) => {
   };
 
   return (
-    <div className={`flex flex-col h-full bg-background/40 p-6 rounded-2xl border transition-all duration-300 ${
-      isDragging ? "border-amber-500/50 shadow-[0_0_15px_rgba(255,102,98,0.15)]" : "border-border/80 hover:border-border/60"
+    <div className={`flex flex-col h-full studio-card p-6 md:p-7 transition-all duration-300 ${
+      isDragging ? "border-amber/50 shadow-[0_0_30px_rgba(254,154,0,0.2)]" : ""
     }`}>
       {/* Header section */}
       <div className="flex items-center justify-between mb-5">
         <div className="flex items-center gap-3">
           <div
-            className="w-10 h-10 rounded-xl flex items-center justify-center transition-transform duration-300 hover:scale-105"
-            style={{
-              background: "rgba(255,102,98,0.08)",
-              border: "1px solid rgba(255,102,98,0.2)",
-            }}
+            className="w-10 h-10 rounded-xl flex items-center justify-center bg-accent/10 border border-accent/25 shadow-sm"
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -102,14 +98,14 @@ const ResumeUpload = ({ value, onChange }) => {
             </svg>
           </div>
           <div>
-            <h2 className="font-semibold text-primary text-base tracking-wide font-sans">
-              Your Resume
+            <h2 className="font-bold text-primary text-base tracking-tight font-display">
+              Candidate Resume
             </h2>
-            <p className="text-xs text-accent font-medium mt-0.5">Required</p>
+            <p className="text-xs text-accent font-mono font-medium mt-0.5">PDF FORMAT REQUIRED</p>
           </div>
         </div>
-        <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 uppercase tracking-wider">
-          Best Results
+        <span className="studio-badge-coral">
+          Primary Input
         </span>
       </div>
 
@@ -120,14 +116,14 @@ const ResumeUpload = ({ value, onChange }) => {
           onDrop={handleDrop}
           onDragOver={handleDragOver}
           onDragLeave={handleDragLeave}
-          className={`flex flex-col items-center justify-center p-6 rounded-xl cursor-pointer transition-all duration-300 border-2 border-dashed h-full ${
+          className={`flex flex-col items-center justify-center p-6 rounded-2xl cursor-pointer transition-all duration-200 border-2 border-dashed h-full studio-well ${
             isDragging
-              ? "border-amber-400/80 bg-amber-500/5 scale-[1.01]"
+              ? "border-amber/80 bg-amber/5 scale-[1.01]"
               : fileName
-              ? "border-amber-500/40 bg-amber-500/5 hover:border-amber-500/60"
+              ? "border-accent/40 bg-accent/5 hover:border-accent/60"
               : fileError
               ? "border-red-500/40 bg-red-500/5"
-              : "border-border bg-background/30 hover:bg-background/60 hover:border-border/80"
+              : "border-white/[0.1] hover:border-white/[0.22] hover:bg-white/[0.02]"
           }`}
         >
           {/* Status Icon */}
@@ -149,26 +145,24 @@ const ResumeUpload = ({ value, onChange }) => {
 
           {fileName ? (
             <div className="flex flex-col items-center gap-3 w-full max-w-xs text-center">
-              <div className="bg-background/80 border border-border/80 rounded-xl p-3 w-full">
-                <p className="text-sm font-semibold text-primary/90 truncate">
+              <div className="studio-card p-3.5 w-full">
+                <p className="text-sm font-semibold text-primary truncate font-display">
                   {fileName}
                 </p>
-                <p className="text-[11px] text-secondary mt-1 font-mono">
-                  Size: {fileSize} · PDF Document
+                <p className="text-[11px] text-muted mt-1 font-mono">
+                  {fileSize} · VALIDATED PDF
                 </p>
               </div>
 
               {/* Ready status indicator */}
-              <div className="flex items-center gap-1.5 text-[11px] text-emerald-400 font-semibold mt-1 animate-fade-in">
-                <svg className="w-4 h-4 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="3">
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
-                </svg>
-                Resume Attached & Ready
+              <div className="flex items-center gap-2 text-[11px] text-emerald-400 font-mono font-medium mt-1 animate-fade-in">
+                <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 shadow-[0_0_8px_rgba(52,211,153,0.8)]" />
+                DOCUMENT READY
               </div>
 
               <button
                 onClick={handleRemove}
-                className="mt-1 text-xs flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-secondary bg-surface border border-border/80 hover:text-red-400 hover:bg-red-500/10 hover:border-red-500/20 transition-all duration-200"
+                className="mt-1 text-xs studio-btn-secondary px-3 py-1.5 rounded-lg text-red-400 hover:text-red-300"
                 aria-label="Remove resume"
               >
                 <svg
@@ -184,7 +178,7 @@ const ResumeUpload = ({ value, onChange }) => {
                     d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
                   />
                 </svg>
-                Remove Resume
+                Remove File
               </button>
             </div>
           ) : (
