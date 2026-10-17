@@ -260,7 +260,7 @@ const Profile = () => {
     <div className="w-full max-w-6xl mx-auto px-4 sm:px-6 py-10 animate-fade-in">
       {/* ── Top Header Banner ── */}
       <div className="relative rounded-3xl p-6 sm:p-8 bg-surface/30 border border-border/80 overflow-hidden mb-8 shadow-xl">
-        <div className="absolute top-0 right-0 w-96 h-96 bg-accent/10 rounded-full blur-[120px] pointer-events-none" />
+        <div className="absolute top-0 right-0 w-96 h-96 bg-accent/10 rounded-full blur-[120px] orb-isolated" />
 
         <div className="flex flex-col md:flex-row items-center gap-6 relative z-10">
           {/* Avatar with live preview */}

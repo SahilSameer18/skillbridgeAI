@@ -142,8 +142,8 @@ const Login = () => {
       <div className="hidden lg:flex w-[48%] flex-col justify-between bg-[#0B0B0E] p-12 lg:p-16 relative overflow-hidden border-r border-white/[0.07]">
         {/* Subtle physical lighting vignette - no generic pulsing balls */}
         <div className="absolute top-0 left-0 w-full h-full pointer-events-none overflow-hidden">
-          <div className="absolute -top-[20%] -left-[15%] w-[450px] h-[450px] rounded-full bg-accent/[0.07] blur-[100px]" />
-          <div className="absolute bottom-[5%] right-[-10%] w-[380px] h-[380px] rounded-full bg-[#FE9A00]/[0.05] blur-[120px]" />
+          <div className="absolute -top-[20%] -left-[15%] w-[450px] h-[450px] rounded-full bg-accent/[0.07] blur-[100px] orb-isolated" />
+          <div className="absolute bottom-[5%] right-[-10%] w-[380px] h-[380px] rounded-full bg-[#FE9A00]/[0.05] blur-[120px] orb-isolated" />
         </div>
 
         {/* Brand Monogram */}

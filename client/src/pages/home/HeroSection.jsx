@@ -76,7 +76,7 @@ const HeroSection = ({ user }) => {
       {/* Precision Atmospheric Vignette */}
       <div className="absolute inset-0 pointer-events-none overflow-hidden">
         <div
-          className="absolute -top-[15%] left-1/2 -translate-x-1/2 w-[800px] h-[500px] opacity-35 blur-[120px]"
+          className="absolute -top-[15%] left-1/2 -translate-x-1/2 w-[800px] h-[500px] opacity-35 blur-[120px] orb-isolated"
           style={{
             background: "radial-gradient(circle, rgba(255,102,98,0.16) 0%, rgba(254,154,0,0.06) 50%, transparent 80%)",
           }}

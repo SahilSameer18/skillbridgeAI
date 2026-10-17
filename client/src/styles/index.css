@@ -124,50 +124,53 @@
 }
 
 @layer utilities {
-  /* ── High-End Directional Glass Cards (Eliminating Flatness) ── */
+  /* ── High-End Directional Glass Cards ── */
+  /* No backdrop-filter: repeated elements with blur create N compositor layers = jank */
+  /* The obsidian palette provides depth without blur */
   .studio-card {
-    background: rgba(14, 14, 18, 0.72);
-    backdrop-filter: blur(20px) saturate(160%);
-    -webkit-backdrop-filter: blur(20px) saturate(160%);
-    border-top: 1px solid rgba(255, 255, 255, 0.14);
-    border-left: 1px solid rgba(255, 255, 255, 0.06);
-    border-right: 1px solid rgba(255, 255, 255, 0.06);
-    border-bottom: 1px solid rgba(0, 0, 0, 0.45);
+    background: #0e0e12;
+    border-top: 1px solid rgba(255, 255, 255, 0.12);
+    border-left: 1px solid rgba(255, 255, 255, 0.05);
+    border-right: 1px solid rgba(255, 255, 255, 0.05);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.55);
     box-shadow:
-      inset 0 1px 1px 0 rgba(255, 255, 255, 0.04),
-      0 12px 36px -8px rgba(0, 0, 0, 0.7),
+      inset 0 1px 0 0 rgba(255, 255, 255, 0.05),
+      0 8px 24px -4px rgba(0, 0, 0, 0.55),
       0 1px 2px 0 rgba(0, 0, 0, 0.4);
     border-radius: 1.25rem;
   }
 
   .studio-card-interactive {
-    background: rgba(14, 14, 18, 0.72);
-    backdrop-filter: blur(20px) saturate(160%);
-    -webkit-backdrop-filter: blur(20px) saturate(160%);
-    border-top: 1px solid rgba(255, 255, 255, 0.14);
-    border-left: 1px solid rgba(255, 255, 255, 0.06);
-    border-right: 1px solid rgba(255, 255, 255, 0.06);
-    border-bottom: 1px solid rgba(0, 0, 0, 0.45);
+    background: #0e0e12;
+    border-top: 1px solid rgba(255, 255, 255, 0.12);
+    border-left: 1px solid rgba(255, 255, 255, 0.05);
+    border-right: 1px solid rgba(255, 255, 255, 0.05);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.55);
     box-shadow:
-      inset 0 1px 1px 0 rgba(255, 255, 255, 0.04),
-      0 12px 36px -8px rgba(0, 0, 0, 0.7);
+      inset 0 1px 0 0 rgba(255, 255, 255, 0.05),
+      0 8px 24px -4px rgba(0, 0, 0, 0.55);
     border-radius: 1.25rem;
-    transition: all 220ms cubic-bezier(0.16, 1, 0.3, 1);
+    /* Only animate compositor-safe properties — no repaints */
+    transition:
+      transform 200ms cubic-bezier(0.16, 1, 0.3, 1),
+      border-top-color 200ms ease,
+      box-shadow 200ms ease;
+    will-change: transform;
   }
 
   .studio-card-interactive:hover {
-    background: rgba(22, 22, 28, 0.85);
-    border-top-color: rgba(255, 102, 98, 0.38);
+    background: #14141c;
+    border-top-color: rgba(255, 102, 98, 0.35);
     transform: translateY(-2px);
     box-shadow:
-      inset 0 1px 1px 0 rgba(255, 255, 255, 0.08),
-      0 20px 44px -10px rgba(0, 0, 0, 0.8),
-      0 0 28px -4px rgba(255, 102, 98, 0.15);
+      inset 0 1px 0 0 rgba(255, 255, 255, 0.08),
+      0 16px 40px -8px rgba(0, 0, 0, 0.75),
+      0 0 20px -6px rgba(255, 102, 98, 0.12);
   }
 
   .studio-card-interactive:active {
-    transform: scale(0.985);
-    transition-duration: 80ms;
+    transform: scale(0.985) translateY(0);
+    transition-duration: 60ms;
   }
 
   /* ── Deep Recessed Well (For inputs, code, and editors) ── */
@@ -178,7 +181,7 @@
       inset 0 2px 4px 0 rgba(0, 0, 0, 0.6),
       0 1px 0 0 rgba(255, 255, 255, 0.03);
     border-radius: 0.875rem;
-    transition: all 180ms ease-out;
+    transition: border-color 160ms ease, box-shadow 160ms ease;
   }
 
   .studio-well:focus-within {
@@ -208,7 +211,9 @@
       0 10px 28px -4px rgba(255, 102, 98, 0.45),
       0 2px 4px 0 rgba(0, 0, 0, 0.3);
     border-radius: 0.75rem;
-    transition: all 160ms cubic-bezier(0.16, 1, 0.3, 1);
+    transition:
+      transform 140ms cubic-bezier(0.16, 1, 0.3, 1),
+      box-shadow 140ms ease;
     cursor: pointer;
     user-select: none;
   }
@@ -247,8 +252,10 @@
       inset 0 1px 1px 0 rgba(255, 255, 255, 0.03),
       0 6px 18px -4px rgba(0, 0, 0, 0.4);
     border-radius: 0.75rem;
-    backdrop-filter: blur(12px);
-    transition: all 160ms cubic-bezier(0.16, 1, 0.3, 1);
+    transition:
+      transform 140ms cubic-bezier(0.16, 1, 0.3, 1),
+      background-color 140ms ease,
+      border-color 140ms ease;
     cursor: pointer;
     user-select: none;
   }
@@ -362,26 +369,30 @@
     animation: laser-travel 1.4s cubic-bezier(0.4, 0, 0.2, 1) infinite;
   }
 
-  /* Backward compatibility aliases */
+  /* Backward compatibility aliases — blur removed for perf */
   .glass {
-    background: rgba(14, 14, 18, 0.72);
-    backdrop-filter: blur(20px) saturate(160%);
-    -webkit-backdrop-filter: blur(20px) saturate(160%);
-    border-top: 1px solid rgba(255, 255, 255, 0.14);
-    border-left: 1px solid rgba(255, 255, 255, 0.06);
-    border-right: 1px solid rgba(255, 255, 255, 0.06);
-    border-bottom: 1px solid rgba(0, 0, 0, 0.45);
-    box-shadow: 0 12px 36px -8px rgba(0, 0, 0, 0.7);
-  }
-
-  .glass-light {
-    background: rgba(22, 22, 28, 0.6);
-    backdrop-filter: blur(16px);
-    -webkit-backdrop-filter: blur(16px);
+    background: #0e0e12;
     border-top: 1px solid rgba(255, 255, 255, 0.12);
     border-left: 1px solid rgba(255, 255, 255, 0.05);
     border-right: 1px solid rgba(255, 255, 255, 0.05);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.5);
+    box-shadow: 0 8px 24px -4px rgba(0, 0, 0, 0.6);
+  }
+
+  .glass-light {
+    background: #14141c;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    border-left: 1px solid rgba(255, 255, 255, 0.04);
+    border-right: 1px solid rgba(255, 255, 255, 0.04);
     border-bottom: 1px solid rgba(0, 0, 0, 0.3);
+  }
+
+  /* ── GPU-isolated decorative orb — use on blur-[Xpx] ambient elements ── */
+  /* Isolates the blur to its own compositor layer so scroll is free */
+  .orb-isolated {
+    will-change: transform;
+    contain: layout style;
+    pointer-events: none;
   }
 
   .text-gradient-primary {
