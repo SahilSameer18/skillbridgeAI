@@ -71,7 +71,7 @@ const Form = () => {
         // Navigate to the dynamic report dashboard
         navigate(`/interview/${data.id}`);
       } else {
-        setError("Failed to generate report. Please ensure resume or job description is not empty.");
+        setError("Failed to generate report. Please verify your inputs and try again.");
       }
     } catch (err) {
       setError(
@@ -98,14 +98,21 @@ const Form = () => {
 
   // Determine current console match setup state description
   const getConsoleStatusText = () => {
-    if (!jobDescription.trim() && !resumeFile) {
+    const trimmedJD = jobDescription.trim();
+    if (!trimmedJD && !resumeFile) {
       return "Career Engine Offline: Awaiting details";
     }
-    if (jobDescription.trim() && !resumeFile) {
+    if (trimmedJD && !resumeFile) {
       return "Awaiting Resume Upload to complete calibration...";
     }
-    if (!jobDescription.trim() && resumeFile) {
+    if (!trimmedJD && resumeFile) {
       return "Awaiting Job Description to begin sync...";
+    }
+    if (trimmedJD.length < 30) {
+      return `Job description too short (${trimmedJD.length}/30 characters minimum)`;
+    }
+    if (trimmedJD.length > 1200) {
+      return `Job description exceeds limit (${trimmedJD.length}/1200 characters maximum)`;
     }
     return "All Systems Calibrated: Console ready for strategy execution";
   };

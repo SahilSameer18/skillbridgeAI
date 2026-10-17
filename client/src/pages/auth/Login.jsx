@@ -13,28 +13,26 @@ const Login = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState(null);
 
-  // State for handling 409 Account Linking
-  const [pendingGoogleToken, setPendingGoogleToken] = useState(null);
-  const [conflictNotice, setConflictNotice] = useState(null);
+  const navigate = useNavigate();
+  const location = useLocation();
+
+  // State for handling 409 Account Linking (lazy-initialized to avoid effect setState)
+  const [pendingGoogleToken, setPendingGoogleToken] = useState(() => {
+    return location.state?.pendingGoogleLink ? sessionStorage.getItem("pendingGoogleToken") : null;
+  });
+  const [conflictNotice] = useState(() => {
+    return location.state?.pendingGoogleLink && sessionStorage.getItem("pendingGoogleToken")
+      ? "An account with this Google email already exists. Enter your password below to link Google to your account."
+      : null;
+  });
 
   const [touched, setTouched] = useState({ email: false, password: false });
   const [fieldErrors, setFieldErrors] = useState({ email: null, password: null });
 
-  const navigate = useNavigate();
-  const location = useLocation();
-
-  // Restore pending Google token from sessionStorage (set by Register.jsx on 409)
+  // Clean up session storage and router state after reading
   useEffect(() => {
-    const storedToken = sessionStorage.getItem("pendingGoogleToken");
-    const fromRegister = location.state?.pendingGoogleLink;
-
-    if (storedToken && fromRegister) {
-      setPendingGoogleToken(storedToken);
-      setConflictNotice(
-        "An account with this Google email already exists. Enter your password below to link Google to your account."
-      );
+    if (location.state?.pendingGoogleLink) {
       sessionStorage.removeItem("pendingGoogleToken");
-      // Clear router state so refresh doesn't re-trigger
       window.history.replaceState({}, "");
     }
   }, [location.state]);

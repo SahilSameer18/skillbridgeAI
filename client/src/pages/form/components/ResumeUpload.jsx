@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useRef, useMemo } from "react";
 
 const MAX_FILE_SIZE_MB = 4;
 const MAX_FILE_SIZE_BYTES = MAX_FILE_SIZE_MB * 1024 * 1024;
@@ -9,38 +9,22 @@ const MAX_FILE_SIZE_BYTES = MAX_FILE_SIZE_MB * 1024 * 1024;
  * and preview of the selected PDF resume file with an animated parsing status.
  */
 const ResumeUpload = ({ value, onChange }) => {
-  const [fileName, setFileName] = useState("");
-  const [fileSize, setFileSize] = useState("");
   const [fileError, setFileError] = useState("");
   const [isDragging, setIsDragging] = useState(false);
-  const [isParsing, setIsParsing] = useState(false);
-  const [parseProgress, setParseProgress] = useState(0);
-  const [isParsed, setIsParsed] = useState(false);
   const fileInputRef = useRef(null);
 
-  // Sync state if value changes externally (e.g. preset selection)
-  useEffect(() => {
-    if (value) {
-      setFileName(value.name || "resume.pdf");
-      const sizeInBytes = value.size || 1024 * 1024 * 1.2; // default 1.2MB for mocks
-      const sizeInKb = (sizeInBytes / 1024).toFixed(1);
-      setFileSize(sizeInKb > 1024 ? `${(sizeInKb / 1024).toFixed(1)} MB` : `${sizeInKb} KB`);
-      setIsParsed(true);
-    } else {
-      setFileName("");
-      setFileSize("");
-      setIsParsed(false);
-      setIsParsing(false);
-      setParseProgress(0);
-    }
+  // Derived state directly from value prop — eliminates redundant effect & cascading renders
+  const fileName = value ? (value.name || "resume.pdf") : "";
+  const fileSize = useMemo(() => {
+    if (!value) return "";
+    const sizeInBytes = value.size || 1024 * 1024 * 1.2;
+    const sizeInKb = (sizeInBytes / 1024).toFixed(1);
+    return sizeInKb > 1024 ? `${(sizeInKb / 1024).toFixed(1)} MB` : `${sizeInKb} KB`;
   }, [value]);
 
   // Validate and handle file input
   const processFile = (file) => {
     setFileError("");
-    setIsParsed(false);
-    setIsParsing(false);
-    setParseProgress(0);
 
     if (!file) return;
 
@@ -58,46 +42,15 @@ const ResumeUpload = ({ value, onChange }) => {
       return;
     }
 
-    // Capture file details
-    setFileName(file.name);
-    // Format size
-    const sizeInKb = (file.size / 1024).toFixed(1);
-    setFileSize(sizeInKb > 1024 ? `${(sizeInKb / 1024).toFixed(1)} MB` : `${sizeInKb} KB`);
-    
-    // Simulate Parsing Process
-    setIsParsing(true);
-    onChange(file); // Set file immediately for validation but show animated parsing
+    // Attach file immediately for validation
+    onChange(file);
   };
-
-  // Parsing simulation progress timer
-  useEffect(() => {
-    let interval;
-    if (isParsing) {
-      interval = setInterval(() => {
-        setParseProgress((prev) => {
-          if (prev >= 100) {
-            clearInterval(interval);
-            setIsParsing(false);
-            setIsParsed(true);
-            return 100;
-          }
-          return prev + 10;
-        });
-      }, 100);
-    }
-    return () => clearInterval(interval);
-  }, [isParsing]);
 
   // Remove the selected file
   const handleRemove = (e) => {
     e.preventDefault();
     e.stopPropagation();
-    setFileName("");
-    setFileSize("");
     setFileError("");
-    setIsParsing(false);
-    setParseProgress(0);
-    setIsParsed(false);
     onChange(null);
     if (fileInputRef.current) fileInputRef.current.value = "";
   };
@@ -183,12 +136,8 @@ const ResumeUpload = ({ value, onChange }) => {
               <svg className="w-12 h-12 text-red-500 animate-pulse" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
                 <path strokeLinecap="round" strokeLinejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
               </svg>
-            ) : isParsing ? (
-              <svg className="w-12 h-12 text-amber-400 animate-spin" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
-                <path strokeLinecap="round" strokeLinejoin="round" d="M4 4v5h.582m15.356 2A8.001 8.001 0 1121.248 10H18.22" />
-              </svg>
-            ) : isParsed ? (
-              <svg className="w-12 h-12 text-emerald-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2.5">
+            ) : fileName ? (
+              <svg className="w-12 h-12 text-emerald-400 animate-fade-in" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2.5">
                 <path strokeLinecap="round" strokeLinejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
               </svg>
             ) : (
@@ -209,31 +158,13 @@ const ResumeUpload = ({ value, onChange }) => {
                 </p>
               </div>
 
-              {/* Parsing status bar */}
-              {isParsing && (
-                <div className="w-full mt-1">
-                  <div className="flex justify-between items-center text-[10px] text-secondary mb-1">
-                    <span>Parsing structure...</span>
-                    <span>{parseProgress}%</span>
-                  </div>
-                  <div className="w-full h-1.5 bg-surface rounded-full overflow-hidden">
-                    <div 
-                      className="h-full bg-accent transition-all duration-100" 
-                      style={{ width: `${parseProgress}%` }}
-                    />
-                  </div>
-                </div>
-              )}
-
-              {/* Parsed success indicator */}
-              {isParsed && (
-                <div className="flex items-center gap-1.5 text-[11px] text-emerald-400 font-semibold mt-1">
-                  <svg className="w-4 h-4 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="3">
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
-                  </svg>
-                  Metadata parsed successfully
-                </div>
-              )}
+              {/* Ready status indicator */}
+              <div className="flex items-center gap-1.5 text-[11px] text-emerald-400 font-semibold mt-1 animate-fade-in">
+                <svg className="w-4 h-4 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="3">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+                </svg>
+                Resume Attached & Ready
+              </div>
 
               <button
                 onClick={handleRemove}

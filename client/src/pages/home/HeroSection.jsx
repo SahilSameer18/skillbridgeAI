@@ -340,7 +340,7 @@ const HeroSection = ({ user }) => {
                         03 · Match Score
                       </p>
                       <div className="flex justify-center mb-4">
-                        <ScoreMeter score={88} />
+                        <ScoreMeter score={score} />
                       </div>
                       <div className="flex items-center justify-center gap-1.5 mb-4">
                         <span className="text-[10px] font-mono font-bold px-2.5 py-1 rounded-full" style={{ background: "rgba(52,211,153,0.1)", color: "#34d399", border: "1px solid rgba(52,211,153,0.2)" }}>

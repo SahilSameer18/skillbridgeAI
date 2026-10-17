@@ -57,10 +57,14 @@ const InteractiveSimulator = ({ user }) => {
     let timer;
     if (simulating && simStep >= 0 && simStep < 4) {
       timer = setTimeout(() => {
-        setSimStep((prev) => prev + 1);
+        setSimStep((prev) => {
+          const next = prev + 1;
+          if (next >= 4) {
+            setSimulating(false);
+          }
+          return next;
+        });
       }, 1200);
-    } else if (simStep === 4) {
-      setSimulating(false);
     }
     return () => clearTimeout(timer);
   }, [simulating, simStep]);

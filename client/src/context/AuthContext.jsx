@@ -18,7 +18,7 @@ export const AuthProvider = ({ children }) => {
         if (data && data.user) {
           setUser(data.user);
         }
-      } catch (error) {
+      } catch {
         // Not logged in
       } finally {
         setLoading(false);

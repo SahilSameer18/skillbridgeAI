@@ -47,7 +47,7 @@ const JobDescriptionInput = ({ value, onChange }) => {
   const extractedSkills = useMemo(() => {
     if (!debouncedValue.trim()) return [];
     return COMMON_SKILLS.filter(skill => {
-      const escapedSkill = skill.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&');
+      const escapedSkill = skill.replace(/[-/\\^$*+?.()|[\]{}]/g, '\\$&');
       const regex = new RegExp(`\\b${escapedSkill}\\b`, 'i');
       return regex.test(debouncedValue);
     });
@@ -106,7 +106,7 @@ const JobDescriptionInput = ({ value, onChange }) => {
           onFocus={() => setIsFocused(true)}
           onBlur={handleBlur}
           placeholder={`Paste the full job description details here...\ne.g. 'Senior Frontend Engineer at Google. Requires proficiency in React, TypeScript, and architectural principles...'`}
-          maxLength={5000}
+          maxLength={1200}
           className="flex-1 min-h-[280px] w-full rounded-xl p-4 text-sm text-primary/90 placeholder-secondary resize-none focus:outline-none transition-all duration-200 leading-relaxed border border-border/80 bg-background/80 no-scrollbar"
         />
       </div>
@@ -137,9 +137,25 @@ const JobDescriptionInput = ({ value, onChange }) => {
 
       {/* Character Count & Tip */}
       <div className="flex justify-between items-center text-[11px] text-secondary border-t border-border/80 pt-3">
-        <span>Tailor your resume against these specific guidelines</span>
-        <span className={`${localValue.length > 4500 ? 'text-amber-400' : 'text-secondary'} font-mono`}>
-          {localValue.length} / 5000
+        <span>
+          {localValue.trim().length > 0 && localValue.trim().length < 30 ? (
+            <span className="text-amber-400 font-medium">
+              Min 30 characters required ({30 - localValue.trim().length} more needed)
+            </span>
+          ) : (
+            <span>Tailor your resume against these specific guidelines</span>
+          )}
+        </span>
+        <span
+          className={`${
+            localValue.length >= 1200
+              ? "text-red-400 font-bold"
+              : localValue.length > 1100
+              ? "text-amber-400 font-semibold"
+              : "text-secondary"
+          } font-mono`}
+        >
+          {localValue.length} / 1200
         </span>
       </div>
     </div>

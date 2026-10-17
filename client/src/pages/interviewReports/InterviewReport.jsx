@@ -322,8 +322,11 @@ const InterviewReport = () => {
 
     if (loading || !report) return <SkeletonLoader />
 
-    const skillGaps       = report.skillGaps ?? []
-    const totalQuestions  = report.technicalQuestions.length + report.behavioralQuestions.length
+    const technicalQuestions = report.technicalQuestions ?? []
+    const behavioralQuestions = report.behavioralQuestions ?? []
+    const preparationPlan   = report.preparationPlan ?? []
+    const skillGaps         = report.skillGaps ?? []
+    const totalQuestions    = technicalQuestions.length + behavioralQuestions.length
     const scoreColor      = report.matchScore >= 80 ? '#34d399' : report.matchScore >= 60 ? '#fbbf24' : '#f87171'
     const scoreLabel      = report.matchScore >= 80 ? 'Strong Match' : report.matchScore >= 60 ? 'Moderate Match' : 'Low Match'
     const scoreLabelColor = report.matchScore >= 80 ? 'text-emerald-400' : report.matchScore >= 60 ? 'text-amber-400' : 'text-red-400'
@@ -387,7 +390,7 @@ const InterviewReport = () => {
                 </div>
                 <span className="hidden sm:inline-block w-px h-4 bg-border/80" />
                 <div className="flex items-center gap-2">
-                    <span className="text-primary font-bold text-sm sm:text-base">{report.preparationPlan.length} Days</span>
+                    <span className="text-primary font-bold text-sm sm:text-base">{preparationPlan.length} Days</span>
                     <span className="text-secondary">Preparation Plan</span>
                 </div>
                 <div className="sm:hidden ml-auto">
@@ -496,30 +499,42 @@ const InterviewReport = () => {
                     {/* Section 1: Technical Questions */}
                     {activeNav === 'technical' && (
                         <div className="space-y-3.5">
-                            {report.technicalQuestions.map((q, i) => (
-                                <QuestionCard
-                                    key={i}
-                                    item={q}
-                                    index={i}
-                                    badgeColor="bg-accent/15 text-accent border border-accent/25"
-                                    isBehavioral={false}
-                                />
-                            ))}
+                            {technicalQuestions.length > 0 ? (
+                                technicalQuestions.map((q, i) => (
+                                    <QuestionCard
+                                        key={i}
+                                        item={q}
+                                        index={i}
+                                        badgeColor="bg-accent/15 text-accent border border-accent/25"
+                                        isBehavioral={false}
+                                    />
+                                ))
+                            ) : (
+                                <div className="rounded-2xl p-8 border border-border/60 bg-surface/70 text-center">
+                                    <p className="text-sm text-secondary">No technical questions available for this report.</p>
+                                </div>
+                            )}
                         </div>
                     )}
 
                     {/* Section 2: Behavioral Questions */}
                     {activeNav === 'behavioral' && (
                         <div className="space-y-3.5">
-                            {report.behavioralQuestions.map((q, i) => (
-                                <QuestionCard
-                                    key={i}
-                                    item={q}
-                                    index={i}
-                                    badgeColor="bg-violet-500/15 text-violet-400 border border-violet-500/25"
-                                    isBehavioral={true}
-                                />
-                            ))}
+                            {behavioralQuestions.length > 0 ? (
+                                behavioralQuestions.map((q, i) => (
+                                    <QuestionCard
+                                        key={i}
+                                        item={q}
+                                        index={i}
+                                        badgeColor="bg-violet-500/15 text-violet-400 border border-violet-500/25"
+                                        isBehavioral={true}
+                                    />
+                                ))
+                            ) : (
+                                <div className="rounded-2xl p-8 border border-border/60 bg-surface/70 text-center">
+                                    <p className="text-sm text-secondary">No behavioral questions available for this report.</p>
+                                </div>
+                            )}
                         </div>
                     )}
 
@@ -545,14 +560,20 @@ const InterviewReport = () => {
                     {/* Section 4: Roadmap */}
                     {activeNav === 'roadmap' && (
                         <div className="pt-2">
-                            {report.preparationPlan.map((day, i) => (
-                                <RoadmapDay
-                                    key={day.day}
-                                    day={day}
-                                    index={i}
-                                    total={report.preparationPlan.length}
-                                />
-                            ))}
+                            {preparationPlan.length > 0 ? (
+                                preparationPlan.map((day, i) => (
+                                    <RoadmapDay
+                                        key={day.day || i}
+                                        day={day}
+                                        index={i}
+                                        total={preparationPlan.length}
+                                    />
+                                ))
+                            ) : (
+                                <div className="rounded-2xl p-8 border border-border/60 bg-surface/70 text-center">
+                                    <p className="text-sm text-secondary">No preparation plan available for this report.</p>
+                                </div>
+                            )}
                         </div>
                     )}
                 </main>

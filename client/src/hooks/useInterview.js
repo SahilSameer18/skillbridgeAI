@@ -14,22 +14,20 @@ export const useInterview = () => {
 
     const generateReport = async ({ jobDescription, resumeFile }) => {
         setLoading(true)
-        let response = null
         try {
-            response = await generateInterviewReport({ jobDescription, resumeFile })
+            const response = await generateInterviewReport({ jobDescription, resumeFile })
             if (response?.interviewReport) {
                 setReport(response.interviewReport)
                 setReports(prev => [response.interviewReport, ...prev])
                 setTotalReports(prev => prev + 1)
             }
+            return response?.interviewReport || null
         } catch (error) {
             console.error("Failed to generate report:", error)
-            return null
+            throw error
         } finally {
             setLoading(false)
         }
-
-        return response?.interviewReport || null
     }
 
     const getReportById = async (interviewId) => {
@@ -83,5 +81,3 @@ export const useInterview = () => {
     return { loading, report, reports, totalReports, generateReport, getReportById, getReports, deleteReport }
 
 }
-
-

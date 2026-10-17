@@ -1,10 +1,8 @@
 import React from 'react';
 import { Link } from 'react-router';
-import { useAuth } from '../../hooks/useAuth';
 import { FiGithub, FiLinkedin, FiInstagram, FiMail } from 'react-icons/fi';
 
 const Footer = () => {
-  const { user } = useAuth();
 
   const social = [
     { 

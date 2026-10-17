@@ -51,10 +51,12 @@ const Navbar = () => {
     return () => document.removeEventListener("mousedown", handler);
   }, [mobileMenuOpen]);
 
-  useEffect(() => {
+  const [prevPath, setPrevPath] = useState(location.pathname);
+  if (prevPath !== location.pathname) {
+    setPrevPath(location.pathname);
     setMobileMenuOpen(false);
     setUserMenuOpen(false);
-  }, [location.pathname]);
+  }
 
   const onLogoutClick = async () => {
     setUserMenuOpen(false);

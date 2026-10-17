@@ -146,7 +146,7 @@ const FEATURES = [
             { day: "Day 3", task: "OAuth Flows", active: true },
             { day: "Day 4", task: "AWS Lambda", pending: true },
             { day: "Day 5", task: "GraphQL API", pending: true },
-          ].map(({ day, task, done, active, pending }) => (
+          ].map(({ day, task, done, active }) => (
             <div
               key={day}
               className="relative rounded-xl p-3 text-center"
