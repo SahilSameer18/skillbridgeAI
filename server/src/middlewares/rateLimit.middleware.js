@@ -2,8 +2,13 @@ import rateLimit from "express-rate-limit";
 import { RedisStore } from "rate-limit-redis";
 import redis from "../lib/redis.js";
 
-const makeStore = () =>
-  new RedisStore({
+const makeStore = () => {
+  if (!redis.isReady) {
+    // When Redis is unreachable at startup, gracefully fall back to express-rate-limit's built-in MemoryStore
+    return undefined;
+  }
+
+  return new RedisStore({
     sendCommand: async (...args) => {
       try {
         if (!redis.isReady) {
@@ -11,11 +16,11 @@ const makeStore = () =>
         }
         return await redis.sendCommand(args);
       } catch (err) {
-        console.error("Rate limit Redis call failed:", err.message);
-        throw err; 
+        throw err;
       }
     },
   });
+};
 
 export const generateAiRateLimitKey = (req) => {
   // Key by authenticated user ID so proxy IP sharing does not lock out distinct users

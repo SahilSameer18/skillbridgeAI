@@ -15,8 +15,9 @@ export const AuthProvider = ({ children }) => {
     const getAndSetUser = async () => {
       try {
         const data = await getMe();
-        if (data && data.user) {
-          setUser(data.user);
+        const currentUser = data?.data?.user || data?.user;
+        if (currentUser) {
+          setUser(currentUser);
         }
       } catch {
         // Not logged in

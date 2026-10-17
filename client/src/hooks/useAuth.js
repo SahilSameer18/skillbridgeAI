@@ -27,7 +27,10 @@ export const useAuth = () => {
     setLoginLoading(true);
     try {
       const data = await login({ email, password });
-      setUser(data.user);
+      const currentUser = data?.data?.user || data?.user;
+      if (currentUser) {
+        setUser(currentUser);
+      }
       return data;
     } finally {
       setLoginLoading(false);
@@ -38,7 +41,10 @@ export const useAuth = () => {
     setRegisterLoading(true);
     try {
       const data = await register({ username, email, password });
-      setUser(data.user);
+      const currentUser = data?.data?.user || data?.user;
+      if (currentUser) {
+        setUser(currentUser);
+      }
       return data;
     } finally {
       setRegisterLoading(false);
@@ -49,8 +55,9 @@ export const useAuth = () => {
     setGoogleLoading(true);
     try {
       const data = await googleAuth({ accessToken });
-      if (data && data.user) {
-        setUser(data.user);
+      const currentUser = data?.data?.user || data?.user;
+      if (currentUser) {
+        setUser(currentUser);
       }
       return data;
     } finally {
@@ -62,8 +69,9 @@ export const useAuth = () => {
     setGoogleLoading(true);
     try {
       const data = await linkGoogle({ accessToken });
-      if (data && data.user) {
-        setUser(data.user);
+      const currentUser = data?.data?.user || data?.user;
+      if (currentUser) {
+        setUser(currentUser);
       }
       return data;
     } finally {
