@@ -7,26 +7,26 @@ import { exportReportPdf } from '../../utils/exportReportPdf.js';
 
 // ── Match Level Configuration ────────────────────────────────────────────────
 const getMatchDetails = (score) => {
-    if (!score) return { bg: "bg-surface/50", text: "text-secondary", border: "border-border/50", badgeBg: "bg-surface/60", label: "Pending" };
-    if (score >= 80) return { bg: "bg-emerald-500", text: "text-emerald-400", border: "border-emerald-500/20", badgeBg: "bg-emerald-500/10", label: "Strong Match" };
-    if (score >= 60) return { bg: "bg-amber-500", text: "text-amber-400", border: "border-amber-500/20", badgeBg: "bg-amber-500/10", label: "Good Match" };
-    return { bg: "bg-red-500", text: "text-red-400", border: "border-red-500/20", badgeBg: "bg-red-500/10", label: "Calibrating" };
+    if (!score) return { text: "text-white/40", border: "border-white/[0.08]", badgeBg: "bg-white/[0.03]", label: "Pending" };
+    if (score >= 80) return { text: "text-emerald-400", border: "border-emerald-500/25", badgeBg: "bg-emerald-500/10", label: "Strong Match" };
+    if (score >= 60) return { text: "text-amber", border: "border-amber/25", badgeBg: "bg-amber/10", label: "Good Match" };
+    return { text: "text-accent", border: "border-accent/25", badgeBg: "bg-accent/10", label: "Needs Prep" };
 };
 
 // ── Linear Progress Bar Component (Memoized) ─────────────────────────────────
 const HorizontalProgressBar = React.memo(({ score }) => {
     if (!score) return null;
-    const { bg, text } = getMatchDetails(score);
+    const { text } = getMatchDetails(score);
 
     return (
         <div className="w-full my-4 relative z-10">
             <div className="flex items-center justify-between mb-1.5">
-                <span className="text-[10px] font-bold text-secondary/60 uppercase tracking-widest font-mono">Compatibility</span>
-                <span className={`text-xs font-black font-mono ${text}`}>{score}%</span>
+                <span className="text-[10px] font-mono font-bold text-white/40 uppercase tracking-wider">Alignment Score</span>
+                <span className={`text-xs font-mono font-bold ${text}`}>{score}%</span>
             </div>
-            <div className="w-full h-2 rounded-full bg-white/[0.03] overflow-hidden border border-white/[0.01]">
+            <div className="w-full h-1.5 rounded-full bg-white/[0.06] overflow-hidden">
                 <div 
-                    className={`h-full rounded-full ${bg} transition-all duration-1000 ease-out`}
+                    className="h-full rounded-full bg-gradient-to-r from-accent to-[#FE9A00] transition-all duration-700 ease-out"
                     style={{ width: `${score}%` }}
                 />
             </div>
@@ -41,23 +41,20 @@ const ReportCard = React.memo(({ report, onNavigate, onDownloadPdf, onDelete, is
     return (
         <div
             onClick={() => onNavigate(`/interview/${report.id}`)}
-            className="group relative rounded-2xl border border-border/80 bg-surface/30 p-5 flex flex-col justify-between min-h-52 hover:border-accent/40 hover:bg-surface/65 hover:shadow-xl hover:shadow-accent/[0.02] cursor-pointer transition-all duration-300"
+            className="studio-card rounded-2xl p-5 flex flex-col justify-between min-h-56 hover:border-white/[0.2] transition-all duration-200 cursor-pointer group"
         >
-            {/* Card Ambient Glow */}
-            <div className="absolute inset-0 bg-gradient-to-br from-accent/5 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
-
             {/* Card Header (Title & Status Tag) */}
             <div className="flex items-start justify-between gap-3 relative z-10">
                 <div className="min-w-0 flex-1">
-                    <h3 className="font-bold text-primary text-base leading-snug group-hover:text-accent transition-colors duration-200 truncate" title={report.title || 'Custom Interview Plan'}>
+                    <h3 className="font-bold text-white text-base leading-snug group-hover:text-accent transition-colors duration-200 truncate" title={report.title || 'Custom Interview Plan'}>
                         {report.title || 'Custom Interview Plan'}
                     </h3>
-                    <p className="text-[10px] text-secondary/70 mt-1 font-mono">
-                        Audited {new Date(report.createdAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}
+                    <p className="text-[11px] text-white/40 mt-1 font-mono">
+                        {new Date(report.createdAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
                     </p>
                 </div>
                 {report.matchScore && (
-                    <span className={`shrink-0 text-[9px] font-bold px-2 py-0.5 rounded border uppercase tracking-wider ${text} ${border} ${badgeBg}`}>
+                    <span className={`shrink-0 text-[10px] font-mono font-bold px-2 py-0.5 rounded border uppercase tracking-wider ${text} ${border} ${badgeBg}`}>
                         {label}
                     </span>
                 )}
@@ -67,17 +64,17 @@ const ReportCard = React.memo(({ report, onNavigate, onDownloadPdf, onDelete, is
             <HorizontalProgressBar score={report.matchScore} />
 
             {/* Description Snippet */}
-            <p className="text-xs text-secondary/75 leading-relaxed flex-grow mt-1.5 line-clamp-2 relative z-10" style={{ display: '-webkit-box', WebkitLineClamp: '2', WebkitBoxOrient: 'vertical', overflow: 'hidden' }}>
+            <p className="text-xs text-secondary/70 leading-relaxed flex-grow mt-1 line-clamp-2 font-normal" style={{ display: '-webkit-box', WebkitLineClamp: '2', WebkitBoxOrient: 'vertical', overflow: 'hidden' }}>
                 {report.jobDescription || "Custom target interview analysis details."}
             </p>
 
             {/* Card Footer Actions */}
-            <div className="flex items-center justify-between mt-4 pt-3 border-t border-border/40 relative z-10" onClick={(e) => e.stopPropagation()}>
+            <div className="flex items-center justify-between mt-4 pt-3 border-t border-white/[0.06] relative z-10" onClick={(e) => e.stopPropagation()}>
                 <button
                     onClick={() => onNavigate(`/interview/${report.id}`)}
-                    className="text-xs font-bold text-primary flex items-center gap-1 group/btn hover:text-accent transition-colors cursor-pointer"
+                    className="text-xs font-semibold text-white/90 flex items-center gap-1 group/btn hover:text-accent transition-colors cursor-pointer"
                 >
-                    View Strategy
+                    <span>View Dossier</span>
                     <FiArrowRight className="w-3.5 h-3.5 group-hover/btn:translate-x-0.5 transition-transform duration-200" />
                 </button>
 
@@ -86,11 +83,11 @@ const ReportCard = React.memo(({ report, onNavigate, onDownloadPdf, onDelete, is
                     <button
                         onClick={(e) => onDownloadPdf(e, report)}
                         disabled={isDownloading}
-                        title="Quick Export PDF"
-                        className="w-8 h-8 rounded-lg flex items-center justify-center bg-surface hover:bg-accent/15 border border-border/80 text-secondary hover:text-accent hover:border-accent/20 transition-all duration-200 disabled:opacity-50 cursor-pointer"
+                        title="Download PDF"
+                        className="w-8 h-8 rounded-lg flex items-center justify-center bg-[#08080A] hover:bg-white/[0.06] border border-white/[0.08] text-white/50 hover:text-white transition-all duration-200 disabled:opacity-50 cursor-pointer"
                     >
                         {isDownloading ? (
-                            <span className="w-3.5 h-3.5 border-2 border-accent/20 border-t-accent rounded-full animate-spin" />
+                            <span className="w-3.5 h-3.5 border-2 border-white/20 border-t-accent rounded-full animate-spin" />
                         ) : (
                             <FiDownload className="w-4 h-4" />
                         )}
@@ -101,7 +98,7 @@ const ReportCard = React.memo(({ report, onNavigate, onDownloadPdf, onDelete, is
                         onClick={(e) => onDelete(e, report.id)}
                         disabled={isDeleting}
                         title="Delete plan"
-                        className="w-8 h-8 rounded-lg flex items-center justify-center bg-surface hover:bg-red-500/15 border border-border/80 text-secondary hover:text-red-400 hover:border-red-500/20 transition-all duration-200 disabled:opacity-50 cursor-pointer"
+                        className="w-8 h-8 rounded-lg flex items-center justify-center bg-[#08080A] hover:bg-red-500/15 border border-white/[0.08] text-white/50 hover:text-red-400 hover:border-red-500/25 transition-all duration-200 disabled:opacity-50 cursor-pointer"
                     >
                         {isDeleting ? (
                             <span className="w-3.5 h-3.5 border-2 border-red-500/30 border-t-red-400 rounded-full animate-spin" />
@@ -117,8 +114,7 @@ const ReportCard = React.memo(({ report, onNavigate, onDownloadPdf, onDelete, is
 
 // ── Skeleton Loader Card ─────────────────────────────────────────────────────
 const SkeletonCard = () => (
-    <div className="rounded-2xl p-5 border border-border/60 bg-surface/20 flex flex-col justify-between h-52 transition-all duration-300">
-        {/* Header */}
+    <div className="studio-card rounded-2xl p-5 flex flex-col justify-between h-56">
         <div className="flex items-start justify-between gap-3">
             <div className="flex-grow space-y-2">
                 <Skeleton width="65%" height="1.1rem" />
@@ -126,24 +122,14 @@ const SkeletonCard = () => (
             </div>
             <Skeleton width="70px" height="1.15rem" borderRadius="4px" />
         </div>
-        
-        {/* Progress Bar Widget Skeleton */}
         <div className="w-full my-4">
-            <div className="flex justify-between mb-1.5">
-                <Skeleton width="30%" height="0.5rem" />
-                <Skeleton width="12%" height="0.5rem" />
-            </div>
             <Skeleton width="100%" height="0.5rem" borderRadius="999px" />
         </div>
-
-        {/* Description Snippet Skeleton */}
         <div className="space-y-1.5 flex-grow">
             <Skeleton width="100%" height="0.4rem" />
             <Skeleton width="75%" height="0.4rem" />
         </div>
-
-        {/* Footer */}
-        <div className="flex items-center justify-between mt-4 pt-3 border-t border-border/30">
+        <div className="flex items-center justify-between mt-4 pt-3 border-t border-white/[0.06]">
             <Skeleton width="80px" height="1.5rem" borderRadius="6px" />
             <div className="flex gap-2">
                 <Skeleton width="32px" height="32px" borderRadius="8px" />
@@ -155,26 +141,22 @@ const SkeletonCard = () => (
 
 // ── Premium Empty State ──────────────────────────────────────────────────────
 const EmptyState = ({ onNavigate }) => (
-    <div className="flex flex-col items-center justify-center py-20 px-6 text-center bg-surface/10 rounded-3xl border border-dashed border-border/80 mt-6 relative overflow-hidden">
-        {/* Glow background decoration */}
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-80 h-80 bg-accent/5 rounded-full blur-[100px] pointer-events-none" />
-        
-        <div className="w-14 h-14 rounded-2xl bg-white/[0.02] border border-white/[0.05] flex items-center justify-center text-accent mb-6 shadow-inner relative z-10">
-            <svg xmlns="http://www.w3.org/2000/svg" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+    <div className="studio-card rounded-3xl p-10 sm:p-16 text-center mt-6 flex flex-col items-center justify-center">
+        <div className="w-14 h-14 rounded-2xl studio-well flex items-center justify-center text-accent mb-6 shadow-inner">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                 <path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/>
                 <polyline points="14 2 14 8 20 8"/>
                 <line x1="8" y1="13" x2="16" y2="13"/>
                 <line x1="8" y1="17" x2="16" y2="17"/>
-                <line x1="8" y1="9" x2="10" y2="9"/>
             </svg>
         </div>
-        <h3 className="text-xl font-bold text-primary mb-2 relative z-10">Generate Preparation Plans</h3>
-        <p className="text-sm text-secondary/80 max-w-sm mx-auto mb-8 leading-relaxed relative z-10">
-            Upload your resume alongside a target job description to build standard questions, skill gap resource charts, and multi-day schedules.
+        <h3 className="text-xl font-bold text-white mb-2">No Interview Plans Yet</h3>
+        <p className="text-sm text-secondary/70 max-w-sm mx-auto mb-8 leading-relaxed font-normal">
+            Upload your resume alongside a target job description to generate tailored questions, skill gap charts, and preparation schedules.
         </p>
         <button
             onClick={onNavigate}
-            className="px-6 py-3 rounded-2xl text-sm font-bold text-primary bg-accent hover:opacity-90 active:scale-95 transition-all duration-200 shadow-[0_4px_20px_rgba(255,102,98,0.25)] relative z-10"
+            className="studio-btn-primary px-6 py-3 rounded-xl text-sm font-bold text-white cursor-pointer"
         >
             Create Your First Plan
         </button>
@@ -259,59 +241,55 @@ const Dashboard = () => {
     const hasMore = reports.length < totalReports;
 
     return (
-        <div className="w-full max-w-6xl mx-auto px-4 sm:px-6 py-10">
+        <div className="w-full max-w-6xl mx-auto px-4 sm:px-6 py-8 font-sans">
 
             {/* ── Page Header ── */}
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-10">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8">
                 <div>
-                    <h1 className="text-3xl font-extrabold text-primary mb-1.5 tracking-tight">
-                        My Preparation Console
+                    <h1 className="text-2xl sm:text-3xl font-extrabold text-white tracking-tight mb-1">
+                        Preparation Workspace
                     </h1>
-                    <p className="text-secondary text-sm">
-                        {isInitialLoading ? 'Syncing...' : `Managing ${totalReports} calibrated job profiles`}
+                    <p className="text-secondary/70 text-xs sm:text-sm font-normal">
+                        {isInitialLoading ? 'Syncing reports...' : `Managing ${totalReports} saved preparation dossiers`}
                     </p>
                 </div>
-                {!isInitialLoading && reports.length > 0 && (
+                {!isInitialLoading && (
                     <button
                         onClick={() => navigate('/generate')}
-                        className="flex items-center gap-2 px-5 py-3 rounded-2xl text-sm font-bold text-primary bg-accent hover:opacity-90 active:scale-95 transition-all duration-200 shadow-[0_4px_20px_rgba(255,102,98,0.2)] cursor-pointer"
+                        className="studio-btn-primary flex items-center gap-2 px-5 py-2.5 rounded-xl text-xs sm:text-sm font-bold text-white cursor-pointer self-start sm:self-auto"
                     >
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
                             <line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>
                         </svg>
-                        New Plan
+                        <span>New Analysis</span>
                     </button>
                 )}
             </div>
 
             {/* ── Stats Summary Grid ── */}
             {!isInitialLoading && reports.length > 0 && (
-                <div className="grid grid-cols-1 sm:grid-cols-3 gap-5 mb-8">
-                    {/* Stat 1 */}
-                    <div className="rounded-2xl p-5 bg-surface/30 border border-border/60 flex flex-col justify-between min-h-[110px] relative overflow-hidden group hover:border-border transition-colors duration-200">
-                        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-40 h-40 bg-accent/5 rounded-full blur-[40px] pointer-events-none" />
-                        <span className="text-[10px] font-bold text-secondary uppercase tracking-widest">Total Audited</span>
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-8">
+                    <div className="studio-card p-5 rounded-2xl flex flex-col justify-between min-h-[105px]">
+                        <span className="text-[10px] font-mono font-bold text-white/40 uppercase tracking-widest">Total Saved Plans</span>
                         <div className="flex items-baseline gap-2 mt-2">
-                            <span className="text-4xl font-extrabold text-primary leading-none">{totalReports}</span>
-                            <span className="text-xs text-secondary/80 font-medium">roles</span>
+                            <span className="text-3xl sm:text-4xl font-extrabold text-white font-mono leading-none">{totalReports}</span>
+                            <span className="text-xs text-white/40 font-mono">plans</span>
                         </div>
                     </div>
-                    {/* Stat 2 */}
-                    <div className="rounded-2xl p-5 bg-surface/30 border border-border/60 flex flex-col justify-between min-h-[110px] relative overflow-hidden group hover:border-border transition-colors duration-200">
-                        <span className="text-[10px] font-bold text-secondary uppercase tracking-widest">Avg Match Compatibility</span>
+                    <div className="studio-card p-5 rounded-2xl flex flex-col justify-between min-h-[105px]">
+                        <span className="text-[10px] font-mono font-bold text-white/40 uppercase tracking-widest">Avg Compatibility</span>
                         <div className="flex items-baseline gap-2 mt-2">
-                            <span className="text-4xl font-extrabold text-primary leading-none" style={{ color: avgScore >= 80 ? '#34d399' : avgScore >= 60 ? '#fbbf24' : '#f87171' }}>
+                            <span className="text-3xl sm:text-4xl font-extrabold text-white font-mono leading-none" style={{ color: avgScore >= 80 ? '#34d399' : avgScore >= 60 ? '#FE9A00' : '#FF6662' }}>
                                 {avgScore}%
                             </span>
-                            <span className="text-xs text-secondary/80 font-medium">strength</span>
+                            <span className="text-xs text-white/40 font-mono">average</span>
                         </div>
                     </div>
-                    {/* Stat 3 */}
-                    <div className="rounded-2xl p-5 bg-surface/30 border border-border/60 flex flex-col justify-between min-h-[110px] relative overflow-hidden group hover:border-border transition-colors duration-200">
-                        <span className="text-[10px] font-bold text-secondary uppercase tracking-widest">Strong Alignments (≥80%)</span>
+                    <div className="studio-card p-5 rounded-2xl flex flex-col justify-between min-h-[105px]">
+                        <span className="text-[10px] font-mono font-bold text-white/40 uppercase tracking-widest">High Matches (≥80%)</span>
                         <div className="flex items-baseline gap-2 mt-2">
-                            <span className="text-4xl font-extrabold text-emerald-400 leading-none">{highMatches}</span>
-                            <span className="text-xs text-secondary/80 font-medium">matching</span>
+                            <span className="text-3xl sm:text-4xl font-extrabold text-emerald-400 font-mono leading-none">{highMatches}</span>
+                            <span className="text-xs text-white/40 font-mono">roles</span>
                         </div>
                     </div>
                 </div>
@@ -319,23 +297,23 @@ const Dashboard = () => {
 
             {/* ── Search & Filters Console Bar ── */}
             {!isInitialLoading && reports.length > 0 && (
-                <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 p-4 rounded-2xl border border-border bg-surface/20 mb-8">
+                <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 p-3.5 sm:p-4 rounded-2xl studio-card mb-8">
                     {/* Search Field */}
                     <div className="relative flex-1 max-w-md">
-                        <div className="absolute left-4 top-1/2 -translate-y-1/2 flex items-center">
-                            <FiSearch className="text-secondary/50 w-5 h-5" />
+                        <div className="absolute left-3.5 top-1/2 -translate-y-1/2 flex items-center text-white/30">
+                            <FiSearch className="w-4 h-4" />
                         </div>
                         <input
                             type="text"
-                            placeholder="Search by job title or description..."
+                            placeholder="Search by role or company..."
                             value={searchTerm}
                             onChange={(e) => setSearchTerm(e.target.value)}
-                            className="w-full pl-11 pr-10 py-2.5 bg-surface/40 border border-white/[0.06] rounded-xl text-sm text-primary placeholder-secondary/40 focus:outline-none focus:ring-4 focus:ring-accent/10 focus:border-accent/60 transition-all duration-300"
+                            className="w-full pl-10 pr-9 py-2.5 bg-[#040405] border border-white/[0.08] rounded-xl text-xs sm:text-sm text-white placeholder-white/20 focus:outline-none focus:border-accent/60 transition-colors"
                         />
                         {searchTerm && (
                             <button
                                 onClick={() => setSearchTerm("")}
-                                className="absolute right-4 top-1/2 -translate-y-1/2 text-secondary/55 hover:text-primary transition-colors cursor-pointer"
+                                className="absolute right-3.5 top-1/2 -translate-y-1/2 text-white/40 hover:text-white transition-colors cursor-pointer"
                             >
                                 <FiX className="w-4 h-4" />
                             </button>
@@ -345,18 +323,18 @@ const Dashboard = () => {
                     {/* Filter Pills */}
                     <div className="flex flex-wrap items-center gap-1.5 overflow-x-auto no-scrollbar">
                         {[
-                            { id: "all", label: "All Cases" },
+                            { id: "all", label: "All Plans" },
                             { id: "strong", label: "Strong (80%+)" },
-                            { id: "medium", label: "Mid (60-79%)" },
-                            { id: "low", label: "Calibration (<60%)" }
+                            { id: "medium", label: "Moderate (60-79%)" },
+                            { id: "low", label: "Needs Prep (<60%)" }
                         ].map((pill) => (
                             <button
                                 key={pill.id}
                                 onClick={() => setFilterTier(pill.id)}
-                                className={`px-4 py-2 text-xs font-semibold rounded-xl border transition-all duration-200 cursor-pointer ${
+                                className={`px-3 py-1.5 text-xs font-mono font-medium rounded-lg transition-all duration-200 cursor-pointer ${
                                     filterTier === pill.id
-                                        ? "bg-accent/15 border-accent text-accent"
-                                        : "bg-surface/30 border-white/[0.06] text-secondary hover:bg-surface/70 hover:text-primary"
+                                        ? "bg-accent/15 border border-accent/40 text-white"
+                                        : "studio-well text-white/60 hover:text-white border border-transparent"
                                 }`}
                             >
                                 {pill.label}
@@ -368,7 +346,7 @@ const Dashboard = () => {
 
             {/* ── Grid Skeletons ── */}
             {isInitialLoading && (
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
                     {[...Array(6)].map((_, i) => <SkeletonCard key={i} />)}
                 </div>
             )}
@@ -382,7 +360,7 @@ const Dashboard = () => {
             {!isInitialLoading && reports.length > 0 && (
                 <>
                     {filteredReports.length > 0 ? (
-                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 animate-fade-in-up">
+                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 animate-fade-in">
                             {filteredReports.map((report) => (
                                 <ReportCard
                                     key={report.id}
@@ -396,13 +374,13 @@ const Dashboard = () => {
                             ))}
                         </div>
                     ) : (
-                        <div className="flex flex-col items-center justify-center py-16 text-center bg-surface/5 border border-border/50 rounded-2xl mt-4">
-                            <span className="text-secondary/40 text-sm">No results match your search and filter criteria.</span>
+                        <div className="flex flex-col items-center justify-center py-16 text-center studio-card rounded-2xl mt-4">
+                            <span className="text-white/40 text-sm font-mono">No plans match your search and filter criteria.</span>
                             <button
                                 onClick={() => { setSearchTerm(""); setFilterTier("all"); }}
-                                className="text-xs font-semibold text-accent mt-3 hover:underline cursor-pointer"
+                                className="text-xs font-mono font-semibold text-accent mt-3 hover:underline cursor-pointer"
                             >
-                                Reset Search Filters
+                                Reset Filters
                             </button>
                         </div>
                     )}
@@ -413,7 +391,7 @@ const Dashboard = () => {
                             <button
                                 onClick={handleLoadMore}
                                 disabled={isFetching}
-                                className="px-6 py-2.5 rounded-2xl text-xs font-bold text-primary bg-surface/50 border border-border hover:bg-surface/80 transition-all duration-200 flex items-center gap-2 shadow-sm cursor-pointer active:scale-95"
+                                className="studio-btn-secondary px-6 py-2.5 rounded-xl text-xs font-mono font-bold text-white transition-all duration-200 flex items-center gap-2 cursor-pointer"
                             >
                                 {isFetching ? 'Loading...' : 'Load More Plans'}
                             </button>
@@ -426,6 +404,3 @@ const Dashboard = () => {
 };
 
 export default Dashboard;
-
-
-

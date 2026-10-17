@@ -3,34 +3,46 @@ import React, { useState } from "react";
 const FEATURES = [
   {
     id: "jd-match",
-    title: "JD Keyword Alignment",
-    tag: "Match Engine",
-    desc: "Scans your credentials against job prerequisites, extracts matching stacks, and highlights missing terms with severity rankings.",
-    color: "#ff6662",
+    title: "Keyword & Vector Alignment",
+    tag: "MATCH ENGINE",
+    desc: "Scans your credentials against job prerequisites, correlates stack competencies, and highlights missing terms with severity rankings.",
+    color: "#FF6662",
     span: "md:col-span-2",
     icon: (
-      <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-        <circle cx="11" cy="11" r="8" /><path d="m21 21-4.3-4.3" /><path d="M8 11h6" /><path d="M11 8v6" />
+      <svg className="w-5 h-5 text-accent" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+        <circle cx="11" cy="11" r="8" />
+        <path d="m21 21-4.3-4.3" />
+        <path d="M8 11h6" />
+        <path d="M11 8v6" />
       </svg>
     ),
     visual: (
-      <div className="mt-5 rounded-2xl overflow-hidden" style={{ background: "rgba(255,255,255,0.02)", border: "1px solid rgba(255,255,255,0.06)" }}>
-        <div className="flex justify-between px-4 py-2 border-b text-[10px] font-mono font-bold uppercase tracking-wider" style={{ borderColor: "rgba(255,255,255,0.06)", color: "rgba(255,255,255,0.3)" }}>
-          <span>Requirement</span><span>Status</span>
+      <div className="mt-5 studio-well rounded-xl overflow-hidden border border-white/[0.08]">
+        <div className="flex justify-between px-4 py-2.5 border-b border-white/[0.06] text-[10px] font-mono font-bold uppercase tracking-wider text-white/40">
+          <span>Requirement Competency</span>
+          <span>Verification Status</span>
         </div>
         {[
-          { skill: "React (Next.js)", status: "match" },
-          { skill: "TypeScript Typing", status: "match" },
-          { skill: "GraphQL Core", status: "gap" },
-          { skill: "AWS Lambda", status: "partial" },
+          { skill: "Distributed Systems & Raft", status: "match" },
+          { skill: "High-Throughput Redis Caching", status: "match" },
+          { skill: "GraphQL Federation & Gateway", status: "gap" },
+          { skill: "Zero-Downtime Data Migration", status: "partial" },
         ].map(({ skill, status }) => (
-          <div key={skill} className="flex items-center justify-between px-4 py-2.5 border-b last:border-b-0" style={{ borderColor: "rgba(255,255,255,0.04)" }}>
-            <span className="text-xs font-mono" style={{ color: "rgba(255,255,255,0.65)" }}>{skill}</span>
-            <span className="text-[10px] font-bold px-2 py-0.5 rounded-full" style={{
-              background: status === "match" ? "rgba(52,211,153,0.1)" : status === "gap" ? "rgba(248,113,113,0.1)" : "rgba(251,191,36,0.1)",
-              color: status === "match" ? "#34d399" : status === "gap" ? "#f87171" : "#fbbf24",
-            }}>
-              {status === "match" ? "✓ Match" : status === "gap" ? "✗ Gap" : "~ Partial"}
+          <div
+            key={skill}
+            className="flex items-center justify-between px-4 py-2.5 border-b border-white/[0.04] last:border-b-0"
+          >
+            <span className="text-xs font-mono text-white/80">{skill}</span>
+            <span
+              className={`text-[10px] font-mono font-bold px-2 py-0.5 rounded ${
+                status === "match"
+                  ? "bg-emerald-500/10 text-emerald-400 border border-emerald-500/20"
+                  : status === "gap"
+                  ? "bg-accent/10 text-accent border border-accent/20"
+                  : "bg-amber/10 text-amber border border-amber/20"
+              }`}
+            >
+              {status === "match" ? "✓ Verified Match" : status === "gap" ? "✗ Priority Gap" : "~ Partial Coverage"}
             </span>
           </div>
         ))}
@@ -39,57 +51,65 @@ const FEATURES = [
   },
   {
     id: "practice-banks",
-    title: "Practice Banks",
-    tag: "Interview Prep",
-    desc: "Tailored technical & behavioral questions with expert model answers, specific to your target role.",
-    color: "#818cf8",
+    title: "Scenario Question Banks",
+    tag: "INTERVIEW REASONING",
+    desc: "Tailored technical and architectural questions with expected evaluator answers calibrated for your target role.",
+    color: "#FE9A00",
     span: "md:col-span-1",
     icon: (
-      <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <svg className="w-5 h-5 text-amber" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
         <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
       </svg>
     ),
     visual: (
-      <div className="mt-5 rounded-2xl p-4" style={{ background: "rgba(129,140,248,0.06)", border: "1px solid rgba(129,140,248,0.15)" }}>
-        <p className="text-[9px] font-bold font-mono uppercase tracking-widest mb-2" style={{ color: "#818cf8" }}>Technical Round</p>
-        <p className="text-xs leading-relaxed" style={{ color: "rgba(255,255,255,0.7)" }}>
-          "Explain how React 19 handles Server Actions and pending states..."
+      <div className="mt-5 studio-well rounded-xl p-4 border border-white/[0.08] space-y-2.5">
+        <div className="flex items-center justify-between text-[10px] font-mono text-amber">
+          <span>SYSTEM ARCHITECTURE</span>
+          <span className="text-white/40">STAFF LEVEL</span>
+        </div>
+        <p className="text-xs font-medium text-white/90 leading-relaxed">
+          "How would you eliminate single-point-of-failure bottlenecks in a multi-region leader election scheme?"
         </p>
-        <div className="mt-3 flex items-center gap-1.5">
-          <div className="flex-1 h-1 rounded-full" style={{ background: "rgba(129,140,248,0.15)" }}>
-            <div className="h-1 rounded-full w-3/4" style={{ background: "#818cf8" }} />
-          </div>
-          <span className="text-[9px] font-mono" style={{ color: "rgba(255,255,255,0.3)" }}>Expert</span>
+        <div className="pt-2 flex items-center justify-between text-[10px] font-mono text-white/40 border-t border-white/[0.06]">
+          <span>EVALUATION: DEEP DIVE</span>
+          <span className="text-emerald-400">94% CONFIDENCE</span>
         </div>
       </div>
     ),
   },
   {
     id: "gap-audit",
-    title: "Priority Gap Auditing",
-    tag: "Severity Engine",
-    desc: "Categorizes missing skills into High, Medium, and Low priorities so you know exactly what to tackle first.",
-    color: "#fbbf24",
+    title: "Severity Gap Diagnostics",
+    tag: "PRIORITY ENGINE",
+    desc: "Categorizes missing capabilities into High, Medium, and Low severity tiers so you eliminate dealbreakers first.",
+    color: "#FF6662",
     span: "md:col-span-1",
     icon: (
-      <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-        <path d="M12 9v4" /><path d="M12 17h.01" /><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z" />
+      <svg className="w-5 h-5 text-accent" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+        <path d="M12 9v4" />
+        <path d="M12 17h.01" />
+        <path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z" />
       </svg>
     ),
     visual: (
-      <div className="mt-5 flex flex-col gap-2">
+      <div className="mt-5 space-y-2">
         {[
-          { label: "Docker Containerization", level: "HIGH", color: "#f87171", bg: "rgba(248,113,113,0.08)", border: "rgba(248,113,113,0.2)", bar: 90 },
-          { label: "Redis Caching", level: "MED", color: "#fbbf24", bg: "rgba(251,191,36,0.08)", border: "rgba(251,191,36,0.2)", bar: 55 },
-          { label: "CI/CD Pipelines", level: "LOW", color: "#34d399", bg: "rgba(52,211,153,0.08)", border: "rgba(52,211,153,0.2)", bar: 25 },
-        ].map(({ label, level, color, bg, border, bar }) => (
-          <div key={label} className="rounded-xl px-3 py-2.5" style={{ background: bg, border: `1px solid ${border}` }}>
-            <div className="flex items-center justify-between mb-1.5">
-              <span className="text-[11px] font-mono" style={{ color: "rgba(255,255,255,0.7)" }}>{label}</span>
-              <span className="text-[9px] font-bold px-1.5 py-0.5 rounded font-mono" style={{ color, background: `${color}15` }}>{level}</span>
+          { label: "Distributed Consensus (Raft)", level: "CRITICAL", color: "#FF6662", bar: "88%" },
+          { label: "Redis Cluster Sharding", level: "HIGH", color: "#FE9A00", bar: "62%" },
+          { label: "CI/CD Deployment Pipelines", level: "LOW", color: "#34D399", bar: "28%" },
+        ].map((item) => (
+          <div key={item.label} className="studio-well p-2.5 rounded-xl border border-white/[0.06] space-y-1.5">
+            <div className="flex items-center justify-between text-[10px] font-mono">
+              <span className="text-white/80">{item.label}</span>
+              <span className="font-bold" style={{ color: item.color }}>
+                {item.level}
+              </span>
             </div>
-            <div className="h-1 rounded-full" style={{ background: "rgba(255,255,255,0.05)" }}>
-              <div className="h-1 rounded-full transition-all duration-700" style={{ width: `${bar}%`, background: color }} />
+            <div className="h-1 rounded-full bg-white/[0.06] overflow-hidden">
+              <div
+                className="h-full rounded-full transition-all duration-700"
+                style={{ width: item.bar, background: item.color }}
+              />
             </div>
           </div>
         ))}
@@ -98,28 +118,34 @@ const FEATURES = [
   },
   {
     id: "learning",
-    title: "Curated Learning Paths",
-    tag: "Knowledge Base",
-    desc: "Each identified gap links to pre-verified documentation, tutorial videos, and hands-on exercises.",
-    color: "#34d399",
+    title: "Curated Reference Knowledge",
+    tag: "CURATED PATHS",
+    desc: "Every flagged gap links to verified engineering specifications, official RFCs, and high-impact design papers.",
+    color: "#34D399",
     span: "md:col-span-2",
     icon: (
-      <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-        <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z" /><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z" />
+      <svg className="w-5 h-5 text-emerald-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+        <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z" />
+        <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z" />
       </svg>
     ),
     visual: (
-      <div className="mt-5 grid grid-cols-2 gap-3">
+      <div className="mt-5 grid grid-cols-1 sm:grid-cols-2 gap-2.5">
         {[
-          { type: "Documentation", title: "Official Next.js Docs", color: "#34d399", icon: "📄" },
-          { type: "Video Tutorial", title: "Advanced App Router", color: "#ff6662", icon: "▶" },
-          { type: "Exercise", title: "GraphQL Playground", color: "#818cf8", icon: "⚡" },
-          { type: "Cheatsheet", title: "Docker Quick Ref", color: "#fbbf24", icon: "📋" },
-        ].map(({ type, title, color, icon }) => (
-          <div key={title} className="rounded-xl p-3 flex flex-col gap-1.5 transition-all duration-300 hover:scale-[1.02]" style={{ background: `${color}08`, border: `1px solid ${color}18` }}>
-            <span className="text-base">{icon}</span>
-            <span className="text-[9px] font-bold uppercase tracking-wider font-mono" style={{ color: `${color}90` }}>{type}</span>
-            <span className="text-xs font-semibold leading-tight" style={{ color: "rgba(255,255,255,0.75)" }}>{title}</span>
+          { type: "ENGINEERING SPEC", title: "Raft Consensus Algorithm RFC", source: "Stanford Paper" },
+          { type: "SYSTEM DESIGN", title: "Distributed Caching At Scale", source: "Stripe Eng Blog" },
+          { type: "ARCHITECTURE", title: "Event Sourcing & CQRS Patterns", source: "Microsoft Docs" },
+          { type: "BENCHMARK GUIDE", title: "Kernel Bypass & Network IO", source: "Cloudflare Whitepaper" },
+        ].map((item) => (
+          <div
+            key={item.title}
+            className="studio-well p-3 rounded-xl border border-white/[0.06] hover:border-white/[0.14] transition-colors"
+          >
+            <span className="text-[9px] font-mono text-accent uppercase tracking-wider block mb-1">
+              {item.type}
+            </span>
+            <span className="text-xs font-semibold text-white/90 block truncate">{item.title}</span>
+            <span className="text-[10px] font-mono text-white/40 block mt-0.5">{item.source}</span>
           </div>
         ))}
       </div>
@@ -127,48 +153,51 @@ const FEATURES = [
   },
   {
     id: "roadmap",
-    title: "10-Day Preparation Roadmap",
-    tag: "Structured Plan",
-    desc: "A day-by-day layout that walks you through closing gaps, building mock answers, and reinforcing core concepts before interview day.",
-    color: "#c084fc",
+    title: "10-Day Milestone Execution Roadmap",
+    tag: "EXECUTION PLAN",
+    desc: "A structured, day-by-day flight plan that walks you through closing gaps, practicing system designs, and locking in offers.",
+    color: "#FE9A00",
     span: "md:col-span-3",
     icon: (
-      <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-        <circle cx="12" cy="12" r="10" /><path d="m9 12 2 2 4-4" />
+      <svg className="w-5 h-5 text-amber" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+        <circle cx="12" cy="12" r="10" />
+        <path d="m9 12 2 2 4-4" />
       </svg>
     ),
     visual: (
-      <div className="mt-5">
-        <div className="grid grid-cols-2 sm:grid-cols-5 gap-2">
+      <div className="mt-5 space-y-4">
+        <div className="grid grid-cols-2 sm:grid-cols-5 gap-2.5">
           {[
-            { day: "Day 1", task: "Setup Docker", done: true },
-            { day: "Day 2", task: "Cache Locks", done: true },
-            { day: "Day 3", task: "OAuth Flows", active: true },
-            { day: "Day 4", task: "AWS Lambda", pending: true },
-            { day: "Day 5", task: "GraphQL API", pending: true },
-          ].map(({ day, task, done, active }) => (
+            { day: "Day 01", task: "Raft Consensus", status: "VERIFIED", done: true },
+            { day: "Day 02", task: "Redis Lua Locks", status: "VERIFIED", done: true },
+            { day: "Day 03", task: "Multi-Region Sharding", status: "IN PROGRESS", active: true },
+            { day: "Day 04", task: "Saga Rollbacks", status: "SCHEDULED", pending: true },
+            { day: "Day 05", task: "Executive Mock", status: "SCHEDULED", pending: true },
+          ].map((item) => (
             <div
-              key={day}
-              className="relative rounded-xl p-3 text-center"
-              style={{
-                background: done ? "rgba(52,211,153,0.06)" : active ? "rgba(192,132,252,0.08)" : "rgba(255,255,255,0.02)",
-                border: `1px solid ${done ? "rgba(52,211,153,0.2)" : active ? "rgba(192,132,252,0.25)" : "rgba(255,255,255,0.06)"}`,
-              }}
+              key={item.day}
+              className={`p-3 rounded-xl text-center border transition-all ${
+                item.done
+                  ? "bg-emerald-500/[0.05] border-emerald-500/20 text-emerald-400"
+                  : item.active
+                  ? "bg-accent/[0.08] border-accent/30 text-accent shadow-[0_0_15px_rgba(255,102,98,0.15)]"
+                  : "bg-white/[0.02] border-white/[0.06] text-white/40"
+              }`}
             >
-              {active && (
-                <span className="absolute -top-1.5 left-1/2 -translate-x-1/2 text-[8px] font-bold font-mono px-2 py-0.5 rounded-full" style={{ background: "#c084fc", color: "#000" }}>ACTIVE</span>
-              )}
-              <p className="text-[9px] font-mono font-bold uppercase tracking-wider mb-1" style={{ color: done ? "#34d399" : active ? "#c084fc" : "rgba(255,255,255,0.2)" }}>{day}</p>
-              <p className="text-xs font-semibold" style={{ color: done ? "rgba(52,211,153,0.9)" : active ? "rgba(255,255,255,0.85)" : "rgba(255,255,255,0.3)" }}>{task}</p>
-              <span className="text-sm">{done ? "✓" : active ? "▸" : "○"}</span>
+              <span className="text-[10px] font-mono font-bold block mb-1">{item.day}</span>
+              <p className="text-xs font-semibold text-white/90 truncate mb-1">{item.task}</p>
+              <span className="text-[9px] font-mono tracking-wider block">
+                {item.done ? "✓ COMPLETE" : item.active ? "● ACTIVE" : "○ QUEUED"}
+              </span>
             </div>
           ))}
         </div>
-        <div className="mt-3 flex items-center gap-2">
-          <div className="flex-1 h-1.5 rounded-full overflow-hidden" style={{ background: "rgba(255,255,255,0.05)" }}>
-            <div className="h-full rounded-full" style={{ width: "30%", background: "linear-gradient(90deg, #34d399, #c084fc)" }} />
+
+        <div className="flex items-center gap-3 studio-well p-3 rounded-xl border border-white/[0.06]">
+          <div className="flex-1 h-1.5 rounded-full bg-white/[0.06] overflow-hidden">
+            <div className="h-full rounded-full bg-gradient-to-r from-accent to-[#FE9A00] w-[40%]" />
           </div>
-          <span className="text-[10px] font-mono" style={{ color: "rgba(255,255,255,0.3)" }}>Day 3 / 10 — 30% Complete</span>
+          <span className="text-xs font-mono text-white/50 shrink-0">MILESTONE 03 / 10 · 40% PACING</span>
         </div>
       </div>
     ),
@@ -176,84 +205,43 @@ const FEATURES = [
 ];
 
 const BentoFeatures = () => {
-  const [hovered, setHovered] = useState(null);
-
   return (
-    <section className="py-28 px-4 sm:px-6 lg:px-8 relative" style={{ background: "#080808" }}>
-      {/* Section glow */}
-      <div className="absolute inset-0 pointer-events-none" style={{
-        background: "radial-gradient(ellipse 60% 40% at 50% 0%, rgba(255,102,98,0.04) 0%, transparent 70%)",
-      }} />
-
-      <div className="max-w-6xl mx-auto relative">
-        {/* Heading */}
+    <section className="py-24 px-4 sm:px-6 lg:px-8 relative bg-[#08080A] font-sans">
+      <div className="max-w-6xl mx-auto">
+        {/* Section Header */}
         <div className="text-center mb-16">
-          <span className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-xs font-semibold mb-5" style={{
-            background: "rgba(255,102,98,0.06)", border: "1px solid rgba(255,102,98,0.2)", color: "#ff6662",
-          }}>
-            <span className="w-1.5 h-1.5 rounded-full bg-accent" />
-            Core Capabilities
-          </span>
-          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-white mb-4 tracking-tight" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>
-            Everything to Ace<br />
-            <span style={{ background: "linear-gradient(135deg, #ff6662, #fe9a00)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", backgroundClip: "text" }}>
-              Your Tech Interview
-            </span>
+          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-white tracking-[-0.035em] mb-4">
+            Everything you need to <br />
+            <span className="text-gradient-coral">ace your technical interview</span>
           </h2>
-          <p className="text-base max-w-xl mx-auto leading-relaxed" style={{ color: "rgba(161,161,170,0.8)" }}>
-            A comprehensive AI workbench designed to close skill gaps and align your profile with real hiring standards.
+          <p className="text-secondary/75 text-sm sm:text-base max-w-xl mx-auto leading-relaxed font-normal">
+            A comprehensive workbench designed to close skill gaps and align your profile with hiring standards.
           </p>
         </div>
 
-        {/* Bento grid */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+        {/* Bento Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
           {FEATURES.map((feat) => (
             <div
               key={feat.id}
-              className={`relative rounded-2xl p-6 flex flex-col overflow-hidden transition-all duration-500 cursor-default ${feat.span}`}
-              style={{
-                background: hovered === feat.id
-                  ? `linear-gradient(160deg, ${feat.color}0a, rgba(10,10,10,0.98))`
-                  : "rgba(255,255,255,0.02)",
-                border: hovered === feat.id
-                  ? `1px solid ${feat.color}30`
-                  : "1px solid rgba(255,255,255,0.06)",
-              }}
-              onMouseEnter={() => setHovered(feat.id)}
-              onMouseLeave={() => setHovered(null)}
+              className={`studio-card rounded-2xl md:rounded-3xl p-6 sm:p-7 flex flex-col justify-between overflow-hidden transition-all duration-300 hover:-translate-y-0.5 ${feat.span}`}
             >
-              {/* Top glow spot */}
-              <div className="absolute top-0 left-0 right-0 h-px" style={{
-                background: hovered === feat.id
-                  ? `linear-gradient(90deg, transparent, ${feat.color}50, transparent)`
-                  : "transparent",
-                transition: "background 0.5s",
-              }} />
-
-              {/* Header */}
-              <div className="flex items-start justify-between gap-3 mb-3">
-                <div className="flex items-center gap-3">
-                  <div
-                    className="w-10 h-10 rounded-xl flex items-center justify-center shrink-0 transition-transform duration-300"
-                    style={{
-                      background: `${feat.color}12`,
-                      border: `1px solid ${feat.color}25`,
-                      color: feat.color,
-                      transform: hovered === feat.id ? "scale(1.1)" : "scale(1)",
-                    }}
-                  >
-                    {feat.icon}
+              <div>
+                <div className="flex items-start justify-between gap-3 mb-4">
+                  <div className="flex items-center gap-3">
+                    <div className="w-10 h-10 rounded-xl bg-[#08080A] border border-white/[0.08] flex items-center justify-center shrink-0 shadow-inner">
+                      {feat.icon}
+                    </div>
+                    <div>
+                      <h3 className="text-base font-bold text-white tracking-tight">{feat.title}</h3>
+                    </div>
                   </div>
-                  <div>
-                    <h3 className="text-sm font-bold text-white leading-tight">{feat.title}</h3>
-                  </div>
+                  <span className="text-[10px] font-mono font-semibold uppercase tracking-wider px-2 py-0.5 rounded bg-white/[0.04] border border-white/[0.08] text-white/60">
+                    {feat.tag}
+                  </span>
                 </div>
-                <span className="text-[9px] font-bold font-mono tracking-widest uppercase shrink-0 px-2 py-1 rounded-lg" style={{ color: feat.color, background: `${feat.color}10` }}>
-                  {feat.tag}
-                </span>
+                <p className="text-xs sm:text-sm text-secondary/70 leading-relaxed font-normal">{feat.desc}</p>
               </div>
-
-              <p className="text-xs leading-relaxed" style={{ color: "rgba(255,255,255,0.45)" }}>{feat.desc}</p>
 
               {feat.visual}
             </div>

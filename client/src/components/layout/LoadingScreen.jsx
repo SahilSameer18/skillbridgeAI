@@ -90,10 +90,9 @@ const LoadingScreen = ({
           </svg>
         </div>
 
-        {/* Monospace System Telemetry Pill */}
-        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full studio-badge-coral mb-4">
-          <span className="w-1.5 h-1.5 rounded-full bg-accent animate-ping" />
-          <span>ENGINE ACTIVE</span>
+        {/* Status Pill */}
+        <div className="inline-flex items-center px-3 py-1 rounded-full studio-badge-coral mb-4">
+          <span className="font-mono text-xs uppercase tracking-wider">Processing</span>
         </div>
 
         {/* Dynamic Typography */}
@@ -125,7 +124,7 @@ const LoadingScreen = ({
                       isCompleted
                         ? "bg-emerald-500/15 text-emerald-400 border border-emerald-500/30"
                         : isActive
-                        ? "bg-accent/20 text-accent border border-accent/40 shadow-[0_0_10px_rgba(255,102,98,0.3)]"
+                        ? "bg-accent/20 text-accent border border-accent/40"
                         : "bg-white/[0.03] text-muted border border-white/[0.06]"
                     }`}
                   >
@@ -150,11 +149,6 @@ const LoadingScreen = ({
                   >
                     {step}
                   </span>
-
-                  {/* Live Beacon on Active Step */}
-                  {isActive && (
-                    <span className="ml-auto w-1.5 h-1.5 rounded-full bg-accent animate-pulse shrink-0" />
-                  )}
                 </div>
               );
             })}

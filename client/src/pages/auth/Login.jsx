@@ -220,15 +220,11 @@ const Login = () => {
       <div className="flex-1 flex items-center justify-center p-6 sm:p-12 relative">
         <div className="w-full max-w-[420px]">
           <div className="mb-8">
-            <span className="studio-badge-coral mb-3">
-              <span className="w-1.5 h-1.5 rounded-full bg-accent" />
-              AUTHENTICATION
-            </span>
             <h1 className="text-2xl sm:text-3xl font-extrabold text-white tracking-[-0.035em] mb-2">
               Welcome back
             </h1>
             <p className="text-secondary/70 text-sm">
-              Enter your credentials to access your console.
+              Enter your credentials to access your account.
             </p>
           </div>
 

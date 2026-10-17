@@ -109,9 +109,8 @@ const JobDescriptionInput = ({ value, onChange }) => {
 
       {/* Live Extracted Skills tags */}
       <div className="mb-4">
-        <p className="text-xs text-secondary mb-2 font-mono uppercase tracking-wider text-[11px] flex items-center gap-2">
-          <span className="w-1.5 h-1.5 rounded-full bg-accent animate-pulse" />
-          <span>Extracted Competencies</span>
+        <p className="text-xs text-secondary mb-2 font-mono uppercase tracking-wider text-[11px]">
+          Extracted Competencies
         </p>
         <div className="flex flex-wrap gap-1.5 min-h-[32px] p-2 rounded-xl studio-well border-white/[0.05]">
           {extractedSkills.length > 0 ? (

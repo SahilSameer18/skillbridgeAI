@@ -224,10 +224,6 @@ const Register = () => {
       <div className="flex-1 flex items-center justify-center p-6 sm:p-12 relative overflow-y-auto">
         <div className="w-full max-w-[420px] py-8 lg:py-0">
           <div className="mb-6">
-            <span className="studio-badge-coral mb-3">
-              <span className="w-1.5 h-1.5 rounded-full bg-accent" />
-              NEW ACCOUNT
-            </span>
             <h1 className="text-2xl sm:text-3xl font-extrabold text-white tracking-[-0.035em] mb-2">
               Create an account
             </h1>

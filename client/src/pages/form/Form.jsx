@@ -121,15 +121,11 @@ const Form = () => {
     <div className="animate-fade-in py-4 max-w-6xl mx-auto">
       {/* Header Info */}
       <div className="mb-10 text-center">
-        <span className="studio-badge-coral mb-4">
-          <span className="w-1.5 h-1.5 rounded-full bg-accent animate-ping" />
-          CALIBRATION CONSOLE V2.0
-        </span>
         <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-primary mb-3 tracking-tight font-display">
           Compare Your <span className="text-gradient-coral">Resume & Target Role</span>
         </h1>
         <p className="text-secondary max-w-2xl mx-auto text-sm leading-relaxed">
-          Synthesize your resume credentials against your target job description to generate a bespoke interview questions bank, skill gap matrix, and a 10-day preparation roadmap.
+          Compare your resume credentials against your target job description to generate tailored interview questions, a skill gap matrix, and a 10-day preparation roadmap.
         </p>
       </div>
 
