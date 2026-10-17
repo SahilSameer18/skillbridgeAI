@@ -24,9 +24,9 @@ export function formatUserResponse(user) {
 }
 
 /**
- * Verifies a Google OAuth2 access token by calling Google's userinfo endpoint.
- * Google validates the token server-side and returns verified user information.
- * Enforces email_verified claim before trusting the email address.
+ * Verifies a Google OAuth2 access token by checking its audience via Google's tokeninfo endpoint
+ * and extracting verified user information via userinfo.
+ * Enforces audience check (A1 fix) and email_verified claim.
  *
  * @param {string} accessToken - The OAuth2 access token from useGoogleLogin() implicit flow
  * @returns {Promise<{sub: string, email: string, name: string, picture: string|null}>}
@@ -37,21 +37,43 @@ export async function verifyGoogleToken(accessToken) {
   }
 
   try {
-    const response = await fetch(
+    // 1. Verify token audience and validity via Google's tokeninfo endpoint
+    // This prevents token-substitution (confused deputy) attacks across different OAuth clients
+    const tokenInfoRes = await fetch(
+      `https://oauth2.googleapis.com/tokeninfo?access_token=${encodeURIComponent(accessToken)}`
+    );
+
+    if (!tokenInfoRes.ok) {
+      throw new ApiError(401, `Google token verification failed (${tokenInfoRes.status})`);
+    }
+
+    const tokenInfo = await tokenInfoRes.json();
+
+    // Verify the token was explicitly issued to this application's Google Client ID
+    const expectedClientId = process.env.GOOGLE_CLIENT_ID;
+    if (expectedClientId) {
+      const tokenAudience = tokenInfo.aud || tokenInfo.azp;
+      if (tokenAudience !== expectedClientId) {
+        throw new ApiError(401, "Google token audience mismatch: token was not issued for this application");
+      }
+    }
+
+    // 2. Fetch full verified profile details via Google userinfo endpoint
+    const userinfoRes = await fetch(
       `https://www.googleapis.com/oauth2/v3/userinfo`,
       {
         headers: { Authorization: `Bearer ${accessToken}` },
       }
     );
 
-    if (!response.ok) {
-      throw new ApiError(401, `Google token validation failed (${response.status})`);
+    if (!userinfoRes.ok) {
+      throw new ApiError(401, `Google userinfo retrieval failed (${userinfoRes.status})`);
     }
 
-    const payload = await response.json();
+    const payload = await userinfoRes.json();
 
     if (!payload || !payload.sub) {
-      throw new ApiError(401, "Invalid Google token payload");
+      throw new ApiError(401, "Invalid Google userinfo payload");
     }
 
     // Critical security check: Ensure Google has verified ownership of this email address

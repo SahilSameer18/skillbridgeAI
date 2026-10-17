@@ -6,7 +6,12 @@ import ApiError from "../utils/ApiError.js";
 
 async function authUser(req, res, next) {
   try {
-    const token = req.cookies.token;
+    let token = req.cookies?.token;
+
+    // Support standard Authorization: Bearer <token> for mobile, Postman, and API clients
+    if (!token && req.headers.authorization?.startsWith("Bearer ")) {
+      token = req.headers.authorization.split(" ")[1];
+    }
 
     if (!token) {
       throw new ApiError(401, "Token not provided");

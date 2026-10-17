@@ -2,8 +2,10 @@ import "dotenv/config";
 import { connectRedis } from "./src/lib/redis.js";
 import dns from "dns";
 
-//changing dns because of db not connected
-dns.setServers(["1.1.1.1", "8.8.8.8"]);
+// Apply custom DNS servers only when explicitly enabled (useful on ISPs with broken SRV lookups)
+if (process.env.CUSTOM_DNS === "true") {
+  dns.setServers(["1.1.1.1", "8.8.8.8"]);
+}
 
 async function start() {
   try {
@@ -24,4 +26,3 @@ async function start() {
 }
 
 start();
-

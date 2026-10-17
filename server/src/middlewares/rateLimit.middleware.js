@@ -17,12 +17,21 @@ const makeStore = () =>
     },
   });
 
+export const generateAiRateLimitKey = (req) => {
+  // Key by authenticated user ID so proxy IP sharing does not lock out distinct users
+  return req.user?.id ? `user:${req.user.id}` : (req.ip || "unknown");
+};
+
 const aiGenerationLimiter = rateLimit({
   store: makeStore(),
   windowMs: 60 * 60 * 1000, // 1 hour
-  max: 4, // 4 requests per hour per IP
+  max: 4, // 4 requests per hour per user
   skipFailedRequests: true, // if response is 4xx/5xx, don't count it
   passOnStoreError: true, // Fail-open if Redis is down
+  keyGenerator: generateAiRateLimitKey,
+  validate: {
+    keyGeneratorIpFallback: false,
+  },
   message: {
     success: false,
     message: "Too many AI generation requests. Please try again after an hour.",

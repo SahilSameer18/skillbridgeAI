@@ -8,15 +8,43 @@ import errorMiddleware from "./middlewares/error.middleware.js";
 import ApiError from "./utils/ApiError.js";
 
 const app = express();
+app.set("trust proxy", 1); // Respect X-Forwarded-For headers from reverse proxies (Render, Vercel, Nginx)
+
+const allowedOrigins = [
+  "http://localhost:5173",
+  "https://skillbridgeai-s.vercel.app",
+  ...(process.env.CLIENT_URL ? [process.env.CLIENT_URL] : []),
+];
 
 app.use(express.json());
 app.use(cookieParser());
+
+// Strict CORS: Reject unknown origins with 403 rather than omitting headers
 app.use(
   cors({
-    origin: ["http://localhost:5173", "https://skillbridgeai-s.vercel.app"],
+    origin: (origin, callback) => {
+      // Allow requests with no origin (e.g. mobile apps, curl, server-to-server)
+      if (!origin || allowedOrigins.includes(origin)) {
+        return callback(null, true);
+      }
+      return callback(new ApiError(403, `CORS policy: Origin '${origin}' is not allowed`));
+    },
     credentials: true,
   }),
 );
+
+// CSRF Origin Guard: Block cross-origin multipart form submissions from malicious sites
+app.use((req, res, next) => {
+  const isStateChanging = ["POST", "PUT", "PATCH", "DELETE"].includes(req.method);
+  if (!isStateChanging) return next();
+
+  const requestOrigin = req.headers.origin;
+  if (requestOrigin && !allowedOrigins.includes(requestOrigin)) {
+    return next(new ApiError(403, `State-changing requests from origin '${requestOrigin}' are forbidden`));
+  }
+
+  next();
+});
 
 // Health check root endpoint for Render & Uptime Monitors
 app.get("/", (req, res) => {
@@ -40,3 +68,4 @@ app.use((req, res, next) => {
 app.use(errorMiddleware);
 
 export default app;
+
