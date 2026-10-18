@@ -39,7 +39,7 @@ const LoadingScreen = ({
       }`}
       style={{
         background: fullScreen
-          ? "rgba(248, 250, 252, 0.85)"
+          ? "rgba(238, 242, 246, 0.88)"
           : "transparent",
         backdropFilter: fullScreen ? "blur(24px) saturate(160%)" : "none",
         WebkitBackdropFilter: fullScreen ? "blur(24px) saturate(160%)" : "none",
@@ -49,7 +49,7 @@ const LoadingScreen = ({
       <div
         className="absolute w-[500px] h-[500px] rounded-full pointer-events-none"
         style={{
-          background: "radial-gradient(circle at center, rgba(229, 77, 72, 0.08) 0%, transparent 65%)",
+          background: "radial-gradient(circle at center, rgba(220, 56, 56, 0.08) 0%, transparent 65%)",
         }}
       />
 
@@ -80,11 +80,11 @@ const LoadingScreen = ({
               strokeWidth="2"
               strokeLinecap="round"
             />
-            <circle cx="16" cy="16" r="3" fill="#ea580c" />
+            <circle cx="16" cy="16" r="3" fill="#c26e05" />
             <defs>
               <linearGradient id="emblemGlow" x1="16" y1="6" x2="16" y2="26">
-                <stop offset="0%" stopColor="#e54d48" />
-                <stop offset="100%" stopColor="#ea580c" />
+                <stop offset="0%" stopColor="#dc3838" />
+                <stop offset="100%" stopColor="#c26e05" />
               </linearGradient>
             </defs>
           </svg>

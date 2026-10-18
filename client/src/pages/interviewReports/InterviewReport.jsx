@@ -111,7 +111,7 @@ const ScoreWidget = React.memo(({ score, size = 80, strokeWidth = 6 }) => {
                     cx={size / 2}
                     cy={size / 2}
                     fill="none"
-                    stroke="rgba(255,255,255,0.06)"
+                    stroke="rgba(15, 23, 42, 0.08)"
                     strokeWidth={strokeWidth}
                 />
                 <circle
@@ -128,8 +128,8 @@ const ScoreWidget = React.memo(({ score, size = 80, strokeWidth = 6 }) => {
                 />
                 <defs>
                     <linearGradient id="reportGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-                        <stop offset="0%" stopColor="#FF6662" />
-                        <stop offset="100%" stopColor="#FE9A00" />
+                        <stop offset="0%" stopColor="#dc3838" />
+                        <stop offset="100%" stopColor="#c26e05" />
                     </linearGradient>
                 </defs>
             </svg>

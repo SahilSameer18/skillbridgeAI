@@ -45,7 +45,7 @@ const Footer = () => {
       <div
         className="absolute top-0 left-1/2 -translate-x-1/2 w-[700px] max-w-full h-[160px] pointer-events-none"
         style={{
-          background: "radial-gradient(ellipse 70% 60% at 50% 0%, rgba(229,77,72,0.05) 0%, rgba(217,119,6,0.02) 40%, transparent 75%)",
+          background: "radial-gradient(ellipse 70% 60% at 50% 0%, rgba(220,56,56,0.05) 0%, rgba(194,110,5,0.02) 40%, transparent 75%)",
         }}
       />
 

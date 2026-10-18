@@ -214,7 +214,7 @@ const Register = () => {
           <h2 className="text-3xl sm:text-4xl font-extrabold text-primary tracking-[-0.035em] leading-[1.15] mb-4">
             Accelerate your career <br />
             with bespoke <br />
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-accent to-[#ea580c]">
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-accent to-amber">
               interview intelligence.
             </span>
           </h2>
@@ -231,8 +231,8 @@ const Register = () => {
       </div>
 
       {/* Right Section - Form */}
-      <div className="flex-1 flex items-center justify-center p-6 sm:p-12 relative overflow-y-auto bg-background">
-        <div className="w-full max-w-[420px] py-8 lg:py-0">
+      <div className="flex-1 flex items-center justify-center p-4 sm:p-8 lg:p-12 relative overflow-y-auto bg-background">
+        <div className="w-full max-w-[440px] studio-card p-6 sm:p-8 rounded-2xl shadow-md my-4">
           <div className="mb-6">
             <h1 className="text-2xl sm:text-3xl font-extrabold text-primary tracking-[-0.035em] mb-2">
               Create an account
@@ -254,7 +254,7 @@ const Register = () => {
 
           <div className="relative flex items-center justify-center my-6">
             <div className="border-t border-border w-full" />
-            <span className="bg-background px-3 text-[11px] text-muted uppercase tracking-widest font-mono shrink-0">
+            <span className="bg-white px-3 text-[11px] text-muted uppercase tracking-widest font-mono shrink-0">
               Or register with email
             </span>
             <div className="border-t border-border w-full" />

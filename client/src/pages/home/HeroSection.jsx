@@ -58,8 +58,8 @@ const PrecisionGauge = ({ score = 94 }) => {
         />
         <defs>
           <linearGradient id="coralAmberGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-            <stop offset="0%" stopColor="#e54d48" />
-            <stop offset="100%" stopColor="#d97706" />
+            <stop offset="0%" stopColor="#dc3838" />
+            <stop offset="100%" stopColor="#c26e05" />
           </linearGradient>
         </defs>
       </svg>
@@ -83,7 +83,7 @@ const HeroSection = ({ user }) => {
         <div
           className="absolute -top-[15%] left-1/2 -translate-x-1/2 w-[800px] h-[480px] pointer-events-none"
           style={{
-            background: "radial-gradient(ellipse 65% 55% at 50% 30%, rgba(229,77,72,0.08) 0%, rgba(217,119,6,0.03) 45%, transparent 75%)",
+            background: "radial-gradient(ellipse 65% 55% at 50% 30%, rgba(220,56,56,0.06) 0%, rgba(194,110,5,0.02) 45%, transparent 75%)",
           }}
         />
       </div>
