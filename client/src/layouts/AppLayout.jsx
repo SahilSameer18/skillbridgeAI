@@ -10,10 +10,17 @@ const AppLayout = ({ children }) => {
         window.scrollTo(0, 0);
     }, [pathname]);
 
+    const isLanding = pathname === '/';
+
     return (
-        <div className="min-h-screen w-full max-w-full flex flex-col bg-background overflow-x-clip">
+        <div className="min-h-screen w-full max-w-full flex flex-col bg-background overflow-x-clip font-sans selection:bg-accent/30 selection:text-white">
             <Navbar />
-            <main className="flex-grow w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
+            <main
+                key={pathname}
+                className={`page-enter flex-grow w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 ${
+                    isLanding ? 'py-0' : 'py-6 sm:py-8'
+                }`}
+            >
                 {children ? children : <Outlet />}
             </main>
             <Footer />
@@ -22,4 +29,5 @@ const AppLayout = ({ children }) => {
 };
 
 export default AppLayout;
+
 

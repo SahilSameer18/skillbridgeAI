@@ -30,7 +30,12 @@ const PrecisionGauge = ({ score = 94 }) => {
 
   return (
     <div className="relative w-28 h-28 shrink-0 flex items-center justify-center">
-      <svg viewBox="0 0 120 120" className="w-full h-full -rotate-90">
+      <svg
+        viewBox="0 0 120 120"
+        className="w-full h-full -rotate-90"
+        role="img"
+        aria-label={`Alignment match score: ${displayed}%`}
+      >
         <circle
           cx="60"
           cy="60"
@@ -73,12 +78,12 @@ const PrecisionGauge = ({ score = 94 }) => {
 const HeroSection = ({ user }) => {
   return (
     <section className="relative min-h-[88vh] flex items-center justify-center overflow-hidden bg-[#08080A] pt-16 pb-24 font-sans">
-      {/* Precision Atmospheric Vignette */}
+      {/* Precision Atmospheric Vignette — Smooth gradient without GPU blur overhead */}
       <div className="absolute inset-0 pointer-events-none overflow-hidden">
         <div
-          className="absolute -top-[15%] left-1/2 -translate-x-1/2 w-[800px] h-[500px] opacity-35 blur-[120px] orb-isolated"
+          className="absolute -top-[15%] left-1/2 -translate-x-1/2 w-[800px] h-[480px] pointer-events-none"
           style={{
-            background: "radial-gradient(circle, rgba(255,102,98,0.16) 0%, rgba(254,154,0,0.06) 50%, transparent 80%)",
+            background: "radial-gradient(ellipse 65% 55% at 50% 30%, rgba(255,102,98,0.14) 0%, rgba(254,154,0,0.05) 45%, transparent 75%)",
           }}
         />
       </div>
@@ -87,25 +92,34 @@ const HeroSection = ({ user }) => {
         <div className="flex flex-col items-center text-center">
 
           {/* Master Architectural Headline */}
-          <h1 className="font-extrabold text-white text-4xl sm:text-6xl lg:text-[4.75rem] leading-[1.08] tracking-[-0.04em] max-w-4xl mx-auto mb-6">
+          <h1
+            className="reveal-up font-extrabold text-white text-4xl sm:text-6xl lg:text-[4.75rem] leading-[1.08] tracking-[-0.04em] max-w-4xl mx-auto mb-6"
+            style={{ animationDelay: "0ms" }}
+          >
             Master your next interview with{" "}
             <span className="text-gradient-coral">intelligent preparation.</span>
           </h1>
 
           {/* Sub-headline */}
-          <p className="text-secondary/80 text-base sm:text-lg max-w-2xl mx-auto leading-relaxed mb-10 font-normal">
+          <p
+            className="reveal-up text-secondary/80 text-base sm:text-lg max-w-2xl mx-auto leading-relaxed mb-10 font-normal"
+            style={{ animationDelay: "90ms" }}
+          >
             Compare your resume against any job description to discover skill gaps, practice tailored questions, and follow a clear preparation roadmap.
           </p>
 
           {/* Dual Tactile CTAs */}
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-16 sm:mb-20 w-full max-w-md sm:max-w-none">
+          <div
+            className="reveal-up flex flex-col sm:flex-row items-center justify-center gap-4 mb-16 sm:mb-20 w-full max-w-md sm:max-w-none"
+            style={{ animationDelay: "180ms" }}
+          >
             <Link
               to={user ? "/generate" : "/register"}
               id="hero-cta-primary"
-              className="w-full sm:w-auto studio-btn-primary px-8 py-4 rounded-xl text-base font-bold flex items-center justify-center gap-3 cursor-pointer shadow-[0_8px_30px_rgba(255,102,98,0.25)]"
+              className="group w-full sm:w-auto studio-btn-primary px-8 py-4 rounded-xl text-base font-bold flex items-center justify-center gap-3 cursor-pointer shadow-[0_8px_30px_rgba(255,102,98,0.25)]"
             >
               <span>{user ? "Start New Analysis" : "Analyze Your Resume"}</span>
-              <svg className="w-4 h-4 transition-transform group-hover:translate-x-1" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
+              <svg className="w-4 h-4 transition-transform duration-200 group-hover:translate-x-1" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3" />
               </svg>
             </Link>
@@ -120,7 +134,10 @@ const HeroSection = ({ user }) => {
           </div>
 
           {/* Executive Product Centerpiece */}
-          <div className="w-full max-w-5xl mx-auto">
+          <div
+            className="reveal-up w-full max-w-5xl mx-auto"
+            style={{ animationDelay: "260ms" }}
+          >
             <div className="studio-card rounded-2xl md:rounded-3xl shadow-[0_24px_80px_rgba(0,0,0,0.9)] overflow-hidden text-left border-t border-white/[0.16] border-x border-b border-white/[0.08]">
               
               {/* Card Header Bar */}

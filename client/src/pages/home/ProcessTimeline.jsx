@@ -90,10 +90,10 @@ const ProcessTimeline = () => {
             {STEPS.map((step, index) => (
               <div
                 key={step.num}
-                className={`relative flex flex-col items-center text-center transition-all duration-500 ${
-                  visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
+                className={`relative flex flex-col items-center text-center ${
+                  visible ? "reveal-up" : "opacity-0"
                 }`}
-                style={{ transitionDelay: `${index * 0.15}s` }}
+                style={{ animationDelay: `${index * 120}ms` }}
                 onMouseEnter={() => setActiveStep(step.num)}
                 onMouseLeave={() => setActiveStep(null)}
               >
@@ -110,8 +110,8 @@ const ProcessTimeline = () => {
                 >
                   {step.icon}
                   <span
-                    className="text-[10px] font-mono font-bold uppercase tracking-widest mt-2"
-                    style={{ color: activeStep === step.num ? step.color : "rgba(255,255,255,0.4)" }}
+                    className="type-micro mt-2"
+                    style={{ color: activeStep === step.num ? step.color : "rgba(255,255,255,0.6)" }}
                   >
                     PHASE {step.num}
                   </span>
@@ -119,7 +119,7 @@ const ProcessTimeline = () => {
 
                 {/* Content */}
                 <span
-                  className="text-[10px] font-mono font-bold uppercase tracking-wider mb-3 px-3 py-1 rounded-md"
+                  className="type-micro mb-3 px-3 py-1 rounded-md"
                   style={{
                     color: step.color,
                     background: `${step.color}10`,
@@ -130,11 +130,11 @@ const ProcessTimeline = () => {
                 </span>
 
                 <h3 className="text-base font-bold text-white mb-2 tracking-tight">{step.title}</h3>
-                <p className="text-xs sm:text-sm text-secondary/70 leading-relaxed mb-4 max-w-xs font-normal">
+                <p className="type-body text-secondary/80 leading-relaxed mb-4 max-w-xs font-normal">
                   {step.desc}
                 </p>
 
-                <span className="text-[10px] font-mono tracking-wider text-white/40">
+                <span className="type-micro text-secondary/60">
                   {step.detail}
                 </span>
               </div>

@@ -5,14 +5,20 @@ const useCountUp = (target, duration = 1400, start = false) => {
   useEffect(() => {
     if (!start) return;
     let startTime = null;
+    let animationFrameId;
     const step = (timestamp) => {
       if (!startTime) startTime = timestamp;
       const progress = Math.min((timestamp - startTime) / duration, 1);
       const eased = 1 - Math.pow(1 - progress, 3); // ease-out cubic
       setValue(Math.round(eased * target));
-      if (progress < 1) requestAnimationFrame(step);
+      if (progress < 1) {
+        animationFrameId = requestAnimationFrame(step);
+      }
     };
-    requestAnimationFrame(step);
+    animationFrameId = requestAnimationFrame(step);
+    return () => {
+      if (animationFrameId) cancelAnimationFrame(animationFrameId);
+    };
   }, [target, duration, start]);
   return value;
 };
@@ -86,7 +92,12 @@ const StatCard = ({ stat, index, visible }) => {
   const displayed = stat.format(count);
 
   return (
-    <div className="studio-card p-6 sm:p-8 rounded-2xl flex flex-col items-center text-center transition-all duration-300 hover:-translate-y-1 group">
+    <div
+      className={`studio-card p-6 sm:p-8 rounded-2xl flex flex-col items-center text-center transition-all duration-300 hover:-translate-y-1 group ${
+        visible ? "reveal-up" : "opacity-0"
+      }`}
+      style={{ animationDelay: `${index * 90}ms` }}
+    >
       {/* Icon Well */}
       <div className="w-12 h-12 rounded-xl bg-[#08080A] border border-white/[0.08] flex items-center justify-center mb-5 group-hover:scale-105 transition-transform duration-300 shadow-inner">
         {stat.icon}
@@ -103,7 +114,7 @@ const StatCard = ({ stat, index, visible }) => {
       </div>
 
       <p className="text-sm font-semibold text-white/90 mb-1 tracking-tight">{stat.label}</p>
-      <p className="text-xs text-white/40 font-mono">{stat.sublabel}</p>
+      <p className="type-caption text-secondary/70 font-mono">{stat.sublabel}</p>
     </div>
   );
 };

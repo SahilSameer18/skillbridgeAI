@@ -34,6 +34,17 @@ const Navbar = () => {
   }, []);
 
   useEffect(() => {
+    if (mobileMenuOpen) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "";
+    }
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, [mobileMenuOpen]);
+
+  useEffect(() => {
     const handler = (e) => {
       if (
         menuRef.current &&
@@ -74,15 +85,20 @@ const Navbar = () => {
           : "border-b border-transparent"
       }`}
       style={{
-        background: scrolled ? "rgba(8, 8, 10, 0.88)" : "rgba(8, 8, 10, 0.40)",
-        backdropFilter: "blur(24px) saturate(160%)",
-        WebkitBackdropFilter: "blur(24px) saturate(160%)",
+        background: scrolled ? "rgba(8, 8, 10, 0.92)" : "rgba(8, 8, 10, 0.65)",
+        backdropFilter: "blur(12px)",
+        WebkitBackdropFilter: "blur(12px)",
       }}
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
           {/* Brand */}
           <Link to="/" className="flex items-center gap-2.5 group shrink-0 active:scale-[0.98] transition-transform">
+            <div className="w-8 h-8 rounded-lg bg-[#0e0e12] border-t border-white/[0.16] border-x border-b border-white/[0.06] flex items-center justify-center shadow-md group-hover:border-accent/40 transition-colors">
+              <svg className="w-4 h-4 text-accent" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+                <path d="M13 10V3L4 14h7v7l9-11h-7z" strokeLinecap="round" strokeLinejoin="round" />
+              </svg>
+            </div>
             <span className="text-lg font-bold tracking-tight text-primary">
               Skill<span className="text-accent">Bridge</span>
             </span>
@@ -98,13 +114,13 @@ const Navbar = () => {
                   to={to}
                   className={`relative px-4 py-2 text-sm font-medium rounded-xl transition-all duration-160 active:scale-[0.97] ${
                     isActive
-                      ? "text-accent"
+                      ? "text-white"
                       : "text-secondary hover:text-primary hover:bg-white/[0.04]"
                   }`}
                 >
                   {label}
                   {isActive && (
-                    <span className="absolute bottom-1 left-1/2 -translate-x-1/2 w-4 h-0.5 rounded-full bg-accent" />
+                    <span className="absolute bottom-0 left-3 right-3 h-[2px] rounded-full bg-accent shadow-[0_0_8px_rgba(255,102,98,0.7)]" />
                   )}
                 </Link>
               );
@@ -182,10 +198,18 @@ const Navbar = () => {
         </div>
       </div>
 
+      {/* Mobile Backdrop Overlay */}
+      {mobileMenuOpen && (
+        <div
+          onClick={() => setMobileMenuOpen(false)}
+          className="md:hidden fixed inset-0 top-16 bg-black/60 backdrop-blur-sm z-40 animate-fade-in"
+        />
+      )}
+
       {/* Mobile Menu */}
       <div
         ref={menuRef}
-        className="md:hidden absolute left-0 right-0 overflow-hidden transition-all duration-300 ease-in-out"
+        className="md:hidden absolute left-0 right-0 overflow-hidden transition-all duration-300 ease-in-out z-50"
         style={{
           maxHeight: mobileMenuOpen ? "400px" : "0px",
           opacity: mobileMenuOpen ? 1 : 0,

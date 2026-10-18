@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 
 const FEATURES = [
   {
@@ -18,7 +18,7 @@ const FEATURES = [
     ),
     visual: (
       <div className="mt-5 studio-well rounded-xl overflow-hidden border border-white/[0.08]">
-        <div className="flex justify-between px-4 py-2.5 border-b border-white/[0.06] text-[10px] font-mono font-bold uppercase tracking-wider text-white/40">
+        <div className="flex justify-between px-4 py-2.5 border-b border-white/[0.06] type-micro text-secondary/70">
           <span>Requirement Competency</span>
           <span>Verification Status</span>
         </div>
@@ -224,7 +224,7 @@ const BentoFeatures = () => {
           {FEATURES.map((feat) => (
             <div
               key={feat.id}
-              className={`studio-card rounded-2xl md:rounded-3xl p-6 sm:p-7 flex flex-col justify-between overflow-hidden transition-all duration-300 hover:-translate-y-0.5 ${feat.span}`}
+              className={`studio-card-interactive rounded-2xl md:rounded-3xl p-6 sm:p-7 flex flex-col justify-between overflow-hidden ${feat.span}`}
             >
               <div>
                 <div className="flex items-start justify-between gap-3 mb-4">

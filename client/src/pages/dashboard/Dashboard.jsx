@@ -35,13 +35,14 @@ const HorizontalProgressBar = React.memo(({ score }) => {
 });
 
 // ── Memoized Individual Report Card Component ────────────────────────────────
-const ReportCard = React.memo(({ report, onNavigate, onDownloadPdf, onDelete, isDownloading, isDeleting }) => {
+const ReportCard = React.memo(({ report, index, onNavigate, onDownloadPdf, onDelete, isDownloading, isDeleting }) => {
     const { label, text, border, badgeBg } = getMatchDetails(report.matchScore);
 
     return (
         <div
             onClick={() => onNavigate(`/interview/${report.id}`)}
-            className="studio-card rounded-2xl p-5 flex flex-col justify-between min-h-56 hover:border-white/[0.2] transition-all duration-200 cursor-pointer group"
+            className="studio-card-interactive rounded-2xl p-5 flex flex-col justify-between cursor-pointer group reveal-up"
+            style={{ animationDelay: `${index * 45}ms` }}
         >
             {/* Card Header (Title & Status Tag) */}
             <div className="flex items-start justify-between gap-3 relative z-10">
@@ -49,12 +50,12 @@ const ReportCard = React.memo(({ report, onNavigate, onDownloadPdf, onDelete, is
                     <h3 className="font-bold text-white text-base leading-snug group-hover:text-accent transition-colors duration-200 truncate" title={report.title || 'Custom Interview Plan'}>
                         {report.title || 'Custom Interview Plan'}
                     </h3>
-                    <p className="text-[11px] text-white/40 mt-1 font-mono">
+                    <p className="type-micro text-secondary/60 mt-1 font-mono">
                         {new Date(report.createdAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
                     </p>
                 </div>
                 {report.matchScore && (
-                    <span className={`shrink-0 text-[10px] font-mono font-bold px-2 py-0.5 rounded border uppercase tracking-wider ${text} ${border} ${badgeBg}`}>
+                    <span className={`shrink-0 type-micro px-2 py-0.5 rounded border uppercase tracking-wider ${text} ${border} ${badgeBg}`}>
                         {label}
                     </span>
                 )}
@@ -69,22 +70,23 @@ const ReportCard = React.memo(({ report, onNavigate, onDownloadPdf, onDelete, is
             </p>
 
             {/* Card Footer Actions */}
-            <div className="flex items-center justify-between mt-4 pt-3 border-t border-white/[0.06] relative z-10" onClick={(e) => e.stopPropagation()}>
+            <div className="flex items-center justify-between mt-5 pt-3.5 border-t border-white/[0.06] relative z-10" onClick={(e) => e.stopPropagation()}>
                 <button
                     onClick={() => onNavigate(`/interview/${report.id}`)}
-                    className="text-xs font-semibold text-white/90 flex items-center gap-1 group/btn hover:text-accent transition-colors cursor-pointer"
+                    className="text-xs font-semibold text-white/90 flex items-center gap-1.5 group/btn hover:text-accent transition-colors cursor-pointer py-1"
                 >
                     <span>View Dossier</span>
                     <FiArrowRight className="w-3.5 h-3.5 group-hover/btn:translate-x-0.5 transition-transform duration-200" />
                 </button>
 
-                <div className="flex gap-2">
+                <div className="flex items-center gap-1.5">
                     {/* PDF export */}
                     <button
                         onClick={(e) => onDownloadPdf(e, report)}
                         disabled={isDownloading}
+                        aria-label="Download PDF report dossier"
                         title="Download PDF"
-                        className="w-8 h-8 rounded-lg flex items-center justify-center bg-[#08080A] hover:bg-white/[0.06] border border-white/[0.08] text-white/50 hover:text-white transition-all duration-200 disabled:opacity-50 cursor-pointer"
+                        className="studio-btn-icon disabled:opacity-50"
                     >
                         {isDownloading ? (
                             <span className="w-3.5 h-3.5 border-2 border-white/20 border-t-accent rounded-full animate-spin" />
@@ -97,8 +99,9 @@ const ReportCard = React.memo(({ report, onNavigate, onDownloadPdf, onDelete, is
                     <button
                         onClick={(e) => onDelete(e, report.id)}
                         disabled={isDeleting}
+                        aria-label="Delete interview plan"
                         title="Delete plan"
-                        className="w-8 h-8 rounded-lg flex items-center justify-center bg-[#08080A] hover:bg-red-500/15 border border-white/[0.08] text-white/50 hover:text-red-400 hover:border-red-500/25 transition-all duration-200 disabled:opacity-50 cursor-pointer"
+                        className="studio-btn-icon hover:bg-red-500/10 hover:border-red-500/30 hover:text-red-400 disabled:opacity-50"
                     >
                         {isDeleting ? (
                             <span className="w-3.5 h-3.5 border-2 border-red-500/30 border-t-red-400 rounded-full animate-spin" />
@@ -114,7 +117,7 @@ const ReportCard = React.memo(({ report, onNavigate, onDownloadPdf, onDelete, is
 
 // ── Skeleton Loader Card ─────────────────────────────────────────────────────
 const SkeletonCard = () => (
-    <div className="studio-card rounded-2xl p-5 flex flex-col justify-between h-56">
+    <div className="studio-card rounded-2xl p-5 flex flex-col justify-between">
         <div className="flex items-start justify-between gap-3">
             <div className="flex-grow space-y-2">
                 <Skeleton width="65%" height="1.1rem" />
@@ -125,40 +128,46 @@ const SkeletonCard = () => (
         <div className="w-full my-4">
             <Skeleton width="100%" height="0.5rem" borderRadius="999px" />
         </div>
-        <div className="space-y-1.5 flex-grow">
-            <Skeleton width="100%" height="0.4rem" />
-            <Skeleton width="75%" height="0.4rem" />
+        <div className="space-y-1.5 flex-grow mb-4">
+            <Skeleton width="100%" height="0.45rem" />
+            <Skeleton width="75%" height="0.45rem" />
         </div>
-        <div className="flex items-center justify-between mt-4 pt-3 border-t border-white/[0.06]">
-            <Skeleton width="80px" height="1.5rem" borderRadius="6px" />
-            <div className="flex gap-2">
-                <Skeleton width="32px" height="32px" borderRadius="8px" />
-                <Skeleton width="32px" height="32px" borderRadius="8px" />
+        <div className="flex items-center justify-between pt-3.5 border-t border-white/[0.06]">
+            <Skeleton width="90px" height="1.5rem" borderRadius="6px" />
+            <div className="flex gap-1.5">
+                <Skeleton width="40px" height="40px" borderRadius="12px" />
+                <Skeleton width="40px" height="40px" borderRadius="12px" />
             </div>
         </div>
     </div>
 );
 
-// ── Premium Empty State ──────────────────────────────────────────────────────
+// ── Luxury Specular Empty State ──────────────────────────────────────────────
 const EmptyState = ({ onNavigate }) => (
-    <div className="studio-card rounded-3xl p-10 sm:p-16 text-center mt-6 flex flex-col items-center justify-center">
-        <div className="w-14 h-14 rounded-2xl studio-well flex items-center justify-center text-accent mb-6 shadow-inner">
-            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <div className="relative rounded-3xl p-10 sm:p-16 text-center mt-6 flex flex-col items-center justify-center border border-dashed border-white/[0.12] bg-[#0A0A0E] overflow-hidden">
+        {/* Ambient Top Laser Line */}
+        <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-accent/50 to-transparent" />
+        
+        <div className="w-16 h-16 rounded-2xl studio-well flex items-center justify-center text-accent mb-6 shadow-inner border border-white/[0.08]">
+            <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                 <path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/>
                 <polyline points="14 2 14 8 20 8"/>
                 <line x1="8" y1="13" x2="16" y2="13"/>
                 <line x1="8" y1="17" x2="16" y2="17"/>
             </svg>
         </div>
-        <h3 className="text-xl font-bold text-white mb-2">No Interview Plans Yet</h3>
-        <p className="text-sm text-secondary/70 max-w-sm mx-auto mb-8 leading-relaxed font-normal">
+        
+        <span className="type-label text-accent mb-2">WORKSPACE READY</span>
+        <h3 className="text-xl sm:text-2xl font-extrabold text-white mb-2 tracking-tight">No Interview Plans Yet</h3>
+        <p className="type-body text-secondary/70 max-w-md mx-auto mb-8 leading-relaxed font-normal">
             Upload your resume alongside a target job description to generate tailored questions, skill gap charts, and preparation schedules.
         </p>
         <button
             onClick={onNavigate}
             className="studio-btn-primary px-6 py-3 rounded-xl text-sm font-bold text-white cursor-pointer"
         >
-            Create Your First Plan
+            <span>Create Your First Plan</span>
+            <FiArrowRight className="w-4 h-4 ml-1" />
         </button>
     </div>
 );
@@ -269,27 +278,27 @@ const Dashboard = () => {
             {/* ── Stats Summary Grid ── */}
             {!isInitialLoading && reports.length > 0 && (
                 <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-8">
-                    <div className="studio-card p-5 rounded-2xl flex flex-col justify-between min-h-[105px]">
-                        <span className="text-[10px] font-mono font-bold text-white/40 uppercase tracking-widest">Total Saved Plans</span>
+                    <div className="studio-card p-5 rounded-2xl flex flex-col justify-between border-l-[3px] border-l-accent transition-transform duration-200 hover:-translate-y-0.5">
+                        <span className="type-micro text-secondary/70">TOTAL SAVED PLANS</span>
                         <div className="flex items-baseline gap-2 mt-2">
-                            <span className="text-3xl sm:text-4xl font-extrabold text-white font-mono leading-none">{totalReports}</span>
-                            <span className="text-xs text-white/40 font-mono">plans</span>
+                            <span className="text-3xl sm:text-4xl font-extrabold text-white font-mono leading-none tracking-tight">{totalReports}</span>
+                            <span className="type-micro text-secondary/50">DOSSIERS</span>
                         </div>
                     </div>
-                    <div className="studio-card p-5 rounded-2xl flex flex-col justify-between min-h-[105px]">
-                        <span className="text-[10px] font-mono font-bold text-white/40 uppercase tracking-widest">Avg Compatibility</span>
+                    <div className="studio-card p-5 rounded-2xl flex flex-col justify-between border-l-[3px] border-l-amber transition-transform duration-200 hover:-translate-y-0.5">
+                        <span className="type-micro text-secondary/70">AVG COMPATIBILITY</span>
                         <div className="flex items-baseline gap-2 mt-2">
-                            <span className="text-3xl sm:text-4xl font-extrabold text-white font-mono leading-none" style={{ color: avgScore >= 80 ? '#34d399' : avgScore >= 60 ? '#FE9A00' : '#FF6662' }}>
+                            <span className="text-3xl sm:text-4xl font-extrabold font-mono leading-none tracking-tight" style={{ color: avgScore >= 80 ? '#34d399' : avgScore >= 60 ? '#FE9A00' : '#FF6662' }}>
                                 {avgScore}%
                             </span>
-                            <span className="text-xs text-white/40 font-mono">average</span>
+                            <span className="type-micro text-secondary/50">ACROSS ROLES</span>
                         </div>
                     </div>
-                    <div className="studio-card p-5 rounded-2xl flex flex-col justify-between min-h-[105px]">
-                        <span className="text-[10px] font-mono font-bold text-white/40 uppercase tracking-widest">High Matches (≥80%)</span>
+                    <div className="studio-card p-5 rounded-2xl flex flex-col justify-between border-l-[3px] border-l-emerald-400 transition-transform duration-200 hover:-translate-y-0.5">
+                        <span className="type-micro text-secondary/70">HIGH MATCHES (≥80%)</span>
                         <div className="flex items-baseline gap-2 mt-2">
-                            <span className="text-3xl sm:text-4xl font-extrabold text-emerald-400 font-mono leading-none">{highMatches}</span>
-                            <span className="text-xs text-white/40 font-mono">roles</span>
+                            <span className="text-3xl sm:text-4xl font-extrabold text-emerald-400 font-mono leading-none tracking-tight">{highMatches}</span>
+                            <span className="type-micro text-secondary/50">OFFER READY</span>
                         </div>
                     </div>
                 </div>
@@ -308,11 +317,12 @@ const Dashboard = () => {
                             placeholder="Search by role or company..."
                             value={searchTerm}
                             onChange={(e) => setSearchTerm(e.target.value)}
-                            className="w-full pl-10 pr-9 py-2.5 bg-[#040405] border border-white/[0.08] rounded-xl text-xs sm:text-sm text-white placeholder-white/20 focus:outline-none focus:border-accent/60 transition-colors"
+                            className="w-full pl-10 pr-9 py-2.5 bg-[#040405] border border-white/[0.08] rounded-xl text-xs sm:text-sm text-white placeholder-white/30 focus:outline-none focus:border-accent/60 transition-colors"
                         />
                         {searchTerm && (
                             <button
                                 onClick={() => setSearchTerm("")}
+                                aria-label="Clear search"
                                 className="absolute right-3.5 top-1/2 -translate-y-1/2 text-white/40 hover:text-white transition-colors cursor-pointer"
                             >
                                 <FiX className="w-4 h-4" />
@@ -333,7 +343,7 @@ const Dashboard = () => {
                                 onClick={() => setFilterTier(pill.id)}
                                 className={`px-3 py-1.5 text-xs font-mono font-medium rounded-lg transition-all duration-200 cursor-pointer ${
                                     filterTier === pill.id
-                                        ? "bg-accent/15 border border-accent/40 text-white"
+                                        ? "bg-accent/15 border border-accent/40 text-white shadow-[0_0_12px_rgba(255,102,98,0.15)]"
                                         : "studio-well text-white/60 hover:text-white border border-transparent"
                                 }`}
                             >
@@ -360,11 +370,12 @@ const Dashboard = () => {
             {!isInitialLoading && reports.length > 0 && (
                 <>
                     {filteredReports.length > 0 ? (
-                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 animate-fade-in">
-                            {filteredReports.map((report) => (
+                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+                            {filteredReports.map((report, index) => (
                                 <ReportCard
                                     key={report.id}
                                     report={report}
+                                    index={index}
                                     onNavigate={handleNavigate}
                                     onDownloadPdf={handlePdfDownload}
                                     onDelete={handleDelete}
@@ -391,9 +402,17 @@ const Dashboard = () => {
                             <button
                                 onClick={handleLoadMore}
                                 disabled={isFetching}
-                                className="studio-btn-secondary px-6 py-2.5 rounded-xl text-xs font-mono font-bold text-white transition-all duration-200 flex items-center gap-2 cursor-pointer"
+                                aria-label="Load more preparation dossiers"
+                                className="studio-btn-secondary px-6 py-2.5 rounded-xl text-xs font-mono font-bold text-white transition-all duration-200 flex items-center gap-2 cursor-pointer disabled:opacity-50"
                             >
-                                {isFetching ? 'Loading...' : 'Load More Plans'}
+                                {isFetching ? (
+                                    <>
+                                        <span className="w-3.5 h-3.5 border-2 border-white/20 border-t-accent rounded-full animate-spin" />
+                                        <span>Fetching Dossiers...</span>
+                                    </>
+                                ) : (
+                                    <span>Load More Plans</span>
+                                )}
                             </button>
                         </div>
                     )}

@@ -75,36 +75,45 @@ const AudiencePersonas = () => {
 
         {/* Persona Cards Grid */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
-          {PERSONAS.map((p, i) => (
-            <div
-              key={p.title}
-              className="studio-card rounded-2xl p-6 flex flex-col justify-between transition-all duration-300 hover:-translate-y-1 group cursor-default"
-              onMouseEnter={() => setHovered(i)}
-              onMouseLeave={() => setHovered(null)}
-            >
-              <div>
-                <div className="w-12 h-12 rounded-xl bg-[#08080A] border border-white/[0.08] flex items-center justify-center mb-5 group-hover:scale-105 transition-transform duration-300 shadow-inner">
-                  {p.icon}
+          {PERSONAS.map((p, i) => {
+            const isHovered = hovered === i;
+            return (
+              <div
+                key={p.title}
+                className="studio-card rounded-2xl p-6 flex flex-col justify-between transition-all duration-300 hover:-translate-y-1 group cursor-default"
+                style={{
+                  borderTopColor: isHovered ? p.color : undefined,
+                  boxShadow: isHovered
+                    ? `0 16px 36px -8px ${p.color}22`
+                    : undefined,
+                }}
+                onMouseEnter={() => setHovered(i)}
+                onMouseLeave={() => setHovered(null)}
+              >
+                <div>
+                  <div className="w-12 h-12 rounded-xl bg-[#08080A] border border-white/[0.08] flex items-center justify-center mb-5 group-hover:scale-105 transition-transform duration-300 shadow-inner">
+                    {p.icon}
+                  </div>
+                  <h4 className="font-bold text-white text-base mb-1 tracking-tight">{p.title}</h4>
+                  <p className="type-caption font-mono font-medium mb-3" style={{ color: p.color }}>
+                    {p.tagline}
+                  </p>
+                  <p className="type-body text-secondary/80 leading-relaxed font-normal">{p.desc}</p>
                 </div>
-                <h4 className="font-bold text-white text-base mb-1 tracking-tight">{p.title}</h4>
-                <p className="text-xs font-mono font-medium mb-3" style={{ color: p.color }}>
-                  {p.tagline}
-                </p>
-                <p className="text-xs text-secondary/70 leading-relaxed font-normal">{p.desc}</p>
-              </div>
 
-              <div className="flex flex-wrap gap-1.5 pt-5 mt-4 border-t border-white/[0.04]">
-                {p.tags.map((tag) => (
-                  <span
-                    key={tag}
-                    className="text-[9px] font-mono font-bold uppercase tracking-wider px-2 py-0.5 rounded bg-white/[0.03] border border-white/[0.06] text-white/50"
-                  >
-                    {tag}
-                  </span>
-                ))}
+                <div className="flex flex-wrap gap-1.5 pt-5 mt-4 border-t border-white/[0.04]">
+                  {p.tags.map((tag) => (
+                    <span
+                      key={tag}
+                      className="type-micro px-2 py-0.5 rounded bg-white/[0.03] border border-white/[0.06] text-secondary/70"
+                    >
+                      {tag}
+                    </span>
+                  ))}
+                </div>
               </div>
-            </div>
-          ))}
+            );
+          })}
         </div>
       </div>
     </section>
