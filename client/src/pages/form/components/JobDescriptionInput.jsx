@@ -82,7 +82,7 @@ const JobDescriptionInput = ({ value, onChange }) => {
             <h2 className="font-bold text-primary text-base tracking-tight font-display">
               Target Role Description
             </h2>
-            <p className="text-xs text-accent font-mono font-medium mt-0.5">30–1200 CHARACTERS</p>
+            <p className="type-micro text-accent mt-0.5">30–4,000 CHARACTERS</p>
           </div>
         </div>
 
@@ -102,14 +102,14 @@ const JobDescriptionInput = ({ value, onChange }) => {
           onFocus={() => setIsFocused(true)}
           onBlur={handleBlur}
           placeholder={`Paste the full job description details here...\ne.g. 'Senior Frontend Engineer at Google. Requires proficiency in React, TypeScript, and architectural principles...'`}
-          maxLength={1200}
+          maxLength={4000}
           className="studio-well flex-1 min-h-[280px] w-full p-4 text-sm text-primary placeholder:text-muted resize-none focus:outline-none transition-all duration-200 leading-relaxed no-scrollbar"
         />
       </div>
 
       {/* Live Extracted Skills tags */}
       <div className="mb-4">
-        <p className="text-xs text-secondary mb-2 font-mono uppercase tracking-wider text-[11px]">
+        <p className="type-micro text-secondary/70 mb-2">
           Extracted Competencies
         </p>
         <div className="flex flex-wrap gap-1.5 min-h-[32px] p-2 rounded-xl studio-well border-white/[0.05]">
@@ -143,14 +143,14 @@ const JobDescriptionInput = ({ value, onChange }) => {
         </span>
         <span
           className={`${
-            localValue.length >= 1200
+            localValue.length >= 4000
               ? "text-red-400 font-bold"
-              : localValue.length > 1100
+              : localValue.length > 3600
               ? "text-amber-400 font-semibold"
-              : "text-secondary"
+              : "text-secondary/70"
           } font-mono`}
         >
-          {localValue.length} / 1200
+          {localValue.length} / 4,000
         </span>
       </div>
     </div>

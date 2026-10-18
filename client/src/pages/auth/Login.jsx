@@ -4,6 +4,7 @@ import { useAuth } from "../../hooks/useAuth";
 import { loginSchema } from "../../schemas/auth.schema.js";
 import LoadingScreen from "../../components/layout/LoadingScreen";
 import GoogleButton from "../../components/auth/GoogleButton";
+import { toast } from "react-hot-toast";
 import { FiMail, FiLock, FiEye, FiEyeOff, FiArrowRight, FiLink } from "react-icons/fi";
 
 const Login = () => {
@@ -140,10 +141,20 @@ const Login = () => {
     <div className="min-h-screen w-full bg-[#08080A] flex flex-col lg:flex-row font-sans selection:bg-accent/30 selection:text-white">
       {/* Left Section - Executive Telemetry Showcase */}
       <div className="hidden lg:flex w-[48%] flex-col justify-between bg-[#0B0B0E] p-12 lg:p-16 relative overflow-hidden border-r border-white/[0.07]">
-        {/* Subtle physical lighting vignette - no generic pulsing balls */}
+        {/* Subtle physical lighting vignette - pure smooth radial gradients */}
         <div className="absolute top-0 left-0 w-full h-full pointer-events-none overflow-hidden">
-          <div className="absolute -top-[20%] -left-[15%] w-[450px] h-[450px] rounded-full bg-accent/[0.07] blur-[100px] orb-isolated" />
-          <div className="absolute bottom-[5%] right-[-10%] w-[380px] h-[380px] rounded-full bg-[#FE9A00]/[0.05] blur-[120px] orb-isolated" />
+          <div
+            className="absolute -top-[20%] -left-[15%] w-[450px] h-[450px] pointer-events-none"
+            style={{
+              background: "radial-gradient(circle, rgba(255,102,98,0.08) 0%, transparent 70%)",
+            }}
+          />
+          <div
+            className="absolute bottom-[5%] right-[-10%] w-[380px] h-[380px] pointer-events-none"
+            style={{
+              background: "radial-gradient(circle, rgba(254,154,0,0.05) 0%, transparent 70%)",
+            }}
+          />
         </div>
 
         {/* Brand Monogram */}
@@ -276,10 +287,10 @@ const Login = () => {
                   onBlur={() => handleBlur("email")}
                   placeholder="name@company.com"
                   autoComplete="email"
-                  className={`w-full pl-11 pr-4 py-3 bg-[#040405] border rounded-xl text-white placeholder-white/20 text-sm focus:outline-none focus:ring-2 focus:ring-accent/15 focus:border-accent/60 transition-all duration-200 ${
+                  className={`w-full pl-11 pr-4 py-3 bg-[#040405] border rounded-xl text-white placeholder-white/30 text-sm focus:outline-none transition-all duration-200 ${
                     fieldErrors.email && touched.email
-                      ? "border-red-500/50 bg-red-500/5"
-                      : "border-white/[0.08] hover:border-white/[0.15]"
+                      ? "border-red-500/50 bg-red-500/5 focus:border-red-500 focus:shadow-[0_0_16px_rgba(239,68,68,0.15)]"
+                      : "border-white/[0.08] hover:border-white/[0.15] focus:border-accent focus:shadow-[0_0_16px_rgba(255,102,98,0.14)]"
                   }`}
                 />
               </div>
@@ -297,9 +308,13 @@ const Login = () => {
                 <label htmlFor="password" className="block text-xs font-mono uppercase tracking-wider text-white/60">
                   Password
                 </label>
-                <Link to="#" className="text-xs font-mono text-accent hover:text-[#FE9A00] transition-colors">
+                <button
+                  type="button"
+                  onClick={() => toast("Password recovery is verified via your Google login or administrator.", { icon: "🔑" })}
+                  className="text-xs font-mono text-accent hover:text-[#FE9A00] transition-colors cursor-pointer"
+                >
                   Forgot?
-                </Link>
+                </button>
               </div>
               <div className="relative group/input">
                 <div className="absolute left-3.5 top-1/2 -translate-y-1/2 text-white/30 group-focus-within/input:text-accent transition-colors duration-200">
@@ -314,16 +329,17 @@ const Login = () => {
                   onBlur={() => handleBlur("password")}
                   placeholder="••••••••••••"
                   autoComplete="current-password"
-                  className={`w-full pl-11 pr-11 py-3 bg-[#040405] border rounded-xl text-white placeholder-white/20 text-sm focus:outline-none focus:ring-2 focus:ring-accent/15 focus:border-accent/60 transition-all duration-200 ${
+                  className={`w-full pl-11 pr-11 py-3 bg-[#040405] border rounded-xl text-white placeholder-white/30 text-sm focus:outline-none transition-all duration-200 ${
                     fieldErrors.password && touched.password
-                      ? "border-red-500/50 bg-red-500/5"
-                      : "border-white/[0.08] hover:border-white/[0.15]"
+                      ? "border-red-500/50 bg-red-500/5 focus:border-red-500 focus:shadow-[0_0_16px_rgba(239,68,68,0.15)]"
+                      : "border-white/[0.08] hover:border-white/[0.15] focus:border-accent focus:shadow-[0_0_16px_rgba(255,102,98,0.14)]"
                   }`}
                 />
                 <button
                   type="button"
                   onClick={() => setShowPassword((v) => !v)}
-                  className="absolute right-3.5 top-1/2 -translate-y-1/2 text-white/30 hover:text-white transition-colors focus:outline-none cursor-pointer"
+                  aria-label={showPassword ? "Hide password" : "Show password"}
+                  className="absolute right-1 top-1/2 -translate-y-1/2 w-10 h-10 flex items-center justify-center text-white/40 hover:text-white transition-colors focus:outline-none cursor-pointer"
                 >
                   {showPassword ? <FiEyeOff className="w-4 h-4" /> : <FiEye className="w-4 h-4" />}
                 </button>

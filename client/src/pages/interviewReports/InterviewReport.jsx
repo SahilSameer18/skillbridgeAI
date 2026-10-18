@@ -12,9 +12,10 @@ const NAV_ITEMS = [
 ]
 
 const SEVERITY_STYLES = {
-    high:   'bg-accent/10 text-accent border border-accent/25',
-    medium: 'bg-[#FE9A00]/10 text-amber border-amber/25',
-    low:    'bg-white/[0.04] text-white/60 border border-white/[0.08]',
+    high:     'studio-badge-coral',
+    critical: 'studio-badge-coral',
+    medium:   'studio-badge-amber',
+    low:      'studio-badge-neutral',
 }
 
 /* ─────────────────────────────────────────
@@ -57,47 +58,87 @@ const DocsLogo = () => (
 )
 
 /* ─────────────────────────────────────────
-   Score Ring Component (Memoized)
+   Score Count-Up Hook
 ───────────────────────────────────────── */
-const ScoreRing = React.memo(({ score, size = 76, strokeWidth = 6 }) => {
+const useCountUp = (target, duration = 1000) => {
+    const [count, setCount] = useState(0)
+    useEffect(() => {
+        if (!target) return
+        let startTime = null
+        let animationFrameId
+        const step = (timestamp) => {
+            if (!startTime) startTime = timestamp
+            const progress = Math.min((timestamp - startTime) / duration, 1)
+            const eased = 1 - Math.pow(1 - progress, 3)
+            setCount(Math.round(eased * target))
+            if (progress < 1) {
+                animationFrameId = requestAnimationFrame(step)
+            }
+        }
+        animationFrameId = requestAnimationFrame(step)
+        return () => {
+            if (animationFrameId) cancelAnimationFrame(animationFrameId)
+        }
+    }, [target, duration])
+    return count
+}
+
+/* ─────────────────────────────────────────
+   Score Widget Component (Animated Gauge + Counter)
+───────────────────────────────────────── */
+const ScoreWidget = React.memo(({ score, size = 80, strokeWidth = 6 }) => {
     const radius = (size - strokeWidth) / 2
     const circumference = 2 * Math.PI * radius
     const [offset, setOffset] = useState(circumference)
+    const displayScore = useCountUp(score, 1100)
 
     useEffect(() => {
-        const t = setTimeout(() => setOffset(circumference - (score / 100) * circumference), 120)
+        const t = setTimeout(() => setOffset(circumference - (score / 100) * circumference), 100)
         return () => clearTimeout(t)
     }, [score, circumference])
 
     return (
-        <svg width={size} height={size} className="-rotate-90">
-            <circle
-                r={radius}
-                cx={size / 2}
-                cy={size / 2}
-                fill="none"
-                stroke="rgba(255,255,255,0.06)"
-                strokeWidth={strokeWidth}
-            />
-            <circle
-                r={radius}
-                cx={size / 2}
-                cy={size / 2}
-                fill="none"
-                stroke="url(#reportGrad)"
-                strokeWidth={strokeWidth}
-                strokeLinecap="round"
-                strokeDasharray={circumference}
-                strokeDashoffset={offset}
-                style={{ transition: 'stroke-dashoffset 1.2s cubic-bezier(0.4,0,0.2,1)' }}
-            />
-            <defs>
-                <linearGradient id="reportGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-                    <stop offset="0%" stopColor="#FF6662" />
-                    <stop offset="100%" stopColor="#FE9A00" />
-                </linearGradient>
-            </defs>
-        </svg>
+        <div className="relative flex items-center justify-center" style={{ width: size, height: size }}>
+            <svg
+                width={size}
+                height={size}
+                className="-rotate-90"
+                role="img"
+                aria-label={`Match score: ${displayScore}%`}
+            >
+                <circle
+                    r={radius}
+                    cx={size / 2}
+                    cy={size / 2}
+                    fill="none"
+                    stroke="rgba(255,255,255,0.06)"
+                    strokeWidth={strokeWidth}
+                />
+                <circle
+                    r={radius}
+                    cx={size / 2}
+                    cy={size / 2}
+                    fill="none"
+                    stroke="url(#reportGrad)"
+                    strokeWidth={strokeWidth}
+                    strokeLinecap="round"
+                    strokeDasharray={circumference}
+                    strokeDashoffset={offset}
+                    style={{ transition: 'stroke-dashoffset 1.1s cubic-bezier(0.16, 1, 0.3, 1)' }}
+                />
+                <defs>
+                    <linearGradient id="reportGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                        <stop offset="0%" stopColor="#FF6662" />
+                        <stop offset="100%" stopColor="#FE9A00" />
+                    </linearGradient>
+                </defs>
+            </svg>
+            <div className="absolute inset-0 flex items-center justify-center flex-col pointer-events-none">
+                <span className="text-xl font-extrabold font-mono text-white leading-none tracking-tight">
+                    {displayScore}%
+                </span>
+            </div>
+        </div>
     )
 })
 
@@ -107,6 +148,7 @@ const ScoreRing = React.memo(({ score, size = 76, strokeWidth = 6 }) => {
 const QuestionCard = React.memo(({ item, index, badgeColor = 'bg-accent/15 text-accent border border-accent/25' }) => {
     const [open, setOpen] = useState(false)
     const [copied, setCopied] = useState(false)
+    const contentId = `qa-content-${index}`
 
     const handleCopy = (e) => {
         e.stopPropagation()
@@ -122,38 +164,43 @@ const QuestionCard = React.memo(({ item, index, badgeColor = 'bg-accent/15 text-
         }`}>
             <button
                 type="button"
-                className="w-full flex items-start gap-3.5 p-4 sm:p-5 text-left focus:outline-none cursor-pointer"
+                aria-expanded={open}
+                aria-controls={contentId}
+                className="w-full flex items-start gap-3.5 p-4 sm:p-5 text-left focus:outline-none cursor-pointer group/q"
                 onClick={() => setOpen(o => !o)}
             >
-                <div className={`shrink-0 w-8 h-8 rounded-xl flex items-center justify-center text-xs font-mono font-bold shadow-inner ${badgeColor}`}>
+                <div className={`shrink-0 w-8 h-8 rounded-xl flex items-center justify-center type-micro shadow-inner ${badgeColor}`}>
                     {String(index + 1).padStart(2, '0')}
                 </div>
                 <div className="flex-1 min-w-0 pt-0.5">
-                    <p className={`text-sm sm:text-base font-medium leading-snug transition-colors duration-200 ${
-                        open ? 'text-white' : 'text-white/90'
+                    <p className={`text-sm sm:text-base font-semibold leading-snug transition-colors duration-200 ${
+                        open ? 'text-white' : 'text-white/90 group-hover/q:text-white'
                     }`}>
                         {item.question}
                     </p>
                 </div>
-                <div className={`shrink-0 w-7 h-7 rounded-lg flex items-center justify-center bg-[#08080A] border border-white/[0.08] text-white/50 transition-transform duration-300 ${
-                    open ? 'rotate-180 text-white' : ''
+                <div className={`shrink-0 w-8 h-8 rounded-lg flex items-center justify-center bg-[#08080A] border border-white/[0.08] text-white/50 transition-transform duration-300 ${
+                    open ? 'rotate-180 text-white border-white/[0.2]' : 'group-hover/q:text-white group-hover/q:border-white/[0.14]'
                 }`}>
                     <Icon name="chevron-down" className="w-3.5 h-3.5" />
                 </div>
             </button>
 
-            <div className={`grid transition-[grid-template-rows,opacity] duration-300 ease-in-out ${
-                open ? 'grid-rows-[1fr] opacity-100' : 'grid-rows-[0fr] opacity-0'
-            }`}>
+            <div
+                id={contentId}
+                className={`grid transition-[grid-template-rows,opacity] duration-300 ease-in-out ${
+                    open ? 'grid-rows-[1fr] opacity-100' : 'grid-rows-[0fr] opacity-0'
+                }`}
+            >
                 <div className="overflow-hidden">
                     <div className="px-4 pb-4 sm:px-5 sm:pb-5 space-y-3.5 border-t border-white/[0.06] pt-4">
                         {/* Intention Section */}
                         {item.intention && (
                             <div className="studio-well rounded-xl p-3.5 border border-white/[0.06]">
-                                <p className="text-[10px] font-mono font-bold text-accent uppercase tracking-wider mb-1.5 flex items-center gap-1.5">
+                                <p className="type-micro text-accent mb-1.5 flex items-center gap-1.5 font-mono">
                                     <Icon name="target" className="w-3 h-3 text-accent" /> Why Interviewers Ask This
                                 </p>
-                                <p className="text-xs sm:text-sm text-secondary/80 leading-relaxed font-sans">
+                                <p className="type-body text-secondary/80 leading-relaxed font-sans">
                                     {item.intention}
                                 </p>
                             </div>
@@ -162,18 +209,19 @@ const QuestionCard = React.memo(({ item, index, badgeColor = 'bg-accent/15 text-
                         {/* Model Answer Section */}
                         <div className="space-y-1.5">
                             <div className="flex items-center justify-between gap-2">
-                                <p className="text-[10px] font-mono font-bold text-white/50 uppercase tracking-wider flex items-center gap-1.5">
+                                <p className="type-micro text-secondary/60 flex items-center gap-1.5 font-mono">
                                     <Icon name="sparkle" className="w-3 h-3 text-amber" /> Model Answer Framework
                                 </p>
                                 <button
                                     type="button"
                                     onClick={handleCopy}
-                                    className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-mono font-medium text-white/60 hover:text-white bg-[#08080A] border border-white/[0.08] hover:border-white/[0.16] transition-colors cursor-pointer"
+                                    aria-label="Copy model answer"
+                                    className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg type-micro text-white/70 hover:text-white bg-[#08080A] border border-white/[0.08] hover:border-white/[0.16] transition-colors cursor-pointer"
                                 >
                                     {copied ? (
                                         <>
                                             <Icon name="check" className="w-3 h-3 text-emerald-400" />
-                                            <span className="text-emerald-400">Copied</span>
+                                            <span className="text-emerald-400 font-semibold">Copied</span>
                                         </>
                                     ) : (
                                         <>
@@ -183,7 +231,7 @@ const QuestionCard = React.memo(({ item, index, badgeColor = 'bg-accent/15 text-
                                     )}
                                 </button>
                             </div>
-                            <div className="text-xs sm:text-sm text-white/95 leading-relaxed rounded-xl p-4 studio-well border border-white/[0.08] font-sans">
+                            <div className="type-body text-white/95 leading-relaxed rounded-xl p-4 studio-well border border-white/[0.08] font-sans">
                                 {item.answer}
                             </div>
                         </div>
@@ -199,7 +247,7 @@ const QuestionCard = React.memo(({ item, index, badgeColor = 'bg-accent/15 text-
 ───────────────────────────────────────── */
 const SkillGapCard = React.memo(({ gap }) => {
     const resources = gap.skillRef?.resources ?? []
-    const severityKey = gap.severity?.toLowerCase()
+    const severityKey = gap.severity?.toLowerCase() || 'low'
 
     return (
         <div className="studio-card rounded-2xl p-4 sm:p-5 transition-colors duration-200">
@@ -207,10 +255,10 @@ const SkillGapCard = React.memo(({ gap }) => {
                 <div className="flex items-center gap-2.5">
                     <span className="text-sm sm:text-base font-bold text-white tracking-tight">{gap.skill}</span>
                 </div>
-                <span className={`px-2.5 py-0.5 rounded-md text-[10px] font-mono font-bold tracking-wider uppercase self-start sm:self-auto ${
+                <span className={`self-start sm:self-auto ${
                     SEVERITY_STYLES[severityKey] ?? SEVERITY_STYLES.low
                 }`}>
-                    {gap.severity ?? 'low'} Priority
+                    {gap.severity ?? 'LOW'} PRIORITY
                 </span>
             </div>
 
@@ -231,7 +279,7 @@ const SkillGapCard = React.memo(({ gap }) => {
                                 <p className="text-xs font-semibold text-white/90 group-hover:text-accent transition-colors duration-200 truncate">
                                     {resource.title || (resource.type === 'VIDEO' ? 'Watch Guide' : 'Read Documentation')}
                                 </p>
-                                <p className="text-[10px] font-mono text-white/40 uppercase tracking-wider mt-0.5">
+                                <p className="type-micro text-secondary/60 mt-0.5">
                                     {resource.type === 'VIDEO' ? 'Video Resource' : 'Official Spec'}
                                 </p>
                             </div>
@@ -239,7 +287,7 @@ const SkillGapCard = React.memo(({ gap }) => {
                     ))}
                 </div>
             ) : (
-                <div className="flex items-center gap-2 p-3 mt-2 rounded-xl studio-well border border-white/[0.06] text-xs text-white/40 font-mono">
+                <div className="flex items-center gap-2 p-3 mt-2 rounded-xl studio-well border border-white/[0.06] type-caption text-secondary/60 font-mono">
                     <Icon name="help-circle" className="w-3.5 h-3.5 shrink-0" />
                     <span>No external resources identified. Review core documentation for this competency.</span>
                 </div>
@@ -251,31 +299,38 @@ const SkillGapCard = React.memo(({ gap }) => {
 /* ─────────────────────────────────────────
    Roadmap Day Timeline (Memoized)
 ───────────────────────────────────────── */
-const RoadmapDay = React.memo(({ day, index, total }) => (
-    <div className="relative flex gap-4 sm:gap-5 pb-6 group">
-        {index < total - 1 && (
-            <div className="absolute left-[19px] sm:left-5 top-11 bottom-0 w-[2px] bg-gradient-to-b from-accent/30 via-[#FE9A00]/20 to-transparent" />
-        )}
-        <div className="relative z-10 shrink-0 w-10 h-10 rounded-xl flex flex-col items-center justify-center studio-card border-t border-white/[0.14] border-x border-b border-white/[0.08] shadow-lg group-hover:border-accent/50 transition-colors duration-300">
-            <span className="text-[7px] font-mono font-bold text-white/40 uppercase tracking-wider leading-none mb-0.5">DAY</span>
-            <span className="text-sm font-mono font-bold text-accent leading-none">{day.day}</span>
+const RoadmapDay = React.memo(({ day, index, total }) => {
+    const isFirst = index === 0;
+    return (
+        <div className="relative flex gap-4 sm:gap-5 pb-6 group">
+            {index < total - 1 && (
+                <div className="absolute left-[19px] sm:left-5 top-11 bottom-0 w-[2px] bg-gradient-to-b from-accent/30 via-[#FE9A00]/20 to-transparent" />
+            )}
+            <div className={`relative z-10 shrink-0 w-10 h-10 rounded-xl flex flex-col items-center justify-center studio-card border-t shadow-lg group-hover:border-accent/50 transition-colors duration-300 ${
+                isFirst
+                    ? 'border-accent/40 shadow-[0_0_12px_rgba(255,102,98,0.2)]'
+                    : 'border-white/[0.14] border-x border-b border-white/[0.08]'
+            }`}>
+                <span className="text-[7px] font-mono font-bold text-white/40 uppercase tracking-wider leading-none mb-0.5">DAY</span>
+                <span className="text-sm font-mono font-bold text-accent leading-none">{day.day}</span>
+            </div>
+            <div className="flex-1 studio-card rounded-2xl p-4 sm:p-5 hover:border-white/[0.16] transition-colors duration-200 border-l-[3px] border-l-accent/40">
+                <h3 className="text-sm sm:text-base font-bold text-white mb-2.5 flex items-center gap-2 tracking-tight">
+                    <span className="text-accent">●</span>
+                    {day.focus}
+                </h3>
+                <ul className="space-y-2">
+                    {day.tasks.map((task, i) => (
+                        <li key={i} className="flex items-start gap-2.5 text-xs sm:text-sm text-secondary/90 leading-relaxed font-sans">
+                            <span className="mt-1.5 w-1.5 h-1.5 rounded-full bg-accent shrink-0" />
+                            <span>{task}</span>
+                        </li>
+                    ))}
+                </ul>
+            </div>
         </div>
-        <div className="flex-1 studio-card rounded-2xl p-4 sm:p-5 hover:border-white/[0.16] transition-colors duration-200">
-            <h3 className="text-sm sm:text-base font-bold text-white mb-2.5 flex items-center gap-2 tracking-tight">
-                <span className="text-accent">●</span>
-                {day.focus}
-            </h3>
-            <ul className="space-y-2">
-                {day.tasks.map((task, i) => (
-                    <li key={i} className="flex items-start gap-2.5 text-xs sm:text-sm text-secondary/90 leading-relaxed font-sans">
-                        <span className="mt-1.5 w-1 h-1 rounded-full bg-accent shrink-0" />
-                        <span>{task}</span>
-                    </li>
-                ))}
-            </ul>
-        </div>
-    </div>
-))
+    )
+})
 
 /* ─────────────────────────────────────────
    Skeleton Loader
@@ -346,7 +401,7 @@ const InterviewReport = () => {
         : 'bg-red-500/10 border-red-500/30 text-red-400'
 
     return (
-        <div className="animate-fade-in w-full max-w-6xl mx-auto pb-20 font-sans">
+        <div className="w-full max-w-6xl mx-auto pb-20 font-sans">
 
             {/* ── Page Header ── */}
             <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4 mb-6 pb-6 border-b border-white/[0.06]">
@@ -442,7 +497,7 @@ const InterviewReport = () => {
                                     onClick={() => setActiveNav(item.id)}
                                     className={`w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs font-medium transition-all duration-200 text-left cursor-pointer ${
                                         isActive
-                                            ? 'bg-[#15151C] text-white border-t border-white/[0.12] border-x border-b border-white/[0.04] shadow-md'
+                                            ? 'bg-[#15151C] text-white border-l-[3px] border-l-accent shadow-[inset_0_1px_0_0_rgba(255,255,255,0.1)]'
                                             : 'text-white/60 hover:text-white hover:bg-white/[0.03]'
                                     }`}
                                 >
@@ -466,119 +521,117 @@ const InterviewReport = () => {
 
                     {/* Match Score Card inside Sidebar */}
                     <div className="studio-card p-5 rounded-2xl flex flex-col items-center text-center">
-                        <p className="text-[10px] font-mono uppercase tracking-widest text-white/40 mb-3">Overall Match Rating</p>
-                        <div className="relative mb-2">
-                            <ScoreRing score={report.matchScore} size={76} strokeWidth={6} />
-                            <div className="absolute inset-0 flex items-center justify-center flex-col">
-                                <span className="text-xl font-bold font-mono text-white leading-none">{report.matchScore}%</span>
-                            </div>
+                        <p className="type-micro text-secondary/60 mb-3">OVERALL MATCH RATING</p>
+                        <div className="mb-2">
+                            <ScoreWidget score={report.matchScore} size={82} strokeWidth={6} />
                         </div>
-                        <span className={`text-xs font-mono font-bold uppercase tracking-wider ${scoreLabelColor}`}>
+                        <span className={`type-micro tracking-wider ${scoreLabelColor}`}>
                             {scoreLabel}
                         </span>
-                        <p className="text-[11px] text-white/40 mt-1 max-w-[180px]">
+                        <p className="type-caption text-secondary/60 mt-1 max-w-[180px]">
                             Calculated against target role specifications
                         </p>
                     </div>
                 </aside>
 
-                {/* ── Main Content Column ── */}
+                {/* ── Main Content Column (With Tab Cross-Fade) ── */}
                 <main className="flex-1 min-w-0 w-full space-y-4">
-
-                    {/* Section Header */}
-                    <div className="mb-4">
-                        <h2 className="text-lg sm:text-xl font-bold text-white tracking-tight mb-1">
-                            {activeNav === 'technical'  && 'Technical Interview Questions'}
-                            {activeNav === 'behavioral' && 'Behavioral & Leadership Scenarios'}
-                            {activeNav === 'skills'     && 'Targeted Skill Gaps & References'}
-                            {activeNav === 'roadmap'    && '10-Day Targeted Action Plan'}
-                        </h2>
-                        <p className="text-secondary/70 text-xs sm:text-sm leading-relaxed">
-                            {activeNav === 'technical'  && 'Tailored technical questions generated directly from your resume and target role requirements.'}
-                            {activeNav === 'behavioral' && 'Situational prompts evaluated against the STAR framework (Situation, Task, Action, Result).'}
-                            {activeNav === 'skills'     && 'Competencies to reinforce before your interview, with verified technical resources.'}
-                            {activeNav === 'roadmap'    && 'A day-by-day structured execution checklist to build confidence and mastery.'}
-                        </p>
-                    </div>
-
-                    {/* Section 1: Technical Questions */}
-                    {activeNav === 'technical' && (
-                        <div className="space-y-3.5">
-                            {technicalQuestions.length > 0 ? (
-                                technicalQuestions.map((q, i) => (
-                                    <QuestionCard
-                                        key={i}
-                                        item={q}
-                                        index={i}
-                                        badgeColor="bg-accent/15 text-accent border border-accent/25"
-                                    />
-                                ))
-                            ) : (
-                                <div className="studio-card rounded-2xl p-8 text-center">
-                                    <p className="text-sm text-secondary/60">No technical questions available for this report.</p>
-                                </div>
-                            )}
+                    <div key={activeNav} className="page-enter space-y-4">
+                        {/* Section Header */}
+                        <div className="mb-4">
+                            <h2 className="text-lg sm:text-xl font-bold text-white tracking-tight mb-1">
+                                {activeNav === 'technical'  && 'Technical Interview Questions'}
+                                {activeNav === 'behavioral' && 'Behavioral & Leadership Scenarios'}
+                                {activeNav === 'skills'     && 'Targeted Skill Gaps & References'}
+                                {activeNav === 'roadmap'    && '10-Day Targeted Action Plan'}
+                            </h2>
+                            <p className="text-secondary/70 text-xs sm:text-sm leading-relaxed">
+                                {activeNav === 'technical'  && 'Tailored technical questions generated directly from your resume and target role requirements.'}
+                                {activeNav === 'behavioral' && 'Situational prompts evaluated against the STAR framework (Situation, Task, Action, Result).'}
+                                {activeNav === 'skills'     && 'Competencies to reinforce before your interview, with verified technical resources.'}
+                                {activeNav === 'roadmap'    && 'A day-by-day structured execution checklist to build confidence and mastery.'}
+                            </p>
                         </div>
-                    )}
 
-                    {/* Section 2: Behavioral Questions */}
-                    {activeNav === 'behavioral' && (
-                        <div className="space-y-3.5">
-                            {behavioralQuestions.length > 0 ? (
-                                behavioralQuestions.map((q, i) => (
-                                    <QuestionCard
-                                        key={i}
-                                        item={q}
-                                        index={i}
-                                        badgeColor="bg-amber/15 text-amber border border-amber/25"
-                                    />
-                                ))
-                            ) : (
-                                <div className="studio-card rounded-2xl p-8 text-center">
-                                    <p className="text-sm text-secondary/60">No behavioral questions available for this report.</p>
-                                </div>
-                            )}
-                        </div>
-                    )}
-
-                    {/* Section 3: Skill Gaps */}
-                    {activeNav === 'skills' && (
-                        <div className="space-y-3.5">
-                            {skillGaps.length > 0 ? (
-                                skillGaps.map((gap, i) => <SkillGapCard key={i} gap={gap} />)
-                            ) : (
-                                <div className="studio-card rounded-2xl p-8 sm:p-10 text-center">
-                                    <div className="w-12 h-12 mx-auto rounded-xl studio-well flex items-center justify-center mb-3">
-                                        <Icon name="target" className="w-6 h-6 text-accent" />
+                        {/* Section 1: Technical Questions */}
+                        {activeNav === 'technical' && (
+                            <div className="space-y-3.5">
+                                {technicalQuestions.length > 0 ? (
+                                    technicalQuestions.map((q, i) => (
+                                        <QuestionCard
+                                            key={i}
+                                            item={q}
+                                            index={i}
+                                            badgeColor="bg-accent/15 text-accent border border-accent/25"
+                                        />
+                                    ))
+                                ) : (
+                                    <div className="studio-card rounded-2xl p-8 text-center">
+                                        <p className="text-sm text-secondary/60">No technical questions available for this report.</p>
                                     </div>
-                                    <p className="text-base font-bold text-white mb-1">No Skill Gaps Identified</p>
-                                    <p className="text-xs sm:text-sm text-secondary/70 max-w-sm mx-auto leading-relaxed">
-                                        Your background aligns seamlessly with target requirements. Focus on polishing question delivery!
-                                    </p>
-                                </div>
-                            )}
-                        </div>
-                    )}
+                                )}
+                            </div>
+                        )}
 
-                    {/* Section 4: Roadmap */}
-                    {activeNav === 'roadmap' && (
-                        <div className="pt-2">
-                            {preparationPlan.length > 0 ? (
-                                preparationPlan.map((day, i) => (
-                                    <RoadmapDay
-                                        key={day.day || i}
-                                        day={day}
-                                        index={i}
-                                        total={preparationPlan.length}
-                                    />
-                                ))
-                            ) : (
-                                <div className="studio-card rounded-2xl p-8 text-center">
-                                    <p className="text-sm text-secondary/60">No preparation plan available for this report.</p>
-                                </div>
-                            )}
-                        </div>
-                    )}
+                        {/* Section 2: Behavioral Questions */}
+                        {activeNav === 'behavioral' && (
+                            <div className="space-y-3.5">
+                                {behavioralQuestions.length > 0 ? (
+                                    behavioralQuestions.map((q, i) => (
+                                        <QuestionCard
+                                            key={i}
+                                            item={q}
+                                            index={i}
+                                            badgeColor="bg-amber/15 text-amber border border-amber/25"
+                                        />
+                                    ))
+                                ) : (
+                                    <div className="studio-card rounded-2xl p-8 text-center">
+                                        <p className="text-sm text-secondary/60">No behavioral questions available for this report.</p>
+                                    </div>
+                                )}
+                            </div>
+                        )}
+
+                        {/* Section 3: Skill Gaps */}
+                        {activeNav === 'skills' && (
+                            <div className="space-y-3.5">
+                                {skillGaps.length > 0 ? (
+                                    skillGaps.map((gap, i) => <SkillGapCard key={i} gap={gap} />)
+                                ) : (
+                                    <div className="studio-card rounded-2xl p-8 sm:p-10 text-center">
+                                        <div className="w-12 h-12 mx-auto rounded-xl studio-well flex items-center justify-center mb-3">
+                                            <Icon name="target" className="w-6 h-6 text-accent" />
+                                        </div>
+                                        <p className="text-base font-bold text-white mb-1">No Skill Gaps Identified</p>
+                                        <p className="text-xs sm:text-sm text-secondary/70 max-w-sm mx-auto leading-relaxed">
+                                            Your background aligns seamlessly with target requirements. Focus on polishing question delivery!
+                                        </p>
+                                    </div>
+                                )}
+                            </div>
+                        )}
+
+                        {/* Section 4: Roadmap */}
+                        {activeNav === 'roadmap' && (
+                            <div className="pt-2">
+                                {preparationPlan.length > 0 ? (
+                                    preparationPlan.map((day, i) => (
+                                        <RoadmapDay
+                                            key={day.day || i}
+                                            day={day}
+                                            index={i}
+                                            total={preparationPlan.length}
+                                        />
+                                    ))
+                                ) : (
+                                    <div className="studio-card rounded-2xl p-8 text-center">
+                                        <p className="text-sm text-secondary/60">No preparation plan available for this report.</p>
+                                    </div>
+                                )}
+                            </div>
+                        )}
+                    </div>
                 </main>
             </div>
         </div>

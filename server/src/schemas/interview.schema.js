@@ -5,7 +5,7 @@ export const createInterviewSchema = z.object({
     .string({ message: "Job description is required" })
     .trim()
     .min(30, "Job description must be at least 30 characters")
-    .max(1200, "Job description cannot exceed 1200 characters"),
+    .max(4000, "Job description cannot exceed 4000 characters"),
 });
 
 export const interviewIdParamSchema = z.object({

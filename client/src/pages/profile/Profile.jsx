@@ -257,10 +257,13 @@ const Profile = () => {
   ];
 
   return (
-    <div className="w-full max-w-6xl mx-auto px-4 sm:px-6 py-10 animate-fade-in">
+    <div className="w-full max-w-6xl mx-auto px-4 sm:px-6 py-10 page-enter">
       {/* ── Top Header Banner ── */}
-      <div className="relative rounded-3xl p-6 sm:p-8 bg-surface/30 border border-border/80 overflow-hidden mb-8 shadow-xl">
-        <div className="absolute top-0 right-0 w-96 h-96 bg-accent/10 rounded-full blur-[120px] orb-isolated" />
+      <div className="relative studio-card p-6 sm:p-8 overflow-hidden mb-8 shadow-xl">
+        <div
+          className="absolute -top-24 -right-24 w-80 h-80 rounded-full pointer-events-none"
+          style={{ background: "radial-gradient(circle, rgba(255,102,98,0.12) 0%, transparent 70%)" }}
+        />
 
         <div className="flex flex-col md:flex-row items-center gap-6 relative z-10">
           {/* Avatar with live preview */}
@@ -280,6 +283,7 @@ const Profile = () => {
               onClick={() => setActiveTab("profile")}
               className="absolute -bottom-2 -right-2 p-2 rounded-xl bg-accent text-primary shadow-lg hover:scale-110 active:scale-95 transition-transform cursor-pointer"
               title="Change Avatar"
+              aria-label="Change Avatar"
             >
               <FiEdit3 className="w-4 h-4" />
             </button>
@@ -301,7 +305,7 @@ const Profile = () => {
               <FiMail className="w-4 h-4 text-accent/80 shrink-0" />
               <span className="truncate">{user?.email}</span>
             </div>
-            <p className="text-xs text-secondary/60 mt-1 font-mono">
+            <p className="type-micro text-secondary/60 mt-1.5 font-mono">
               Member since {new Date(user?.createdAt || Date.now()).toLocaleDateString("en-US", { month: "short", year: "numeric" })}
             </p>
           </div>
@@ -310,51 +314,51 @@ const Profile = () => {
 
       {/* ── Candidate Performance Stats Grid ── */}
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-5 mb-8">
-        <div className="rounded-2xl p-5 bg-surface/30 border border-border/60 flex items-center gap-4">
+        <div className="studio-card p-5 border-l-[3px] border-l-accent flex items-center gap-4">
           <div className="w-12 h-12 rounded-xl bg-accent/15 border border-accent/20 flex items-center justify-center text-accent shrink-0">
             <FiLayers className="w-6 h-6" />
           </div>
           <div>
-            <span className="text-[10px] font-bold text-secondary uppercase tracking-widest block">Total Audited</span>
+            <span className="type-micro text-secondary block font-mono">TOTAL AUDITED</span>
             {statsLoading ? (
               <div className="mt-1"><Skeleton width="65px" height="1.5rem" /></div>
             ) : (
-              <span className="text-2xl font-extrabold text-primary">{stats.totalReports} roles</span>
+              <span className="text-2xl font-extrabold text-primary font-mono">{stats.totalReports} <span className="text-xs font-normal text-secondary font-sans">roles</span></span>
             )}
           </div>
         </div>
 
-        <div className="rounded-2xl p-5 bg-surface/30 border border-border/60 flex items-center gap-4">
-          <div className="w-12 h-12 rounded-xl bg-amber-500/15 border border-amber-500/20 flex items-center justify-center text-amber-400 shrink-0">
+        <div className="studio-card p-5 border-l-[3px] border-l-amber flex items-center gap-4">
+          <div className="w-12 h-12 rounded-xl bg-amber/15 border border-amber/20 flex items-center justify-center text-amber shrink-0">
             <FiTrendingUp className="w-6 h-6" />
           </div>
           <div>
-            <span className="text-[10px] font-bold text-secondary uppercase tracking-widest block">Avg Compatibility</span>
+            <span className="type-micro text-secondary block font-mono">AVG COMPATIBILITY</span>
             {statsLoading ? (
               <div className="mt-1"><Skeleton width="55px" height="1.5rem" /></div>
             ) : (
-              <span className="text-2xl font-extrabold text-amber-400">{stats.averageScore}%</span>
+              <span className="text-2xl font-extrabold text-amber font-mono">{stats.averageScore}%</span>
             )}
           </div>
         </div>
 
-        <div className="rounded-2xl p-5 bg-surface/30 border border-border/60 flex items-center gap-4">
+        <div className="studio-card p-5 border-l-[3px] border-l-emerald-400 flex items-center gap-4">
           <div className="w-12 h-12 rounded-xl bg-emerald-500/15 border border-emerald-500/20 flex items-center justify-center text-emerald-400 shrink-0">
             <FiAward className="w-6 h-6" />
           </div>
           <div>
-            <span className="text-[10px] font-bold text-secondary uppercase tracking-widest block">Highest Match</span>
+            <span className="type-micro text-secondary block font-mono">HIGHEST MATCH</span>
             {statsLoading ? (
               <div className="mt-1"><Skeleton width="55px" height="1.5rem" /></div>
             ) : (
-              <span className="text-2xl font-extrabold text-emerald-400">{stats.topScore}%</span>
+              <span className="text-2xl font-extrabold text-emerald-400 font-mono">{stats.topScore}%</span>
             )}
           </div>
         </div>
       </div>
 
       {/* ── Tabbed Workspace ── */}
-      <div className="bg-surface/20 border border-border/80 rounded-3xl p-6 sm:p-8">
+      <div className="studio-card p-6 sm:p-8">
         {/* Modern Segmented Capsule Tab Navigation */}
         <div className="flex bg-surface/60 p-1.5 rounded-2xl border border-white/[0.06] mb-8 gap-2 overflow-x-auto no-scrollbar">
           {TABS.map((tab) => {
@@ -364,7 +368,7 @@ const Profile = () => {
               <button
                 key={tab.id}
                 onClick={() => setActiveTab(tab.id)}
-                className={`flex items-center gap-2 px-5 py-2.5 rounded-xl text-xs sm:text-sm font-bold transition-all duration-200 cursor-pointer whitespace-nowrap ${
+                className={`flex items-center gap-2 px-5 py-2.5 rounded-xl text-xs sm:text-sm font-bold min-h-[42px] transition-all duration-200 cursor-pointer whitespace-nowrap ${
                   isActive
                     ? "bg-accent text-primary shadow-[0_0_20px_rgba(255,102,98,0.3)] scale-[1.02]"
                     : "text-secondary hover:text-primary hover:bg-white/[0.03]"
@@ -392,7 +396,9 @@ const Profile = () => {
                   value={username}
                   onChange={(e) => setUsername(e.target.value)}
                   className={`w-full pl-11 pr-4 py-3 bg-surface/50 border rounded-xl text-sm text-primary focus:outline-none transition-all ${
-                    profileErrors.username ? "border-red-500/50 focus:border-red-500" : "border-white/[0.08] focus:border-accent/60"
+                    profileErrors.username
+                      ? "border-red-500/50 focus:border-red-500 focus:shadow-[0_0_16px_rgba(239,68,68,0.18)]"
+                      : "border-white/[0.08] focus:border-accent focus:shadow-[0_0_16px_rgba(255,102,98,0.14)]"
                   }`}
                   placeholder="e.g. alex_dev"
                   required
@@ -412,7 +418,7 @@ const Profile = () => {
                 <label className="block text-xs font-bold text-secondary uppercase tracking-wider">
                   Email Address <span className="text-secondary/50 font-normal">(Permanent Identity)</span>
                 </label>
-                <span className="text-[11px] text-accent/80 font-mono">Verified Account</span>
+                <span className="type-micro text-accent/80 font-mono">Verified Account</span>
               </div>
               <div className="relative">
                 <FiMail className="absolute left-4 top-1/2 -translate-y-1/2 text-secondary/50" />
@@ -426,8 +432,9 @@ const Profile = () => {
                 <button
                   type="button"
                   onClick={handleCopyEmail}
-                  className="absolute right-2.5 top-1/2 -translate-y-1/2 px-3 py-1.5 rounded-lg bg-surface border border-white/[0.08] hover:border-accent/40 text-xs font-bold text-primary flex items-center gap-1.5 transition-all cursor-pointer hover:scale-105 active:scale-95 shadow-sm"
+                  className="absolute right-2.5 top-1/2 -translate-y-1/2 px-3 py-1.5 rounded-lg bg-surface border border-white/[0.08] hover:border-accent/40 text-xs font-bold text-primary flex items-center gap-1.5 transition-all cursor-pointer hover:scale-105 active:scale-95 shadow-sm min-h-[32px]"
                   title="Copy Email Address"
+                  aria-label="Copy Email Address"
                 >
                   {copiedEmail ? (
                     <>
@@ -453,7 +460,7 @@ const Profile = () => {
                 <label className="block text-xs font-bold text-secondary uppercase tracking-wider">
                   Choose Avatar Style
                 </label>
-                <span className="text-[11px] text-secondary/60 font-mono">8 Preset Styles</span>
+                <span className="type-micro text-secondary/60 font-mono">8 Preset Styles</span>
               </div>
 
               <div className="grid grid-cols-2 sm:grid-cols-4 gap-3.5">
@@ -499,10 +506,8 @@ const Profile = () => {
               <button
                 type="submit"
                 disabled={!canSaveProfile}
-                className={`px-7 py-3 rounded-xl font-bold text-primary transition-all flex items-center gap-2 shadow-md ${
-                  canSaveProfile
-                    ? "bg-accent hover:opacity-90 cursor-pointer shadow-accent/20 hover:scale-[1.02] active:scale-95"
-                    : "bg-surface/50 text-secondary/40 border border-white/[0.05] cursor-not-allowed opacity-60"
+                className={`studio-btn-primary min-h-[44px] flex items-center gap-2 ${
+                  !canSaveProfile ? "opacity-50 cursor-not-allowed pointer-events-none" : ""
                 }`}
               >
                 {savingProfile ? (
@@ -548,13 +553,14 @@ const Profile = () => {
                       value={currentPassword}
                       onChange={(e) => setCurrentPassword(e.target.value)}
                       placeholder="••••••••"
-                      className="w-full pl-11 pr-12 py-3 bg-surface/50 border border-white/[0.08] rounded-xl text-sm text-primary focus:outline-none focus:border-accent/60"
+                      className="w-full pl-11 pr-12 py-3 bg-surface/50 border border-white/[0.08] rounded-xl text-sm text-primary focus:outline-none focus:border-accent focus:shadow-[0_0_16px_rgba(255,102,98,0.14)] transition-all"
                       required
                     />
                     <button
                       type="button"
                       onClick={() => setShowCurrentPassword((v) => !v)}
-                      className="absolute right-4 top-1/2 -translate-y-1/2 text-secondary/50 hover:text-primary transition-colors focus:outline-none cursor-pointer"
+                      className="absolute right-2 top-1/2 -translate-y-1/2 w-9 h-9 flex items-center justify-center text-secondary/50 hover:text-primary transition-colors focus:outline-none cursor-pointer rounded-lg hover:bg-white/[0.04]"
+                      aria-label={showCurrentPassword ? "Hide current password" : "Show current password"}
                     >
                       {showCurrentPassword ? <FiEyeOff className="w-4 h-4" /> : <FiEye className="w-4 h-4" />}
                     </button>
@@ -574,14 +580,17 @@ const Profile = () => {
                       onChange={(e) => setNewPassword(e.target.value)}
                       placeholder="••••••••"
                       className={`w-full pl-11 pr-12 py-3 bg-surface/50 border rounded-xl text-sm text-primary focus:outline-none transition-all ${
-                        passwordErrors.newPassword ? "border-red-500/50 focus:border-red-500" : "border-white/[0.08] focus:border-accent/60"
+                        passwordErrors.newPassword
+                          ? "border-red-500/50 focus:border-red-500 focus:shadow-[0_0_16px_rgba(239,68,68,0.18)]"
+                          : "border-white/[0.08] focus:border-accent focus:shadow-[0_0_16px_rgba(255,102,98,0.14)]"
                       }`}
                       required
                     />
                     <button
                       type="button"
                       onClick={() => setShowNewPassword((v) => !v)}
-                      className="absolute right-4 top-1/2 -translate-y-1/2 text-secondary/50 hover:text-primary transition-colors focus:outline-none cursor-pointer"
+                      className="absolute right-2 top-1/2 -translate-y-1/2 w-9 h-9 flex items-center justify-center text-secondary/50 hover:text-primary transition-colors focus:outline-none cursor-pointer rounded-lg hover:bg-white/[0.04]"
+                      aria-label={showNewPassword ? "Hide new password" : "Show new password"}
                     >
                       {showNewPassword ? <FiEyeOff className="w-4 h-4" /> : <FiEye className="w-4 h-4" />}
                     </button>
@@ -607,14 +616,17 @@ const Profile = () => {
                       onChange={(e) => setConfirmPassword(e.target.value)}
                       placeholder="••••••••"
                       className={`w-full pl-11 pr-12 py-3 bg-surface/50 border rounded-xl text-sm text-primary focus:outline-none transition-all ${
-                        passwordErrors.confirmPassword ? "border-red-500/50 focus:border-red-500" : "border-white/[0.08] focus:border-accent/60"
+                        passwordErrors.confirmPassword
+                          ? "border-red-500/50 focus:border-red-500 focus:shadow-[0_0_16px_rgba(239,68,68,0.18)]"
+                          : "border-white/[0.08] focus:border-accent focus:shadow-[0_0_16px_rgba(255,102,98,0.14)]"
                       }`}
                       required
                     />
                     <button
                       type="button"
                       onClick={() => setShowConfirmPassword((v) => !v)}
-                      className="absolute right-4 top-1/2 -translate-y-1/2 text-secondary/50 hover:text-primary transition-colors focus:outline-none cursor-pointer"
+                      className="absolute right-2 top-1/2 -translate-y-1/2 w-9 h-9 flex items-center justify-center text-secondary/50 hover:text-primary transition-colors focus:outline-none cursor-pointer rounded-lg hover:bg-white/[0.04]"
+                      aria-label={showConfirmPassword ? "Hide confirm password" : "Show confirm password"}
                     >
                       {showConfirmPassword ? <FiEyeOff className="w-4 h-4" /> : <FiEye className="w-4 h-4" />}
                     </button>
@@ -631,10 +643,8 @@ const Profile = () => {
                 <button
                   type="submit"
                   disabled={!canSavePassword}
-                  className={`px-6 py-3 rounded-xl font-bold text-primary transition-all flex items-center gap-2 text-sm shadow-md ${
-                    canSavePassword
-                      ? "bg-accent hover:opacity-90 cursor-pointer shadow-accent/20 hover:scale-[1.02] active:scale-95"
-                      : "bg-surface/50 text-secondary/40 border border-white/[0.05] cursor-not-allowed opacity-60"
+                  className={`studio-btn-primary min-h-[44px] flex items-center gap-2 text-sm ${
+                    !canSavePassword ? "opacity-50 cursor-not-allowed pointer-events-none" : ""
                   }`}
                 >
                   {savingPassword ? (
@@ -646,7 +656,7 @@ const Profile = () => {
                 </button>
               </form>
             ) : (
-              <div className="p-6 rounded-2xl bg-surface/30 border border-border/60">
+              <div className="p-6 rounded-2xl studio-well border border-border/60">
                 <h3 className="text-base font-bold text-primary mb-2 flex items-center gap-2">
                   <FiShield className="text-emerald-400" /> Google Single Sign-On Account
                 </h3>
@@ -664,7 +674,7 @@ const Profile = () => {
         {/* ── Tab 3: Connected Accounts (Split Tab) ── */}
         {activeTab === "accounts" && (
           <div className="space-y-6 max-w-xl animate-fade-in">
-            <div className="p-6 rounded-2xl bg-surface/30 border border-border/60">
+            <div className="p-6 rounded-2xl studio-well border border-border/60">
               <h3 className="text-base font-bold text-primary mb-2 flex items-center gap-2">
                 <FiShield className="text-accent" /> External SSO Providers
               </h3>

@@ -1,38 +1,56 @@
-import React from 'react'
-import { Link, useNavigate } from 'react-router'
+import React from "react";
+import { Link, useNavigate } from "react-router";
+import { FiHome, FiArrowLeft, FiCompass } from "react-icons/fi";
 
 const NotFound = () => {
-    const navigate = useNavigate()
+  const navigate = useNavigate();
 
-    return (
-        <div className="min-h-[70vh] flex items-center justify-center px-4 animate-fade-in">
-            <div className="text-center max-w-md mx-auto">
-                {/* 404 glowing number */}
-                <div className="text-[8rem] font-black leading-none text-gradient-primary mb-4 select-none">
-                    404
-                </div>
+  return (
+    <div className="min-h-[75vh] flex items-center justify-center px-4 font-sans">
+      <div className="relative w-full max-w-lg rounded-3xl p-8 sm:p-12 text-center studio-card border border-white/[0.08] shadow-2xl overflow-hidden">
+        {/* Subtle top laser highlight */}
+        <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-accent/50 to-transparent" />
 
-                <h1 className="text-2xl font-bold text-white mb-3">Page Not Found</h1>
-                <p className="text-stone-400 mb-10 leading-relaxed">
-                    The page you're looking for doesn't exist or has been moved.
-                </p>
-
-                <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-                    <Link
-                        to="/"
-                        className="px-6 py-3 rounded-xl font-semibold text-white text-sm transition-all duration-300 active:scale-95" style={{ background: "linear-gradient(135deg,#ff6662,#fe9a00)" }}>
-                        🏠 Go Home
-                    </Link>
-                    <button
-                        onClick={() => navigate(-1)}
-                        className="px-6 py-3 rounded-xl font-semibold text-sm text-stone-300 hover:text-white transition-all duration-200"
-                        style={{background:'rgba(30,41,59,0.6)', border:'1px solid rgba(51,65,85,0.6)'}}>
-                        ← Go Back
-                    </button>
-                </div>
-            </div>
+        {/* Status Icon */}
+        <div className="w-16 h-16 rounded-2xl studio-well flex items-center justify-center text-accent mx-auto mb-6 shadow-inner border border-white/[0.08]">
+          <FiCompass className="w-8 h-8" />
         </div>
-    )
-}
 
-export default NotFound
+        {/* Telemetry Badge */}
+        <div className="mb-3">
+          <span className="studio-badge-coral text-[10px]">
+            STATUS 404 · ROUTE NOT FOUND
+          </span>
+        </div>
+
+        {/* Heading */}
+        <h1 className="text-3xl sm:text-4xl font-extrabold text-white tracking-tight mb-3 font-display">
+          Lost in the Stack
+        </h1>
+        <p className="type-body text-secondary/70 max-w-sm mx-auto mb-8 leading-relaxed font-normal">
+          The dossier or endpoint you requested cannot be located. It may have been archived or repositioned.
+        </p>
+
+        {/* Actions */}
+        <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
+          <Link
+            to="/"
+            className="w-full sm:w-auto px-6 py-3 rounded-xl text-sm font-bold text-white studio-btn-primary flex items-center justify-center gap-2"
+          >
+            <FiHome className="w-4 h-4" />
+            <span>Return to Console</span>
+          </Link>
+          <button
+            onClick={() => navigate(-1)}
+            className="w-full sm:w-auto px-6 py-3 rounded-xl text-sm font-semibold text-white/80 studio-btn-secondary flex items-center justify-center gap-2 cursor-pointer"
+          >
+            <FiArrowLeft className="w-4 h-4" />
+            <span>Go Back</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default NotFound;

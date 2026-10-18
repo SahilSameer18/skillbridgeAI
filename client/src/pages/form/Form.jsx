@@ -111,14 +111,14 @@ const Form = () => {
     if (trimmedJD.length < 30) {
       return `Job description too short (${trimmedJD.length}/30 characters minimum)`;
     }
-    if (trimmedJD.length > 1200) {
-      return `Job description exceeds limit (${trimmedJD.length}/1200 characters maximum)`;
+    if (trimmedJD.length > 4000) {
+      return `Job description exceeds limit (${trimmedJD.length}/4,000 characters maximum)`;
     }
     return "All Systems Calibrated: Console ready for strategy execution";
   };
 
   return (
-    <div className="animate-fade-in py-4 max-w-6xl mx-auto">
+    <div className="py-4 max-w-6xl mx-auto font-sans">
       {/* Header Info */}
       <div className="mb-10 text-center">
         <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-primary mb-3 tracking-tight font-display">
@@ -173,15 +173,16 @@ const Form = () => {
       )}
 
       {/* Main Console Box */}
-      <div
-        className="studio-card overflow-hidden shadow-2xl relative"
-      >
+      <div className="studio-card overflow-hidden shadow-2xl relative">
+        {/* Active Processing Laser Progress Hairline */}
+        {isGenerating && <div className="laser-progress" />}
+
         {/* Calibration Status Bar at top of Workspace */}
         <div className="flex items-center gap-3 px-6 md:px-8 py-3.5 bg-black/40 border-b border-white/[0.06]">
           <span className={`w-2 h-2 rounded-full shrink-0 ${
             canGenerate ? "bg-emerald-400 shadow-[0_0_8px_rgba(52,211,153,0.8)]" : "bg-amber"
           }`} />
-          <span className="text-xs font-mono font-medium tracking-wide text-secondary truncate">
+          <span className="type-micro text-secondary/80 truncate">
             {getConsoleStatusText()}
           </span>
         </div>
