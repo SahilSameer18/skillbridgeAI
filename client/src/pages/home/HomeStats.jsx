@@ -93,19 +93,19 @@ const StatCard = ({ stat, index, visible }) => {
 
   return (
     <div
-      className={`studio-card p-6 sm:p-8 rounded-2xl flex flex-col items-center text-center transition-all duration-300 hover:-translate-y-1 group ${
+      className={`studio-card p-6 sm:p-8 rounded-2xl flex flex-col items-center text-center transition-all duration-300 hover:-translate-y-1 group shadow-sm border border-border ${
         visible ? "reveal-up" : "opacity-0"
       }`}
       style={{ animationDelay: `${index * 90}ms` }}
     >
       {/* Icon Well */}
-      <div className="w-12 h-12 rounded-xl bg-[#08080A] border border-white/[0.08] flex items-center justify-center mb-5 group-hover:scale-105 transition-transform duration-300 shadow-inner">
+      <div className="w-12 h-12 rounded-xl bg-slate-100 border border-border flex items-center justify-center mb-5 group-hover:scale-105 transition-transform duration-300 shadow-sm">
         {stat.icon}
       </div>
 
       {/* Numerical Value */}
       <div className="flex items-baseline gap-0.5 mb-2">
-        <span className="text-3xl sm:text-4xl font-extrabold text-white font-mono tracking-tight">
+        <span className="text-3xl sm:text-4xl font-extrabold text-primary font-mono tracking-tight">
           {displayed}
         </span>
         <span className="text-xl font-bold font-mono" style={{ color: stat.color }}>
@@ -113,8 +113,8 @@ const StatCard = ({ stat, index, visible }) => {
         </span>
       </div>
 
-      <p className="text-sm font-semibold text-white/90 mb-1 tracking-tight">{stat.label}</p>
-      <p className="type-caption text-secondary/70 font-mono">{stat.sublabel}</p>
+      <p className="text-sm font-semibold text-primary mb-1 tracking-tight">{stat.label}</p>
+      <p className="type-caption text-secondary font-mono">{stat.sublabel}</p>
     </div>
   );
 };
@@ -138,11 +138,11 @@ const HomeStats = () => {
   }, []);
 
   return (
-    <section ref={sectionRef} className="py-20 px-4 sm:px-6 lg:px-8 relative bg-[#08080A] font-sans">
+    <section ref={sectionRef} className="py-20 px-4 sm:px-6 lg:px-8 relative bg-background font-sans">
       <div className="max-w-6xl mx-auto">
         {/* Section Label */}
         <div className="text-center mb-12">
-          <span className="text-xs font-mono uppercase tracking-[0.25em] text-white/40">
+          <span className="text-xs font-mono uppercase tracking-[0.25em] text-secondary">
             ENGINEERED FOR SENIOR CANDIDATES & TECH LEADERS
           </span>
         </div>

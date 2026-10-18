@@ -7,8 +7,8 @@ import { exportReportPdf } from '../../utils/exportReportPdf.js';
 
 // ── Match Level Configuration ────────────────────────────────────────────────
 const getMatchDetails = (score) => {
-    if (!score) return { text: "text-white/40", border: "border-white/[0.08]", badgeBg: "bg-white/[0.03]", label: "Pending" };
-    if (score >= 80) return { text: "text-emerald-400", border: "border-emerald-500/25", badgeBg: "bg-emerald-500/10", label: "Strong Match" };
+    if (!score) return { text: "text-secondary", border: "border-border", badgeBg: "bg-slate-100", label: "Pending" };
+    if (score >= 80) return { text: "text-emerald-600", border: "border-emerald-500/25", badgeBg: "bg-emerald-500/10", label: "Strong Match" };
     if (score >= 60) return { text: "text-amber", border: "border-amber/25", badgeBg: "bg-amber/10", label: "Good Match" };
     return { text: "text-accent", border: "border-accent/25", badgeBg: "bg-accent/10", label: "Needs Prep" };
 };
@@ -21,12 +21,12 @@ const HorizontalProgressBar = React.memo(({ score }) => {
     return (
         <div className="w-full my-4 relative z-10">
             <div className="flex items-center justify-between mb-1.5">
-                <span className="text-[10px] font-mono font-bold text-white/40 uppercase tracking-wider">Alignment Score</span>
+                <span className="text-[10px] font-mono font-bold text-secondary uppercase tracking-wider">Alignment Score</span>
                 <span className={`text-xs font-mono font-bold ${text}`}>{score}%</span>
             </div>
-            <div className="w-full h-1.5 rounded-full bg-white/[0.06] overflow-hidden">
+            <div className="w-full h-1.5 rounded-full bg-slate-200 overflow-hidden">
                 <div 
-                    className="h-full rounded-full bg-gradient-to-r from-accent to-[#FE9A00] transition-all duration-700 ease-out"
+                    className="h-full rounded-full bg-gradient-to-r from-accent to-amber transition-all duration-700 ease-out"
                     style={{ width: `${score}%` }}
                 />
             </div>
@@ -47,10 +47,10 @@ const ReportCard = React.memo(({ report, index, onNavigate, onDownloadPdf, onDel
             {/* Card Header (Title & Status Tag) */}
             <div className="flex items-start justify-between gap-3 relative z-10">
                 <div className="min-w-0 flex-1">
-                    <h3 className="font-bold text-white text-base leading-snug group-hover:text-accent transition-colors duration-200 truncate" title={report.title || 'Custom Interview Plan'}>
+                    <h3 className="font-bold text-primary text-base leading-snug group-hover:text-accent transition-colors duration-200 truncate" title={report.title || 'Custom Interview Plan'}>
                         {report.title || 'Custom Interview Plan'}
                     </h3>
-                    <p className="type-micro text-secondary/60 mt-1 font-mono">
+                    <p className="type-micro text-secondary mt-1 font-mono">
                         {new Date(report.createdAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
                     </p>
                 </div>
@@ -65,15 +65,15 @@ const ReportCard = React.memo(({ report, index, onNavigate, onDownloadPdf, onDel
             <HorizontalProgressBar score={report.matchScore} />
 
             {/* Description Snippet */}
-            <p className="text-xs text-secondary/70 leading-relaxed flex-grow mt-1 line-clamp-2 font-normal" style={{ display: '-webkit-box', WebkitLineClamp: '2', WebkitBoxOrient: 'vertical', overflow: 'hidden' }}>
+            <p className="text-xs text-secondary leading-relaxed flex-grow mt-1 line-clamp-2 font-normal" style={{ display: '-webkit-box', WebkitLineClamp: '2', WebkitBoxOrient: 'vertical', overflow: 'hidden' }}>
                 {report.jobDescription || "Custom target interview analysis details."}
             </p>
 
             {/* Card Footer Actions */}
-            <div className="flex items-center justify-between mt-5 pt-3.5 border-t border-white/[0.06] relative z-10" onClick={(e) => e.stopPropagation()}>
+            <div className="flex items-center justify-between mt-5 pt-3.5 border-t border-border relative z-10" onClick={(e) => e.stopPropagation()}>
                 <button
                     onClick={() => onNavigate(`/interview/${report.id}`)}
-                    className="text-xs font-semibold text-white/90 flex items-center gap-1.5 group/btn hover:text-accent transition-colors cursor-pointer py-1"
+                    className="text-xs font-semibold text-primary flex items-center gap-1.5 group/btn hover:text-accent transition-colors cursor-pointer py-1"
                 >
                     <span>View Dossier</span>
                     <FiArrowRight className="w-3.5 h-3.5 group-hover/btn:translate-x-0.5 transition-transform duration-200" />
@@ -89,7 +89,7 @@ const ReportCard = React.memo(({ report, index, onNavigate, onDownloadPdf, onDel
                         className="studio-btn-icon disabled:opacity-50"
                     >
                         {isDownloading ? (
-                            <span className="w-3.5 h-3.5 border-2 border-white/20 border-t-accent rounded-full animate-spin" />
+                            <span className="w-3.5 h-3.5 border-2 border-slate-300 border-t-accent rounded-full animate-spin" />
                         ) : (
                             <FiDownload className="w-4 h-4" />
                         )}
@@ -101,10 +101,10 @@ const ReportCard = React.memo(({ report, index, onNavigate, onDownloadPdf, onDel
                         disabled={isDeleting}
                         aria-label="Delete interview plan"
                         title="Delete plan"
-                        className="studio-btn-icon hover:bg-red-500/10 hover:border-red-500/30 hover:text-red-400 disabled:opacity-50"
+                        className="studio-btn-icon hover:bg-red-500/10 hover:border-red-500/30 hover:text-red-500 disabled:opacity-50"
                     >
                         {isDeleting ? (
-                            <span className="w-3.5 h-3.5 border-2 border-red-500/30 border-t-red-400 rounded-full animate-spin" />
+                            <span className="w-3.5 h-3.5 border-2 border-red-500/30 border-t-red-500 rounded-full animate-spin" />
                         ) : (
                             <FiTrash2 className="w-4 h-4" />
                         )}
@@ -132,7 +132,7 @@ const SkeletonCard = () => (
             <Skeleton width="100%" height="0.45rem" />
             <Skeleton width="75%" height="0.45rem" />
         </div>
-        <div className="flex items-center justify-between pt-3.5 border-t border-white/[0.06]">
+        <div className="flex items-center justify-between pt-3.5 border-t border-border">
             <Skeleton width="90px" height="1.5rem" borderRadius="6px" />
             <div className="flex gap-1.5">
                 <Skeleton width="40px" height="40px" borderRadius="12px" />
@@ -142,13 +142,13 @@ const SkeletonCard = () => (
     </div>
 );
 
-// ── Luxury Specular Empty State ──────────────────────────────────────────────
+// ── Specular Empty State ──────────────────────────────────────────────
 const EmptyState = ({ onNavigate }) => (
-    <div className="relative rounded-3xl p-10 sm:p-16 text-center mt-6 flex flex-col items-center justify-center border border-dashed border-white/[0.12] bg-[#0A0A0E] overflow-hidden">
+    <div className="relative rounded-3xl p-10 sm:p-16 text-center mt-6 flex flex-col items-center justify-center border border-dashed border-border bg-white overflow-hidden shadow-sm">
         {/* Ambient Top Laser Line */}
         <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-accent/50 to-transparent" />
         
-        <div className="w-16 h-16 rounded-2xl studio-well flex items-center justify-center text-accent mb-6 shadow-inner border border-white/[0.08]">
+        <div className="w-16 h-16 rounded-2xl studio-well flex items-center justify-center text-accent mb-6 border border-border">
             <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                 <path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/>
                 <polyline points="14 2 14 8 20 8"/>
@@ -158,8 +158,8 @@ const EmptyState = ({ onNavigate }) => (
         </div>
         
         <span className="type-label text-accent mb-2">WORKSPACE READY</span>
-        <h3 className="text-xl sm:text-2xl font-extrabold text-white mb-2 tracking-tight">No Interview Plans Yet</h3>
-        <p className="type-body text-secondary/70 max-w-md mx-auto mb-8 leading-relaxed font-normal">
+        <h3 className="text-xl sm:text-2xl font-extrabold text-primary mb-2 tracking-tight">No Interview Plans Yet</h3>
+        <p className="type-body text-secondary max-w-md mx-auto mb-8 leading-relaxed font-normal">
             Upload your resume alongside a target job description to generate tailored questions, skill gap charts, and preparation schedules.
         </p>
         <button
@@ -255,10 +255,10 @@ const Dashboard = () => {
             {/* ── Page Header ── */}
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8">
                 <div>
-                    <h1 className="text-2xl sm:text-3xl font-extrabold text-white tracking-tight mb-1">
+                    <h1 className="text-2xl sm:text-3xl font-extrabold text-primary tracking-tight mb-1">
                         Preparation Workspace
                     </h1>
-                    <p className="text-secondary/70 text-xs sm:text-sm font-normal">
+                    <p className="text-secondary text-xs sm:text-sm font-normal">
                         {isInitialLoading ? 'Syncing reports...' : `Managing ${totalReports} saved preparation dossiers`}
                     </p>
                 </div>
@@ -279,26 +279,26 @@ const Dashboard = () => {
             {!isInitialLoading && reports.length > 0 && (
                 <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-8">
                     <div className="studio-card p-5 rounded-2xl flex flex-col justify-between border-l-[3px] border-l-accent transition-transform duration-200 hover:-translate-y-0.5">
-                        <span className="type-micro text-secondary/70">TOTAL SAVED PLANS</span>
+                        <span className="type-micro text-secondary">TOTAL SAVED PLANS</span>
                         <div className="flex items-baseline gap-2 mt-2">
-                            <span className="text-3xl sm:text-4xl font-extrabold text-white font-mono leading-none tracking-tight">{totalReports}</span>
-                            <span className="type-micro text-secondary/50">DOSSIERS</span>
+                            <span className="text-3xl sm:text-4xl font-extrabold text-primary font-mono leading-none tracking-tight">{totalReports}</span>
+                            <span className="type-micro text-secondary/60">DOSSIERS</span>
                         </div>
                     </div>
                     <div className="studio-card p-5 rounded-2xl flex flex-col justify-between border-l-[3px] border-l-amber transition-transform duration-200 hover:-translate-y-0.5">
-                        <span className="type-micro text-secondary/70">AVG COMPATIBILITY</span>
+                        <span className="type-micro text-secondary">AVG COMPATIBILITY</span>
                         <div className="flex items-baseline gap-2 mt-2">
-                            <span className="text-3xl sm:text-4xl font-extrabold font-mono leading-none tracking-tight" style={{ color: avgScore >= 80 ? '#34d399' : avgScore >= 60 ? '#FE9A00' : '#FF6662' }}>
+                            <span className="text-3xl sm:text-4xl font-extrabold font-mono leading-none tracking-tight" style={{ color: avgScore >= 80 ? '#059669' : avgScore >= 60 ? '#d97706' : '#e54d48' }}>
                                 {avgScore}%
                             </span>
-                            <span className="type-micro text-secondary/50">ACROSS ROLES</span>
+                            <span className="type-micro text-secondary/60">ACROSS ROLES</span>
                         </div>
                     </div>
-                    <div className="studio-card p-5 rounded-2xl flex flex-col justify-between border-l-[3px] border-l-emerald-400 transition-transform duration-200 hover:-translate-y-0.5">
-                        <span className="type-micro text-secondary/70">HIGH MATCHES (≥80%)</span>
+                    <div className="studio-card p-5 rounded-2xl flex flex-col justify-between border-l-[3px] border-l-emerald-600 transition-transform duration-200 hover:-translate-y-0.5">
+                        <span className="type-micro text-secondary">HIGH MATCHES (≥80%)</span>
                         <div className="flex items-baseline gap-2 mt-2">
-                            <span className="text-3xl sm:text-4xl font-extrabold text-emerald-400 font-mono leading-none tracking-tight">{highMatches}</span>
-                            <span className="type-micro text-secondary/50">OFFER READY</span>
+                            <span className="text-3xl sm:text-4xl font-extrabold text-emerald-600 font-mono leading-none tracking-tight">{highMatches}</span>
+                            <span className="type-micro text-secondary/60">OFFER READY</span>
                         </div>
                     </div>
                 </div>
@@ -309,7 +309,7 @@ const Dashboard = () => {
                 <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 p-3.5 sm:p-4 rounded-2xl studio-card mb-8">
                     {/* Search Field */}
                     <div className="relative flex-1 max-w-md">
-                        <div className="absolute left-3.5 top-1/2 -translate-y-1/2 flex items-center text-white/30">
+                        <div className="absolute left-3.5 top-1/2 -translate-y-1/2 flex items-center text-muted">
                             <FiSearch className="w-4 h-4" />
                         </div>
                         <input
@@ -317,13 +317,13 @@ const Dashboard = () => {
                             placeholder="Search by role or company..."
                             value={searchTerm}
                             onChange={(e) => setSearchTerm(e.target.value)}
-                            className="w-full pl-10 pr-9 py-2.5 bg-[#040405] border border-white/[0.08] rounded-xl text-xs sm:text-sm text-white placeholder-white/30 focus:outline-none focus:border-accent/60 transition-colors"
+                            className="w-full pl-10 pr-9 py-2.5 bg-surface-recessed border border-border rounded-xl text-xs sm:text-sm text-primary placeholder-muted focus:outline-none focus:border-accent focus:bg-white transition-colors"
                         />
                         {searchTerm && (
                             <button
                                 onClick={() => setSearchTerm("")}
                                 aria-label="Clear search"
-                                className="absolute right-3.5 top-1/2 -translate-y-1/2 text-white/40 hover:text-white transition-colors cursor-pointer"
+                                className="absolute right-3.5 top-1/2 -translate-y-1/2 text-muted hover:text-primary transition-colors cursor-pointer"
                             >
                                 <FiX className="w-4 h-4" />
                             </button>
@@ -343,8 +343,8 @@ const Dashboard = () => {
                                 onClick={() => setFilterTier(pill.id)}
                                 className={`px-3 py-1.5 text-xs font-mono font-medium rounded-lg transition-all duration-200 cursor-pointer ${
                                     filterTier === pill.id
-                                        ? "bg-accent/15 border border-accent/40 text-white shadow-[0_0_12px_rgba(255,102,98,0.15)]"
-                                        : "studio-well text-white/60 hover:text-white border border-transparent"
+                                        ? "bg-accent/10 border border-accent/30 text-accent font-bold"
+                                        : "studio-well text-secondary hover:text-primary border border-border"
                                 }`}
                             >
                                 {pill.label}
@@ -386,7 +386,7 @@ const Dashboard = () => {
                         </div>
                     ) : (
                         <div className="flex flex-col items-center justify-center py-16 text-center studio-card rounded-2xl mt-4">
-                            <span className="text-white/40 text-sm font-mono">No plans match your search and filter criteria.</span>
+                            <span className="text-secondary text-sm font-mono">No plans match your search and filter criteria.</span>
                             <button
                                 onClick={() => { setSearchTerm(""); setFilterTier("all"); }}
                                 className="text-xs font-mono font-semibold text-accent mt-3 hover:underline cursor-pointer"
@@ -403,11 +403,11 @@ const Dashboard = () => {
                                 onClick={handleLoadMore}
                                 disabled={isFetching}
                                 aria-label="Load more preparation dossiers"
-                                className="studio-btn-secondary px-6 py-2.5 rounded-xl text-xs font-mono font-bold text-white transition-all duration-200 flex items-center gap-2 cursor-pointer disabled:opacity-50"
+                                className="studio-btn-secondary px-6 py-2.5 rounded-xl text-xs font-mono font-bold text-primary transition-all duration-200 flex items-center gap-2 cursor-pointer disabled:opacity-50"
                             >
                                 {isFetching ? (
                                     <>
-                                        <span className="w-3.5 h-3.5 border-2 border-white/20 border-t-accent rounded-full animate-spin" />
+                                        <span className="w-3.5 h-3.5 border-2 border-slate-300 border-t-accent rounded-full animate-spin" />
                                         <span>Fetching Dossiers...</span>
                                     </>
                                 ) : (

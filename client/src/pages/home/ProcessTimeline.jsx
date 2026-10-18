@@ -68,15 +68,15 @@ const ProcessTimeline = () => {
   }, []);
 
   return (
-    <section ref={sectionRef} className="py-24 px-4 sm:px-6 lg:px-8 relative bg-[#08080A] font-sans">
+    <section ref={sectionRef} className="py-24 px-4 sm:px-6 lg:px-8 relative bg-background font-sans">
       <div className="max-w-6xl mx-auto relative">
         {/* Section Heading */}
         <div className="text-center mb-20">
-          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-white tracking-[-0.035em] mb-4">
+          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-primary tracking-[-0.035em] mb-4">
             From raw application to <br />
             <span className="text-gradient-coral">interview ready</span>
           </h2>
-          <p className="text-secondary/75 text-sm sm:text-base max-w-lg mx-auto leading-relaxed font-normal">
+          <p className="text-secondary text-sm sm:text-base max-w-lg mx-auto leading-relaxed font-normal">
             Three simple steps that turn your job description into an actionable interview preparation strategy.
           </p>
         </div>
@@ -84,7 +84,7 @@ const ProcessTimeline = () => {
         {/* Timeline Grid */}
         <div className="relative">
           {/* Connector Line (Desktop) */}
-          <div className="hidden md:block absolute top-14 left-[15%] right-[15%] h-px bg-gradient-to-r from-transparent via-white/[0.12] to-transparent pointer-events-none" />
+          <div className="hidden md:block absolute top-14 left-[15%] right-[15%] h-px bg-gradient-to-r from-transparent via-border to-transparent pointer-events-none" />
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-6">
             {STEPS.map((step, index) => (
@@ -99,19 +99,19 @@ const ProcessTimeline = () => {
               >
                 {/* Node Box */}
                 <div
-                  className="studio-card relative z-10 w-28 h-28 rounded-2xl flex flex-col items-center justify-center mb-8 transition-all duration-300 group cursor-default"
+                  className="studio-card relative z-10 w-28 h-28 rounded-2xl flex flex-col items-center justify-center mb-8 transition-all duration-300 group cursor-default shadow-sm border border-border"
                   style={{
                     boxShadow:
                       activeStep === step.num
                         ? `0 12px 36px -8px ${step.color}25`
-                        : "0 12px 36px -8px rgba(0,0,0,0.7)",
+                        : "0 8px 24px -4px rgba(15,23,42,0.06)",
                     transform: activeStep === step.num ? "scale(1.05)" : "scale(1)",
                   }}
                 >
                   {step.icon}
                   <span
                     className="type-micro mt-2"
-                    style={{ color: activeStep === step.num ? step.color : "rgba(255,255,255,0.6)" }}
+                    style={{ color: activeStep === step.num ? step.color : "#475569" }}
                   >
                     PHASE {step.num}
                   </span>
@@ -129,12 +129,12 @@ const ProcessTimeline = () => {
                   {step.label}
                 </span>
 
-                <h3 className="text-base font-bold text-white mb-2 tracking-tight">{step.title}</h3>
-                <p className="type-body text-secondary/80 leading-relaxed mb-4 max-w-xs font-normal">
+                <h3 className="text-base font-bold text-primary mb-2 tracking-tight">{step.title}</h3>
+                <p className="type-body text-secondary leading-relaxed mb-4 max-w-xs font-normal">
                   {step.desc}
                 </p>
 
-                <span className="type-micro text-secondary/60">
+                <span className="type-micro text-secondary">
                   {step.detail}
                 </span>
               </div>

@@ -41,7 +41,7 @@ const PrecisionGauge = ({ score = 94 }) => {
           cy="60"
           r="48"
           fill="none"
-          stroke="rgba(255,255,255,0.06)"
+          stroke="rgba(15, 23, 42, 0.08)"
           strokeWidth="6"
         />
         <circle
@@ -58,16 +58,16 @@ const PrecisionGauge = ({ score = 94 }) => {
         />
         <defs>
           <linearGradient id="coralAmberGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-            <stop offset="0%" stopColor="#FF6662" />
-            <stop offset="100%" stopColor="#FE9A00" />
+            <stop offset="0%" stopColor="#e54d48" />
+            <stop offset="100%" stopColor="#d97706" />
           </linearGradient>
         </defs>
       </svg>
       <div className="absolute inset-0 flex flex-col items-center justify-center">
-        <span className="text-2xl font-black text-white font-mono tracking-tight leading-none">
+        <span className="text-2xl font-black text-primary font-mono tracking-tight leading-none">
           {displayed}%
         </span>
-        <span className="text-[9px] font-mono uppercase tracking-widest text-white/40 mt-1">
+        <span className="text-[9px] font-mono uppercase tracking-widest text-secondary mt-1">
           MATCH
         </span>
       </div>
@@ -77,13 +77,13 @@ const PrecisionGauge = ({ score = 94 }) => {
 
 const HeroSection = ({ user }) => {
   return (
-    <section className="relative min-h-[88vh] flex items-center justify-center overflow-hidden bg-[#08080A] pt-16 pb-24 font-sans">
-      {/* Precision Atmospheric Vignette — Smooth gradient without GPU blur overhead */}
+    <section className="relative min-h-[88vh] flex items-center justify-center overflow-hidden bg-background pt-16 pb-24 font-sans">
+      {/* Atmospheric Vignette */}
       <div className="absolute inset-0 pointer-events-none overflow-hidden">
         <div
           className="absolute -top-[15%] left-1/2 -translate-x-1/2 w-[800px] h-[480px] pointer-events-none"
           style={{
-            background: "radial-gradient(ellipse 65% 55% at 50% 30%, rgba(255,102,98,0.14) 0%, rgba(254,154,0,0.05) 45%, transparent 75%)",
+            background: "radial-gradient(ellipse 65% 55% at 50% 30%, rgba(229,77,72,0.08) 0%, rgba(217,119,6,0.03) 45%, transparent 75%)",
           }}
         />
       </div>
@@ -93,7 +93,7 @@ const HeroSection = ({ user }) => {
 
           {/* Master Architectural Headline */}
           <h1
-            className="reveal-up font-extrabold text-white text-4xl sm:text-6xl lg:text-[4.75rem] leading-[1.08] tracking-[-0.04em] max-w-4xl mx-auto mb-6"
+            className="reveal-up font-extrabold text-primary text-4xl sm:text-6xl lg:text-[4.75rem] leading-[1.08] tracking-[-0.04em] max-w-4xl mx-auto mb-6"
             style={{ animationDelay: "0ms" }}
           >
             Master your next interview with{" "}
@@ -102,7 +102,7 @@ const HeroSection = ({ user }) => {
 
           {/* Sub-headline */}
           <p
-            className="reveal-up text-secondary/80 text-base sm:text-lg max-w-2xl mx-auto leading-relaxed mb-10 font-normal"
+            className="reveal-up text-secondary text-base sm:text-lg max-w-2xl mx-auto leading-relaxed mb-10 font-normal"
             style={{ animationDelay: "90ms" }}
           >
             Compare your resume against any job description to discover skill gaps, practice tailored questions, and follow a clear preparation roadmap.
@@ -116,7 +116,7 @@ const HeroSection = ({ user }) => {
             <Link
               to={user ? "/generate" : "/register"}
               id="hero-cta-primary"
-              className="group w-full sm:w-auto studio-btn-primary px-8 py-4 rounded-xl text-base font-bold flex items-center justify-center gap-3 cursor-pointer shadow-[0_8px_30px_rgba(255,102,98,0.25)]"
+              className="group w-full sm:w-auto studio-btn-primary px-8 py-4 rounded-xl text-base font-bold flex items-center justify-center gap-3 cursor-pointer shadow-lg"
             >
               <span>{user ? "Start New Analysis" : "Analyze Your Resume"}</span>
               <svg className="w-4 h-4 transition-transform duration-200 group-hover:translate-x-1" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
@@ -127,7 +127,7 @@ const HeroSection = ({ user }) => {
             <Link
               to={user ? "/dashboard" : "/login"}
               id="hero-cta-secondary"
-              className="w-full sm:w-auto studio-btn-secondary px-8 py-4 rounded-xl text-base font-medium flex items-center justify-center gap-2 cursor-pointer"
+              className="w-full sm:w-auto studio-btn-secondary px-8 py-4 rounded-xl text-base font-medium flex items-center justify-center gap-2 cursor-pointer shadow-sm"
             >
               <span>{user ? "View Dashboard" : "Sign In"}</span>
             </Link>
@@ -138,48 +138,48 @@ const HeroSection = ({ user }) => {
             className="reveal-up w-full max-w-5xl mx-auto"
             style={{ animationDelay: "260ms" }}
           >
-            <div className="studio-card rounded-2xl md:rounded-3xl shadow-[0_24px_80px_rgba(0,0,0,0.9)] overflow-hidden text-left border-t border-white/[0.16] border-x border-b border-white/[0.08]">
+            <div className="studio-card rounded-2xl md:rounded-3xl shadow-xl overflow-hidden text-left border border-border">
               
               {/* Card Header Bar */}
-              <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 px-6 py-4 bg-[#0A0A0D] border-b border-white/[0.06]">
+              <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 px-6 py-4 bg-slate-50 border-b border-border">
                 <div className="flex items-center gap-3">
-                  <div className="w-7 h-7 rounded-lg bg-surface border border-white/[0.08] flex items-center justify-center">
+                  <div className="w-7 h-7 rounded-lg bg-white border border-border flex items-center justify-center shadow-sm">
                     <svg className="w-4 h-4 text-accent" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
                       <path d="M13 10V3L4 14h7v7l9-11h-7z" strokeLinecap="round" strokeLinejoin="round" />
                     </svg>
                   </div>
                   <div>
-                    <span className="text-xs font-semibold text-white tracking-tight block">
+                    <span className="text-xs font-semibold text-primary tracking-tight block">
                       Sample Analysis Report
                     </span>
-                    <span className="text-[11px] text-white/40 block">
+                    <span className="text-[11px] text-secondary block">
                       Senior Software Engineer · Stripe
                     </span>
                   </div>
                 </div>
 
-                <div className="text-xs font-mono text-emerald-400 bg-emerald-500/10 px-3 py-1 rounded-md border border-emerald-500/20">
+                <div className="text-xs font-mono text-emerald-600 bg-emerald-500/10 px-3 py-1 rounded-md border border-emerald-500/20 font-semibold">
                   Ready
                 </div>
               </div>
 
               {/* Card Body Grid */}
-              <div className="grid grid-cols-1 lg:grid-cols-12 divide-y lg:divide-y-0 lg:divide-x divide-white/[0.06] bg-[#0E0E12]">
+              <div className="grid grid-cols-1 lg:grid-cols-12 divide-y lg:divide-y-0 lg:divide-x divide-border bg-white">
                 
                 {/* Column 1: Role Specification */}
                 <div className="lg:col-span-3 p-5 sm:p-6 space-y-4">
                   <div className="flex items-center justify-between">
-                    <span className="text-xs font-medium text-white/60">Target Role</span>
-                    <span className="text-[11px] font-mono text-accent">Stripe</span>
+                    <span className="text-xs font-medium text-secondary">Target Role</span>
+                    <span className="text-[11px] font-mono text-accent font-semibold">Stripe</span>
                   </div>
 
                   <div className="studio-well p-3.5 rounded-xl space-y-1">
-                    <p className="text-sm font-bold text-white tracking-tight">Senior Fullstack Engineer</p>
-                    <p className="text-xs text-white/50">Infrastructure & Payments</p>
+                    <p className="text-sm font-bold text-primary tracking-tight">Senior Fullstack Engineer</p>
+                    <p className="text-xs text-secondary">Infrastructure & Payments</p>
                   </div>
 
                   <div className="space-y-2 pt-1">
-                    <div className="text-xs text-white/50">Key Competencies</div>
+                    <div className="text-xs text-secondary">Key Competencies</div>
                     <div className="flex flex-wrap gap-1.5">
                       {[
                         "React & TypeScript",
@@ -189,7 +189,7 @@ const HeroSection = ({ user }) => {
                       ].map((item) => (
                         <span
                           key={item}
-                          className="px-2.5 py-1 rounded-md text-xs bg-white/[0.03] border border-white/[0.08] text-white/70"
+                          className="px-2.5 py-1 rounded-md text-xs bg-slate-100 border border-border text-secondary font-medium"
                         >
                           {item}
                         </span>
@@ -199,30 +199,30 @@ const HeroSection = ({ user }) => {
                 </div>
 
                 {/* Column 2: Interview Question */}
-                <div className="lg:col-span-6 p-5 sm:p-6 space-y-4 bg-[#0A0A0D]/50">
+                <div className="lg:col-span-6 p-5 sm:p-6 space-y-4 bg-slate-50/50">
                   <div className="flex items-center justify-between">
-                    <span className="text-xs font-medium text-white/60">Tailored Interview Question</span>
-                    <span className="text-[11px] font-mono px-2 py-0.5 rounded bg-accent/10 border border-accent/20 text-accent">
+                    <span className="text-xs font-medium text-secondary">Tailored Interview Question</span>
+                    <span className="text-[11px] font-mono px-2 py-0.5 rounded bg-accent/10 border border-accent/20 text-accent font-semibold">
                       Technical Round
                     </span>
                   </div>
 
-                  <div className="studio-well p-4 rounded-xl border border-white/[0.08] space-y-3">
-                    <p className="text-sm font-medium text-white/95 leading-relaxed">
+                  <div className="studio-well p-4 rounded-xl border border-border space-y-3">
+                    <p className="text-sm font-medium text-primary leading-relaxed">
                       "How would you design a distributed idempotency key cache processing 250k requests per second with zero stale read anomalies?"
                     </p>
                   </div>
 
                   {/* Evaluator Notes */}
                   <div className="space-y-2 pt-1">
-                    <div className="text-xs text-white/50">What interviewers look for</div>
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs text-white/70">
+                    <div className="text-xs text-secondary font-medium">What interviewers look for</div>
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs text-secondary">
                       <div className="studio-well p-2.5 rounded-lg">
-                        <span className="text-emerald-400 font-bold mr-1.5">✓</span>
+                        <span className="text-emerald-600 font-bold mr-1.5">✓</span>
                         <span>Atomic Lua scripts</span>
                       </div>
                       <div className="studio-well p-2.5 rounded-lg">
-                        <span className="text-emerald-400 font-bold mr-1.5">✓</span>
+                        <span className="text-emerald-600 font-bold mr-1.5">✓</span>
                         <span>Quorum partitioning</span>
                       </div>
                     </div>
@@ -233,8 +233,8 @@ const HeroSection = ({ user }) => {
                 <div className="lg:col-span-3 p-5 sm:p-6 flex flex-col justify-between space-y-4">
                   <div>
                     <div className="flex items-center justify-between mb-4">
-                      <span className="text-xs font-medium text-white/60">Skill Match</span>
-                      <span className="text-[11px] font-mono text-emerald-400">High Match</span>
+                      <span className="text-xs font-medium text-secondary">Skill Match</span>
+                      <span className="text-[11px] font-mono text-emerald-600 font-semibold">High Match</span>
                     </div>
 
                     <div className="flex justify-center my-2">
@@ -249,12 +249,12 @@ const HeroSection = ({ user }) => {
                       ].map((bar) => (
                         <div key={bar.label} className="space-y-1">
                           <div className="flex justify-between text-xs">
-                            <span className="text-white/50">{bar.label}</span>
-                            <span className="text-white font-mono font-semibold">{bar.val}</span>
+                            <span className="text-secondary">{bar.label}</span>
+                            <span className="text-primary font-mono font-semibold">{bar.val}</span>
                           </div>
-                          <div className="h-1 rounded-full bg-white/[0.06] overflow-hidden">
+                          <div className="h-1 rounded-full bg-slate-200 overflow-hidden">
                             <div
-                              className="h-full rounded-full bg-gradient-to-r from-accent to-[#FE9A00]"
+                              className="h-full rounded-full bg-gradient-to-r from-accent to-amber"
                               style={{ width: bar.val }}
                             />
                           </div>
@@ -264,7 +264,7 @@ const HeroSection = ({ user }) => {
                   </div>
 
                   <div className="pt-2">
-                    <div className="text-center text-xs font-mono text-amber bg-amber/10 py-1.5 rounded-lg border border-amber/20">
+                    <div className="text-center text-xs font-mono text-amber bg-amber/10 py-1.5 rounded-lg border border-amber/20 font-bold">
                       10-DAY ROADMAP INCLUDED
                     </div>
                   </div>
@@ -273,13 +273,13 @@ const HeroSection = ({ user }) => {
               </div>
 
               {/* Card Footer Strip */}
-              <div className="px-6 py-3.5 bg-[#070709] border-t border-white/[0.06] flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-white/40">
+              <div className="px-6 py-3.5 bg-slate-50 border-t border-border flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-secondary">
                 <div className="flex items-center gap-4">
                   <span>ATS-Optimized</span>
                   <span>•</span>
                   <span>Fast Generation</span>
                 </div>
-                <div className="text-white/60 font-mono text-[11px]">
+                <div className="text-secondary font-mono text-[11px]">
                   PDF Export & Interactive Workspace
                 </div>
               </div>

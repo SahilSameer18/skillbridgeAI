@@ -134,7 +134,7 @@ const ScoreWidget = React.memo(({ score, size = 80, strokeWidth = 6 }) => {
                 </defs>
             </svg>
             <div className="absolute inset-0 flex items-center justify-center flex-col pointer-events-none">
-                <span className="text-xl font-extrabold font-mono text-white leading-none tracking-tight">
+                <span className="text-xl font-extrabold font-mono text-primary leading-none tracking-tight">
                     {displayScore}%
                 </span>
             </div>
@@ -160,7 +160,7 @@ const QuestionCard = React.memo(({ item, index, badgeColor = 'bg-accent/15 text-
 
     return (
         <div className={`studio-card rounded-2xl transition-all duration-200 overflow-hidden ${
-            open ? 'border-white/[0.18] shadow-2xl' : 'hover:border-white/[0.14]'
+            open ? 'border-accent/40 shadow-lg' : 'hover:border-slate-300'
         }`}>
             <button
                 type="button"
@@ -174,13 +174,13 @@ const QuestionCard = React.memo(({ item, index, badgeColor = 'bg-accent/15 text-
                 </div>
                 <div className="flex-1 min-w-0 pt-0.5">
                     <p className={`text-sm sm:text-base font-semibold leading-snug transition-colors duration-200 ${
-                        open ? 'text-white' : 'text-white/90 group-hover/q:text-white'
+                        open ? 'text-primary' : 'text-primary/90 group-hover/q:text-primary'
                     }`}>
                         {item.question}
                     </p>
                 </div>
-                <div className={`shrink-0 w-8 h-8 rounded-lg flex items-center justify-center bg-[#08080A] border border-white/[0.08] text-white/50 transition-transform duration-300 ${
-                    open ? 'rotate-180 text-white border-white/[0.2]' : 'group-hover/q:text-white group-hover/q:border-white/[0.14]'
+                <div className={`shrink-0 w-8 h-8 rounded-lg flex items-center justify-center bg-slate-100 border border-border text-secondary transition-transform duration-300 ${
+                    open ? 'rotate-180 text-primary border-slate-300' : 'group-hover/q:text-primary group-hover/q:border-slate-300'
                 }`}>
                     <Icon name="chevron-down" className="w-3.5 h-3.5" />
                 </div>
@@ -193,14 +193,14 @@ const QuestionCard = React.memo(({ item, index, badgeColor = 'bg-accent/15 text-
                 }`}
             >
                 <div className="overflow-hidden">
-                    <div className="px-4 pb-4 sm:px-5 sm:pb-5 space-y-3.5 border-t border-white/[0.06] pt-4">
+                    <div className="px-4 pb-4 sm:px-5 sm:pb-5 space-y-3.5 border-t border-border pt-4">
                         {/* Intention Section */}
                         {item.intention && (
-                            <div className="studio-well rounded-xl p-3.5 border border-white/[0.06]">
+                            <div className="studio-well rounded-xl p-3.5 border border-border">
                                 <p className="type-micro text-accent mb-1.5 flex items-center gap-1.5 font-mono">
                                     <Icon name="target" className="w-3 h-3 text-accent" /> Why Interviewers Ask This
                                 </p>
-                                <p className="type-body text-secondary/80 leading-relaxed font-sans">
+                                <p className="type-body text-secondary leading-relaxed font-sans">
                                     {item.intention}
                                 </p>
                             </div>
@@ -209,19 +209,19 @@ const QuestionCard = React.memo(({ item, index, badgeColor = 'bg-accent/15 text-
                         {/* Model Answer Section */}
                         <div className="space-y-1.5">
                             <div className="flex items-center justify-between gap-2">
-                                <p className="type-micro text-secondary/60 flex items-center gap-1.5 font-mono">
+                                <p className="type-micro text-secondary flex items-center gap-1.5 font-mono">
                                     <Icon name="sparkle" className="w-3 h-3 text-amber" /> Model Answer Framework
                                 </p>
                                 <button
                                     type="button"
                                     onClick={handleCopy}
                                     aria-label="Copy model answer"
-                                    className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg type-micro text-white/70 hover:text-white bg-[#08080A] border border-white/[0.08] hover:border-white/[0.16] transition-colors cursor-pointer"
+                                    className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg type-micro text-secondary hover:text-primary bg-slate-100 border border-border hover:border-slate-300 transition-colors cursor-pointer"
                                 >
                                     {copied ? (
                                         <>
-                                            <Icon name="check" className="w-3 h-3 text-emerald-400" />
-                                            <span className="text-emerald-400 font-semibold">Copied</span>
+                                            <Icon name="check" className="w-3 h-3 text-emerald-600" />
+                                            <span className="text-emerald-600 font-semibold">Copied</span>
                                         </>
                                     ) : (
                                         <>
@@ -231,7 +231,7 @@ const QuestionCard = React.memo(({ item, index, badgeColor = 'bg-accent/15 text-
                                     )}
                                 </button>
                             </div>
-                            <div className="type-body text-white/95 leading-relaxed rounded-xl p-4 studio-well border border-white/[0.08] font-sans">
+                            <div className="type-body text-primary leading-relaxed rounded-xl p-4 studio-well border border-border font-sans">
                                 {item.answer}
                             </div>
                         </div>
@@ -253,7 +253,7 @@ const SkillGapCard = React.memo(({ gap }) => {
         <div className="studio-card rounded-2xl p-4 sm:p-5 transition-colors duration-200">
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-3">
                 <div className="flex items-center gap-2.5">
-                    <span className="text-sm sm:text-base font-bold text-white tracking-tight">{gap.skill}</span>
+                    <span className="text-sm sm:text-base font-bold text-primary tracking-tight">{gap.skill}</span>
                 </div>
                 <span className={`self-start sm:self-auto ${
                     SEVERITY_STYLES[severityKey] ?? SEVERITY_STYLES.low
@@ -270,16 +270,16 @@ const SkillGapCard = React.memo(({ gap }) => {
                             href={resource.url}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="group flex items-center gap-3 p-3 rounded-xl studio-well border border-white/[0.06] hover:border-accent/40 transition-all duration-200"
+                            className="group flex items-center gap-3 p-3 rounded-xl studio-well border border-border hover:border-accent/40 transition-all duration-200"
                         >
-                            <div className="shrink-0 w-8 h-8 rounded-lg flex items-center justify-center bg-[#08080A] border border-white/[0.08] shadow-inner group-hover:scale-105 transition-transform duration-200">
+                            <div className="shrink-0 w-8 h-8 rounded-lg flex items-center justify-center bg-slate-100 border border-border shadow-sm group-hover:scale-105 transition-transform duration-200">
                                 {resource.type === 'VIDEO' ? <YouTubeLogo /> : <DocsLogo />}
                             </div>
                             <div className="flex-1 min-w-0">
-                                <p className="text-xs font-semibold text-white/90 group-hover:text-accent transition-colors duration-200 truncate">
+                                <p className="text-xs font-semibold text-primary group-hover:text-accent transition-colors duration-200 truncate">
                                     {resource.title || (resource.type === 'VIDEO' ? 'Watch Guide' : 'Read Documentation')}
                                 </p>
-                                <p className="type-micro text-secondary/60 mt-0.5">
+                                <p className="type-micro text-secondary mt-0.5">
                                     {resource.type === 'VIDEO' ? 'Video Resource' : 'Official Spec'}
                                 </p>
                             </div>
@@ -287,7 +287,7 @@ const SkillGapCard = React.memo(({ gap }) => {
                     ))}
                 </div>
             ) : (
-                <div className="flex items-center gap-2 p-3 mt-2 rounded-xl studio-well border border-white/[0.06] type-caption text-secondary/60 font-mono">
+                <div className="flex items-center gap-2 p-3 mt-2 rounded-xl studio-well border border-border type-caption text-secondary font-mono">
                     <Icon name="help-circle" className="w-3.5 h-3.5 shrink-0" />
                     <span>No external resources identified. Review core documentation for this competency.</span>
                 </div>
@@ -304,24 +304,24 @@ const RoadmapDay = React.memo(({ day, index, total }) => {
     return (
         <div className="relative flex gap-4 sm:gap-5 pb-6 group">
             {index < total - 1 && (
-                <div className="absolute left-[19px] sm:left-5 top-11 bottom-0 w-[2px] bg-gradient-to-b from-accent/30 via-[#FE9A00]/20 to-transparent" />
+                <div className="absolute left-[19px] sm:left-5 top-11 bottom-0 w-[2px] bg-gradient-to-b from-accent/30 via-amber/20 to-transparent" />
             )}
-            <div className={`relative z-10 shrink-0 w-10 h-10 rounded-xl flex flex-col items-center justify-center studio-card border-t shadow-lg group-hover:border-accent/50 transition-colors duration-300 ${
+            <div className={`relative z-10 shrink-0 w-10 h-10 rounded-xl flex flex-col items-center justify-center studio-card border shadow-sm group-hover:border-accent/50 transition-colors duration-300 ${
                 isFirst
-                    ? 'border-accent/40 shadow-[0_0_12px_rgba(255,102,98,0.2)]'
-                    : 'border-white/[0.14] border-x border-b border-white/[0.08]'
+                    ? 'border-accent/40 shadow-sm'
+                    : 'border-border'
             }`}>
-                <span className="text-[7px] font-mono font-bold text-white/40 uppercase tracking-wider leading-none mb-0.5">DAY</span>
+                <span className="text-[7px] font-mono font-bold text-secondary uppercase tracking-wider leading-none mb-0.5">DAY</span>
                 <span className="text-sm font-mono font-bold text-accent leading-none">{day.day}</span>
             </div>
-            <div className="flex-1 studio-card rounded-2xl p-4 sm:p-5 hover:border-white/[0.16] transition-colors duration-200 border-l-[3px] border-l-accent/40">
-                <h3 className="text-sm sm:text-base font-bold text-white mb-2.5 flex items-center gap-2 tracking-tight">
+            <div className="flex-1 studio-card rounded-2xl p-4 sm:p-5 hover:border-slate-300 transition-colors duration-200 border-l-[3px] border-l-accent/40">
+                <h3 className="text-sm sm:text-base font-bold text-primary mb-2.5 flex items-center gap-2 tracking-tight">
                     <span className="text-accent">●</span>
                     {day.focus}
                 </h3>
                 <ul className="space-y-2">
                     {day.tasks.map((task, i) => (
-                        <li key={i} className="flex items-start gap-2.5 text-xs sm:text-sm text-secondary/90 leading-relaxed font-sans">
+                        <li key={i} className="flex items-start gap-2.5 text-xs sm:text-sm text-secondary leading-relaxed font-sans">
                             <span className="mt-1.5 w-1.5 h-1.5 rounded-full bg-accent shrink-0" />
                             <span>{task}</span>
                         </li>
@@ -404,17 +404,17 @@ const InterviewReport = () => {
         <div className="w-full max-w-6xl mx-auto pb-20 font-sans">
 
             {/* ── Page Header ── */}
-            <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4 mb-6 pb-6 border-b border-white/[0.06]">
+            <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4 mb-6 pb-6 border-b border-border">
                 <div className="space-y-1.5">
                     <span className="text-xs font-mono uppercase tracking-wider text-accent font-semibold block">
                         Interview Preparation Dossier
                     </span>
-                    <h1 className="text-2xl sm:text-3xl lg:text-4xl font-extrabold text-white tracking-tight">
+                    <h1 className="text-2xl sm:text-3xl lg:text-4xl font-extrabold text-primary tracking-tight">
                         {report.title || 'Target Role Analysis'}
                     </h1>
                 </div>
 
-                <div className="flex items-center gap-3 shrink-0">
+                <div className="flex items-center gap-3 shrink-0 w-full sm:w-auto">
                     <div className={`hidden sm:inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl border text-xs font-mono font-semibold ${matchBadgeClass}`}>
                         <span>{report.matchScore}% {scoreLabel}</span>
                     </div>
@@ -423,7 +423,7 @@ const InterviewReport = () => {
                         id="export-pdf-btn"
                         onClick={handleExportPdf}
                         disabled={isExporting}
-                        className="studio-btn-primary flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl text-xs sm:text-sm font-bold text-white cursor-pointer disabled:opacity-50"
+                        className="w-full sm:w-auto studio-btn-primary flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl text-xs sm:text-sm font-bold text-white cursor-pointer disabled:opacity-50"
                     >
                         {isExporting ? (
                             <>
@@ -443,20 +443,20 @@ const InterviewReport = () => {
             {/* ── Inline Stats Strip ── */}
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4 mb-8">
                 <div className="studio-card p-4 rounded-xl flex flex-col justify-between">
-                    <span className="text-[11px] font-mono text-white/40 uppercase">Total Questions</span>
-                    <span className="text-xl font-mono font-bold text-white mt-1">{totalQuestions}</span>
+                    <span className="text-[11px] font-mono text-secondary uppercase">Total Questions</span>
+                    <span className="text-xl font-mono font-bold text-primary mt-1">{totalQuestions}</span>
                 </div>
                 <div className="studio-card p-4 rounded-xl flex flex-col justify-between">
-                    <span className="text-[11px] font-mono text-white/40 uppercase">Skill Gaps Flagged</span>
+                    <span className="text-[11px] font-mono text-secondary uppercase">Skill Gaps Flagged</span>
                     <span className="text-xl font-mono font-bold text-accent mt-1">{skillGaps.length}</span>
                 </div>
                 <div className="studio-card p-4 rounded-xl flex flex-col justify-between">
-                    <span className="text-[11px] font-mono text-white/40 uppercase">Preparation Plan</span>
+                    <span className="text-[11px] font-mono text-secondary uppercase">Preparation Plan</span>
                     <span className="text-xl font-mono font-bold text-amber mt-1">{preparationPlan.length} Days</span>
                 </div>
                 <div className="studio-card p-4 rounded-xl flex flex-col justify-between">
-                    <span className="text-[11px] font-mono text-white/40 uppercase">Overall Match</span>
-                    <span className="text-xl font-mono font-bold text-emerald-400 mt-1">{report.matchScore}%</span>
+                    <span className="text-[11px] font-mono text-secondary uppercase">Overall Match</span>
+                    <span className="text-xl font-mono font-bold text-emerald-600 mt-1">{report.matchScore}%</span>
                 </div>
             </div>
 
@@ -468,8 +468,8 @@ const InterviewReport = () => {
                         onClick={() => setActiveNav(item.id)}
                         className={`flex items-center gap-1.5 px-4 py-2 rounded-xl text-xs font-mono font-semibold whitespace-nowrap shrink-0 border transition-all duration-200 ${
                             activeNav === item.id
-                                ? 'bg-accent/15 border-accent/40 text-white'
-                                : 'studio-well text-white/60 hover:text-white'
+                                ? 'bg-accent/15 border-accent/40 text-accent font-bold'
+                                : 'studio-well text-secondary hover:text-primary'
                         }`}
                     >
                         <Icon name={item.icon} className="w-3.5 h-3.5" />
@@ -497,19 +497,19 @@ const InterviewReport = () => {
                                     onClick={() => setActiveNav(item.id)}
                                     className={`w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs font-medium transition-all duration-200 text-left cursor-pointer ${
                                         isActive
-                                            ? 'bg-[#15151C] text-white border-l-[3px] border-l-accent shadow-[inset_0_1px_0_0_rgba(255,255,255,0.1)]'
-                                            : 'text-white/60 hover:text-white hover:bg-white/[0.03]'
+                                            ? 'bg-accent/10 text-primary font-semibold border-l-[3px] border-l-accent'
+                                            : 'text-secondary hover:text-primary hover:bg-slate-100'
                                     }`}
                                 >
                                     <div className={`shrink-0 w-7 h-7 rounded-lg flex items-center justify-center transition-colors duration-200 ${
-                                        isActive ? 'bg-accent text-white' : 'bg-[#08080A] border border-white/[0.08] text-white/40'
+                                        isActive ? 'bg-accent text-white' : 'bg-slate-100 border border-border text-secondary'
                                     }`}>
                                         <Icon name={item.icon} className="w-3.5 h-3.5" />
                                     </div>
                                     <span className="truncate">{item.label}</span>
                                     {item.id === 'skills' && skillGaps.length > 0 && (
                                         <span className={`ml-auto shrink-0 px-2 py-0.5 rounded-full text-[10px] font-mono font-bold ${
-                                            isActive ? 'bg-accent text-white' : 'bg-white/[0.06] text-white/70'
+                                            isActive ? 'bg-accent text-white' : 'bg-slate-200 text-secondary'
                                         }`}>
                                             {skillGaps.length}
                                         </span>
@@ -521,14 +521,14 @@ const InterviewReport = () => {
 
                     {/* Match Score Card inside Sidebar */}
                     <div className="studio-card p-5 rounded-2xl flex flex-col items-center text-center">
-                        <p className="type-micro text-secondary/60 mb-3">OVERALL MATCH RATING</p>
+                        <p className="type-micro text-secondary mb-3">OVERALL MATCH RATING</p>
                         <div className="mb-2">
                             <ScoreWidget score={report.matchScore} size={82} strokeWidth={6} />
                         </div>
                         <span className={`type-micro tracking-wider ${scoreLabelColor}`}>
                             {scoreLabel}
                         </span>
-                        <p className="type-caption text-secondary/60 mt-1 max-w-[180px]">
+                        <p className="type-caption text-secondary mt-1 max-w-[180px]">
                             Calculated against target role specifications
                         </p>
                     </div>
@@ -539,7 +539,7 @@ const InterviewReport = () => {
                     <div key={activeNav} className="page-enter space-y-4">
                         {/* Section Header */}
                         <div className="mb-4">
-                            <h2 className="text-lg sm:text-xl font-bold text-white tracking-tight mb-1">
+                            <h2 className="text-lg sm:text-xl font-bold text-primary tracking-tight mb-1">
                                 {activeNav === 'technical'  && 'Technical Interview Questions'}
                                 {activeNav === 'behavioral' && 'Behavioral & Leadership Scenarios'}
                                 {activeNav === 'skills'     && 'Targeted Skill Gaps & References'}
@@ -603,7 +603,7 @@ const InterviewReport = () => {
                                         <div className="w-12 h-12 mx-auto rounded-xl studio-well flex items-center justify-center mb-3">
                                             <Icon name="target" className="w-6 h-6 text-accent" />
                                         </div>
-                                        <p className="text-base font-bold text-white mb-1">No Skill Gaps Identified</p>
+                                        <p className="text-base font-bold text-primary mb-1">No Skill Gaps Identified</p>
                                         <p className="text-xs sm:text-sm text-secondary/70 max-w-sm mx-auto leading-relaxed">
                                             Your background aligns seamlessly with target requirements. Focus on polishing question delivery!
                                         </p>

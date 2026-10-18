@@ -54,14 +54,14 @@ const JobDescriptionInput = ({ value, onChange }) => {
   }, [debouncedValue]);
 
   return (
-    <div className={`flex flex-col h-full studio-card p-6 md:p-7 transition-all duration-300 ${
-      isFocused ? "border-accent/40 shadow-[0_0_28px_rgba(255,102,98,0.2)]" : ""
+    <div className={`flex flex-col h-full studio-card p-4 sm:p-6 md:p-7 transition-all duration-300 ${
+      isFocused ? "border-accent/40 shadow-xs" : ""
     }`}>
       {/* Header section with Icon and Title */}
       <div className="flex items-center justify-between mb-5">
         <div className="flex items-center gap-3">
           <div
-            className="w-10 h-10 rounded-xl flex items-center justify-center bg-accent/10 border border-accent/25 shadow-sm"
+            className="w-10 h-10 rounded-xl flex items-center justify-center bg-accent/10 border border-accent/25 shadow-xs"
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -69,7 +69,7 @@ const JobDescriptionInput = ({ value, onChange }) => {
               height="18"
               viewBox="0 0 24 24"
               fill="none"
-              stroke="#ff6662"
+              stroke="var(--color-accent)"
               strokeWidth="2.5"
               strokeLinecap="round"
               strokeLinejoin="round"
@@ -88,8 +88,8 @@ const JobDescriptionInput = ({ value, onChange }) => {
 
         {/* IDE window dot decoration */}
         <div className="flex gap-1.5 opacity-60">
-          <span className="w-2.5 h-2.5 rounded-full bg-white/[0.12]" />
-          <span className="w-2.5 h-2.5 rounded-full bg-white/[0.12]" />
+          <span className="w-2.5 h-2.5 rounded-full bg-slate-300" />
+          <span className="w-2.5 h-2.5 rounded-full bg-slate-300" />
           <span className="w-2.5 h-2.5 rounded-full bg-accent/40" />
         </div>
       </div>
@@ -109,10 +109,10 @@ const JobDescriptionInput = ({ value, onChange }) => {
 
       {/* Live Extracted Skills tags */}
       <div className="mb-4">
-        <p className="type-micro text-secondary/70 mb-2">
+        <p className="type-micro text-secondary mb-2 font-semibold">
           Extracted Competencies
         </p>
-        <div className="flex flex-wrap gap-1.5 min-h-[32px] p-2 rounded-xl studio-well border-white/[0.05]">
+        <div className="flex flex-wrap gap-1.5 min-h-[32px] p-2 rounded-xl studio-well border border-border">
           {extractedSkills.length > 0 ? (
             extractedSkills.map(skill => (
               <span
@@ -131,10 +131,10 @@ const JobDescriptionInput = ({ value, onChange }) => {
       </div>
 
       {/* Character Count & Tip */}
-      <div className="flex justify-between items-center text-[11px] text-muted border-t border-white/[0.06] pt-3 font-mono">
+      <div className="flex justify-between items-center text-[11px] text-muted border-t border-border pt-3 font-mono">
         <span>
           {localValue.trim().length > 0 && localValue.trim().length < 30 ? (
-            <span className="text-amber-400 font-medium">
+            <span className="text-amber-700 font-semibold">
               Min 30 characters required ({30 - localValue.trim().length} more needed)
             </span>
           ) : (
@@ -144,10 +144,10 @@ const JobDescriptionInput = ({ value, onChange }) => {
         <span
           className={`${
             localValue.length >= 4000
-              ? "text-red-400 font-bold"
+              ? "text-red-600 font-bold"
               : localValue.length > 3600
-              ? "text-amber-400 font-semibold"
-              : "text-secondary/70"
+              ? "text-amber-700 font-semibold"
+              : "text-secondary"
           } font-mono`}
         >
           {localValue.length} / 4,000

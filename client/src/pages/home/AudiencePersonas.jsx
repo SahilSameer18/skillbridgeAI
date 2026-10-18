@@ -60,15 +60,15 @@ const AudiencePersonas = () => {
   const [hovered, setHovered] = useState(null);
 
   return (
-    <section className="py-24 px-4 sm:px-6 lg:px-8 relative bg-[#08080A] font-sans">
+    <section className="py-24 px-4 sm:px-6 lg:px-8 relative bg-background font-sans">
       <div className="max-w-6xl mx-auto relative">
         {/* Section Heading */}
         <div className="text-center mb-16">
-          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-white tracking-[-0.035em] mb-4">
+          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-primary tracking-[-0.035em] mb-4">
             Designed for every stage of <br />
             <span className="text-gradient-coral">your engineering journey</span>
           </h2>
-          <p className="text-secondary/75 text-sm sm:text-base max-w-lg mx-auto leading-relaxed font-normal">
+          <p className="text-secondary text-sm sm:text-base max-w-lg mx-auto leading-relaxed font-normal">
             Whether you are preparing for your first tech job or leveling up to senior and staff roles.
           </p>
         </div>
@@ -80,7 +80,7 @@ const AudiencePersonas = () => {
             return (
               <div
                 key={p.title}
-                className="studio-card rounded-2xl p-6 flex flex-col justify-between transition-all duration-300 hover:-translate-y-1 group cursor-default"
+                className="studio-card rounded-2xl p-6 flex flex-col justify-between transition-all duration-300 hover:-translate-y-1 group cursor-default shadow-sm border border-border"
                 style={{
                   borderTopColor: isHovered ? p.color : undefined,
                   boxShadow: isHovered
@@ -91,21 +91,21 @@ const AudiencePersonas = () => {
                 onMouseLeave={() => setHovered(null)}
               >
                 <div>
-                  <div className="w-12 h-12 rounded-xl bg-[#08080A] border border-white/[0.08] flex items-center justify-center mb-5 group-hover:scale-105 transition-transform duration-300 shadow-inner">
+                  <div className="w-12 h-12 rounded-xl bg-slate-100 border border-border flex items-center justify-center mb-5 group-hover:scale-105 transition-transform duration-300 shadow-sm">
                     {p.icon}
                   </div>
-                  <h4 className="font-bold text-white text-base mb-1 tracking-tight">{p.title}</h4>
+                  <h4 className="font-bold text-primary text-base mb-1 tracking-tight">{p.title}</h4>
                   <p className="type-caption font-mono font-medium mb-3" style={{ color: p.color }}>
                     {p.tagline}
                   </p>
-                  <p className="type-body text-secondary/80 leading-relaxed font-normal">{p.desc}</p>
+                  <p className="type-body text-secondary leading-relaxed font-normal">{p.desc}</p>
                 </div>
 
-                <div className="flex flex-wrap gap-1.5 pt-5 mt-4 border-t border-white/[0.04]">
+                <div className="flex flex-wrap gap-1.5 pt-5 mt-4 border-t border-border">
                   {p.tags.map((tag) => (
                     <span
                       key={tag}
-                      className="type-micro px-2 py-0.5 rounded bg-white/[0.03] border border-white/[0.06] text-secondary/70"
+                      className="type-micro px-2 py-0.5 rounded bg-slate-100 border border-border text-secondary"
                     >
                       {tag}
                     </span>

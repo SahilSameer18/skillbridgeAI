@@ -40,12 +40,12 @@ const LEGAL_LINKS = [
 
 const Footer = () => {
   return (
-    <footer className="mt-24 border-t border-white/[0.06] bg-[#060608] relative overflow-hidden w-full max-w-full font-sans">
+    <footer className="mt-24 border-t border-border bg-white relative overflow-hidden w-full max-w-full font-sans">
       {/* Specular Ambient Apex Lighting Anchor — Pure gradient, zero blur overhead */}
       <div
         className="absolute top-0 left-1/2 -translate-x-1/2 w-[700px] max-w-full h-[160px] pointer-events-none"
         style={{
-          background: "radial-gradient(ellipse 70% 60% at 50% 0%, rgba(255,102,98,0.06) 0%, rgba(254,154,0,0.02) 40%, transparent 75%)",
+          background: "radial-gradient(ellipse 70% 60% at 50% 0%, rgba(229,77,72,0.05) 0%, rgba(217,119,6,0.02) 40%, transparent 75%)",
         }}
       />
 
@@ -55,21 +55,19 @@ const Footer = () => {
           {/* Column 1: Brand & Strategic Purpose (Span 5) */}
           <div className="md:col-span-5 space-y-4">
             <Link to="/" className="inline-flex items-center gap-2.5 group">
-              <div className="w-8 h-8 rounded-lg bg-[#0e0e12] border-t border-white/[0.16] border-x border-b border-white/[0.06] flex items-center justify-center shadow-md group-hover:border-accent/40 transition-colors">
+              <div className="w-8 h-8 rounded-lg bg-white border border-border flex items-center justify-center shadow-sm group-hover:border-accent/40 transition-colors">
                 <svg className="w-4 h-4 text-accent" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
                   <path d="M13 10V3L4 14h7v7l9-11h-7z" strokeLinecap="round" strokeLinejoin="round" />
                 </svg>
               </div>
-              <span className="text-lg font-extrabold tracking-tight text-white">
-                Skill<span className="text-accent">Bridge</span> <span className="text-white/40 text-xs font-mono font-medium">AI</span>
+              <span className="text-lg font-extrabold tracking-tight text-primary">
+                Skill<span className="text-accent">Bridge</span> <span className="text-secondary text-xs font-mono font-medium">AI</span>
               </span>
             </Link>
 
-            <p className="text-secondary/80 text-sm leading-relaxed max-w-sm">
+            <p className="text-secondary text-sm leading-relaxed max-w-sm">
               Executive-grade interview intelligence. Benchmark resume credentials against target role expectations, diagnose skill gaps, and execute calibrated preparation roadmaps.
             </p>
-
-
 
             {/* Social Affordance Strip */}
             <div className="flex items-center gap-2 pt-3">
@@ -80,7 +78,7 @@ const Footer = () => {
                   target="_blank"
                   rel="noopener noreferrer"
                   aria-label={s.label}
-                  className="studio-btn-icon w-9 h-9 !min-w-[36px] !min-h-[36px] text-white/50 hover:text-white"
+                  className="studio-btn-icon w-9 h-9 !min-w-[36px] !min-h-[36px] text-secondary hover:text-primary"
                 >
                   {s.icon}
                 </a>
@@ -90,13 +88,13 @@ const Footer = () => {
 
           {/* Column 2: Platform Navigation (Span 3) */}
           <div className="md:col-span-3 space-y-3.5">
-            <h4 className="type-label text-white/60">Platform Architecture</h4>
+            <h4 className="type-label text-primary font-bold">Platform Architecture</h4>
             <ul className="space-y-2.5">
               {PLATFORM_LINKS.map((link) => (
                 <li key={link.name}>
                   <Link
                     to={link.url}
-                    className="text-sm text-secondary hover:text-white transition-colors duration-160 inline-flex items-center gap-1 group"
+                    className="text-sm text-secondary hover:text-primary transition-colors duration-160 inline-flex items-center gap-1 group"
                   >
                     <span>{link.name}</span>
                     <FiArrowUpRight className="w-3.5 h-3.5 opacity-0 -translate-x-1 group-hover:opacity-100 group-hover:translate-x-0 transition-all text-accent" />
@@ -108,13 +106,13 @@ const Footer = () => {
 
           {/* Column 3: Legal & Security (Span 2) */}
           <div className="md:col-span-2 space-y-3.5">
-            <h4 className="type-label text-white/60">Security & Legal</h4>
+            <h4 className="type-label text-primary font-bold">Security & Legal</h4>
             <ul className="space-y-2.5">
               {LEGAL_LINKS.map((link) => (
                 <li key={link.name}>
                   <a
                     href={link.url}
-                    className="text-sm text-secondary hover:text-white transition-colors duration-160"
+                    className="text-sm text-secondary hover:text-primary transition-colors duration-160"
                   >
                     {link.name}
                   </a>
@@ -125,14 +123,15 @@ const Footer = () => {
 
           {/* Column 4: Contact & Dispatch (Span 2) */}
           <div className="md:col-span-2 space-y-3.5">
-            <h4 className="type-label text-white/60">Direct Dispatch</h4>
+            <h4 className="type-label text-primary font-bold">Direct Dispatch</h4>
             <div className="space-y-2">
               <a
                 href="mailto:sahilsameer.dev18@gmail.com"
                 className="text-xs text-secondary hover:text-accent flex items-center gap-2 transition-colors duration-160 truncate font-mono"
               >
+                sahilsameer.dev18@gmail.com
               </a>
-              <p className="text-[11px] text-white/40 leading-relaxed font-mono">
+              <p className="text-[11px] text-secondary leading-relaxed font-mono">
                 Engineered for high-throughput career acceleration.
               </p>
             </div>
@@ -140,15 +139,15 @@ const Footer = () => {
 
         </div>
 
-        {/* Full-width Luxury Specular Divider */}
+        {/* Full-width Ceramic Divider */}
         <div className="studio-divider mb-6" />
 
         {/* Bottom Metadata Strip */}
-        <div className="flex flex-col sm:flex-row items-center justify-between gap-4 text-xs font-mono text-white/40">
+        <div className="flex flex-col sm:flex-row items-center justify-between gap-4 text-xs font-mono text-secondary">
           <p>© {new Date().getFullYear()} SkillBridge AI. Engineered with precision.</p>
           <p className="flex items-center gap-2">
             <span>Crafted by</span>
-            <span className="text-white/80 font-semibold">Sahil Sameer</span>
+            <span className="text-primary font-semibold">Sahil Sameer</span>
           </p>
         </div>
       </div>

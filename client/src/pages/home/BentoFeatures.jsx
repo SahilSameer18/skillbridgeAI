@@ -17,8 +17,8 @@ const FEATURES = [
       </svg>
     ),
     visual: (
-      <div className="mt-5 studio-well rounded-xl overflow-hidden border border-white/[0.08]">
-        <div className="flex justify-between px-4 py-2.5 border-b border-white/[0.06] type-micro text-secondary/70">
+      <div className="mt-5 studio-well rounded-xl overflow-hidden border border-border">
+        <div className="flex justify-between px-4 py-2.5 border-b border-border type-micro text-secondary">
           <span>Requirement Competency</span>
           <span>Verification Status</span>
         </div>
@@ -30,13 +30,13 @@ const FEATURES = [
         ].map(({ skill, status }) => (
           <div
             key={skill}
-            className="flex items-center justify-between px-4 py-2.5 border-b border-white/[0.04] last:border-b-0"
+            className="flex items-center justify-between px-4 py-2.5 border-b border-border last:border-b-0"
           >
-            <span className="text-xs font-mono text-white/80">{skill}</span>
+            <span className="text-xs font-mono text-primary font-medium">{skill}</span>
             <span
               className={`text-[10px] font-mono font-bold px-2 py-0.5 rounded ${
                 status === "match"
-                  ? "bg-emerald-500/10 text-emerald-400 border border-emerald-500/20"
+                  ? "bg-emerald-500/10 text-emerald-600 border border-emerald-500/20"
                   : status === "gap"
                   ? "bg-accent/10 text-accent border border-accent/20"
                   : "bg-amber/10 text-amber border border-amber/20"
@@ -54,7 +54,7 @@ const FEATURES = [
     title: "Scenario Question Banks",
     tag: "INTERVIEW REASONING",
     desc: "Tailored technical and architectural questions with expected evaluator answers calibrated for your target role.",
-    color: "#FE9A00",
+    color: "#d97706",
     span: "md:col-span-1",
     icon: (
       <svg className="w-5 h-5 text-amber" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
@@ -62,17 +62,17 @@ const FEATURES = [
       </svg>
     ),
     visual: (
-      <div className="mt-5 studio-well rounded-xl p-4 border border-white/[0.08] space-y-2.5">
-        <div className="flex items-center justify-between text-[10px] font-mono text-amber">
+      <div className="mt-5 studio-well rounded-xl p-4 border border-border space-y-2.5">
+        <div className="flex items-center justify-between text-[10px] font-mono text-amber font-semibold">
           <span>SYSTEM ARCHITECTURE</span>
-          <span className="text-white/40">STAFF LEVEL</span>
+          <span className="text-secondary">STAFF LEVEL</span>
         </div>
-        <p className="text-xs font-medium text-white/90 leading-relaxed">
+        <p className="text-xs font-medium text-primary leading-relaxed">
           "How would you eliminate single-point-of-failure bottlenecks in a multi-region leader election scheme?"
         </p>
-        <div className="pt-2 flex items-center justify-between text-[10px] font-mono text-white/40 border-t border-white/[0.06]">
+        <div className="pt-2 flex items-center justify-between text-[10px] font-mono text-secondary border-t border-border">
           <span>EVALUATION: DEEP DIVE</span>
-          <span className="text-emerald-400">94% CONFIDENCE</span>
+          <span className="text-emerald-600 font-bold">94% CONFIDENCE</span>
         </div>
       </div>
     ),
@@ -82,7 +82,7 @@ const FEATURES = [
     title: "Severity Gap Diagnostics",
     tag: "PRIORITY ENGINE",
     desc: "Categorizes missing capabilities into High, Medium, and Low severity tiers so you eliminate dealbreakers first.",
-    color: "#FF6662",
+    color: "#e54d48",
     span: "md:col-span-1",
     icon: (
       <svg className="w-5 h-5 text-accent" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
@@ -94,18 +94,18 @@ const FEATURES = [
     visual: (
       <div className="mt-5 space-y-2">
         {[
-          { label: "Distributed Consensus (Raft)", level: "CRITICAL", color: "#FF6662", bar: "88%" },
-          { label: "Redis Cluster Sharding", level: "HIGH", color: "#FE9A00", bar: "62%" },
-          { label: "CI/CD Deployment Pipelines", level: "LOW", color: "#34D399", bar: "28%" },
+          { label: "Distributed Consensus (Raft)", level: "CRITICAL", color: "#e54d48", bar: "88%" },
+          { label: "Redis Cluster Sharding", level: "HIGH", color: "#d97706", bar: "62%" },
+          { label: "CI/CD Deployment Pipelines", level: "LOW", color: "#059669", bar: "28%" },
         ].map((item) => (
-          <div key={item.label} className="studio-well p-2.5 rounded-xl border border-white/[0.06] space-y-1.5">
+          <div key={item.label} className="studio-well p-2.5 rounded-xl border border-border space-y-1.5">
             <div className="flex items-center justify-between text-[10px] font-mono">
-              <span className="text-white/80">{item.label}</span>
+              <span className="text-primary font-medium">{item.label}</span>
               <span className="font-bold" style={{ color: item.color }}>
                 {item.level}
               </span>
             </div>
-            <div className="h-1 rounded-full bg-white/[0.06] overflow-hidden">
+            <div className="h-1 rounded-full bg-slate-200 overflow-hidden">
               <div
                 className="h-full rounded-full transition-all duration-700"
                 style={{ width: item.bar, background: item.color }}
@@ -121,10 +121,10 @@ const FEATURES = [
     title: "Curated Reference Knowledge",
     tag: "CURATED PATHS",
     desc: "Every flagged gap links to verified engineering specifications, official RFCs, and high-impact design papers.",
-    color: "#34D399",
+    color: "#059669",
     span: "md:col-span-2",
     icon: (
-      <svg className="w-5 h-5 text-emerald-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+      <svg className="w-5 h-5 text-emerald-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
         <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z" />
         <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z" />
       </svg>
@@ -139,13 +139,13 @@ const FEATURES = [
         ].map((item) => (
           <div
             key={item.title}
-            className="studio-well p-3 rounded-xl border border-white/[0.06] hover:border-white/[0.14] transition-colors"
+            className="studio-well p-3 rounded-xl border border-border hover:border-slate-300 transition-colors"
           >
-            <span className="text-[9px] font-mono text-accent uppercase tracking-wider block mb-1">
+            <span className="text-[9px] font-mono text-accent uppercase tracking-wider block mb-1 font-semibold">
               {item.type}
             </span>
-            <span className="text-xs font-semibold text-white/90 block truncate">{item.title}</span>
-            <span className="text-[10px] font-mono text-white/40 block mt-0.5">{item.source}</span>
+            <span className="text-xs font-semibold text-primary block truncate">{item.title}</span>
+            <span className="text-[10px] font-mono text-secondary block mt-0.5">{item.source}</span>
           </div>
         ))}
       </div>
@@ -156,7 +156,7 @@ const FEATURES = [
     title: "10-Day Milestone Execution Roadmap",
     tag: "EXECUTION PLAN",
     desc: "A structured, day-by-day flight plan that walks you through closing gaps, practicing system designs, and locking in offers.",
-    color: "#FE9A00",
+    color: "#d97706",
     span: "md:col-span-3",
     icon: (
       <svg className="w-5 h-5 text-amber" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
@@ -178,14 +178,14 @@ const FEATURES = [
               key={item.day}
               className={`p-3 rounded-xl text-center border transition-all ${
                 item.done
-                  ? "bg-emerald-500/[0.05] border-emerald-500/20 text-emerald-400"
+                  ? "bg-emerald-500/[0.05] border-emerald-500/20 text-emerald-600 font-semibold"
                   : item.active
-                  ? "bg-accent/[0.08] border-accent/30 text-accent shadow-[0_0_15px_rgba(255,102,98,0.15)]"
-                  : "bg-white/[0.02] border-white/[0.06] text-white/40"
+                  ? "bg-accent/[0.08] border-accent/30 text-accent font-semibold shadow-sm"
+                  : "bg-slate-100 border-border text-secondary"
               }`}
             >
               <span className="text-[10px] font-mono font-bold block mb-1">{item.day}</span>
-              <p className="text-xs font-semibold text-white/90 truncate mb-1">{item.task}</p>
+              <p className="text-xs font-semibold text-primary truncate mb-1">{item.task}</p>
               <span className="text-[9px] font-mono tracking-wider block">
                 {item.done ? "✓ COMPLETE" : item.active ? "● ACTIVE" : "○ QUEUED"}
               </span>
@@ -193,11 +193,11 @@ const FEATURES = [
           ))}
         </div>
 
-        <div className="flex items-center gap-3 studio-well p-3 rounded-xl border border-white/[0.06]">
-          <div className="flex-1 h-1.5 rounded-full bg-white/[0.06] overflow-hidden">
-            <div className="h-full rounded-full bg-gradient-to-r from-accent to-[#FE9A00] w-[40%]" />
+        <div className="flex items-center gap-3 studio-well p-3 rounded-xl border border-border">
+          <div className="flex-1 h-1.5 rounded-full bg-slate-200 overflow-hidden">
+            <div className="h-full rounded-full bg-gradient-to-r from-accent to-amber w-[40%]" />
           </div>
-          <span className="text-xs font-mono text-white/50 shrink-0">MILESTONE 03 / 10 · 40% PACING</span>
+          <span className="text-xs font-mono text-secondary shrink-0">MILESTONE 03 / 10 · 40% PACING</span>
         </div>
       </div>
     ),
@@ -206,15 +206,15 @@ const FEATURES = [
 
 const BentoFeatures = () => {
   return (
-    <section className="py-24 px-4 sm:px-6 lg:px-8 relative bg-[#08080A] font-sans">
+    <section className="py-24 px-4 sm:px-6 lg:px-8 relative bg-background font-sans">
       <div className="max-w-6xl mx-auto">
         {/* Section Header */}
         <div className="text-center mb-16">
-          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-white tracking-[-0.035em] mb-4">
+          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-primary tracking-[-0.035em] mb-4">
             Everything you need to <br />
             <span className="text-gradient-coral">ace your technical interview</span>
           </h2>
-          <p className="text-secondary/75 text-sm sm:text-base max-w-xl mx-auto leading-relaxed font-normal">
+          <p className="text-secondary text-sm sm:text-base max-w-xl mx-auto leading-relaxed font-normal">
             A comprehensive workbench designed to close skill gaps and align your profile with hiring standards.
           </p>
         </div>
@@ -224,23 +224,23 @@ const BentoFeatures = () => {
           {FEATURES.map((feat) => (
             <div
               key={feat.id}
-              className={`studio-card-interactive rounded-2xl md:rounded-3xl p-6 sm:p-7 flex flex-col justify-between overflow-hidden ${feat.span}`}
+              className={`studio-card-interactive rounded-2xl md:rounded-3xl p-6 sm:p-7 flex flex-col justify-between overflow-hidden shadow-sm border border-border ${feat.span}`}
             >
               <div>
                 <div className="flex items-start justify-between gap-3 mb-4">
                   <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 rounded-xl bg-[#08080A] border border-white/[0.08] flex items-center justify-center shrink-0 shadow-inner">
+                    <div className="w-10 h-10 rounded-xl bg-slate-100 border border-border flex items-center justify-center shrink-0 shadow-sm">
                       {feat.icon}
                     </div>
                     <div>
-                      <h3 className="text-base font-bold text-white tracking-tight">{feat.title}</h3>
+                      <h3 className="text-base font-bold text-primary tracking-tight">{feat.title}</h3>
                     </div>
                   </div>
-                  <span className="text-[10px] font-mono font-semibold uppercase tracking-wider px-2 py-0.5 rounded bg-white/[0.04] border border-white/[0.08] text-white/60">
+                  <span className="text-[10px] font-mono font-semibold uppercase tracking-wider px-2 py-0.5 rounded bg-slate-100 border border-border text-secondary">
                     {feat.tag}
                   </span>
                 </div>
-                <p className="text-xs sm:text-sm text-secondary/70 leading-relaxed font-normal">{feat.desc}</p>
+                <p className="text-xs sm:text-sm text-secondary leading-relaxed font-normal">{feat.desc}</p>
               </div>
 
               {feat.visual}

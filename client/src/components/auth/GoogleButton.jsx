@@ -72,19 +72,19 @@ const GoogleButton = ({
       type="button"
       onClick={() => !isLoading && login()}
       disabled={isLoading}
-      className="w-full flex items-center justify-center gap-3 px-4 py-3.5 rounded-xl bg-[#0E0E12] border-t border-white/[0.14] border-x border-b border-white/[0.08] hover:border-white/[0.2] hover:bg-[#15151C] active:scale-[0.985] shadow-[0_4px_20px_rgba(0,0,0,0.5)] transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed group cursor-pointer font-sans"
+      className="w-full flex items-center justify-center gap-3 px-4 py-3.5 rounded-xl bg-white border border-border hover:border-slate-300 hover:bg-slate-50 active:scale-[0.985] shadow-xs hover:shadow-sm transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed group cursor-pointer font-sans"
     >
       {isLoading ? (
         <>
-          <span className="w-5 h-5 border-2 border-white/20 border-t-white/70 rounded-full animate-spin shrink-0" />
-          <span className="text-sm font-medium text-white/70">Connecting to Google...</span>
+          <span className="w-5 h-5 border-2 border-slate-300 border-t-accent rounded-full animate-spin shrink-0" />
+          <span className="text-sm font-medium text-secondary">Connecting to Google...</span>
         </>
       ) : (
         <>
           <span className="shrink-0 group-hover:scale-105 transition-transform duration-200">
             <GoogleLogo />
           </span>
-          <span className="text-sm font-medium text-white/90 group-hover:text-white transition-colors duration-200">
+          <span className="text-sm font-semibold text-primary transition-colors duration-200">
             {label}
           </span>
         </>

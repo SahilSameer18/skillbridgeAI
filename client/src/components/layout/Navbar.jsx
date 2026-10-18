@@ -81,11 +81,11 @@ const Navbar = () => {
     <nav
       className={`sticky top-0 z-50 w-full transition-all duration-300 ${
         scrolled
-          ? "border-b border-white/[0.08] shadow-2xl shadow-black/60"
+          ? "border-b border-border shadow-md shadow-slate-900/5"
           : "border-b border-transparent"
       }`}
       style={{
-        background: scrolled ? "rgba(8, 8, 10, 0.92)" : "rgba(8, 8, 10, 0.65)",
+        background: scrolled ? "rgba(255, 255, 255, 0.94)" : "rgba(255, 255, 255, 0.8)",
         backdropFilter: "blur(12px)",
         WebkitBackdropFilter: "blur(12px)",
       }}
@@ -94,7 +94,7 @@ const Navbar = () => {
         <div className="flex justify-between items-center h-16">
           {/* Brand */}
           <Link to="/" className="flex items-center gap-2.5 group shrink-0 active:scale-[0.98] transition-transform">
-            <div className="w-8 h-8 rounded-lg bg-[#0e0e12] border-t border-white/[0.16] border-x border-b border-white/[0.06] flex items-center justify-center shadow-md group-hover:border-accent/40 transition-colors">
+            <div className="w-8 h-8 rounded-lg bg-white border border-border flex items-center justify-center shadow-sm group-hover:border-accent/40 transition-colors">
               <svg className="w-4 h-4 text-accent" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
                 <path d="M13 10V3L4 14h7v7l9-11h-7z" strokeLinecap="round" strokeLinejoin="round" />
               </svg>
@@ -114,13 +114,13 @@ const Navbar = () => {
                   to={to}
                   className={`relative px-4 py-2 text-sm font-medium rounded-xl transition-all duration-160 active:scale-[0.97] ${
                     isActive
-                      ? "text-white"
-                      : "text-secondary hover:text-primary hover:bg-white/[0.04]"
+                      ? "text-primary font-semibold"
+                      : "text-secondary hover:text-primary hover:bg-slate-100"
                   }`}
                 >
                   {label}
                   {isActive && (
-                    <span className="absolute bottom-0 left-3 right-3 h-[2px] rounded-full bg-accent shadow-[0_0_8px_rgba(255,102,98,0.7)]" />
+                    <span className="absolute bottom-0 left-3 right-3 h-[2px] rounded-full bg-accent shadow-[0_0_8px_rgba(229,77,72,0.4)]" />
                   )}
                 </Link>
               );
@@ -133,7 +133,7 @@ const Navbar = () => {
               <div className="relative" ref={userDropdownRef}>
                 <button
                   onClick={() => setUserMenuOpen((prev) => !prev)}
-                  className="flex items-center gap-2.5 px-3 py-1.5 rounded-full border border-white/[0.08] bg-white/[0.03] hover:bg-white/[0.07] hover:border-white/[0.14] transition-all duration-160 cursor-pointer active:scale-[0.97]"
+                  className="flex items-center gap-2.5 px-3 py-1.5 rounded-full border border-border bg-white hover:bg-slate-50 hover:border-slate-300 transition-all duration-160 cursor-pointer active:scale-[0.97] shadow-sm"
                 >
                   <img
                     src={avatarSrc}
@@ -152,10 +152,10 @@ const Navbar = () => {
 
                 {/* Dropdown Menu */}
                 {userMenuOpen && (
-                  <div className="absolute right-0 mt-2 w-48 rounded-2xl studio-card p-1.5 z-50 animate-fade-in shadow-2xl">
+                  <div className="absolute right-0 mt-2 w-48 rounded-2xl studio-card p-1.5 z-50 animate-fade-in shadow-xl">
                     <Link
                       to="/profile"
-                      className="flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-xs font-semibold text-primary hover:bg-white/[0.06] hover:text-accent transition-colors"
+                      className="flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-xs font-semibold text-primary hover:bg-slate-100 hover:text-accent transition-colors"
                       onClick={() => setUserMenuOpen(false)}
                     >
                       <FiUser className="w-4 h-4" />
@@ -202,7 +202,7 @@ const Navbar = () => {
       {mobileMenuOpen && (
         <div
           onClick={() => setMobileMenuOpen(false)}
-          className="md:hidden fixed inset-0 top-16 bg-black/60 backdrop-blur-sm z-40 animate-fade-in"
+          className="md:hidden fixed inset-0 top-16 bg-slate-900/40 backdrop-blur-sm z-40 animate-fade-in"
         />
       )}
 
@@ -216,7 +216,7 @@ const Navbar = () => {
           pointerEvents: mobileMenuOpen ? "auto" : "none",
         }}
       >
-        <div className="border-t border-border px-4 pt-3 pb-5 space-y-1 bg-background/95 backdrop-blur-xl">
+        <div className="border-t border-b border-border px-4 pt-3 pb-5 space-y-1 bg-white/95 backdrop-blur-xl shadow-lg">
           {NAV_LINKS.map(({ to, label }) => {
             const isActive = location.pathname === to;
             return (
@@ -224,7 +224,7 @@ const Navbar = () => {
                 key={to}
                 to={to}
                 className={`flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all duration-200 ${
-                  isActive ? "text-accent bg-accent/10" : "text-secondary hover:text-primary hover:bg-surface"
+                  isActive ? "text-accent bg-accent/10" : "text-secondary hover:text-primary hover:bg-slate-100"
                 }`}
               >
                 {isActive && <span className="w-1 h-4 rounded-full bg-accent shrink-0" />}
@@ -237,7 +237,7 @@ const Navbar = () => {
             <Link
               to="/profile"
               className={`flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all duration-200 ${
-                location.pathname === "/profile" ? "text-accent bg-accent/10" : "text-secondary hover:text-primary hover:bg-surface"
+                location.pathname === "/profile" ? "text-accent bg-accent/10" : "text-secondary hover:text-primary hover:bg-slate-100"
               }`}
             >
               <FiUser className="w-4 h-4" />

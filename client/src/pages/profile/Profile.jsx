@@ -259,16 +259,16 @@ const Profile = () => {
   return (
     <div className="w-full max-w-6xl mx-auto px-4 sm:px-6 py-10 page-enter">
       {/* ── Top Header Banner ── */}
-      <div className="relative studio-card p-6 sm:p-8 overflow-hidden mb-8 shadow-xl">
+      <div className="relative studio-card p-4 sm:p-6 md:p-8 overflow-hidden mb-8 shadow-sm">
         <div
           className="absolute -top-24 -right-24 w-80 h-80 rounded-full pointer-events-none"
-          style={{ background: "radial-gradient(circle, rgba(255,102,98,0.12) 0%, transparent 70%)" }}
+          style={{ background: "radial-gradient(circle, rgba(229,77,72,0.08) 0%, transparent 70%)" }}
         />
 
         <div className="flex flex-col md:flex-row items-center gap-6 relative z-10">
           {/* Avatar with live preview */}
           <div className="relative group">
-            <div className="w-24 h-24 sm:w-28 sm:h-28 rounded-2xl overflow-hidden border-2 border-accent/40 bg-surface shadow-lg relative shrink-0 transition-all duration-300 group-hover:scale-105">
+            <div className="w-24 h-24 sm:w-28 sm:h-28 rounded-2xl overflow-hidden border-2 border-accent/40 bg-white shadow-sm relative shrink-0 transition-all duration-300 group-hover:scale-105">
               <img
                 src={displayAvatar}
                 alt={user?.username}
@@ -281,7 +281,7 @@ const Profile = () => {
             </div>
             <button
               onClick={() => setActiveTab("profile")}
-              className="absolute -bottom-2 -right-2 p-2 rounded-xl bg-accent text-primary shadow-lg hover:scale-110 active:scale-95 transition-transform cursor-pointer"
+              className="absolute -bottom-2 -right-2 p-2 rounded-xl bg-accent text-white shadow-sm hover:scale-110 active:scale-95 transition-transform cursor-pointer"
               title="Change Avatar"
               aria-label="Change Avatar"
             >
@@ -296,7 +296,7 @@ const Profile = () => {
                 {user?.username}
               </h1>
               {isGoogleLinked && (
-                <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
+                <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-emerald-50 text-emerald-700 border border-emerald-200">
                   <FiCheckCircle className="w-3.5 h-3.5" /> Google Connected
                 </span>
               )}
@@ -342,8 +342,8 @@ const Profile = () => {
           </div>
         </div>
 
-        <div className="studio-card p-5 border-l-[3px] border-l-emerald-400 flex items-center gap-4">
-          <div className="w-12 h-12 rounded-xl bg-emerald-500/15 border border-emerald-500/20 flex items-center justify-center text-emerald-400 shrink-0">
+        <div className="studio-card p-5 border-l-[3px] border-l-emerald-600 flex items-center gap-4">
+          <div className="w-12 h-12 rounded-xl bg-emerald-50 border border-emerald-200 flex items-center justify-center text-emerald-700 shrink-0">
             <FiAward className="w-6 h-6" />
           </div>
           <div>
@@ -351,16 +351,16 @@ const Profile = () => {
             {statsLoading ? (
               <div className="mt-1"><Skeleton width="55px" height="1.5rem" /></div>
             ) : (
-              <span className="text-2xl font-extrabold text-emerald-400 font-mono">{stats.topScore}%</span>
+              <span className="text-2xl font-extrabold text-emerald-700 font-mono">{stats.topScore}%</span>
             )}
           </div>
         </div>
       </div>
 
       {/* ── Tabbed Workspace ── */}
-      <div className="studio-card p-6 sm:p-8">
+      <div className="studio-card p-4 sm:p-6 md:p-8">
         {/* Modern Segmented Capsule Tab Navigation */}
-        <div className="flex bg-surface/60 p-1.5 rounded-2xl border border-white/[0.06] mb-8 gap-2 overflow-x-auto no-scrollbar">
+        <div className="flex bg-slate-100 p-1.5 rounded-2xl border border-border mb-8 gap-2 overflow-x-auto no-scrollbar">
           {TABS.map((tab) => {
             const IconComp = tab.icon;
             const isActive = activeTab === tab.id;
@@ -370,8 +370,8 @@ const Profile = () => {
                 onClick={() => setActiveTab(tab.id)}
                 className={`flex items-center gap-2 px-5 py-2.5 rounded-xl text-xs sm:text-sm font-bold min-h-[42px] transition-all duration-200 cursor-pointer whitespace-nowrap ${
                   isActive
-                    ? "bg-accent text-primary shadow-[0_0_20px_rgba(255,102,98,0.3)] scale-[1.02]"
-                    : "text-secondary hover:text-primary hover:bg-white/[0.03]"
+                    ? "bg-accent text-white shadow-xs scale-[1.02]"
+                    : "text-secondary hover:text-primary hover:bg-white"
                 }`}
               >
                 <IconComp className="w-4 h-4 shrink-0" />
@@ -390,23 +390,23 @@ const Profile = () => {
                 Username <span className="text-secondary/50 font-normal">(Letters, numbers, underscores)</span>
               </label>
               <div className="relative">
-                <FiUser className="absolute left-4 top-1/2 -translate-y-1/2 text-secondary/50" />
+                <FiUser className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400" />
                 <input
                   type="text"
                   value={username}
                   onChange={(e) => setUsername(e.target.value)}
-                  className={`w-full pl-11 pr-4 py-3 bg-surface/50 border rounded-xl text-sm text-primary focus:outline-none transition-all ${
+                  className={`w-full pl-11 pr-4 py-3 bg-white border rounded-xl text-sm text-primary focus:outline-none transition-all ${
                     profileErrors.username
-                      ? "border-red-500/50 focus:border-red-500 focus:shadow-[0_0_16px_rgba(239,68,68,0.18)]"
-                      : "border-white/[0.08] focus:border-accent focus:shadow-[0_0_16px_rgba(255,102,98,0.14)]"
+                      ? "border-red-500/60 bg-red-50/40 focus:border-red-500 focus:shadow-[0_0_0_3px_rgba(239,68,68,0.12)]"
+                      : "border-border hover:border-slate-300 focus:border-accent focus:shadow-[0_0_0_3px_rgba(229,77,72,0.12)]"
                   }`}
                   placeholder="e.g. alex_dev"
                   required
                 />
               </div>
               {profileErrors.username && (
-                <p className="text-red-400 text-xs mt-1.5 flex items-center gap-1">
-                  <span className="w-1 h-1 rounded-full bg-red-400 shrink-0" />
+                <p className="text-red-600 text-xs mt-1.5 flex items-center gap-1 font-mono">
+                  <span className="w-1.5 h-1.5 rounded-full bg-red-600 shrink-0" />
                   {profileErrors.username}
                 </p>
               )}
@@ -418,28 +418,28 @@ const Profile = () => {
                 <label className="block text-xs font-bold text-secondary uppercase tracking-wider">
                   Email Address <span className="text-secondary/50 font-normal">(Permanent Identity)</span>
                 </label>
-                <span className="type-micro text-accent/80 font-mono">Verified Account</span>
+                <span className="type-micro text-accent font-mono font-semibold">Verified Account</span>
               </div>
               <div className="relative">
-                <FiMail className="absolute left-4 top-1/2 -translate-y-1/2 text-secondary/50" />
+                <FiMail className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400" />
                 <input
                   type="email"
                   value={user?.email || ""}
                   readOnly
                   disabled
-                  className="w-full pl-11 pr-28 py-3 bg-surface/25 border border-white/[0.05] rounded-xl text-sm text-secondary cursor-not-allowed select-all"
+                  className="w-full pl-11 pr-28 py-3 bg-slate-100 border border-border rounded-xl text-sm text-secondary cursor-not-allowed select-all"
                 />
                 <button
                   type="button"
                   onClick={handleCopyEmail}
-                  className="absolute right-2.5 top-1/2 -translate-y-1/2 px-3 py-1.5 rounded-lg bg-surface border border-white/[0.08] hover:border-accent/40 text-xs font-bold text-primary flex items-center gap-1.5 transition-all cursor-pointer hover:scale-105 active:scale-95 shadow-sm min-h-[32px]"
+                  className="absolute right-2.5 top-1/2 -translate-y-1/2 px-3 py-1.5 rounded-lg bg-white border border-border hover:border-slate-300 text-xs font-bold text-primary flex items-center gap-1.5 transition-all cursor-pointer hover:scale-105 active:scale-95 shadow-xs min-h-[32px]"
                   title="Copy Email Address"
                   aria-label="Copy Email Address"
                 >
                   {copiedEmail ? (
                     <>
-                      <FiCheck className="w-3.5 h-3.5 text-emerald-400" />
-                      <span className="text-emerald-400">Copied</span>
+                      <FiCheck className="w-3.5 h-3.5 text-emerald-700" />
+                      <span className="text-emerald-700">Copied</span>
                     </>
                   ) : (
                     <>
@@ -449,7 +449,7 @@ const Profile = () => {
                   )}
                 </button>
               </div>
-              <p className="text-[11px] text-secondary/50 mt-1.5">
+              <p className="text-[11px] text-muted mt-1.5">
                 Email address is locked to your account security credentials and cannot be modified.
               </p>
             </div>
@@ -460,7 +460,7 @@ const Profile = () => {
                 <label className="block text-xs font-bold text-secondary uppercase tracking-wider">
                   Choose Avatar Style
                 </label>
-                <span className="type-micro text-secondary/60 font-mono">8 Preset Styles</span>
+                <span className="type-micro text-muted font-mono">8 Preset Styles</span>
               </div>
 
               <div className="grid grid-cols-2 sm:grid-cols-4 gap-3.5">
@@ -475,23 +475,23 @@ const Profile = () => {
                       onClick={() => setAvatar(styleUrl)}
                       className={`relative p-3 rounded-2xl border transition-all duration-200 flex flex-col items-center gap-2.5 text-center cursor-pointer group ${
                         isSelected
-                          ? "bg-accent/15 border-accent shadow-[0_0_20px_rgba(255,102,98,0.25)] scale-[1.03]"
-                          : "bg-surface/40 border-white/[0.06] hover:border-white/[0.15] hover:bg-surface/70"
+                          ? "bg-accent/10 border-accent shadow-xs scale-[1.03]"
+                          : "bg-white border-border hover:border-slate-300 hover:bg-slate-50"
                       }`}
                     >
-                      <div className="w-14 h-14 rounded-2xl overflow-hidden bg-background/80 border border-white/[0.08] p-1 flex items-center justify-center shrink-0 shadow-md">
+                      <div className="w-14 h-14 rounded-2xl overflow-hidden bg-slate-100 border border-border p-1 flex items-center justify-center shrink-0 shadow-xs">
                         <img src={styleUrl} alt={style.name} className="w-full h-full object-contain" />
                       </div>
                       <div className="min-w-0">
                         <span className={`text-xs font-bold block truncate ${isSelected ? "text-accent" : "text-secondary group-hover:text-primary"}`}>
                           {style.name}
                         </span>
-                        <span className="text-[10px] text-secondary/60 block truncate font-mono mt-0.5">
+                        <span className="text-[10px] text-muted block truncate font-mono mt-0.5">
                           {style.role}
                         </span>
                       </div>
                       {isSelected && (
-                        <div className="absolute top-2 right-2 w-4 h-4 rounded-full bg-accent flex items-center justify-center text-primary text-[10px] shadow-sm font-black">
+                        <div className="absolute top-2 right-2 w-4 h-4 rounded-full bg-accent flex items-center justify-center text-white text-[10px] shadow-xs font-black">
                           ✓
                         </div>
                       )}
@@ -502,16 +502,16 @@ const Profile = () => {
             </div>
 
             {/* Save Changes Button */}
-            <div className="pt-2">
+            <div className="pt-6 mt-6 border-t border-border">
               <button
                 type="submit"
                 disabled={!canSaveProfile}
-                className={`studio-btn-primary min-h-[44px] flex items-center gap-2 ${
-                  !canSaveProfile ? "opacity-50 cursor-not-allowed pointer-events-none" : ""
+                className={`studio-btn-primary min-h-[44px] px-6 py-3 rounded-xl text-sm font-bold flex items-center gap-2.5 text-white shadow-sm transition-all duration-200 ${
+                  !canSaveProfile ? "opacity-45 cursor-not-allowed pointer-events-none" : "hover:scale-[1.02] active:scale-[0.98]"
                 }`}
               >
                 {savingProfile ? (
-                  <span className="w-4 h-4 border-2 border-primary/30 border-t-primary rounded-full animate-spin" />
+                  <span className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
                 ) : (
                   <FiSave className="w-4 h-4" />
                 )}
@@ -519,7 +519,7 @@ const Profile = () => {
               </button>
 
               {!hasProfileChanged && (
-                <p className="text-xs text-secondary/50 italic mt-2.5">
+                <p className="text-xs text-muted mt-3 font-sans">
                   Change your username or select an avatar to enable saving.
                 </p>
               )}
@@ -547,19 +547,19 @@ const Profile = () => {
                     Current Password
                   </label>
                   <div className="relative">
-                    <FiLock className="absolute left-4 top-1/2 -translate-y-1/2 text-secondary/50" />
+                    <FiLock className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400" />
                     <input
                       type={showCurrentPassword ? "text" : "password"}
                       value={currentPassword}
                       onChange={(e) => setCurrentPassword(e.target.value)}
                       placeholder="••••••••"
-                      className="w-full pl-11 pr-12 py-3 bg-surface/50 border border-white/[0.08] rounded-xl text-sm text-primary focus:outline-none focus:border-accent focus:shadow-[0_0_16px_rgba(255,102,98,0.14)] transition-all"
+                      className="w-full pl-11 pr-12 py-3 bg-white border border-border rounded-xl text-sm text-primary focus:outline-none focus:border-accent focus:shadow-[0_0_0_3px_rgba(229,77,72,0.12)] transition-all"
                       required
                     />
                     <button
                       type="button"
                       onClick={() => setShowCurrentPassword((v) => !v)}
-                      className="absolute right-2 top-1/2 -translate-y-1/2 w-9 h-9 flex items-center justify-center text-secondary/50 hover:text-primary transition-colors focus:outline-none cursor-pointer rounded-lg hover:bg-white/[0.04]"
+                      className="absolute right-2 top-1/2 -translate-y-1/2 w-9 h-9 flex items-center justify-center text-slate-400 hover:text-primary transition-colors focus:outline-none cursor-pointer rounded-lg hover:bg-slate-100"
                       aria-label={showCurrentPassword ? "Hide current password" : "Show current password"}
                     >
                       {showCurrentPassword ? <FiEyeOff className="w-4 h-4" /> : <FiEye className="w-4 h-4" />}
@@ -573,31 +573,31 @@ const Profile = () => {
                     New Password <span className="text-secondary/50 font-normal">(Min 6 characters)</span>
                   </label>
                   <div className="relative">
-                    <FiLock className="absolute left-4 top-1/2 -translate-y-1/2 text-secondary/50" />
+                    <FiLock className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400" />
                     <input
                       type={showNewPassword ? "text" : "password"}
                       value={newPassword}
                       onChange={(e) => setNewPassword(e.target.value)}
                       placeholder="••••••••"
-                      className={`w-full pl-11 pr-12 py-3 bg-surface/50 border rounded-xl text-sm text-primary focus:outline-none transition-all ${
+                      className={`w-full pl-11 pr-12 py-3 bg-white border rounded-xl text-sm text-primary focus:outline-none transition-all ${
                         passwordErrors.newPassword
-                          ? "border-red-500/50 focus:border-red-500 focus:shadow-[0_0_16px_rgba(239,68,68,0.18)]"
-                          : "border-white/[0.08] focus:border-accent focus:shadow-[0_0_16px_rgba(255,102,98,0.14)]"
+                          ? "border-red-500/60 bg-red-50/40 focus:border-red-500 focus:shadow-[0_0_0_3px_rgba(239,68,68,0.12)]"
+                          : "border-border hover:border-slate-300 focus:border-accent focus:shadow-[0_0_0_3px_rgba(229,77,72,0.12)]"
                       }`}
                       required
                     />
                     <button
                       type="button"
                       onClick={() => setShowNewPassword((v) => !v)}
-                      className="absolute right-2 top-1/2 -translate-y-1/2 w-9 h-9 flex items-center justify-center text-secondary/50 hover:text-primary transition-colors focus:outline-none cursor-pointer rounded-lg hover:bg-white/[0.04]"
+                      className="absolute right-2 top-1/2 -translate-y-1/2 w-9 h-9 flex items-center justify-center text-slate-400 hover:text-primary transition-colors focus:outline-none cursor-pointer rounded-lg hover:bg-slate-100"
                       aria-label={showNewPassword ? "Hide new password" : "Show new password"}
                     >
                       {showNewPassword ? <FiEyeOff className="w-4 h-4" /> : <FiEye className="w-4 h-4" />}
                     </button>
                   </div>
                   {passwordErrors.newPassword && (
-                    <p className="text-red-400 text-xs mt-1.5 flex items-center gap-1">
-                      <span className="w-1 h-1 rounded-full bg-red-400 shrink-0" />
+                    <p className="text-red-600 text-xs mt-1.5 flex items-center gap-1 font-mono">
+                      <span className="w-1.5 h-1.5 rounded-full bg-red-600 shrink-0" />
                       {passwordErrors.newPassword}
                     </p>
                   )}
@@ -609,61 +609,63 @@ const Profile = () => {
                     Confirm New Password
                   </label>
                   <div className="relative">
-                    <FiLock className="absolute left-4 top-1/2 -translate-y-1/2 text-secondary/50" />
+                    <FiLock className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400" />
                     <input
                       type={showConfirmPassword ? "text" : "password"}
                       value={confirmPassword}
                       onChange={(e) => setConfirmPassword(e.target.value)}
                       placeholder="••••••••"
-                      className={`w-full pl-11 pr-12 py-3 bg-surface/50 border rounded-xl text-sm text-primary focus:outline-none transition-all ${
+                      className={`w-full pl-11 pr-12 py-3 bg-white border rounded-xl text-sm text-primary focus:outline-none transition-all ${
                         passwordErrors.confirmPassword
-                          ? "border-red-500/50 focus:border-red-500 focus:shadow-[0_0_16px_rgba(239,68,68,0.18)]"
-                          : "border-white/[0.08] focus:border-accent focus:shadow-[0_0_16px_rgba(255,102,98,0.14)]"
+                          ? "border-red-500/60 bg-red-50/40 focus:border-red-500 focus:shadow-[0_0_0_3px_rgba(239,68,68,0.12)]"
+                          : "border-border hover:border-slate-300 focus:border-accent focus:shadow-[0_0_0_3px_rgba(229,77,72,0.12)]"
                       }`}
                       required
                     />
                     <button
                       type="button"
                       onClick={() => setShowConfirmPassword((v) => !v)}
-                      className="absolute right-2 top-1/2 -translate-y-1/2 w-9 h-9 flex items-center justify-center text-secondary/50 hover:text-primary transition-colors focus:outline-none cursor-pointer rounded-lg hover:bg-white/[0.04]"
+                      className="absolute right-2 top-1/2 -translate-y-1/2 w-9 h-9 flex items-center justify-center text-slate-400 hover:text-primary transition-colors focus:outline-none cursor-pointer rounded-lg hover:bg-slate-100"
                       aria-label={showConfirmPassword ? "Hide confirm password" : "Show confirm password"}
                     >
                       {showConfirmPassword ? <FiEyeOff className="w-4 h-4" /> : <FiEye className="w-4 h-4" />}
                     </button>
                   </div>
                   {passwordErrors.confirmPassword && (
-                    <p className="text-red-400 text-xs mt-1.5 flex items-center gap-1">
-                      <span className="w-1 h-1 rounded-full bg-red-400 shrink-0" />
+                    <p className="text-red-600 text-xs mt-1.5 flex items-center gap-1 font-mono">
+                      <span className="w-1.5 h-1.5 rounded-full bg-red-600 shrink-0" />
                       {passwordErrors.confirmPassword}
                     </p>
                   )}
                 </div>
 
                 {/* Update Password Button */}
-                <button
-                  type="submit"
-                  disabled={!canSavePassword}
-                  className={`studio-btn-primary min-h-[44px] flex items-center gap-2 text-sm ${
-                    !canSavePassword ? "opacity-50 cursor-not-allowed pointer-events-none" : ""
-                  }`}
-                >
-                  {savingPassword ? (
-                    <span className="w-4 h-4 border-2 border-primary/30 border-t-primary rounded-full animate-spin" />
-                  ) : (
-                    <FiLock className="w-4 h-4" />
-                  )}
-                  {savingPassword ? "Updating Password..." : "Update Password"}
-                </button>
+                <div className="pt-6 mt-6 border-t border-border">
+                  <button
+                    type="submit"
+                    disabled={!canSavePassword}
+                    className={`studio-btn-primary min-h-[44px] px-6 py-3 rounded-xl text-sm font-bold flex items-center gap-2.5 text-white shadow-sm transition-all duration-200 ${
+                      !canSavePassword ? "opacity-45 cursor-not-allowed pointer-events-none" : "hover:scale-[1.02] active:scale-[0.98]"
+                    }`}
+                  >
+                    {savingPassword ? (
+                      <span className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                    ) : (
+                      <FiLock className="w-4 h-4" />
+                    )}
+                    {savingPassword ? "Updating Password..." : "Update Password"}
+                  </button>
+                </div>
               </form>
             ) : (
-              <div className="p-6 rounded-2xl studio-well border border-border/60">
+              <div className="p-6 rounded-2xl studio-well border border-border">
                 <h3 className="text-base font-bold text-primary mb-2 flex items-center gap-2">
-                  <FiShield className="text-emerald-400" /> Google Single Sign-On Account
+                  <FiShield className="text-emerald-700" /> Google Single Sign-On Account
                 </h3>
                 <p className="text-xs text-secondary leading-relaxed mb-4">
                   Password management is disabled because your account was created with Google OAuth. Your account security is directly handled by Google.
                 </p>
-                <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-xl bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-xs font-bold">
+                <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-xl bg-emerald-50 border border-emerald-200 text-emerald-700 text-xs font-bold">
                   <FiCheckCircle className="w-4 h-4" /> Google SSO Verified
                 </div>
               </div>
@@ -674,7 +676,7 @@ const Profile = () => {
         {/* ── Tab 3: Connected Accounts (Split Tab) ── */}
         {activeTab === "accounts" && (
           <div className="space-y-6 max-w-xl animate-fade-in">
-            <div className="p-6 rounded-2xl studio-well border border-border/60">
+            <div className="p-6 rounded-2xl studio-well border border-border">
               <h3 className="text-base font-bold text-primary mb-2 flex items-center gap-2">
                 <FiShield className="text-accent" /> External SSO Providers
               </h3>
@@ -683,7 +685,7 @@ const Profile = () => {
               </p>
 
               {isGoogleLinked ? (
-                <div className="flex items-center justify-between p-4 rounded-xl bg-emerald-500/10 border border-emerald-500/20 shadow-sm">
+                <div className="flex items-center justify-between p-4 rounded-xl bg-emerald-50 border border-emerald-200 shadow-xs">
                   <div className="flex items-center gap-3.5">
                     <svg className="w-6 h-6 shrink-0" viewBox="0 0 24 24">
                       <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" />
@@ -693,14 +695,14 @@ const Profile = () => {
                     </svg>
                     <div>
                       <span className="text-sm font-bold text-primary block">Google Account</span>
-                      <span className="text-xs text-emerald-400 font-medium">Connected & Active</span>
+                      <span className="text-xs text-emerald-700 font-semibold">Connected & Active</span>
                     </div>
                   </div>
-                  <FiCheckCircle className="text-emerald-400 w-5 h-5 shrink-0" />
+                  <FiCheckCircle className="text-emerald-700 w-5 h-5 shrink-0" />
                 </div>
               ) : (
                 <div className="space-y-4">
-                  <p className="text-xs text-amber-300 bg-amber-500/10 p-3.5 rounded-xl border border-amber-500/20 leading-relaxed">
+                  <p className="text-xs text-amber-900 bg-amber-50 p-3.5 rounded-xl border border-amber-200 leading-relaxed">
                     Google account is not linked. Link your Google account to sign in with one click using your verified email.
                   </p>
                   <GoogleButton

@@ -134,7 +134,7 @@ const Form = () => {
         <div className="mb-5 flex justify-end">
           <button
             onClick={handleClear}
-            className="text-xs studio-btn-secondary px-3 py-1.5 rounded-lg text-red-400 hover:text-red-300"
+            className="text-xs studio-btn-secondary px-3 py-1.5 rounded-lg text-red-600 hover:text-red-700"
           >
             <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
               <line x1="18" y1="6" x2="6" y2="18" />
@@ -147,22 +147,17 @@ const Form = () => {
 
       {/* Global error banner */}
       {error && (
-        <div
-          className="mb-6 flex items-start gap-3 px-4 py-3.5 rounded-2xl text-sm text-red-300 animate-fade-in studio-card border-red-500/30"
-          style={{
-            background: "rgba(239, 68, 68, 0.08)",
-          }}
-        >
-          <svg className="w-4 h-4 mt-0.5 shrink-0 text-red-400" fill="currentColor" viewBox="0 0 20 20">
+        <div className="mb-6 flex items-start gap-3 px-4 py-3.5 rounded-2xl text-sm bg-red-50 border border-red-200 text-red-700 animate-fade-in shadow-xs">
+          <svg className="w-4 h-4 mt-0.5 shrink-0 text-red-600" fill="currentColor" viewBox="0 0 20 20">
             <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm-.75-9.25a.75.75 0 011.5 0v3.5a.75.75 0 01-1.5 0v-3.5zm.75 6a.875.875 0 100-1.75.875.875 0 000 1.75z" clipRule="evenodd" />
           </svg>
           <div className="flex-grow">
-            <p className="font-semibold text-red-200">Execution Error</p>
-            <p className="text-xs text-red-300/80 mt-0.5">{error}</p>
+            <p className="font-semibold text-red-800">Execution Error</p>
+            <p className="text-xs text-red-700 mt-0.5">{error}</p>
           </div>
           <button
             onClick={() => setError("")}
-            className="ml-auto shrink-0 text-red-400 hover:text-red-200 transition-colors"
+            className="ml-auto shrink-0 text-red-500 hover:text-red-800 transition-colors"
             aria-label="Dismiss error"
           >
             <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
@@ -173,16 +168,16 @@ const Form = () => {
       )}
 
       {/* Main Console Box */}
-      <div className="studio-card overflow-hidden shadow-2xl relative">
+      <div className="studio-card overflow-hidden shadow-sm relative">
         {/* Active Processing Laser Progress Hairline */}
         {isGenerating && <div className="laser-progress" />}
 
         {/* Calibration Status Bar at top of Workspace */}
-        <div className="flex items-center gap-3 px-6 md:px-8 py-3.5 bg-black/40 border-b border-white/[0.06]">
+        <div className="flex items-center gap-3 px-4 sm:px-6 md:px-8 py-3.5 bg-slate-100/70 border-b border-border">
           <span className={`w-2 h-2 rounded-full shrink-0 ${
-            canGenerate ? "bg-emerald-400 shadow-[0_0_8px_rgba(52,211,153,0.8)]" : "bg-amber"
+            canGenerate ? "bg-emerald-500 shadow-xs" : "bg-amber"
           }`} />
-          <span className="type-micro text-secondary/80 truncate">
+          <span className="type-micro text-secondary truncate font-medium">
             {getConsoleStatusText()}
           </span>
         </div>
@@ -199,7 +194,7 @@ const Form = () => {
         )}
 
         {/* Side-by-side Grid Inputs */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 p-6 md:p-8">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-5 sm:gap-6 p-4 sm:p-6 md:p-8">
           <JobDescriptionInput
             value={jobDescription}
             onChange={(val) => {
@@ -215,7 +210,7 @@ const Form = () => {
         </div>
 
         {/* Footer Area */}
-        <div className="flex flex-col sm:flex-row items-center justify-between gap-4 px-6 md:px-8 py-5 border-t border-white/[0.06] bg-black/30">
+        <div className="flex flex-col sm:flex-row items-center justify-between gap-4 px-4 sm:px-6 md:px-8 py-4 sm:py-5 border-t border-border bg-slate-50/80">
           <div className="flex items-center gap-2 text-xs text-muted font-mono">
             <svg className="w-4 h-4 text-accent/60" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
@@ -228,8 +223,8 @@ const Form = () => {
             disabled={!canGenerate}
             className={`w-full sm:w-auto px-7 py-3 rounded-xl font-bold text-sm transition-all duration-200 ${
               canGenerate 
-                ? "studio-btn-primary" 
-                : "bg-white/[0.04] text-muted border border-white/[0.06] cursor-not-allowed opacity-50"
+                ? "studio-btn-primary text-white" 
+                : "bg-slate-100 text-muted border border-border cursor-not-allowed opacity-60"
             }`}
           >
             <svg

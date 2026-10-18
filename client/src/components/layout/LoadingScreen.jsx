@@ -39,7 +39,7 @@ const LoadingScreen = ({
       }`}
       style={{
         background: fullScreen
-          ? "rgba(8, 8, 10, 0.88)"
+          ? "rgba(248, 250, 252, 0.85)"
           : "transparent",
         backdropFilter: fullScreen ? "blur(24px) saturate(160%)" : "none",
         WebkitBackdropFilter: fullScreen ? "blur(24px) saturate(160%)" : "none",
@@ -49,20 +49,20 @@ const LoadingScreen = ({
       <div
         className="absolute w-[500px] h-[500px] rounded-full pointer-events-none"
         style={{
-          background: "radial-gradient(circle at center, rgba(255, 102, 98, 0.06) 0%, transparent 65%)",
+          background: "radial-gradient(circle at center, rgba(229, 77, 72, 0.08) 0%, transparent 65%)",
         }}
       />
 
       {/* Main Studio Glass Console Card */}
-      <div className="studio-card max-w-md w-full px-8 py-9 relative z-10 text-center overflow-hidden border border-white/[0.08] shadow-2xl shadow-black/80">
+      <div className="studio-card max-w-md w-full px-8 py-9 relative z-10 text-center overflow-hidden border border-border shadow-2xl">
         
         {/* Whisper-thin laser progress line at the very top rim */}
         <div className="absolute top-0 left-0 right-0 laser-progress" />
 
         {/* Studio Monogram Emblem */}
-        <div className="relative mx-auto mb-6 w-16 h-16 rounded-2xl flex items-center justify-center bg-white/[0.03] border-t border-white/[0.18] border-x border-white/[0.06] border-b border-black/40 shadow-xl">
+        <div className="relative mx-auto mb-6 w-16 h-16 rounded-2xl flex items-center justify-center bg-white border border-border shadow-md">
           {/* Ambient inner aura */}
-          <div className="absolute inset-0 rounded-2xl bg-gradient-to-br from-accent/20 to-amber/10 blur-md pointer-events-none" />
+          <div className="absolute inset-0 rounded-2xl bg-gradient-to-br from-accent/15 to-amber/10 blur-md pointer-events-none" />
 
           {/* Precision Monogram SVG */}
           <svg className="w-8 h-8 text-accent relative z-10" viewBox="0 0 32 32" fill="none">
@@ -80,11 +80,11 @@ const LoadingScreen = ({
               strokeWidth="2"
               strokeLinecap="round"
             />
-            <circle cx="16" cy="16" r="3" fill="#fe9a00" />
+            <circle cx="16" cy="16" r="3" fill="#ea580c" />
             <defs>
               <linearGradient id="emblemGlow" x1="16" y1="6" x2="16" y2="26">
-                <stop offset="0%" stopColor="#ff6662" />
-                <stop offset="100%" stopColor="#fe9a00" />
+                <stop offset="0%" stopColor="#e54d48" />
+                <stop offset="100%" stopColor="#ea580c" />
               </linearGradient>
             </defs>
           </svg>
@@ -122,10 +122,10 @@ const LoadingScreen = ({
                   <div
                     className={`w-5 h-5 rounded-md flex items-center justify-center shrink-0 font-mono text-[10px] font-semibold transition-all duration-200 ${
                       isCompleted
-                        ? "bg-emerald-500/15 text-emerald-400 border border-emerald-500/30"
+                        ? "bg-emerald-50 text-emerald-700 border border-emerald-200"
                         : isActive
-                        ? "bg-accent/20 text-accent border border-accent/40"
-                        : "bg-white/[0.03] text-muted border border-white/[0.06]"
+                        ? "bg-accent/15 text-accent border border-accent/40"
+                        : "bg-slate-100 text-muted border border-border"
                     }`}
                   >
                     {isCompleted ? (

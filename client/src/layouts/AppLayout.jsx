@@ -13,7 +13,7 @@ const AppLayout = ({ children }) => {
     const isLanding = pathname === '/';
 
     return (
-        <div className="min-h-screen w-full max-w-full flex flex-col bg-background overflow-x-clip font-sans selection:bg-accent/30 selection:text-white">
+        <div className="min-h-screen w-full max-w-full flex flex-col bg-background overflow-x-clip font-sans selection:bg-accent/20 selection:text-primary">
             <Navbar />
             <main
                 key={pathname}
